@@ -38,7 +38,7 @@ module.exports = {
         'unicorn/no-reduce': 'off',
         'class-methods-use-this': ['error', { exceptMethods: ['map'] }],
         complexity: ['error', 5],
-        'max-params': ['error', 7],
+        'max-params': ['error', 4],
         curly: 'error',
         'no-console': 'error',
         'no-floating-decimal': 'error',
