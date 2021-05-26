@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - 14.15.4
+install:
+  - npm install
+scripts:
+  # Prettier
+  - npm run format:check
+  # ESLint
+  - npm run lint:check
+  # Automated Test
+  - npm run test
+  # Build
+  - npm run build
