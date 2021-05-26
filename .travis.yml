@@ -8,6 +8,8 @@ scripts:
   - npm run format:check
   # ESLint
   - npm run lint:check
+  # Docker container
+  - docker-compose up -d
   # Automated Test
   - npm run test
   # Build
