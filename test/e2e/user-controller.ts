@@ -1,14 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import bootstrap from '@/bootstrap';
-import UserModule from '@/user/UserModule';
 import getAppAPIPrefix from '@test/util/service-util';
+import AppModule from '@/AppModule';
 
 describe('/v1/users', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
-        app = await bootstrap(UserModule);
+        app = await bootstrap(AppModule);
     });
 
     afterAll(async () => {

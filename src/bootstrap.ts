@@ -3,16 +3,10 @@ import { NestFactory } from '@nestjs/core';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
-import * as dotenv from 'dotenv';
 import AppModule from '@/AppModule';
-import UserModule from '@/user/UserModule';
 import ServiceConfig from '@/common/ServiceConfig';
 
-type Module = AppModule | UserModule;
-
-async function bootstrap(module: Module): Promise<INestApplication> {
-    // TODO load the environment variables using NestJS way
-    dotenv.config();
+async function bootstrap(module: AppModule): Promise<INestApplication> {
     const app: INestApplication = await NestFactory.create(module);
     app.useGlobalPipes(new ValidationPipe());
     const serviceConfig = new ServiceConfig();
