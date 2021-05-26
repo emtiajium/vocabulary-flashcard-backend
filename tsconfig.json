@@ -15,5 +15,6 @@
             "@/*": ["./src/*"],
             "@test/*": ["./test/*"]
         }
-    }
+    },
+    "include": ["migrations", "src", "test", ".eslintrc.json"]
 }
