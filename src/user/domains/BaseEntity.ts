@@ -9,15 +9,15 @@ export default abstract class BaseEntity {
     @CreateDateColumn({ type: 'timestamp with time zone' })
     @IsDate()
     @IsOptional()
-    createdAt: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn({ type: 'timestamp with time zone' })
     @IsDate()
     @IsOptional()
-    updatedAt: Date;
+    updatedAt?: Date;
 
     @VersionColumn()
     @IsNumber()
     @IsOptional()
-    version: number;
+    version?: number;
 }
