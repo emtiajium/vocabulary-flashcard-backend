@@ -1,6 +1,8 @@
 language: node_js
 node_js:
     - 14.15.4
+before_install:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 install:
     - npm install
 scripts:
