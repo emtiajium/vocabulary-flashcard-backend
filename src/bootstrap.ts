@@ -4,7 +4,7 @@ import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@n
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import AppModule from '@/AppModule';
-import ServiceConfig from '@/common/ServiceConfig';
+import ServiceConfig from '@/common/configs/ServiceConfig';
 
 async function bootstrap(module: AppModule): Promise<INestApplication> {
     const app: INestApplication = await NestFactory.create(module);
