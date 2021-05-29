@@ -1,6 +1,6 @@
 import BaseEntity from '@/user/domains/BaseEntity';
 import { Column, Entity } from 'typeorm';
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export const usernameSize = 36;
@@ -29,6 +29,7 @@ export default class User extends BaseEntity {
     lastname?: string;
 
     @Column({ type: 'varchar', nullable: true })
+    @IsUrl()
     @MaxLength(profilePictureUrlSize)
     @IsString()
     @IsOptional()
