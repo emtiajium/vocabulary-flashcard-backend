@@ -18,7 +18,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                     database,
                     synchronize,
                     connection,
-                    entities,
                     migrations,
                     migrationDirectory,
                 } = databaseConfig;
@@ -36,6 +35,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                     cli: {
                         migrationsDir: migrationDirectory,
                     },
+                    // TODO add logger
                 } as TypeOrmModuleOptions;
             },
             inject: [ConfigService],
