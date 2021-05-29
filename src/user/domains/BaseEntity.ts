@@ -4,7 +4,8 @@ import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, VersionColu
 export default abstract class BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     @IsUUID()
-    id: string;
+    @IsOptional()
+    id?: string;
 
     @CreateDateColumn({ type: 'timestamp with time zone' })
     @IsDate()
