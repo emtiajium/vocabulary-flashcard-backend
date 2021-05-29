@@ -6,6 +6,7 @@ import * as cookieParser from 'cookie-parser';
 import AppModule from '@/AppModule';
 import ServiceConfig from '@/common/configs/ServiceConfig';
 
+// TODO transform it to a class
 async function bootstrap(module: AppModule): Promise<INestApplication> {
     const app: INestApplication = await NestFactory.create(module);
     app.enableShutdownHooks();
