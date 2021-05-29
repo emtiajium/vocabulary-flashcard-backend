@@ -20,6 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                     connection,
                     migrations,
                     migrationDirectory,
+                    logging,
                 } = databaseConfig;
                 return {
                     type: connection,
@@ -35,7 +36,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                     cli: {
                         migrationsDir: migrationDirectory,
                     },
-                    // TODO add logger
+                    logging,
                 } as TypeOrmModuleOptions;
             },
             inject: [ConfigService],

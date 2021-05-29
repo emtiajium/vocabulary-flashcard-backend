@@ -26,6 +26,8 @@ export default class DatabaseConfig {
 
     migrationDirectory: string;
 
+    logging: string[];
+
     constructor() {
         this.configService = new ConfigService();
         this.connection = this.configService.get<DatabaseType>('TYPEORM_CONNECTION');
@@ -37,6 +39,7 @@ export default class DatabaseConfig {
         this.synchronize = this.configService.get<boolean>('TYPEORM_SYNCHRONIZE');
         this.entities = [this.configService.get<string>('TYPEORM_ENTITIES')];
         this.migrations = [this.configService.get<string>('TYPEORM_MIGRATIONS')];
+        this.logging = this.configService.get<string>('TYPEORM_LOGGING').split(',');
         this.migrationDirectory = this.configService.get<string>('TYPEORM_MIGRATIONS_DIR');
     }
 }
