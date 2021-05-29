@@ -3,7 +3,6 @@ import User from '@/user/domains/User';
 import { INestApplication } from '@nestjs/common';
 import bootstrap from '@/bootstrap';
 import AppModule from '@/AppModule';
-import { v4 as uuidV4 } from 'uuid';
 import UserRepository from '@/user/repositories/UserRepository';
 
 describe('Repository Injection', () => {
@@ -19,7 +18,6 @@ describe('Repository Injection', () => {
 
     it('SHOULD insert a user', async () => {
         const user: User = {
-            id: uuidV4(),
             username: 'example@gibberish.com',
             firstname: 'John',
             lastname: 'Doe',
