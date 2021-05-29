@@ -123,6 +123,12 @@
                 "node/no-process-env": "off",
                 "unicorn/no-static-only-class": "off"
             }
+        },
+        {
+            "files": ["migrations/**/*.ts"],
+            "rules": {
+                "class-methods-use-this": "off"
+            }
         }
     ]
 }
