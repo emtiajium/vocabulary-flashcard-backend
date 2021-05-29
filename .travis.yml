@@ -12,6 +12,7 @@ scripts:
     - npm run lint:check
     # Docker container
     - docker-compose up -d
+    - docker-compose ps
     # Automated Test
     - npm run test
     # Build
