@@ -8,6 +8,7 @@ import ServiceConfig from '@/common/ServiceConfig';
 
 async function bootstrap(module: AppModule): Promise<INestApplication> {
     const app: INestApplication = await NestFactory.create(module);
+    app.enableShutdownHooks();
     app.useGlobalPipes(new ValidationPipe());
     const serviceConfig = new ServiceConfig();
     const { payloadLimitSize, serviceApiPrefix, port } = serviceConfig;
