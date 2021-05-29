@@ -36,7 +36,7 @@
 
 ## Generate the migration
 
-➜ `npm run typeorm migration:create -- -n name-of-the-mogration`
+➜ `npm run typeorm migration:create -- -n name-of-the-migration`
 
 ## Change Log
 
