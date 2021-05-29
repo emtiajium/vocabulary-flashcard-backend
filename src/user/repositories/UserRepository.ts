@@ -10,6 +10,7 @@ export default class UserRepository extends Repository<User> {
             .values(user)
             .onConflict(`("username") DO NOTHING`)
             .execute();
-        return { ...user, id: createdUser.raw[0].id } as User;
+        // TODO investigate why createdUser.identifiers and createdUser.raw are not accessible
+        return { ...user, id: createdUser.generatedMaps[0].id } as User;
     }
 }

@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { v4 as uuidV4 } from 'uuid';
 import bootstrap from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
@@ -9,14 +10,12 @@ import getUserByUsername, { removeUserByUsername } from '@test/util/user-util';
 describe('/v1/users', () => {
     let app: INestApplication;
 
-    const getBasePayload = (): ObjectLiteral => {
-        return {
-            username: 'example@gibberish.com',
-            firstname: 'John',
-            lastname: 'Doe',
-            profilePictureUrl: 'https://gibberish.com/files/images/blah.png',
-        };
-    };
+    const getBasePayload = (): ObjectLiteral => ({
+        username: 'example@gibberish.com',
+        firstname: 'John',
+        lastname: 'Doe',
+        profilePictureUrl: 'https://gibberish.com/files/images/blah.png',
+    });
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
@@ -62,22 +61,32 @@ describe('/v1/users', () => {
                 await removeUserByUsername(getBasePayload().username);
             });
 
-            it('SHOULD return 201 CREATED for payload with id', async () => {
+            it('SHOULD return 201 CREATED for payload without id', async () => {
                 const user = { ...getBasePayload() };
-                const { status } = await makeApiRequest(user);
+                const { status, body: createdUser } = await makeApiRequest(user);
+                expect(status).toBe(201);
+                expect(createdUser.username).toBe(user.username);
+                expect(createdUser.id).toBeDefined();
+            });
+
+            it('SHOULD return 201 CREATED for payload with id and the passed ID will be ignored', async () => {
+                const user = { ...getBasePayload(), id: uuidV4 } as ObjectLiteral;
+                const { status, body } = await makeApiRequest(user);
                 expect(status).toBe(201);
                 const createdUser = await getUserByUsername(user.username);
                 expect(createdUser.username).toBe(user.username);
+                expect(createdUser.id).toBe(body.id);
+                expect(createdUser.id).not.toBe(user.id);
             });
 
             it('SHOULD ignore multiple creation requests with same ID', async () => {
                 const user = { ...getBasePayload() };
-                const { status: status1 } = await makeApiRequest(user);
+                const { status: status1, body: createdUserFirstTime } = await makeApiRequest(user);
                 expect(status1).toBe(201);
-                const { status: status2 } = await makeApiRequest(user);
+                expect(createdUserFirstTime.username).toBe(user.username);
+                const { status: status2, body: createdUserSecondTime } = await makeApiRequest(user);
                 expect(status2).toBe(201);
-                const createdUser = await getUserByUsername(user.username);
-                expect(createdUser.username).toBe(user.username);
+                expect(createdUserFirstTime.id).toBe(createdUserSecondTime.id);
             });
         });
     });
