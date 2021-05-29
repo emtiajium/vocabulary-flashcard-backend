@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta
+            name="google-signin-client_id"
+            content="690681613690-0cv6vu8kgsba8rc8s9gcup58ua333ktb.apps.googleusercontent.com"
+        />
+        <script>
+            function onSignIn(googleUser) {
+                const profile = googleUser.getBasicProfile();
+                const user = {
+                    email: profile.getEmail(), // This is null if the 'email' scope is not present.
+                    firstname: profile.getGivenName(),
+                    lastname: profile.getFamilyName(),
+                    profilePictureUrl: profile.getImageUrl(),
+                };
+                console.log(`ID: ${profile.getId()}`); // Do not send to your backend! Use an ID token instead.
+                console.log(`User details`, user);
+            }
+        </script>
+    </head>
+    <body>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </body>
+</html>
