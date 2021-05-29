@@ -2,7 +2,7 @@
     "moduleFileExtensions": ["js", "json", "ts"],
     "rootDir": "../",
     "testEnvironment": "node",
-    "testMatch": ["<rootDir>/test/e2e/**/*.{ts,js}"],
+    "testMatch": ["<rootDir>/test/e2e/**/*.{ts,js}", "<rootDir>/test/integration/**/*.{ts,js}"],
     "transform": {
         "^.+\\.(t|j)s$": "ts-jest"
     },
