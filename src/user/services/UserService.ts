@@ -6,7 +6,7 @@ import User from '@/user/domains/User';
 export default class UserService {
     constructor(private readonly userRepository: UserRepository) {}
 
-    async createUser(user: User): Promise<void> {
-        await this.userRepository.insertIfNotExists(user);
+    async createUser(user: User): Promise<User> {
+        return this.userRepository.insertIfNotExists(user);
     }
 }
