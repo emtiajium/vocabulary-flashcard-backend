@@ -1,11 +1,13 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import DatabaseConfig from '@/common/DatabaseConfig';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm/dist/interfaces/typeorm-options.interface';
+import User from '@/user/domains/User';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
             useFactory: (): TypeOrmModuleOptions => {
                 const databaseConfig = new DatabaseConfig();
                 const {
@@ -27,14 +29,16 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm/dist/interfaces/typeorm-op
                     username,
                     password,
                     database,
-                    entities,
+                    entities: [User],
                     synchronize,
-                    migrations,
+                    // eslint-disable-next-line unicorn/prefer-module
+                    migrations: [`${__dirname}/${migrations}`],
                     cli: {
                         migrationsDir: migrationDirectory,
                     },
                 } as TypeOrmModuleOptions;
             },
+            inject: [ConfigService],
         }),
     ],
     exports: [TypeOrmModule],
