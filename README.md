@@ -34,6 +34,10 @@
 
 ➜ `npm run start:dev`
 
+## Generate the migration
+
+➜ `npm run typeorm migration:create -- -n name-of-the-mogration`
+
 ## Change Log
 
 -   `0.1.0`: Very first version
