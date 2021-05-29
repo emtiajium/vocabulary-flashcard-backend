@@ -6,7 +6,7 @@ import AppModule from '@/AppModule';
 import { v4 as uuidV4 } from 'uuid';
 import UserRepository from '@/user/repositories/UserRepository';
 
-describe('Repository Connection', () => {
+describe('Repository Injection', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
