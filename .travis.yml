@@ -15,6 +15,8 @@ scripts:
     - docker-compose ps
     # Create environment variables
     - npm run create:env
+    # Database Table CRUD
+    - npm run typeorm migration:run
     # Automated Test
     - npm run test
     # Build
