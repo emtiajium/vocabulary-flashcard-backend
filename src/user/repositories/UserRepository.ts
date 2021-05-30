@@ -16,6 +16,6 @@ export default class UserRepository extends Repository<User> {
             .onConflict(`("username") DO UPDATE ${updateActionOnConflict}`)
             .execute();
 
-        return plainToClass(User, { ...user, id: createdUser.generatedMaps[0].id });
+        return plainToClass(User, { ...user, ...createdUser.generatedMaps[0] });
     }
 }
