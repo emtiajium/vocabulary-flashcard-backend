@@ -20,8 +20,6 @@ export default class DatabaseConfig {
 
     synchronize: boolean;
 
-    entities: string[];
-
     migrations: string[];
 
     migrationDirectory: string;
@@ -37,7 +35,6 @@ export default class DatabaseConfig {
         this.password = this.configService.get<string>('TYPEORM_PASSWORD');
         this.database = this.configService.get<string>('TYPEORM_DATABASE');
         this.synchronize = this.configService.get<boolean>('TYPEORM_SYNCHRONIZE');
-        this.entities = [this.configService.get<string>('TYPEORM_ENTITIES')];
         this.migrations = [this.configService.get<string>('TYPEORM_MIGRATIONS')];
         this.logging = this.configService.get<string>('TYPEORM_LOGGING').split(',');
         this.migrationDirectory = this.configService.get<string>('TYPEORM_MIGRATIONS_DIR');
