@@ -40,4 +40,4 @@
 
 ## Change Log
 
--   `0.1.0`: Very first version
+-   `0.1.0`: Added user functionality
