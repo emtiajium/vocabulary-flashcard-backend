@@ -54,11 +54,32 @@ describe('/v1/users', () => {
                 const { status } = await makeApiRequest(user);
                 expect(status).toBe(400);
             });
+
+            it('SHOULD return 400 BAD_REQUEST for payload with invalid profilePictureUrl', async () => {
+                const user = { ...getBasePayload(), profilePictureUrl: `NOT_A_URL` };
+                const { status } = await makeApiRequest(user);
+                expect(status).toBe(400);
+            });
         });
 
         describe('Success', () => {
             beforeEach(() => async () => {
                 await removeUserByUsername(getBasePayload().username);
+            });
+
+            it('SHOULD return 201 CREATED for payload without lastname', async () => {
+                const user = { ...getBasePayload() };
+                delete user.lastname;
+                const { status, body: createdUser } = await makeApiRequest(user);
+                expect(status).toBe(201);
+                expect(createdUser.name).toBe(user.firstname);
+            });
+
+            it('SHOULD return 201 CREATED for payload without profilePictureUrl', async () => {
+                const user = { ...getBasePayload() };
+                delete user.profilePictureUrl;
+                const { status } = await makeApiRequest(user);
+                expect(status).toBe(201);
             });
 
             it('SHOULD return 201 CREATED for payload without id', async () => {
@@ -73,6 +94,7 @@ describe('/v1/users', () => {
                 const user = { ...getBasePayload(), id: uuidV4 } as ObjectLiteral;
                 const { status, body } = await makeApiRequest(user);
                 expect(status).toBe(201);
+
                 const createdUser = await getUserByUsername(user.username);
                 expect(createdUser.username).toBe(user.username);
                 expect(createdUser.id).toBe(body.id);
@@ -84,9 +106,25 @@ describe('/v1/users', () => {
                 const { status: status1, body: createdUserFirstTime } = await makeApiRequest(user);
                 expect(status1).toBe(201);
                 expect(createdUserFirstTime.username).toBe(user.username);
+
                 const { status: status2, body: createdUserSecondTime } = await makeApiRequest(user);
                 expect(status2).toBe(201);
                 expect(createdUserFirstTime.id).toBe(createdUserSecondTime.id);
+            });
+
+            it('SHOULD update the user', async () => {
+                const user = { ...getBasePayload() };
+                const { status: status1, body: createdUserFirstTime } = await makeApiRequest(user);
+                expect(status1).toBe(201);
+                expect(createdUserFirstTime.username).toBe(user.username);
+
+                const { status: status2, body: createdUserSecondTime } = (await makeApiRequest({
+                    ...user,
+                    firstname: 'Modified',
+                })) as ObjectLiteral;
+                expect(status2).toBe(201);
+                expect(createdUserFirstTime.id).toBe(createdUserSecondTime.id);
+                expect(createdUserSecondTime.firstname).toBe('Modified');
             });
         });
     });
