@@ -8,3 +8,7 @@ export default async function getUserByUsername(username: string): Promise<User>
 export async function removeUserByUsername(username: string): Promise<void> {
     await getRepository(User).delete({ username });
 }
+
+export async function createUser(user: User): Promise<User> {
+    return getRepository(User).save(user);
+}

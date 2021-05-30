@@ -11,7 +11,7 @@ describe('/v1/users', () => {
     let app: INestApplication;
 
     const getBasePayload = (): ObjectLiteral => ({
-        username: 'example@gibberish.com',
+        username: 'example30@gibberish.com',
         firstname: 'John',
         lastname: 'Doe',
         profilePictureUrl: 'https://gibberish.com/files/images/blah.png',

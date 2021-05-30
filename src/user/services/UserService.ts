@@ -9,4 +9,8 @@ export default class UserService {
     async createUser(user: User): Promise<User> {
         return this.userRepository.insertIfNotExists(user);
     }
+
+    async getUserByUsername(username: string): Promise<User> {
+        return this.userRepository.findOne({ username });
+    }
 }

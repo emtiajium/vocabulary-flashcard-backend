@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 
@@ -9,5 +9,10 @@ export default class UserController {
     @Post()
     async createUser(@Body() user: User): Promise<User> {
         return this.userService.createUser(user);
+    }
+
+    @Get('/:username')
+    async getUserByUsername(@Param('username') username: string): Promise<User> {
+        return this.userService.getUserByUsername(username);
     }
 }
