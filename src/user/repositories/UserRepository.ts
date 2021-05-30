@@ -7,7 +7,8 @@ export default class UserRepository extends Repository<User> {
     async insertIfNotExists(user: User): Promise<User> {
         const updateActionOnConflict = `SET firstname = EXCLUDED.firstname,
             lastname  = EXCLUDED.lastname,
-            "profilePictureUrl" = EXCLUDED."profilePictureUrl"`;
+            "profilePictureUrl" = EXCLUDED."profilePictureUrl",
+            "updatedAt" = NOW()`;
 
         const createdUser = await this.createQueryBuilder()
             .insert()

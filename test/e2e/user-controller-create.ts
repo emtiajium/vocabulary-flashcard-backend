@@ -125,6 +125,9 @@ describe('/v1/users', () => {
                 expect(status2).toBe(201);
                 expect(createdUserFirstTime.id).toBe(createdUserSecondTime.id);
                 expect(createdUserSecondTime.firstname).toBe('Modified');
+                expect(new Date(createdUserSecondTime.updatedAt).getTime()).not.toBe(
+                    new Date(createdUserFirstTime.updatedAt).getTime(),
+                );
             });
         });
     });
