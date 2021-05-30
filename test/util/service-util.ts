@@ -1,5 +1,5 @@
-import EnvVars from '@/common/EnvVars';
+import { ConfigService } from '@nestjs/config';
 
 export default function getAppAPIPrefix(): string {
-    return EnvVars.get('SERVICE_API_PREFIX');
+    return new ConfigService().get<string>('SERVICE_API_PREFIX');
 }
