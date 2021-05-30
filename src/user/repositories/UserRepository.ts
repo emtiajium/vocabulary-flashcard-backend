@@ -8,7 +8,8 @@ export default class UserRepository extends Repository<User> {
         const updateActionOnConflict = `SET firstname = EXCLUDED.firstname,
             lastname  = EXCLUDED.lastname,
             "profilePictureUrl" = EXCLUDED."profilePictureUrl",
-            "updatedAt" = NOW()`;
+            "updatedAt" = NOW(),
+            version = "User".version + 1`;
 
         const createdUser = await this.createQueryBuilder()
             .insert()

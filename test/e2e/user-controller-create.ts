@@ -128,6 +128,7 @@ describe('/v1/users', () => {
                 expect(new Date(createdUserSecondTime.updatedAt).getTime()).not.toBe(
                     new Date(createdUserFirstTime.updatedAt).getTime(),
                 );
+                expect(createdUserSecondTime.version).toBe(createdUserFirstTime.version + 1);
             });
         });
     });
