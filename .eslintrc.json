@@ -36,6 +36,7 @@
         "unicorn/prevent-abbreviations": "off",
         "unicorn/no-null": "off",
         "unicorn/no-reduce": "off",
+        "unicorn/no-array-for-each": "off",
         "class-methods-use-this": ["error", { "exceptMethods": ["map"] }],
         "complexity": ["error", 5],
         "max-params": ["error", 4],
