@@ -18,7 +18,7 @@
         "lint:config": "eslint --print-config src/main.ts",
         "lint": "eslint \"{migrations,src,test}/**/*.ts\" --fix",
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
-        "test": "jest --coverage  --config ./test/jest-e2e.json --testTimeout 30000 --verbose --detectOpenHandles --maxWorkers=1 --forceExit --collectCoverageFrom=src/**/*.ts --collectCoverageFrom=!test/**/*  --collectCoverageFrom=!src/main.ts",
+        "test": "jest --detectOpenHandles --forceExit",
         "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
     },
     "dependencies": {
@@ -68,5 +68,47 @@
         "ts-node": "^9.1.1",
         "tsconfig-paths": "^3.9.0",
         "typescript": "^4.2.3"
+    },
+    "jest": {
+        "collectCoverage": true,
+        "coverageDirectory": "./coverage",
+        "collectCoverageFrom": [
+            "src/**/*.ts",
+            "!src/main.ts",
+            "!test/**/*"
+        ],
+        "maxWorkers": 1,
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "moduleNameMapper": {
+            "^@/(.*)": "<rootDir>/src/$1",
+            "^@test/(.*)": "<rootDir>/test/$1"
+        },
+        "reporters": [
+            "default",
+            [
+                "jest-junit",
+                {
+                    "outputDirectory": "./coverage"
+                }
+            ]
+        ],
+        "rootDir": ".",
+        "setupFiles": [
+            "<rootDir>/test/jest-init.ts"
+        ],
+        "testEnvironment": "node",
+        "testMatch": [
+            "<rootDir>/test/e2e/**/*.{ts,js}",
+            "<rootDir>/test/integration/**/*.{ts,js}"
+        ],
+        "testTimeout": 30000,
+        "transform": {
+            "^.+\\.(t|j)s$": "ts-jest"
+        },
+        "verbose": true
     }
 }
