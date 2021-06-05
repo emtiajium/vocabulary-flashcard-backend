@@ -24,6 +24,7 @@ import Cohort from '@/user/domains/Cohort';
                     logging,
                 } = databaseConfig;
                 return {
+                    retryAttempts: 1,
                     type: connection,
                     host,
                     port,
