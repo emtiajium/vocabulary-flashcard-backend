@@ -4,7 +4,7 @@ import { v4 as uuidV4 } from 'uuid';
 import bootstrap from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { ObjectLiteral } from '@/common/ObjectLiteral';
+import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import getUserByUsername, { removeUserByUsername } from '@test/util/user-util';
 
 describe('/v1/users', () => {

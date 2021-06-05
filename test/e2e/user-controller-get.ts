@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import bootstrap from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { ObjectLiteral } from '@/common/ObjectLiteral';
+import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import { createUser, removeUserByUsername } from '@test/util/user-util';
 import User from '@/user/domains/User';
 
