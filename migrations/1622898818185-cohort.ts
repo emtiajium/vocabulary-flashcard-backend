@@ -32,6 +32,13 @@ export default class Cohort1622898818185 implements MigrationInterface {
                         isNullable: false,
                     },
                     {
+                        name: 'name',
+                        type: 'varchar',
+                        length: '36',
+                        isNullable: false,
+                        isUnique: true,
+                    },
+                    {
                         name: 'users',
                         type: 'jsonb',
                         default: "'[]'",
