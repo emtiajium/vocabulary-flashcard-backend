@@ -3,9 +3,10 @@ import UserController from '@/user/controllers/UserController';
 import UserService from '@/user/services/UserService';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import UserRepository from '@/user/repositories/UserRepository';
+import CohortRepository from '@/user/repositories/CohortRepository';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserRepository])],
+    imports: [TypeOrmModule.forFeature([UserRepository, CohortRepository])],
     controllers: [UserController],
     providers: [UserService],
     exports: [TypeOrmModule],
