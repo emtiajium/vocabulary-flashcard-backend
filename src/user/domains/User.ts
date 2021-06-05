@@ -1,7 +1,8 @@
 import BaseEntity from '@/user/domains/BaseEntity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { Expose } from 'class-transformer';
+import Cohort from '@/user/domains/Cohort';
 
 export const usernameSize = 36;
 export const firstnameSize = 36;
@@ -35,8 +36,16 @@ export default class User extends BaseEntity {
     @IsOptional()
     profilePictureUrl?: string;
 
+    @OneToMany(() => Cohort, (cohort) => cohort.id)
+    cohort?: Cohort;
+
     @Expose()
     get name(): string {
         return `${this.firstname} ${this.lastname || ''}`.trim();
+    }
+
+    @Expose()
+    get cohortId(): string {
+        return this.cohort?.id || '';
     }
 }

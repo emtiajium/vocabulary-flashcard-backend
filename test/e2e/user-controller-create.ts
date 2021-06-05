@@ -130,6 +130,13 @@ describe('/v1/users', () => {
                 );
                 expect(createdUserSecondTime.version).toBe(createdUserFirstTime.version + 1);
             });
+
+            it('SHOULD return 201 CREATED with empty cohortId', async () => {
+                const user = { ...getBasePayload() };
+                const { status, body: createdUser } = await makeApiRequest(user);
+                expect(status).toBe(201);
+                expect(createdUser.cohortId).toBe('');
+            });
         });
     });
 });

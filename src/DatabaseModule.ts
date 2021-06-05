@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import DatabaseConfig from '@/common/configs/DatabaseConfig';
 import User from '@/user/domains/User';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import Cohort from '@/user/domains/Cohort';
 
 @Module({
     imports: [
@@ -29,7 +30,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                     username,
                     password,
                     database,
-                    entities: [User],
+                    entities: [User, Cohort],
                     synchronize,
                     // eslint-disable-next-line unicorn/prefer-module
                     migrations: [`${__dirname}/${migrations}`],
