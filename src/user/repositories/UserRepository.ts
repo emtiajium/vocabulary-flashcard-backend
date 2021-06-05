@@ -6,10 +6,10 @@ import { plainToClass } from 'class-transformer';
 export default class UserRepository extends Repository<User> {
     async insertIfNotExists(user: User): Promise<User> {
         const updateActionOnConflict = `SET firstname = EXCLUDED.firstname,
-            lastname  = EXCLUDED.lastname,
+            lastname = EXCLUDED.lastname,
             "profilePictureUrl" = EXCLUDED."profilePictureUrl",
             "updatedAt" = NOW(),
-            version = "User".version + 1`;
+            version = "${this.metadata.tableName}".version + 1`;
 
         const createdUser = await this.createQueryBuilder()
             .insert()
