@@ -22,8 +22,7 @@
                 "--inspect-brk",
                 "${workspaceRoot}/node_modules/.bin/jest",
                 "--detectOpenHandles",
-                "--coverage",
-                "false"
+                "--forceExit"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
@@ -35,8 +34,6 @@
             "runtimeArgs": [
                 "--inspect-brk",
                 "${workspaceRoot}/node_modules/.bin/jest",
-                "--coverage",
-                "false",
                 "--detectOpenHandles",
                 "--forceExit",
                 "-t",
@@ -52,8 +49,6 @@
             "runtimeArgs": [
                 "--inspect-brk",
                 "${workspaceRoot}/node_modules/.bin/jest",
-                "--coverage",
-                "false",
                 "--detectOpenHandles",
                 "--forceExit",
                 "${relativeFile}"
