@@ -36,7 +36,7 @@ export default class User extends BaseEntity {
     @IsOptional()
     profilePictureUrl?: string;
 
-    @OneToMany(() => Cohort, (cohort) => cohort.id)
+    @OneToMany(() => Cohort, (cohort) => cohort.id, { eager: true, cascade: true })
     cohort?: Cohort;
 
     @Expose()

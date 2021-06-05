@@ -16,7 +16,7 @@ export default class Cohort extends BaseEntity {
 
     @IsArray()
     @Type(() => User)
-    @ManyToOne(() => User, (user) => user.cohort)
+    @ManyToOne(() => User, (user) => user.cohort, { nullable: true, eager: false, cascade: false })
     @Column({ type: 'jsonb' })
     users: User[];
 }
