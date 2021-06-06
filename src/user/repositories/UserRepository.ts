@@ -1,5 +1,5 @@
 import User from '@/user/domains/User';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, In, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 
 @EntityRepository(User)
@@ -20,5 +20,9 @@ export default class UserRepository extends Repository<User> {
             .execute();
 
         return plainToClass(User, { ...user, ...createdUser.generatedMaps[0] });
+    }
+
+    async getUsers(ids: string[]): Promise<User[]> {
+        return this.find({ id: In(ids) });
     }
 }
