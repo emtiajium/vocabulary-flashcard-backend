@@ -1,5 +1,6 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityNotFoundError, EntityRepository, Repository } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
+import EntityNotFoundException from '@/exceptions/EntityNotFoundException';
 
 @EntityRepository(Cohort)
 export default class CohortRepository extends Repository<Cohort> {
@@ -15,7 +16,12 @@ export default class CohortRepository extends Repository<Cohort> {
     }
 
     async getCohortByName(name: string): Promise<Cohort> {
-        return this.findOneOrFail({ name });
+        // findOneOrFail() is not working as expected
+        const cohort: Cohort = await this.findOne({ name });
+        if (!cohort) {
+            throw new EntityNotFoundException(`Cohort with name "${name}" does not exist`);
+        }
+        return cohort;
     }
 
     async updateUsersToCohort(id: string, userIds: string[]): Promise<void> {
