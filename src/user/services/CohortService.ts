@@ -21,5 +21,6 @@ export default class CohortService {
             throw new NotFoundException(`There are no such users having IDs ${nonExistingUsers.join(', ')}`);
         }
         await this.cohortRepository.updateUsersToCohort(cohort.id, _.union(currentUserIdsBelongToCohort, userIds));
+        await Promise.all(userIds.map((userId) => this.userRepository.updateCohort(userId, cohort.id)));
     }
 }
