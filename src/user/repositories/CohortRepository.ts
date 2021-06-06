@@ -18,10 +18,12 @@ export default class CohortRepository extends Repository<Cohort> {
         const clonedUserIds = userIds.map((userId) => `'${userId}'`);
         await this.query(
             `
-            UPDATE "Cohort"
-            SET "userIds" = ARRAY [${clonedUserIds}]::UUID[]
-            WHERE id = $1::UUID;
-        `,
+                UPDATE "Cohort"
+                SET "userIds"   = ARRAY [${clonedUserIds}]::UUID[],
+                    "updatedAt" = NOW(),
+                    version     = "Cohort".version + 1
+                WHERE id = $1::UUID;
+            `,
             [id],
         );
     }

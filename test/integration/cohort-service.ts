@@ -47,6 +47,7 @@ describe('Cohort Service', () => {
 
         expect(updatedCohort.userIds).toHaveLength(2);
         expect(updatedCohort.userIds).toEqual(expect.arrayContaining([firstUser.id, secondUser.id]));
+        expect(updatedCohort.updatedAt.toISOString()).not.toBe(updatedCohort.createdAt.toISOString());
 
         await getRepository(Cohort).delete({ name: cohortPayload.name });
         await removeUserByUsername(firstUserPayload.username);
