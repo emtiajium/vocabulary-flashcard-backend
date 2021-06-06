@@ -6,6 +6,7 @@ import AppModule from '@/AppModule';
 import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
+import getCohortByName, { removeCohortByName } from '@test/util/cohort-util';
 
 describe('Cohort Service', () => {
     let app: INestApplication;
@@ -36,11 +37,11 @@ describe('Cohort Service', () => {
 
         const cohortPayload: Cohort = { name: 'The best cohort ever exist', userIds: [] } as Cohort;
         await cohortService.createCohort(cohortPayload);
-        const cohort: Cohort = await getRepository(Cohort).findOne({ name: cohortPayload.name });
+        const cohort: Cohort = await getCohortByName(cohortPayload.name);
 
-        await cohortService.addUsersToCohort(cohort.name, [firstUser.id, secondUser.id]);
+        await cohortService.addUsersToCohort(cohortPayload.name, [firstUser.id, secondUser.id]);
 
-        const updatedCohort: Cohort = await getRepository(Cohort).findOne({ name: cohortPayload.name });
+        const updatedCohort: Cohort = await getCohortByName(cohortPayload.name);
 
         expect(updatedCohort.userIds).toHaveLength(2);
         expect(updatedCohort.userIds).toEqual(expect.arrayContaining([firstUser.id, secondUser.id]));
@@ -54,6 +55,6 @@ describe('Cohort Service', () => {
         });
 
         await removeUsersByUsernames([firstUser.username, secondUser.username]);
-        await getRepository(Cohort).delete({ name: cohortPayload.name });
+        await removeCohortByName(cohortPayload.name);
     });
 });
