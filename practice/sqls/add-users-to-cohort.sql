@@ -4,12 +4,8 @@ SET SESSION my.cohortName = 'Game Theory Study Group';
 
 INSERT
 INTO "User" (id, "createdAt", "updatedAt", version, username, firstname)
-VALUES (DEFAULT, DEFAULT, DEFAULT, 1, current_setting('my.firstUsername')::VARCHAR, 'Alice')
-ON CONFLICT ("username") DO NOTHING;
-
-INSERT
-INTO "User" (id, "createdAt", "updatedAt", version, username, firstname)
-VALUES (DEFAULT, DEFAULT, DEFAULT, 1, current_setting('my.secondUsername')::VARCHAR, 'Bob')
+VALUES (DEFAULT, DEFAULT, DEFAULT, 1, current_setting('my.firstUsername')::VARCHAR, 'Alice'),
+       (DEFAULT, DEFAULT, DEFAULT, 1, current_setting('my.secondUsername')::VARCHAR, 'Bob')
 ON CONFLICT ("username") DO NOTHING;
 
 CREATE OR REPLACE FUNCTION "getUserId"(requestedUsername VARCHAR)
