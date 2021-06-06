@@ -45,6 +45,7 @@ export default class Cohort1622898818185 implements MigrationInterface {
                     },
                 ],
             }),
+            true,
         );
 
         await queryRunner.addColumn(

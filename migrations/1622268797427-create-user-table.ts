@@ -60,6 +60,7 @@ export default class CreateUserTable1622268797427 implements MigrationInterface 
                     },
                 ],
             }),
+            true,
         );
     }
 
