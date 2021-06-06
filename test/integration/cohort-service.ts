@@ -3,7 +3,7 @@ import User from '@/user/domains/User';
 import { INestApplication } from '@nestjs/common';
 import bootstrap from '@/bootstrap';
 import AppModule from '@/AppModule';
-import { createUser, removeUserByUsername } from '@test/util/user-util';
+import { createUser, getUsersByUsernames, removeUserByUsername, removeUsersByCohortName } from '@test/util/user-util';
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
 
@@ -25,7 +25,7 @@ describe('Cohort Service', () => {
         await app.close();
     });
 
-    it('SHOULD insert users into a cohort', async () => {
+    it('SHOULD be tagged users to a cohort', async () => {
         const cohortService = app.get(CohortService);
 
         const firstUserPayload = getUserPayload();
@@ -49,8 +49,15 @@ describe('Cohort Service', () => {
         expect(updatedCohort.userIds).toEqual(expect.arrayContaining([firstUser.id, secondUser.id]));
         expect(updatedCohort.updatedAt.toISOString()).not.toBe(updatedCohort.createdAt.toISOString());
 
-        await getRepository(Cohort).delete({ name: cohortPayload.name });
-        await removeUserByUsername(firstUserPayload.username);
-        await removeUserByUsername(secondUserPayload.username);
+        const usersWithCohort: User[] = await getUsersByUsernames([firstUser.username, secondUser.username]);
+
+        usersWithCohort.forEach((user) => {
+            expect(user.cohort.id).toBe(cohort.id);
+            expect(user.cohort.name).toBe(cohort.name);
+        });
+
+        // TODO handle FK/Cascade
+        // await getRepository(Cohort).delete({ name: cohortPayload.name });
+        // await removeUsersByCohortName(cohortPayload.name);
     });
 });
