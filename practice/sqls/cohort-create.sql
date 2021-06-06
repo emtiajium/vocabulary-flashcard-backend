@@ -17,7 +17,9 @@ $$
 
 INSERT INTO "Cohort"("id", "createdAt", "updatedAt", "version", "name", "users")
 VALUES (DEFAULT, DEFAULT, DEFAULT, 1, current_setting('my.cohortName')::VARCHAR,
-        ARRAY[(SELECT "getUserId"(current_setting('my.username')::VARCHAR))])
+        ARRAY [(SELECT "getUserId"(current_setting('my.username')::VARCHAR))])
 ON CONFLICT ("name") DO NOTHING;
 
-SELECT * FROM "Cohort";
+SELECT *
+FROM "Cohort"
+WHERE name = current_setting('my.cohortName')::VARCHAR;
