@@ -6,7 +6,8 @@ export default async function getUserByUsername(username: string): Promise<User>
 }
 
 export async function getUsersByUsernames(usernames: string[]): Promise<User[]> {
-    return getRepository(User).find({ username: In(usernames) });
+    // as eager is true, no need to pass { relations: ['cohort'] }
+    return getRepository(User).find({ where: { username: In(usernames) } });
 }
 
 export async function removeUserByUsername(username: string): Promise<void> {
