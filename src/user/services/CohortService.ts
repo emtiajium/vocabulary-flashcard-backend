@@ -3,14 +3,13 @@ import CohortRepository from '@/user/repositories/CohortRepository';
 import UserRepository from '@/user/repositories/UserRepository';
 import * as _ from 'lodash';
 import Cohort from '@/user/domains/Cohort';
-import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 
 @Injectable()
 export default class CohortService {
     constructor(private readonly cohortRepository: CohortRepository, private readonly userRepository: UserRepository) {}
 
-    async createCohort(name: string): Promise<void> {
-        await this.cohortRepository.insertIfNotExists({ name, users: [] });
+    async createCohort(cohort: Cohort): Promise<void> {
+        await this.cohortRepository.insertIfNotExists(cohort);
     }
 
     async addUsersToCohort(name: string, userIds: string[]): Promise<void> {

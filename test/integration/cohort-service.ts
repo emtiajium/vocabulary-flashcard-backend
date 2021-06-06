@@ -36,15 +36,14 @@ describe('Cohort Service', () => {
         await removeUserByUsername(secondUserPayload.username);
         const secondUser = await createUser(secondUserPayload);
 
-        const cohortPayload: Cohort = { name: 'The best cohort ever exist' } as Cohort;
+        const cohortPayload: Cohort = { name: 'The best cohort ever exist', userIds: [] } as Cohort;
         await getRepository(Cohort).delete({ name: cohortPayload.name });
-        await cohortService.createCohort(cohortPayload.name);
+        await cohortService.createCohort(cohortPayload);
         const cohort: Cohort = await getRepository(Cohort).findOne({ name: cohortPayload.name });
 
         await cohortService.addUsersToCohort(cohort.name, [firstUser.id, secondUser.id]);
 
         const updatedCohort: Cohort = await getRepository(Cohort).findOne({ name: cohortPayload.name });
-        // console.log('hello', updatedCohort);
 
         expect(updatedCohort.userIds).toHaveLength(2);
         expect(updatedCohort.userIds).toEqual(expect.arrayContaining([firstUser.id, secondUser.id]));

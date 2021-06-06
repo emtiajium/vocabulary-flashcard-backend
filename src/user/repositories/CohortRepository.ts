@@ -4,10 +4,11 @@ import Cohort from '@/user/domains/Cohort';
 @EntityRepository(Cohort)
 export default class CohortRepository extends Repository<Cohort> {
     async insertIfNotExists(cohort: Cohort): Promise<void> {
+        const userIds = cohort.userIds.map((userId) => `'${userId}'`);
         await this.createQueryBuilder()
             .insert()
             .into(Cohort)
-            .values({ name: () => `'${cohort.name}'::VARCHAR`, userIds: () => 'ARRAY []::UUID[]' })
+            .values({ name: () => `'${cohort.name}'::VARCHAR`, userIds: () => `ARRAY [${userIds}]::UUID[]` })
             .onConflict(`("name") DO NOTHING`)
             .printSql()
             .execute();
