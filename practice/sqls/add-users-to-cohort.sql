@@ -31,6 +31,14 @@ SET "userIds" = ARRAY [(SELECT "getUserId"(current_setting('my.firstUsername')::
     (SELECT "getUserId"(current_setting('my.secondUsername')::VARCHAR))]
 WHERE name = current_setting('my.cohortName')::VARCHAR;
 
+UPDATE "User"
+SET "cohortId" = (SELECT id FROM "Cohort" WHERE name = current_setting('my.cohortName')::VARCHAR)
+WHERE username = current_setting('my.firstUsername')::VARCHAR;
+
+UPDATE "User"
+SET "cohortId" = (SELECT id FROM "Cohort" WHERE name = current_setting('my.cohortName')::VARCHAR)
+WHERE username = current_setting('my.secondUsername')::VARCHAR;
+
 SELECT *
 FROM "Cohort"
 WHERE name = current_setting('my.cohortName')::VARCHAR;
