@@ -13,8 +13,8 @@ export async function removeUserByUsername(username: string): Promise<void> {
     await getRepository(User).delete({ username });
 }
 
-export async function removeUsersByCohortName(cohortName: string): Promise<void> {
-    await getRepository(User).delete({ cohort: { name: cohortName } });
+export async function removeUsersByUsernames(usernames: string[]): Promise<void> {
+    await getRepository(User).delete({ username: In(usernames) });
 }
 
 export async function createUser(user: User): Promise<User> {
