@@ -40,8 +40,8 @@ export default class Cohort1622898818185 implements MigrationInterface {
                     },
                     {
                         name: 'users',
-                        type: 'jsonb',
-                        default: "'[]'",
+                        type: 'varchar',
+                        isArray: true,
                     },
                 ],
             }),
