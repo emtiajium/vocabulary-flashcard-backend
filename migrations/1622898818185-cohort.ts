@@ -40,7 +40,7 @@ export default class Cohort1622898818185 implements MigrationInterface {
                     },
                     {
                         name: 'users',
-                        type: 'varchar',
+                        type: 'uuid',
                         isArray: true,
                     },
                 ],
@@ -69,7 +69,7 @@ export default class Cohort1622898818185 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('Cohort');
+        await queryRunner.dropTable('Cohort', true);
         const table = await queryRunner.getTable('User');
         const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.includes('cohortId'));
         await queryRunner.dropForeignKey('User', foreignKey);
