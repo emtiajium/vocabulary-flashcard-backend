@@ -1,5 +1,5 @@
 import BaseEntity from '@/user/domains/BaseEntity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { Expose } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
@@ -37,7 +37,7 @@ export default class User extends BaseEntity {
     profilePictureUrl?: string;
 
     @IsOptional()
-    @OneToMany(() => Cohort, (cohort) => cohort.id, { eager: true, cascade: true })
+    @ManyToOne(() => Cohort, (cohort) => cohort.id, { nullable: true, eager: true, cascade: true })
     cohort?: Cohort;
 
     @Expose()

@@ -1,5 +1,5 @@
 import BaseEntity from '@/user/domains/BaseEntity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import User from '@/user/domains/User';
 import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsString, MaxLength } from 'class-validator';
@@ -14,9 +14,12 @@ export default class Cohort extends BaseEntity {
     @Column({ type: 'varchar', unique: true })
     name: string;
 
+    @Column({ type: 'uuid', array: true })
+    // why do we need it?
+    userIds?: string[];
+
     @IsArray()
     @Type(() => User)
-    @ManyToOne(() => User, (user) => user.cohort, { nullable: true, eager: false, cascade: false })
-    @Column({ type: 'varchar', array: true })
+    @OneToMany(() => User, (user) => user.cohort, { eager: false, cascade: false })
     users: User[];
 }

@@ -39,7 +39,7 @@ export default class Cohort1622898818185 implements MigrationInterface {
                         isUnique: true,
                     },
                     {
-                        name: 'users',
+                        name: 'userIds',
                         type: 'uuid',
                         isArray: true,
                     },
