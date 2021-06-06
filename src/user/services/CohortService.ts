@@ -9,7 +9,7 @@ export default class CohortService {
     constructor(private readonly cohortRepository: CohortRepository, private readonly userRepository: UserRepository) {}
 
     async createCohort(cohort: Cohort): Promise<void> {
-        const isEmptyUserIds = cohort?.userIds.length === 0;
+        const isEmptyUserIds = cohort.userIds?.length === 0;
         if (!isEmptyUserIds) {
             await this.validateUsers(cohort.userIds);
         }
