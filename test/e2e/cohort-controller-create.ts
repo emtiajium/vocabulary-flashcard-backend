@@ -5,7 +5,7 @@ import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
-import Cohort from '@/user/domains/Cohort';
+import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
 import getCohortByName, { removeCohortByName } from '@test/util/cohort-util';
 import SupertestResponse from '@test/util/supertest';
 import User from '@/user/domains/User';
@@ -53,18 +53,37 @@ describe('/v1/cohorts', () => {
             });
 
             it('SHOULD return 400 BAD_REQUEST for payload without name', async () => {
-                const cohort = { ...getBasePayload() } as ObjectLiteral;
+                let cohort = { ...getBasePayload() } as ObjectLiteral;
                 delete cohort.name;
+                let { status } = await makeApiRequest(cohort as Cohort);
+                expect(status).toBe(400);
+
+                cohort = { ...getBasePayload(), name: null } as Cohort;
+                status = (await makeApiRequest(cohort as Cohort)).status;
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload with a large name', async () => {
+                const cohort = { ...getBasePayload(), name: 'X'.repeat(cohortNameSize + 1) } as Cohort;
+                const { status } = await makeApiRequest(cohort as Cohort);
+                expect(status).toBe(400);
+            });
+
+            // skipping as it is not working
+            it.skip('SHOULD return 400 BAD_REQUEST for payload WHEN userIds is not defined', async () => {
+                const cohort = { ...getBasePayload(), userIds: null } as Cohort;
+                const { status } = await makeApiRequest(cohort as Cohort);
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload with invalid userIds', async () => {
+                const cohort = { ...getBasePayload(), userIds: ['Hello!', null, undefined, ''] } as Cohort;
                 const { status } = await makeApiRequest(cohort as Cohort);
                 expect(status).toBe(400);
             });
         });
 
         describe('Payload with empty user IDs', () => {
-            beforeEach(async () => {
-                await removeCohortByName(getBasePayload().name);
-            });
-
             afterAll(async () => {
                 await removeCohortByName(getBasePayload().name);
             });
@@ -72,6 +91,12 @@ describe('/v1/cohorts', () => {
             it('SHOULD return 201 CREATED', async () => {
                 const { status } = await makeApiRequest(getBasePayload());
                 expect(status).toBe(201);
+            });
+        });
+
+        describe('Multiple Request With Same Payload', () => {
+            afterAll(async () => {
+                await removeCohortByName(getBasePayload().name);
             });
 
             it('SHOULD return 201 CREATED WHEN same payload is sent twice', async () => {
