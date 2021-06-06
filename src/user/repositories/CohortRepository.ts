@@ -14,6 +14,10 @@ export default class CohortRepository extends Repository<Cohort> {
             .execute();
     }
 
+    async getCohortByName(name: string): Promise<Cohort> {
+        return this.findOneOrFail({ name });
+    }
+
     async updateUsersToCohort(id: string, userIds: string[]): Promise<void> {
         const clonedUserIds = userIds.map((userId) => `'${userId}'`);
         await this.query(
