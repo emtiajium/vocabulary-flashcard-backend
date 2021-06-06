@@ -12,7 +12,7 @@ export default class CohortController {
     }
 
     @Put('/:name')
-    async addUsersToCohort(@Body() userIds: string[], @Param('id') name: string): Promise<void> {
+    async addUsersToCohort(@Body() userIds: string[], @Param('name') name: string): Promise<void> {
         await this.cohortService.addUsersToCohort(name, userIds);
     }
 }
