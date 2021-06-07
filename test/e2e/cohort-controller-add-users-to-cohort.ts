@@ -6,7 +6,7 @@ import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';
 import getCohortByName, { createCohort, removeCohortByName } from '@test/util/cohort-util';
-import SupertestResponse from '@test/util/supertest';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest';
 import User from '@/user/domains/User';
 import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
 
@@ -33,7 +33,7 @@ describe('/v1/cohorts/:name', () => {
         await app.close();
     });
 
-    const makeApiRequest = async (name: string, userIds: string[] = []): Promise<SupertestResponse<Cohort>> => {
+    const makeApiRequest = async (name: string, userIds: string[] = []): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .put(`${getAppAPIPrefix()}/v1/cohorts/${name}`)
             .send(userIds);
@@ -68,11 +68,24 @@ describe('/v1/cohorts/:name', () => {
         });
 
         it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
-            let { status } = await makeApiRequest(getBasePayload().name, [uuidV4()]);
-            expect(status).toBe(404);
+            const invalidUserIds = [uuidV4(), uuidV4(), uuidV4()];
+            const { status: status1, body: body1 } = await makeApiRequest(getBasePayload().name, [
+                invalidUserIds[0],
+                invalidUserIds[1],
+            ]);
+            expect(status1).toBe(404);
+            expect((body1 as SupertestErrorResponse).message).toBe(
+                `There are no such users having IDs ${[invalidUserIds[0], invalidUserIds[1]].join(', ')}`,
+            );
 
-            status = (await makeApiRequest(getBasePayload().name, [firstUser.id, uuidV4()])).status;
-            expect(status).toBe(404);
+            const { status: status2, body: body2 } = await makeApiRequest(getBasePayload().name, [
+                firstUser.id,
+                invalidUserIds[2],
+            ]);
+            expect(status2).toBe(404);
+            expect((body2 as SupertestErrorResponse).message).toBe(
+                `There is no such user having ID ${invalidUserIds[2]}`,
+            );
         });
 
         it('SHOULD return 200 OK', async () => {
