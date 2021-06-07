@@ -7,7 +7,7 @@ import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
 import getCohortByName, { removeCohortByName } from '@test/util/cohort-util';
-import SupertestResponse from '@test/util/supertest';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest';
 import User from '@/user/domains/User';
 import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
 import { getRepository } from 'typeorm';
@@ -35,7 +35,7 @@ describe('/v1/cohorts', () => {
         await app.close();
     });
 
-    const makeApiRequest = async (cohort?: Cohort): Promise<SupertestResponse<Cohort>> => {
+    const makeApiRequest = async (cohort?: Cohort): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/cohorts`)
             .send(cohort);
@@ -128,11 +128,20 @@ describe('/v1/cohorts', () => {
             });
 
             it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
-                let { status } = await makeApiRequest(getBasePayload([uuidV4()]));
-                expect(status).toBe(404);
+                const invalidUserId = uuidV4();
+                const { status: status1, body: body1 } = await makeApiRequest(getBasePayload([invalidUserId]));
+                expect(status1).toBe(404);
+                expect((body1 as SupertestErrorResponse).message).toBe(
+                    `There is no such user having ID ${invalidUserId}`,
+                );
 
-                status = (await makeApiRequest(getBasePayload([firstUser.id, uuidV4()]))).status;
-                expect(status).toBe(404);
+                const { status: status2, body: body2 } = await makeApiRequest(
+                    getBasePayload([firstUser.id, invalidUserId]),
+                );
+                expect(status2).toBe(404);
+                expect((body2 as SupertestErrorResponse).message).toBe(
+                    `There is no such user having ID ${invalidUserId}`,
+                );
             });
 
             it('SHOULD return 201 CREATED', async () => {
