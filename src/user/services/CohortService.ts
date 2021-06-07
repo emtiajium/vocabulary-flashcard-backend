@@ -31,7 +31,12 @@ export default class CohortService {
         const users = await this.userRepository.getUsers(userIds);
         if (users.length !== userIds.length) {
             const nonExistingUsers = _.difference(userIds, _.map(users, 'id'));
-            throw new NotFoundException(`There are no such users having IDs ${nonExistingUsers.join(', ')}`);
+            const isSingular = nonExistingUsers.length === 1;
+            throw new NotFoundException(
+                `There ${isSingular ? 'is' : 'are'} no such ${isSingular ? 'user' : 'users'} having ${
+                    isSingular ? 'ID' : 'IDs'
+                } ${nonExistingUsers.join(', ')}`,
+            );
         }
     }
 
