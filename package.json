@@ -106,7 +106,7 @@
             "<rootDir>/test/e2e/**/*.{ts,js}",
             "<rootDir>/test/integration/**/*.{ts,js}"
         ],
-        "testTimeout": 30000,
+        "testTimeout": 5000,
         "transform": {
             "^.+\\.(t|j)s$": "ts-jest"
         },
