@@ -15,7 +15,10 @@ export default class CohortService {
         }
         await this.cohortRepository.insertIfNotExists(cohort);
         if (!isEmptyUserIds) {
-            await this.tagUsersWithCohort(cohort.userIds, await this.cohortRepository.getCohortByName(cohort.name));
+            await this.associateUsersWithCohort(
+                cohort.userIds,
+                await this.cohortRepository.getCohortByName(cohort.name),
+            );
         }
     }
 
@@ -24,7 +27,7 @@ export default class CohortService {
         const currentUserIdsBelongToCohort: string[] = cohort.userIds;
         await this.validateUsers(userIds);
         await this.cohortRepository.updateUsersToCohort(cohort.id, _.union(currentUserIdsBelongToCohort, userIds));
-        await this.tagUsersWithCohort(userIds, cohort);
+        await this.associateUsersWithCohort(userIds, cohort);
     }
 
     private async validateUsers(userIds: string[]): Promise<void> {
@@ -40,7 +43,7 @@ export default class CohortService {
         }
     }
 
-    private async tagUsersWithCohort(userIds: string[], cohort): Promise<void> {
+    private async associateUsersWithCohort(userIds: string[], cohort): Promise<void> {
         await Promise.all(userIds.map((userId) => this.userRepository.updateCohort(userId, cohort.id)));
     }
 }
