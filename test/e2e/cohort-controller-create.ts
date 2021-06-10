@@ -7,7 +7,7 @@ import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
 import getCohortByName, { removeCohortByName } from '@test/util/cohort-util';
-import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import User from '@/user/domains/User';
 import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
 import { getRepository } from 'typeorm';
