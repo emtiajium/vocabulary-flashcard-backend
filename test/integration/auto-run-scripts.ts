@@ -20,7 +20,7 @@ describe('Autorun Scripts', () => {
     it('SHOULD execute the autorun scripts', async () => {
         mockRunScripts = jest.spyOn(AutoRunScripts.prototype, 'runScripts').mockImplementation(() => Promise.resolve());
 
-        await new AutoRunScripts(app).runScripts().finally();
+        await new AutoRunScripts(app).runScripts();
 
         expect(mockRunScripts).toHaveBeenCalled();
     });
