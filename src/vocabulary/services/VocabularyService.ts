@@ -1,11 +1,12 @@
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import MeaningRepository from '@/vocabulary/repositories/MeaningRepository';
 import { Injectable } from '@nestjs/common';
+import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 @Injectable()
 export default class VocabularyService {
-    constructor(
-        private readonly vocabularyRepository: VocabularyRepository,
-        private readonly meaningRepository: MeaningRepository,
-    ) {}
+    constructor(private readonly vocabularyRepository: VocabularyRepository) {}
+
+    async createVocabulary(vocabulary: Vocabulary): Promise<Vocabulary> {
+        return this.vocabularyRepository.save(vocabulary);
+    }
 }

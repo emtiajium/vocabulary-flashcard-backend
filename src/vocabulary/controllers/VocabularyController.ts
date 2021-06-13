@@ -7,7 +7,7 @@ export default class VocabularyController {
     constructor(private readonly vocabularyService: VocabularyService) {}
 
     @Post()
-    async createVocabulary(@Body() vocabulary: Vocabulary): Promise<void> {
-        await this.vocabularyService.createVocabulary(vocabulary);
+    async createVocabulary(@Body() vocabulary: Vocabulary): Promise<Vocabulary> {
+        return this.vocabularyService.createVocabulary(vocabulary);
     }
 }
