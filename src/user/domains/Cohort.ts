@@ -6,6 +6,7 @@ import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-vali
 import IsArrayContainsOnlyUuid from '@/common/validators/IsArrayContainsOnlyUuid';
 
 export const cohortNameSize = 36;
+export const defaultName = 'Wolverine';
 
 @Entity('Cohort')
 export default class Cohort extends BaseEntity {
