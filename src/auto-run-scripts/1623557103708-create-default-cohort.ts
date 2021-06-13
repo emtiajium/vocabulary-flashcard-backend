@@ -14,12 +14,11 @@ export default class CreateDefaultCohort {
 
     async createDefaultCohort(): Promise<void> {
         try {
-            const name = defaultCohortName;
             await this.cohortRepository
                 .createQueryBuilder()
                 .insert()
                 .into(Cohort)
-                .values({ name: () => `'${name}'::VARCHAR`, userIds: () => `ARRAY []::UUID[]` })
+                .values({ name: () => `'${defaultCohortName}'::VARCHAR`, userIds: () => `ARRAY []::UUID[]` })
                 .onConflict(`("name") DO NOTHING`)
                 .execute();
             this.logger.log(`Default cohort with name "${defaultCohortName}" has been created`);
