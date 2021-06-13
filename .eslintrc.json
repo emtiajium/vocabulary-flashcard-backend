@@ -115,7 +115,8 @@
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "unicorn/consistent-function-scoping": "off",
                 "max-classes-per-file": "off",
-                "class-methods-use-this": "off"
+                "class-methods-use-this": "off",
+                "import/prefer-default-export": "off"
             }
         },
         {
