@@ -6,7 +6,7 @@ import { Type } from 'class-transformer';
 
 @Entity('Meaning')
 export default class Meaning extends BaseEntity {
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', default: '' })
     @IsNotEmpty()
     @IsString()
     @IsDefined()
