@@ -1,4 +1,4 @@
-import { EntityNotFoundError, EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import EntityNotFoundException from '@/exceptions/EntityNotFoundException';
 
