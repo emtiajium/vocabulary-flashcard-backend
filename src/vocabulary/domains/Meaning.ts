@@ -1,6 +1,6 @@
 import BaseEntity from '@/common/domains/BaseEntity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { ArrayNotEmpty, IsArray, IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsDefined, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Type } from 'class-transformer';
 
@@ -34,5 +34,7 @@ export default class Meaning extends BaseEntity {
     vocabulary?: Vocabulary;
 
     @Column({ type: 'uuid' })
-    vocabularyId?: string;
+    @IsUUID()
+    @IsNotEmpty()
+    vocabularyId: string;
 }
