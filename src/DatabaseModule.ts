@@ -4,6 +4,8 @@ import DatabaseConfig from '@/common/configs/DatabaseConfig';
 import User from '@/user/domains/User';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import Cohort from '@/user/domains/Cohort';
+import Meaning from '@/vocabulary/domains/Meaning';
+import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 @Module({
     imports: [
@@ -31,7 +33,7 @@ import Cohort from '@/user/domains/Cohort';
                     username,
                     password,
                     database,
-                    entities: [User, Cohort],
+                    entities: [User, Cohort, Meaning, Vocabulary],
                     synchronize,
                     // eslint-disable-next-line unicorn/prefer-module
                     migrations: [`${__dirname}/${migrations}`],
