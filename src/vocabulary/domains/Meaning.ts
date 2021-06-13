@@ -24,6 +24,7 @@ export default class Meaning extends BaseEntity {
     notes?: string[];
 
     @Column({ type: 'varchar', array: true, default: [] })
+    // TODO add validation for the URLs
     @IsArray()
     @IsOptional()
     externalLinks?: string[];
