@@ -38,7 +38,10 @@ export default class AutoRunScripts {
                 if (error) {
                     return reject(error);
                 }
-                return resolve(files.filter((file) => file.endsWith('.js') && file !== 'index.js'));
+                return resolve(
+                    // .js file as it is supposed to execute from the build folder
+                    files.filter((file) => Number.isInteger(Number.parseInt(file, 10)) && file.endsWith('.js')),
+                );
             });
         });
     }
