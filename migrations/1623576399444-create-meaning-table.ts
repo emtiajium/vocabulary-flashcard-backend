@@ -32,6 +32,10 @@ export default class CreateMeaningTable1623576399444 implements MigrationInterfa
                         isNullable: false,
                     },
                     {
+                        name: 'meaning',
+                        type: 'varchar',
+                    },
+                    {
                         name: 'examples',
                         type: 'varchar',
                         isArray: true,
