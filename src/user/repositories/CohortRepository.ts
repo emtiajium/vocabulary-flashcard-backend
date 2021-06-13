@@ -11,7 +11,6 @@ export default class CohortRepository extends Repository<Cohort> {
             .into(Cohort)
             .values({ name: () => `'${cohort.name}'::VARCHAR`, userIds: () => `ARRAY [${userIds}]::UUID[]` })
             .onConflict(`("name") DO NOTHING`)
-            .printSql()
             .execute();
     }
 
