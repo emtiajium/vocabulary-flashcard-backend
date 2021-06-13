@@ -55,6 +55,7 @@ export default class Vocabulary extends BaseEntity {
     @Type(() => Cohort)
     cohort?: Cohort;
 
+    @Column({ type: 'uuid', nullable: false })
     @IsUUID()
     @IsNotEmpty()
     cohortId: string;

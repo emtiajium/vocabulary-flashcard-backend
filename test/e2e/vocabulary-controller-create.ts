@@ -19,14 +19,13 @@ describe('/v1/vocabularies', () => {
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
-        await removeCohortByName('Vocabulary Automated Test Cohort');
         cohort = await createCohort({ name: 'Vocabulary Automated Test Cohort', userIds: [] } as Cohort);
     });
 
     afterAll(async () => {
-        await app.close();
         await removeVocabularyAndRelationsByCohortId(cohort.id);
         await removeCohortByName(cohort.name);
+        await app.close();
     });
 
     async function makeApiRequest(vocabulary?: Vocabulary): Promise<SupertestResponse<Vocabulary>> {
