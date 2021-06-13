@@ -1,9 +1,10 @@
-import BaseEntity from '@/user/domains/BaseEntity';
+import BaseEntity from '@/common/domains/BaseEntity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import User from '@/user/domains/User';
 import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 import IsArrayContainsOnlyUuid from '@/common/validators/IsArrayContainsOnlyUuid';
+import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 export const cohortNameSize = 36;
 export const defaultName = 'Wolverine';
@@ -27,4 +28,10 @@ export default class Cohort extends BaseEntity {
     @Type(() => User)
     @OneToMany(() => User, (user) => user.cohort, { eager: false, cascade: false })
     users?: User[];
+
+    @IsArray()
+    @IsOptional()
+    @Type(() => Vocabulary)
+    @OneToMany(() => Vocabulary, (vocabulary) => vocabulary.cohort, { eager: false, cascade: false })
+    vocabularies?: Vocabulary[];
 }

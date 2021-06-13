@@ -1,4 +1,4 @@
-import BaseEntity from '@/user/domains/BaseEntity';
+import BaseEntity from '@/common/domains/BaseEntity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { Expose } from 'class-transformer';
