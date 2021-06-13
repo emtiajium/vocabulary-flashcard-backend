@@ -40,4 +40,5 @@
 
 ## Change Log
 
+-   `0.2.0`: Added cohort functionality
 -   `0.1.0`: Added user functionality
