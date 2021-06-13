@@ -13,11 +13,11 @@ export default class AutoRunScripts {
     }
 
     async runScripts(): Promise<void> {
-        const files = await this.getScripts();
+        const scripts = await this.getScripts();
         // parallel execution is okay for now
         // we may need to execute the scripts sequentially in future
         await Promise.all(
-            files.map((script) => {
+            scripts.map((script) => {
                 return this.app.get(script.name).runScript();
             }),
         );
@@ -25,9 +25,9 @@ export default class AutoRunScripts {
     }
 
     private async getScripts(): Promise<ClassType<CreateDefaultCohort>[]> {
-        const files = await this.getScriptNames();
-        return files.map((file) => {
-            const script = require(`./${file}`);
+        const scripts = await this.getScriptNames();
+        return scripts.map((scriptName) => {
+            const script = require(`./${scriptName}`);
             return script.default;
         });
     }
