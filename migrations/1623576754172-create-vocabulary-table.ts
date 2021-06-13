@@ -88,6 +88,7 @@ export default class CreateVocabularyTable1623576754172 implements MigrationInte
             new TableColumn({
                 name: 'vocabularyId',
                 type: 'uuid',
+                isNullable: true,
             }),
         );
 
@@ -113,7 +114,7 @@ export default class CreateVocabularyTable1623576754172 implements MigrationInte
 
         const meaningTable = await queryRunner.getTable(meaningTableName);
         await queryRunner.dropForeignKey(
-            vocabularyTableName,
+            meaningTableName,
             meaningTable.foreignKeys.find((fk) => fk.columnNames.includes('vocabularyId')),
         );
     }
