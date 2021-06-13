@@ -1,6 +1,16 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '@/common/domains/BaseEntity';
-import { ArrayNotEmpty, IsArray, IsBoolean, IsOptional, ValidateIf } from 'class-validator';
+import {
+    ArrayNotEmpty,
+    IsArray,
+    IsBoolean,
+    IsDefined,
+    IsNotEmpty,
+    IsOptional,
+    IsUUID,
+    ValidateIf,
+    ValidateNested,
+} from 'class-validator';
 import Meaning from '@/vocabulary/domains/Meaning';
 import { Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
@@ -27,15 +37,22 @@ export default class Vocabulary extends BaseEntity {
     isDraft: boolean;
 
     @OneToMany(() => Meaning, (meaning) => meaning.id, { eager: true, cascade: true })
+    @ValidateIf((vocabulary) => vocabulary.isDraft === false)
+    @ValidateNested({ each: true })
+    @ArrayNotEmpty()
     @Type(() => Meaning)
-    meanings: Meaning[];
+    meanings?: Meaning[];
 
     @Column({ type: 'uuid', array: true })
-    @ValidateIf((vocabulary) => vocabulary.isDraft === false)
-    @ArrayNotEmpty()
     @IsOptional()
-    meaningIds: string[];
+    meaningIds?: string[];
 
     @ManyToOne(() => Cohort, (cohort) => cohort.id, { eager: false, cascade: false })
+    @IsOptional()
+    @Type(() => Cohort)
     cohort?: Cohort;
+
+    @IsUUID()
+    @IsNotEmpty()
+    cohortId: string;
 }
