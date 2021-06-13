@@ -35,9 +35,9 @@ export default class CreateVocabularyTable1623576754172 implements MigrationInte
                         isNullable: false,
                     },
                     {
-                        name: 'meaningIds',
-                        type: 'uuid',
-                        isArray: true,
+                        name: 'vocabulary',
+                        type: 'varchar',
+                        isNullable: false,
                     },
                     {
                         name: 'genericNotes',

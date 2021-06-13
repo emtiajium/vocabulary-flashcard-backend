@@ -7,6 +7,7 @@ import {
     IsDefined,
     IsNotEmpty,
     IsOptional,
+    IsString,
     IsUUID,
     ValidateIf,
     ValidateNested,
@@ -17,17 +18,23 @@ import Cohort from '@/user/domains/Cohort';
 
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntity {
-    @Column({ type: 'varchar', array: true })
+    @Column({ type: 'varchar' })
+    @IsNotEmpty()
+    @IsString()
+    @IsDefined()
+    vocabulary: string;
+
+    @Column({ type: 'varchar', array: true, default: [] })
     @IsArray()
     @IsOptional()
     genericNotes?: string[];
 
-    @Column({ type: 'varchar', array: true })
+    @Column({ type: 'varchar', array: true, default: [] })
     @IsArray()
     @IsOptional()
     genericExternalLinks?: string[];
 
-    @Column({ type: 'varchar', array: true })
+    @Column({ type: 'varchar', array: true, default: [] })
     @IsArray()
     @IsOptional()
     linkerWords?: string[];
@@ -42,10 +49,6 @@ export default class Vocabulary extends BaseEntity {
     @ArrayNotEmpty()
     @Type(() => Meaning)
     meanings?: Meaning[];
-
-    @Column({ type: 'uuid', array: true })
-    @IsOptional()
-    meaningIds?: string[];
 
     @ManyToOne(() => Cohort, (cohort) => cohort.id, { eager: false, cascade: false })
     @IsOptional()

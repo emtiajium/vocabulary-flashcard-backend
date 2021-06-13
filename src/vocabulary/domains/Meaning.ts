@@ -12,18 +12,18 @@ export default class Meaning extends BaseEntity {
     @IsDefined()
     meaning: string;
 
-    @Column({ type: 'varchar', array: true })
+    @Column({ type: 'varchar', array: true, default: [] })
     @ArrayNotEmpty()
     @IsArray()
     @IsDefined()
     examples?: string[];
 
-    @Column({ type: 'varchar', array: true })
+    @Column({ type: 'varchar', array: true, default: [] })
     @IsArray()
     @IsOptional()
     notes?: string[];
 
-    @Column({ type: 'varchar', array: true })
+    @Column({ type: 'varchar', array: true, default: [] })
     @IsArray()
     @IsOptional()
     externalLinks?: string[];
