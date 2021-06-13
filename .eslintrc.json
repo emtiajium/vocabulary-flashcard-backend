@@ -130,6 +130,18 @@
             "rules": {
                 "class-methods-use-this": "off"
             }
+        },
+        {
+            "files": ["src/auto-run-scripts/index.ts"],
+            "rules": {
+                "unicorn/prefer-node-protocol": "off",
+                "class-methods-use-this": "off",
+                "unicorn/prefer-module": "off",
+                "@typescript-eslint/no-var-requires": "off",
+                "import/no-dynamic-require": "off",
+                "node/global-require": "off",
+                "global-require": "off"
+            }
         }
     ]
 }
