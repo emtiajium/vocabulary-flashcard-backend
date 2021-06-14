@@ -170,7 +170,7 @@ describe('/v1/vocabularies', () => {
                 expect(meanings[0].id).toBe(vocabulary.meanings[0].id);
             });
 
-            it('SHOULD return 201 CREATED with created with vocabulary', async () => {
+            it('SHOULD return 201 CREATED with created vocabulary', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
@@ -227,6 +227,33 @@ describe('/v1/vocabularies', () => {
                 expect(meanings).toHaveLength(1);
                 expect(meanings[0].vocabularyId).toBe(payload.id);
                 expect(meanings[0].id).toBe(meaningId);
+            });
+
+            it('SHOULD return 201 CREATED for the payload with multiple meanings', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = false;
+                payload.vocabulary = 'Vocabulary1';
+                payload.meanings = [
+                    getBaseMeaningPayloadWithoutRelations(payload.id, uuidV4()),
+                    getBaseMeaningPayloadWithoutRelations(payload.id, uuidV4()),
+                ];
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+                expect(status).toBe(201);
+                expect(vocabulary).toBeDefined();
+                expect(vocabulary.id).toBe(payload.id);
+                expect(vocabulary.meanings).toHaveLength(2);
+
+                const meanings = await getMeaningByVocabularyId(vocabulary.id);
+
+                expect(meanings).toHaveLength(2);
+                meanings.forEach((meaning, index) => {
+                    expect(meaning.vocabularyId).toBe(payload.id);
+                    expect(meaning.id).toBe(payload.meanings[index].id);
+                    expect(meaning.id).toBe(vocabulary.meanings[index].id);
+                });
             });
         });
     });
