@@ -10,7 +10,7 @@ import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortByName } from '@test/util/cohort-util';
 import Meaning from '@/vocabulary/domains/Meaning';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
-import { removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
+import { getMeaningByVocabularyId, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -38,8 +38,9 @@ describe('/v1/vocabularies', () => {
         };
     }
 
-    function getBaseMeaningPayloadWithoutRelations(vocabularyId?: string): Meaning {
+    function getBaseMeaningPayloadWithoutRelations(vocabularyId?: string, meaningId?: string): Meaning {
         const meaning = new Meaning();
+        meaning.id = meaningId;
         meaning.vocabularyId = vocabularyId;
         meaning.meaning = 'Meaning 1';
         meaning.examples = ['Example1'];
@@ -86,16 +87,6 @@ describe('/v1/vocabularies', () => {
                 payload.isDraft = false;
                 payload.vocabulary = 'Vocabulary1';
                 payload.meanings = null;
-                const { status } = await makeApiRequest(payload);
-                expect(status).toBe(400);
-            });
-
-            it('SHOULD return 400 BAD_REQUEST for payload WHEN meanings is an empty array', async () => {
-                const payload = new Vocabulary();
-                payload.cohortId = cohort.id;
-                payload.isDraft = false;
-                payload.vocabulary = 'Vocabulary1';
-                payload.meanings = [];
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
@@ -157,7 +148,29 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
-            it('SHOULD return 201 CREATED with created vocabulary', async () => {
+            it('SHOULD return 201 CREATED for payload WHEN meanings is an empty array', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = true;
+                payload.vocabulary = 'Vocabulary1';
+                payload.meanings = [];
+
+                const { status, body } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+
+                const vocabulary = body as Vocabulary;
+                expect(vocabulary.meanings).toHaveLength(1);
+                expect(vocabulary.meanings[0].vocabularyId).toBe(payload.id);
+
+                const meanings = await getMeaningByVocabularyId(payload.id);
+                expect(meanings).toHaveLength(1);
+                expect(meanings[0].vocabularyId).toBe(payload.id);
+                expect(meanings[0].id).toBe(vocabulary.meanings[0].id);
+            });
+
+            it('SHOULD return 201 CREATED with created with vocabulary', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
@@ -171,7 +184,49 @@ describe('/v1/vocabularies', () => {
                 expect(vocabulary.id).toBe(payload.id);
                 vocabulary.meanings.forEach((meaning) => {
                     expect(meaning.vocabularyId).toBe(payload.id);
+                    expect(meaning.id).toBeDefined();
                 });
+                expect(await getMeaningByVocabularyId(vocabulary.id)).toHaveLength(1);
+            });
+
+            it('SHOULD return 201 CREATED with same vocabulary ID', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = true;
+                payload.vocabulary = 'Vocabulary1';
+                payload.meanings = [];
+
+                const { body: draftVocabulary } = await makeApiRequest(payload);
+                const meaningId = (draftVocabulary as Vocabulary).meanings[0].id;
+                expect(meaningId).toBeDefined();
+
+                const draftMeanings = await getMeaningByVocabularyId(payload.id);
+                expect(draftMeanings).toHaveLength(1);
+                expect(draftMeanings[0].vocabularyId).toBe(payload.id);
+                expect(draftMeanings[0].id).toBe(meaningId);
+
+                // second attempt
+
+                payload.isDraft = false;
+                payload.meanings = [getBaseMeaningPayloadWithoutRelations(payload.id, meaningId)];
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary).toBeDefined();
+                expect(vocabulary.id).toBe(payload.id);
+                vocabulary.meanings.forEach((meaning) => {
+                    expect(meaning.vocabularyId).toBe(payload.id);
+                });
+
+                const meanings = await getMeaningByVocabularyId(payload.id);
+
+                expect(meanings).toHaveLength(1);
+                expect(meanings).toHaveLength(1);
+                expect(meanings[0].vocabularyId).toBe(payload.id);
+                expect(meanings[0].id).toBe(meaningId);
             });
         });
     });

@@ -3,6 +3,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { ArrayNotEmpty, IsArray, IsDefined, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Type } from 'class-transformer';
+import { v4 as uuidV4 } from 'uuid';
 
 @Entity('Meaning')
 export default class Meaning extends BaseEntity {
@@ -37,4 +38,16 @@ export default class Meaning extends BaseEntity {
     @IsUUID()
     @IsNotEmpty()
     vocabularyId: string;
+
+    // eslint-disable-next-line complexity
+    static create(vocabularyId: string, meaning?: Meaning): Meaning {
+        const meaningInstance = new Meaning();
+        meaningInstance.id = meaning?.id || uuidV4();
+        meaningInstance.vocabularyId = vocabularyId;
+        meaningInstance.meaning = meaning?.meaning || '';
+        meaningInstance.examples = meaning?.examples || [];
+        meaningInstance.notes = meaning?.notes || [];
+        meaningInstance.externalLinks = meaning?.externalLinks || [];
+        return meaningInstance;
+    }
 }

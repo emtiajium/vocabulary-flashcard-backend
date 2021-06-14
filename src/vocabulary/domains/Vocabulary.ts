@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import BaseEntity from '@/common/domains/BaseEntity';
 import {
-    ArrayNotEmpty,
     IsArray,
     IsBoolean,
     IsDefined,
@@ -13,8 +12,9 @@ import {
     ValidateNested,
 } from 'class-validator';
 import Meaning from '@/vocabulary/domains/Meaning';
-import { Type } from 'class-transformer';
+import { plainToClass, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
+import * as _ from 'lodash';
 
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntity {
@@ -46,7 +46,6 @@ export default class Vocabulary extends BaseEntity {
     @OneToMany(() => Meaning, (meaning) => meaning.id, { eager: true, cascade: true })
     @ValidateIf((vocabulary) => vocabulary.isDraft === false)
     @ValidateNested({ each: true })
-    @ArrayNotEmpty()
     @Type(() => Meaning)
     meanings?: Meaning[];
 
@@ -59,4 +58,12 @@ export default class Vocabulary extends BaseEntity {
     @IsUUID()
     @IsNotEmpty()
     cohortId: string;
+
+    static populateMeanings(vocabulary: Vocabulary): Vocabulary {
+        const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
+        vocabularyInstance.meanings = _.isEmpty(vocabulary.meanings)
+            ? [Meaning.create(vocabulary.id)]
+            : vocabulary.meanings.map((meaning) => Meaning.create(vocabulary.id, meaning));
+        return vocabularyInstance;
+    }
 }

@@ -14,3 +14,11 @@ export async function removeVocabularyAndRelationsByCohortId(cohortId: string): 
     );
     await getRepository(Vocabulary).delete({ cohortId });
 }
+
+export async function getMeaningByVocabularyId(vocabularyId: string): Promise<Meaning[]> {
+    return getRepository(Meaning).query(
+        `SELECT *
+         FROM "Meaning"
+         WHERE "vocabularyId" = '${vocabularyId}';`,
+    );
+}
