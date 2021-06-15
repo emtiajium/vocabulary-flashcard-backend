@@ -56,6 +56,16 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
+            // TODO fix it
+            it.skip('SHOULD return 400 BAD_REQUEST for payload without id', async () => {
+                const payload = new Vocabulary();
+                payload.cohortId = cohort.id;
+                payload.word = 'Word1';
+                payload.isDraft = true;
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 400 BAD_REQUEST for payload without word', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
@@ -70,7 +80,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.isDraft = true;
                 payload.cohortId = null;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
@@ -80,7 +90,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.isDraft = true;
                 payload.cohortId = 'NOT_A_UUID';
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
@@ -89,7 +99,7 @@ describe('/v1/vocabularies', () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
@@ -99,7 +109,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 payload.definitions = null;
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
@@ -110,7 +120,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations() };
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);
@@ -122,7 +132,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations('NOT_A_UUID') };
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);
@@ -134,7 +144,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const definition = getBaseDefinitionPayloadWithoutRelations(payload.id);
                 delete definition.meaning;
                 payload.definitions = [definition];
@@ -147,7 +157,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id) } as ObjectLiteral;
                 delete definition.examples;
                 payload.definitions = [definition as Definition];
@@ -160,7 +170,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id), examples: [] };
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);
@@ -172,7 +182,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = true;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 payload.definitions = [];
 
                 const { status, body } = await makeApiRequest(payload);
@@ -194,7 +204,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id)];
                 const { status, body } = await makeApiRequest(payload);
                 const vocabulary = body as Vocabulary;
@@ -213,7 +223,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = true;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 payload.definitions = [];
 
                 const { body: draftVocabulary } = await makeApiRequest(payload);
@@ -253,7 +263,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
-                payload.word = 'Vocabulary1';
+                payload.word = 'Word1';
                 payload.definitions = [
                     getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
                     getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),

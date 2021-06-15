@@ -18,6 +18,10 @@ import * as _ from 'lodash';
 
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntity {
+    // "id" should not be an optional prop
+    // client must send "id"
+    // TODO fix it!
+
     @Column({ type: 'varchar' })
     @IsNotEmpty()
     @IsString()
