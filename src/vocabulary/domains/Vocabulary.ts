@@ -46,6 +46,7 @@ export default class Vocabulary extends BaseEntity {
     @OneToMany(() => Definition, (definition) => definition.id, { eager: true, cascade: true })
     @ValidateIf((vocabulary) => vocabulary.isDraft === false)
     @ValidateNested({ each: true })
+    @IsArray()
     @Type(() => Definition)
     definitions?: Definition[];
 

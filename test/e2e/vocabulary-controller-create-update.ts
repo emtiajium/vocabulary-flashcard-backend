@@ -42,7 +42,7 @@ describe('/v1/vocabularies', () => {
         const definition = new Definition();
         definition.id = definitionId;
         definition.vocabularyId = vocabularyId;
-        definition.meaning = 'Definition 1';
+        definition.meaning = 'Meaning 1';
         definition.examples = ['Example1'];
         definition.notes = ['Notes1'];
         definition.externalLinks = ['https://gibberish.com/public/static/blah.html'];
@@ -56,16 +56,18 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
-            it('SHOULD return 400 BAD_REQUEST for payload without vocabulary', async () => {
+            it('SHOULD return 400 BAD_REQUEST for payload without word', async () => {
                 const payload = new Vocabulary();
-                payload.isDraft = true;
+                payload.id = uuidV4();
                 payload.cohortId = cohort.id;
+                payload.isDraft = true;
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
 
-            it('SHOULD return 400 BAD_REQUEST for payload without cohort', async () => {
+            it('SHOULD return 400 BAD_REQUEST for payload without cohortId', async () => {
                 const payload = new Vocabulary();
+                payload.id = uuidV4();
                 payload.isDraft = true;
                 payload.cohortId = null;
                 payload.word = 'Vocabulary1';
@@ -73,8 +75,19 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
+            it('SHOULD return 400 BAD_REQUEST for payload for invalid type of cohortId', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.cohortId = 'NOT_A_UUID';
+                payload.word = 'Vocabulary1';
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 400 BAD_REQUEST for payload without isDraft', async () => {
                 const payload = new Vocabulary();
+                payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.word = 'Vocabulary1';
                 const { status } = await makeApiRequest(payload);
@@ -83,46 +96,11 @@ describe('/v1/vocabularies', () => {
 
             it('SHOULD return 400 BAD_REQUEST for payload without definitions', async () => {
                 const payload = new Vocabulary();
-                payload.cohortId = cohort.id;
-                payload.isDraft = false;
-                payload.word = 'Vocabulary1';
-                payload.definitions = null;
-                const { status } = await makeApiRequest(payload);
-                expect(status).toBe(400);
-            });
-
-            it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].meaning', async () => {
-                const payload = new Vocabulary();
-                payload.cohortId = cohort.id;
-                payload.isDraft = false;
-                payload.word = 'Vocabulary1';
-                const definition = getBaseDefinitionPayloadWithoutRelations();
-                delete definition.meaning;
-                payload.definitions = [definition];
-                const { status } = await makeApiRequest(payload);
-                expect(status).toBe(400);
-            });
-
-            it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].examples', async () => {
-                const payload = new Vocabulary();
-                payload.cohortId = cohort.id;
-                payload.isDraft = false;
-                payload.word = 'Vocabulary1';
-                const definition = { ...getBaseDefinitionPayloadWithoutRelations() } as ObjectLiteral;
-                delete definition.examples;
-                payload.definitions = [definition as Definition];
-                const { status } = await makeApiRequest(payload);
-                expect(status).toBe(400);
-            });
-
-            it('SHOULD return 400 BAD_REQUEST for payload with empty definitions[X].examples', async () => {
-                const payload = new Vocabulary();
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Vocabulary1';
-                const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id), examples: [] };
-                payload.definitions = [definition as Definition];
+                payload.definitions = null;
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
@@ -145,7 +123,45 @@ describe('/v1/vocabularies', () => {
                 payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Vocabulary1';
-                const definition = { ...getBaseDefinitionPayloadWithoutRelations('IM_AN_NOT_A_UUID') };
+                const definition = { ...getBaseDefinitionPayloadWithoutRelations('NOT_A_UUID') };
+                payload.definitions = [definition as Definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].meaning', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = false;
+                payload.word = 'Vocabulary1';
+                const definition = getBaseDefinitionPayloadWithoutRelations(payload.id);
+                delete definition.meaning;
+                payload.definitions = [definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].examples', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = false;
+                payload.word = 'Vocabulary1';
+                const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id) } as ObjectLiteral;
+                delete definition.examples;
+                payload.definitions = [definition as Definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload with empty definitions[X].examples', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = false;
+                payload.word = 'Vocabulary1';
+                const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id), examples: [] };
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
