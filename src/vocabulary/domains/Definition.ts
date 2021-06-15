@@ -5,8 +5,8 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Type } from 'class-transformer';
 import { v4 as uuidV4 } from 'uuid';
 
-@Entity('Meaning')
-export default class Meaning extends BaseEntity {
+@Entity('Definition')
+export default class Definition extends BaseEntity {
     @Column({ type: 'varchar', default: '' })
     @IsNotEmpty()
     @IsString()
@@ -40,14 +40,14 @@ export default class Meaning extends BaseEntity {
     vocabularyId: string;
 
     // eslint-disable-next-line complexity
-    static create(vocabularyId: string, meaning?: Meaning): Meaning {
-        const meaningInstance = new Meaning();
-        meaningInstance.id = meaning?.id || uuidV4();
-        meaningInstance.vocabularyId = vocabularyId;
-        meaningInstance.meaning = meaning?.meaning || '';
-        meaningInstance.examples = meaning?.examples || [];
-        meaningInstance.notes = meaning?.notes || [];
-        meaningInstance.externalLinks = meaning?.externalLinks || [];
-        return meaningInstance;
+    static create(vocabularyId: string, definition?: Definition): Definition {
+        const definitionInstance = new Definition();
+        definitionInstance.id = definition?.id || uuidV4();
+        definitionInstance.vocabularyId = vocabularyId;
+        definitionInstance.meaning = definition?.meaning || '';
+        definitionInstance.examples = definition?.examples || [];
+        definitionInstance.notes = definition?.notes || [];
+        definitionInstance.externalLinks = definition?.externalLinks || [];
+        return definitionInstance;
     }
 }

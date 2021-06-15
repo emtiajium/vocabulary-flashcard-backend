@@ -1,11 +1,11 @@
 import { getRepository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
-import Meaning from '@/vocabulary/domains/Meaning';
+import Definition from '@/vocabulary/domains/Definition';
 
 export async function removeVocabularyAndRelationsByCohortId(cohortId: string): Promise<void> {
-    await getRepository(Meaning).query(
+    await getRepository(Definition).query(
         `DELETE
-         FROM "Meaning"
+         FROM "Definition"
          WHERE "vocabularyId" IN (
              SELECT id
              FROM "Vocabulary"
@@ -15,10 +15,10 @@ export async function removeVocabularyAndRelationsByCohortId(cohortId: string): 
     await getRepository(Vocabulary).delete({ cohortId });
 }
 
-export async function getMeaningByVocabularyId(vocabularyId: string): Promise<Meaning[]> {
-    return getRepository(Meaning).query(
+export async function getDefinitionByVocabularyId(vocabularyId: string): Promise<Definition[]> {
+    return getRepository(Definition).query(
         `SELECT *
-         FROM "Meaning"
+         FROM "Definition"
          WHERE "vocabularyId" = '${vocabularyId}';`,
     );
 }

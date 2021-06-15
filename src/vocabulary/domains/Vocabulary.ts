@@ -11,7 +11,7 @@ import {
     ValidateIf,
     ValidateNested,
 } from 'class-validator';
-import Meaning from '@/vocabulary/domains/Meaning';
+import Definition from '@/vocabulary/domains/Definition';
 import { plainToClass, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
@@ -22,7 +22,7 @@ export default class Vocabulary extends BaseEntity {
     @IsNotEmpty()
     @IsString()
     @IsDefined()
-    vocabulary: string;
+    word: string;
 
     @Column({ type: 'varchar', array: true, default: [] })
     @IsArray()
@@ -43,11 +43,11 @@ export default class Vocabulary extends BaseEntity {
     @IsBoolean()
     isDraft: boolean;
 
-    @OneToMany(() => Meaning, (meaning) => meaning.id, { eager: true, cascade: true })
+    @OneToMany(() => Definition, (definition) => definition.id, { eager: true, cascade: true })
     @ValidateIf((vocabulary) => vocabulary.isDraft === false)
     @ValidateNested({ each: true })
-    @Type(() => Meaning)
-    meanings?: Meaning[];
+    @Type(() => Definition)
+    definitions?: Definition[];
 
     @ManyToOne(() => Cohort, (cohort) => cohort.id, { eager: false, cascade: false })
     @IsOptional()
@@ -61,9 +61,9 @@ export default class Vocabulary extends BaseEntity {
 
     static populateMeanings(vocabulary: Vocabulary): Vocabulary {
         const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
-        vocabularyInstance.meanings = _.isEmpty(vocabulary.meanings)
-            ? [Meaning.create(vocabulary.id)]
-            : vocabulary.meanings.map((meaning) => Meaning.create(vocabulary.id, meaning));
+        vocabularyInstance.definitions = _.isEmpty(vocabulary.definitions)
+            ? [Definition.create(vocabulary.id)]
+            : vocabulary.definitions.map((definition) => Definition.create(vocabulary.id, definition));
         return vocabularyInstance;
     }
 }
