@@ -8,7 +8,7 @@ export default class UserService {
 
     async createUser(user: User): Promise<User> {
         // TODO associate with a brand new Cohort (name = username)
-        return this.userRepository.insertIfNotExists(user);
+        return this.userRepository.insertAndUpdateIfExist(user);
     }
 
     async getUserByUsername(username: string): Promise<User> {

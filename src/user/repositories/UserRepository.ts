@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer';
 
 @EntityRepository(User)
 export default class UserRepository extends Repository<User> {
-    async insertIfNotExists(user: User): Promise<User> {
+    async insertAndUpdateIfExist(user: User): Promise<User> {
         // possible to get the column names by accessing "this.metadata.propertiesMap"
         const updateActionOnConflict = `SET firstname = EXCLUDED.firstname,
             lastname = EXCLUDED.lastname,

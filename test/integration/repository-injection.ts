@@ -23,7 +23,7 @@ describe('Repository Injection', () => {
             lastname: 'Doe',
         } as User;
         const userRepository = app.get<UserRepository>(UserRepository);
-        await expect(userRepository.insertIfNotExists(user)).resolves.toBeDefined();
+        await expect(userRepository.insertAndUpdateIfExist(user)).resolves.toBeDefined();
         await expect(getRepository(User).findOne({ username: user.username })).resolves.toBeDefined();
         await getRepository(User).delete({ username: user.username });
     });
