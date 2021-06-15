@@ -26,7 +26,7 @@ export default class Cohort extends BaseEntity {
     @IsArray()
     @IsOptional()
     @Type(() => User)
-    @OneToMany(() => User, (user) => user.cohort, { eager: false, cascade: false })
+    @OneToMany(() => User, (user) => user.cohort, { eager: false, cascade: true })
     users?: User[];
 
     @IsArray()
