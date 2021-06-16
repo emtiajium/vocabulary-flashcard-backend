@@ -19,14 +19,13 @@ export default class Cohort extends BaseEntity {
 
     @IsArrayContainsOnlyUuid()
     @IsOptional()
-    @Column({ type: 'uuid', array: true })
     // why do we need it?
     userIds?: string[];
 
     @IsArray()
     @IsOptional()
     @Type(() => User)
-    @OneToMany(() => User, (user) => user.cohort, { eager: false, cascade: true })
+    @OneToMany(() => User, (user) => user.cohort, { eager: false, cascade: false })
     users?: User[];
 
     @IsArray()

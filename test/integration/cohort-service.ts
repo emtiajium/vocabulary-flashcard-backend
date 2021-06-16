@@ -1,4 +1,3 @@
-import { getRepository } from 'typeorm';
 import User from '@/user/domains/User';
 import { INestApplication } from '@nestjs/common';
 import bootstrap from '@/bootstrap';
@@ -43,9 +42,7 @@ describe('Cohort Service', () => {
 
         const updatedCohort: Cohort = await getCohortByName(cohortPayload.name);
 
-        expect(updatedCohort.userIds).toHaveLength(2);
-        expect(updatedCohort.userIds).toEqual(expect.arrayContaining([firstUser.id, secondUser.id]));
-        expect(updatedCohort.updatedAt.toISOString()).not.toBe(updatedCohort.createdAt.toISOString());
+        expect(updatedCohort.updatedAt.toISOString()).toBe(updatedCohort.createdAt.toISOString());
 
         const usersWithCohort: User[] = await getUsersByUsernames([firstUser.username, secondUser.username]);
 

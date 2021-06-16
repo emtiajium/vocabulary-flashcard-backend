@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
-import getCohortByName, { removeCohortByName } from '@test/util/cohort-util';
+import { removeCohortByName } from '@test/util/cohort-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import User from '@/user/domains/User';
 import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
@@ -153,14 +153,8 @@ describe('/v1/cohorts', () => {
                     secondUser.username,
                 ]);
 
-                const { name: cohortName } = getBasePayload();
-
-                await expect(firstUserWithCohort.cohort.name).toBe(getBasePayload().name);
-                await expect(secondUserWithCohort.cohort.name).toBe(getBasePayload().name);
-
-                const cohort = await getCohortByName(cohortName);
-
-                expect(cohort.userIds).toEqual(expect.arrayContaining([firstUser.id, secondUser.id]));
+                expect(firstUserWithCohort.cohort.name).toBe(getBasePayload().name);
+                expect(secondUserWithCohort.cohort.name).toBe(getBasePayload().name);
             });
         });
     });

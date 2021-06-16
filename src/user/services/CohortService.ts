@@ -24,9 +24,7 @@ export default class CohortService {
 
     async addUsersToCohort(name: string, userIds: string[]): Promise<void> {
         const cohort: Cohort = await this.cohortRepository.getCohortByName(name);
-        const currentUserIdsBelongToCohort: string[] = cohort.userIds;
         await this.validateUsers(userIds);
-        await this.cohortRepository.updateUsersToCohort(cohort.id, _.union(currentUserIdsBelongToCohort, userIds));
         await this.associateUsersWithCohort(userIds, cohort);
     }
 
