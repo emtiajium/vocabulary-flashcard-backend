@@ -6,7 +6,7 @@ import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import getUserByUsername, { removeUserByUsername } from '@test/util/user-util';
-import getCohortByName from '@test/util/cohort-util';
+import getCohortByName, { removeCohortByName } from '@test/util/cohort-util';
 import User from '@/user/domains/User';
 import SupertestResponse from '@test/util/supertest-util';
 
@@ -27,6 +27,7 @@ describe('/v1/users', () => {
 
     afterAll(async () => {
         await removeUserByUsername(getBasePayload().username);
+        await removeCohortByName(getBasePayload().username);
         await app.close();
     });
 

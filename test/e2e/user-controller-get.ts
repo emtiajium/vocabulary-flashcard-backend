@@ -7,6 +7,7 @@ import { removeUserByUsername } from '@test/util/user-util';
 import User from '@/user/domains/User';
 import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
+import { removeCohortByName } from '@test/util/cohort-util';
 
 describe('/v1/users', () => {
     let app: INestApplication;
@@ -20,6 +21,7 @@ describe('/v1/users', () => {
 
     afterAll(async () => {
         await removeUserByUsername(username);
+        await removeCohortByName(username);
         await app.close();
     });
 
