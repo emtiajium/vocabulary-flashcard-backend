@@ -14,9 +14,8 @@ WHERE "User".username = requestedUsername
 $$
     LANGUAGE SQL;
 
-INSERT INTO "Cohort"("id", "createdAt", "updatedAt", "version", "name", "userIds")
-VALUES (DEFAULT, DEFAULT, DEFAULT, 1, current_setting('my.cohortName')::VARCHAR,
-        ARRAY [(SELECT "getUserId"(current_setting('my.username')::VARCHAR))])
+INSERT INTO "Cohort"("id", "createdAt", "updatedAt", "version", "name")
+VALUES (DEFAULT, DEFAULT, DEFAULT, 1, current_setting('my.cohortName')::VARCHAR)
 ON CONFLICT ("name") DO NOTHING;
 
 UPDATE "User"
