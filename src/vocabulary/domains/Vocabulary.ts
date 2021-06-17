@@ -1,5 +1,4 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import BaseEntity from '@/common/domains/BaseEntity';
 import {
     IsArray,
     IsBoolean,
@@ -15,13 +14,10 @@ import Definition from '@/vocabulary/domains/Definition';
 import { plainToClass, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
+import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
 
 @Entity('Vocabulary')
-export default class Vocabulary extends BaseEntity {
-    // "id" should not be an optional prop
-    // client must send "id"
-    // TODO fix it!
-
+export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar' })
     @IsNotEmpty()
     @IsString()

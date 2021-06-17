@@ -56,8 +56,7 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
-            // TODO fix it
-            it.skip('SHOULD return 400 BAD_REQUEST for payload without id', async () => {
+            it('SHOULD return 400 BAD_REQUEST for payload without id', async () => {
                 const payload = new Vocabulary();
                 payload.cohortId = cohort.id;
                 payload.word = 'Word1';
