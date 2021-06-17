@@ -32,3 +32,11 @@ WHERE username = current_setting('my.secondUsername')::VARCHAR;
 SELECT *
 FROM "Cohort"
 WHERE name = current_setting('my.cohortName')::VARCHAR;
+
+SELECT *
+FROM "User"
+WHERE "cohortId" = (
+    SELECT id
+    FROM "Cohort"
+    WHERE name = current_setting('my.cohortName')::VARCHAR
+);
