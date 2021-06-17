@@ -3,9 +3,10 @@ import * as request from 'supertest';
 import bootstrap from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { ObjectLiteral } from '@/common/types/ObjectLiteral';
-import { createUser, removeUserByUsername } from '@test/util/user-util';
+import { removeUserByUsername } from '@test/util/user-util';
 import User from '@/user/domains/User';
+import UserService from '@/user/services/UserService';
+import SupertestResponse from '@test/util/supertest-util';
 
 describe('/v1/users', () => {
     let app: INestApplication;
@@ -22,7 +23,7 @@ describe('/v1/users', () => {
         await app.close();
     });
 
-    const makeApiRequest = async (): Promise<ObjectLiteral> => {
+    const makeApiRequest = async (): Promise<SupertestResponse<User>> => {
         const { status, body } = await request(app.getHttpServer()).get(`${getAppAPIPrefix()}/v1/users/${username}`);
         return {
             status,
@@ -32,16 +33,18 @@ describe('/v1/users', () => {
 
     describe('GET /:username', () => {
         beforeAll(async () => {
-            await createUser({
+            await app.get(UserService).createUser({
                 username,
                 firstname: 'John',
             } as User);
         });
 
         it('SHOULD return 200 OK with user details', async () => {
-            const { body: user } = await makeApiRequest();
+            const { body } = await makeApiRequest();
+            const user = body as User;
             expect(user).toBeDefined();
             expect(user.username).toBe(username);
+            expect(user.cohort).toMatchObject({ name: user.username });
         });
     });
 });
