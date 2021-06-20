@@ -15,6 +15,7 @@ class Bootstrap {
 
     async start(): Promise<INestApplication> {
         const app: INestApplication = await NestFactory.create(this.appModule);
+        app.enableCors();
         app.enableShutdownHooks();
         app.useGlobalPipes(new ValidationPipe());
         const serviceConfig = new ServiceConfig();
