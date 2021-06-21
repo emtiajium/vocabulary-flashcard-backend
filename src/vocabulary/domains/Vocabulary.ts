@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import {
+    ArrayNotEmpty,
     IsArray,
     IsBoolean,
     IsDefined,
@@ -46,6 +47,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @OneToMany(() => Definition, (definition) => definition.id, { eager: true, cascade: true })
     @ValidateIf((vocabulary) => vocabulary.isDraft === false)
     @ValidateNested({ each: true })
+    @ArrayNotEmpty()
     @IsArray()
     @Type(() => Definition)
     definitions?: Definition[];

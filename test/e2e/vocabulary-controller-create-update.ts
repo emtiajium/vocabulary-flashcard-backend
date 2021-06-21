@@ -114,6 +114,17 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
+            it('SHOULD return 400 BAD_REQUEST for payload with empty definitions', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].vocabularyId', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
