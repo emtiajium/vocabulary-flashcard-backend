@@ -25,4 +25,8 @@ export default class VocabularyService {
     async findVocabularies(vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
         return this.vocabularyRepository.findVocabularies(vocabularySearch);
     }
+
+    async findVocabularyById(id: string): Promise<Vocabulary> {
+        return this.vocabularyRepository.findVocabularyById(id);
+    }
 }

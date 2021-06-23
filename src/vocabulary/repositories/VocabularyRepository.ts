@@ -16,4 +16,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         const [vocabularyQueryResult, totalNumberOfVocabularies] = await vocabularyQuery.getManyAndCount();
         return new SearchResult(vocabularyQueryResult, totalNumberOfVocabularies);
     }
+
+    async findVocabularyById(id: string): Promise<Vocabulary> {
+        return this.findOne({ id });
+    }
 }
