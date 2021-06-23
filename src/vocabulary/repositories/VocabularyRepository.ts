@@ -18,6 +18,17 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     }
 
     async findVocabularyById(id: string): Promise<Vocabulary> {
-        return this.findOne({ id });
+        const result = await this.query(
+            `
+                SELECT vocabulary.*,
+                       json_agg(definition.*) AS definitions
+                FROM "Vocabulary" AS vocabulary
+                         INNER JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
+                WHERE vocabulary.id = $1
+                GROUP BY vocabulary.id;
+            `,
+            [id],
+        );
+        return result[0];
     }
 }
