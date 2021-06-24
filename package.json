@@ -4,6 +4,9 @@
     "author": "271emtiaj@gmail.com",
     "private": true,
     "license": "UNLICENSED",
+    "engines": {
+        "node": "14.x"
+    },
     "scripts": {
         "create:env": "node -r fs -e \"fs.copyFileSync('.env.sample', '.env', fs.constants.COPYFILE_EXCL)\"",
         "prebuild": "rimraf dist",
