@@ -38,6 +38,14 @@
 
 ➜ `npm run typeorm migration:create -- -n name-of-the-migration`
 
+## Deploy to Heroku
+
+➜ [Install Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+
+➜ Set the environment variables by navigating to the Heroku dashboard's settings' tab
+
+➜ Follow the [steps](https://devcenter.heroku.com/articles/deploying-nodejs)
+
 ## Change Log
 
 -   `0.3.0`: Added vocabulary creation/update functionality
