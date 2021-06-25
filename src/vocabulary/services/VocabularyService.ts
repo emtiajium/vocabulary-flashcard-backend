@@ -17,7 +17,9 @@ export default class VocabularyService {
         const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
         // this is a workaround
         // facing issues during "UPDATE"
-        await this.definitionRepository.removeDefinitionsByIds(_.map(vocabularyInstance.definitions, 'id'));
+        if (vocabulary.definitions.length > 0) {
+            await this.definitionRepository.removeDefinitionsByIds(_.map(vocabularyInstance.definitions, 'id'));
+        }
         await this.vocabularyRepository.removeVocabularyById(vocabularyInstance.id);
         return this.vocabularyRepository.save(vocabularyInstance);
     }

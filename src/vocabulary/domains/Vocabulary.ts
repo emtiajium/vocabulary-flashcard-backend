@@ -64,9 +64,11 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
 
     static populateMeanings(vocabulary: Vocabulary): Vocabulary {
         const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
-        vocabularyInstance.definitions = _.isEmpty(vocabulary.definitions)
-            ? [Definition.create(vocabulary.id)]
-            : vocabulary.definitions.map((definition) => Definition.create(vocabulary.id, definition));
+        if (!_.isEmpty(vocabulary.definitions)) {
+            vocabularyInstance.definitions = vocabulary.definitions.map((definition) =>
+                Definition.create(vocabulary.id, definition),
+            );
+        }
         return vocabularyInstance;
     }
 }

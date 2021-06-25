@@ -200,13 +200,10 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
 
                 const vocabulary = body as Vocabulary;
-                expect(vocabulary.definitions).toHaveLength(1);
-                expect(vocabulary.definitions[0].vocabularyId).toBe(payload.id);
+                expect(vocabulary.definitions).toHaveLength(0);
 
                 const definitions = await getDefinitionByVocabularyId(payload.id);
-                expect(definitions).toHaveLength(1);
-                expect(definitions[0].vocabularyId).toBe(payload.id);
-                expect(definitions[0].id).toBe(vocabulary.definitions[0].id);
+                expect(definitions).toHaveLength(0);
             });
 
             it('SHOULD return 201 CREATED with created vocabulary', async () => {
@@ -232,22 +229,21 @@ describe('/v1/vocabularies', () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
                 payload.cohortId = cohort.id;
-                payload.isDraft = true;
+                payload.isDraft = false;
                 payload.word = 'Word1';
-                payload.definitions = [];
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id)];
 
                 const { body: draftVocabulary } = await makeApiRequest(payload);
                 const definitionId = (draftVocabulary as Vocabulary).definitions[0].id;
                 expect(definitionId).toBeDefined();
 
-                const draftMeanings = await getDefinitionByVocabularyId(payload.id);
-                expect(draftMeanings).toHaveLength(1);
-                expect(draftMeanings[0].vocabularyId).toBe(payload.id);
-                expect(draftMeanings[0].id).toBe(definitionId);
+                const draftDefinitions = await getDefinitionByVocabularyId(payload.id);
+                expect(draftDefinitions).toHaveLength(1);
+                expect(draftDefinitions[0].vocabularyId).toBe(payload.id);
+                expect(draftDefinitions[0].id).toBe(definitionId);
 
                 // second attempt
 
-                payload.isDraft = false;
                 payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id, definitionId)];
 
                 const { status, body } = await makeApiRequest(payload);
