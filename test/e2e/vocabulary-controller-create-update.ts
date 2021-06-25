@@ -225,6 +225,44 @@ describe('/v1/vocabularies', () => {
                 expect(await getDefinitionByVocabularyId(vocabulary.id)).toHaveLength(1);
             });
 
+            it('SHOULD return 201 CREATED with same vocabulary ID WHEN definition is defined later', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.definitions = [];
+
+                const { body } = await makeApiRequest(payload);
+                const draftVocabulary = body as Vocabulary;
+                expect(draftVocabulary).toBeDefined();
+                expect(draftVocabulary.id).toBe(payload.id);
+
+                const draftDefinitions = await getDefinitionByVocabularyId(payload.id);
+                expect(draftDefinitions).toHaveLength(0);
+
+                // second attempt
+
+                payload.isDraft = false;
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4())];
+
+                const { status, body: body2 } = await makeApiRequest(payload);
+                const vocabulary = body2 as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary).toBeDefined();
+                expect(vocabulary.id).toBe(payload.id);
+                expect(vocabulary.definitions).toHaveLength(1);
+                expect(vocabulary.definitions[0].vocabularyId).toBe(payload.id);
+
+                const definitions = await getDefinitionByVocabularyId(payload.id);
+
+                expect(definitions).toHaveLength(1);
+                expect(definitions).toHaveLength(1);
+                expect(definitions[0].vocabularyId).toBe(payload.id);
+                expect(definitions[0].id).toBeDefined();
+            });
+
             it('SHOULD return 201 CREATED with same vocabulary ID', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
@@ -244,7 +282,14 @@ describe('/v1/vocabularies', () => {
 
                 // second attempt
 
-                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id, definitionId)];
+                // different definition
+                payload.definitions = [
+                    {
+                        ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                        meaning: 'Updated meaning',
+                        examples: ['Updated example'],
+                    },
+                ];
 
                 const { status, body } = await makeApiRequest(payload);
                 const vocabulary = body as Vocabulary;
@@ -252,16 +297,19 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
                 expect(vocabulary).toBeDefined();
                 expect(vocabulary.id).toBe(payload.id);
-                vocabulary.definitions.forEach((definition) => {
-                    expect(definition.vocabularyId).toBe(payload.id);
-                });
+                expect(vocabulary.definitions).toHaveLength(1);
+                expect(vocabulary.definitions[0].vocabularyId).toBe(payload.id);
+                expect(vocabulary.definitions[0].meaning).toBe(payload.definitions[0].meaning);
+                expect(vocabulary.definitions[0].examples).toHaveLength(1);
+                expect(vocabulary.definitions[0].examples[0]).toBe(payload.definitions[0].examples[0]);
 
                 const definitions = await getDefinitionByVocabularyId(payload.id);
 
                 expect(definitions).toHaveLength(1);
                 expect(definitions).toHaveLength(1);
                 expect(definitions[0].vocabularyId).toBe(payload.id);
-                expect(definitions[0].id).toBe(definitionId);
+                expect(definitions[0].id).not.toBe(definitionId);
+                expect(definitions[0].id).toBe(payload.definitions[0].id);
             });
 
             it('SHOULD return 201 CREATED for the payload with multiple definitions', async () => {

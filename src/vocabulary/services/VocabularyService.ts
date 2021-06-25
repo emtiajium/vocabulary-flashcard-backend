@@ -1,10 +1,11 @@
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import * as _ from 'lodash';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
+import Definition from '@/vocabulary/domains/Definition';
 
 @Injectable()
 export default class VocabularyService {
@@ -14,13 +15,13 @@ export default class VocabularyService {
     ) {}
 
     async createVocabulary(vocabulary: Vocabulary): Promise<Vocabulary> {
-        const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
-        // this is a workaround
-        // facing issues during "UPDATE"
-        if (vocabulary.definitions.length > 0) {
-            await this.definitionRepository.removeDefinitionsByIds(_.map(vocabularyInstance.definitions, 'id'));
+        const existingVocabulary = await this.findVocabularyById(vocabulary.id);
+        if (existingVocabulary) {
+            // this is a workaround
+            // facing issues during "UPDATE"
+            await this.removeVocabularyAndDefinitions(existingVocabulary);
         }
-        await this.vocabularyRepository.removeVocabularyById(vocabularyInstance.id);
+        const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
         return this.vocabularyRepository.save(vocabularyInstance);
     }
 
@@ -30,5 +31,25 @@ export default class VocabularyService {
 
     async findVocabularyById(id: string): Promise<Vocabulary> {
         return this.vocabularyRepository.findVocabularyById(id);
+    }
+
+    private extractDefinitionIds = (definitions: Definition[]): string[] => {
+        return _.map(definitions, 'id');
+    };
+
+    async assertExistenceAndRemoveVocabularyAndDefinitions(id: string): Promise<void> {
+        const existingVocabulary = await this.findVocabularyById(id);
+        if (existingVocabulary) {
+            await this.removeVocabularyAndDefinitions(existingVocabulary);
+        } else {
+            throw new NotFoundException(`Vocabulary with ID "${id}" does not exist`);
+        }
+    }
+
+    async removeVocabularyAndDefinitions(vocabulary: Vocabulary): Promise<void> {
+        if (!_.isEmpty(vocabulary.definitions)) {
+            await this.definitionRepository.removeDefinitionsByIds(this.extractDefinitionIds(vocabulary.definitions));
+        }
+        await this.vocabularyRepository.removeVocabularyById(vocabulary.id);
     }
 }

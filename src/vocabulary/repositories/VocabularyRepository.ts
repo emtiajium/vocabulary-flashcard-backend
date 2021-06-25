@@ -23,12 +23,21 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 SELECT vocabulary.*,
                        json_agg(definition.*) AS definitions
                 FROM "Vocabulary" AS vocabulary
-                         INNER JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
+                         LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
                 WHERE vocabulary.id = $1
                 GROUP BY vocabulary.id;
             `,
             [id],
         );
+
+        if (result[0]) {
+            return {
+                ...result[0],
+                // as LEFT join result[0].definitions can be [null]
+                definitions: result[0].definitions[0] ? result[0].definitions : [],
+            } as Vocabulary;
+        }
+
         return result[0];
     }
 }
