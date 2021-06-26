@@ -1,5 +1,5 @@
 import VocabularyService from '@/vocabulary/services/VocabularyService';
-import { Body, Controller, HttpCode, Post, HttpStatus, Get, Param } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, HttpStatus, Get, Param, Delete } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
@@ -22,5 +22,10 @@ export default class VocabularyController {
     @Get('/:id')
     async findVocabularyById(@Param('id') id: string): Promise<Vocabulary> {
         return this.vocabularyService.findVocabularyById(id);
+    }
+
+    @Delete('/:id')
+    async removeVocabularyById(@Param('id') id: string): Promise<void> {
+        await this.vocabularyService.removeVocabularyById(id);
     }
 }

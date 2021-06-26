@@ -52,4 +52,8 @@ export default class VocabularyService {
         }
         await this.vocabularyRepository.removeVocabularyById(vocabulary.id);
     }
+
+    async removeVocabularyById(id: string): Promise<void> {
+        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id);
+    }
 }
