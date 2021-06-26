@@ -1,8 +1,8 @@
 import { EntityRepository, Repository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
-import VocabularySearchQueryBuilder from '@/vocabulary/repositories/VocabularySearchQueryBuilder';
 import SearchResult from '@/common/domains/SearchResult';
+import * as _ from 'lodash';
 
 @EntityRepository(Vocabulary)
 export default class VocabularyRepository extends Repository<Vocabulary> {
@@ -11,14 +11,45 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     }
 
     async findVocabularies(vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
-        const searchQueryBuilder = new VocabularySearchQueryBuilder(vocabularySearch);
-        const vocabularyQuery = searchQueryBuilder.build(this.createQueryBuilder());
-        const [vocabularyQueryResult, totalNumberOfVocabularies] = await vocabularyQuery.getManyAndCount();
-        return new SearchResult(vocabularyQueryResult, totalNumberOfVocabularies);
+        const {
+            pagination: { pageSize, pageNumber },
+            cohortId,
+        } = vocabularySearch;
+
+        const currentPage = pageSize * (pageNumber - 1);
+
+        let vocabularyQueryResult = await this.query(
+            `
+                SELECT vocabulary.*,
+                       json_agg(definition.*)      AS definitions,
+                       (COUNT(*) OVER ())::INTEGER AS "totalNumberOfVocabularies"
+                FROM "Vocabulary" AS vocabulary
+                         LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
+                WHERE vocabulary."cohortId" = $1
+                GROUP BY vocabulary.id
+                OFFSET $2 LIMIT $3;
+            `,
+            [cohortId, currentPage, pageSize],
+        );
+
+        vocabularyQueryResult = this.rejectNull(vocabularyQueryResult);
+
+        return new SearchResult(vocabularyQueryResult, vocabularyQueryResult[0]?.totalNumberOfVocabularies || 0);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    rejectNull(result: Vocabulary[]): Vocabulary[] {
+        // as LEFT join result[index].definitions can be [null]
+        return _.map(result, (eachResult) => {
+            return {
+                ...eachResult,
+                definitions: eachResult.definitions[0] ? eachResult.definitions : [],
+            };
+        });
     }
 
     async findVocabularyById(id: string): Promise<Vocabulary> {
-        const result = await this.query(
+        let result = await this.query(
             `
                 SELECT vocabulary.*,
                        json_agg(definition.*) AS definitions
@@ -30,13 +61,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             [id],
         );
 
-        if (result[0]) {
-            return {
-                ...result[0],
-                // as LEFT join result[0].definitions can be [null]
-                definitions: result[0].definitions[0] ? result[0].definitions : [],
-            } as Vocabulary;
-        }
+        result = this.rejectNull(result);
 
         return result[0];
     }
