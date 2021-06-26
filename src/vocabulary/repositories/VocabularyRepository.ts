@@ -27,6 +27,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
                 WHERE vocabulary."cohortId" = $1
                 GROUP BY vocabulary.id
+                ORDER BY vocabulary."createdAt" DESC
                 OFFSET $2 LIMIT $3;
             `,
             [cohortId, currentPage, pageSize],
