@@ -48,6 +48,7 @@ export default class InsertVocabularies {
                         vocabularyId,
                     } as Definition;
                 }),
+                isDraft: false,
             } as Vocabulary;
         });
     }
@@ -70,8 +71,6 @@ export default class InsertVocabularies {
         await Promise.all(
             _.map(this.vocabularies, (vocabulary) => {
                 const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
-                vocabularyInstance.cohortId = this.cohortId;
-                vocabularyInstance.isDraft = false;
                 return getRepository(Vocabulary).save(vocabularyInstance);
             }),
         );

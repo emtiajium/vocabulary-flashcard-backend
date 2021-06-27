@@ -143,6 +143,13 @@
                 "unicorn/prefer-node-protocol": "off",
                 "unicorn/import-style": "off"
             }
+        },
+        {
+            "files": ["scripts/*.ts"],
+            "rules": {
+                "unicorn/no-process-exit": "off",
+                "no-console": "off"
+            }
         }
     ]
 }
