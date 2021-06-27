@@ -11,6 +11,7 @@
         "create:env": "node -r fs -e \"fs.copyFileSync('.env.sample', '.env', fs.constants.COPYFILE_EXCL)\"",
         "prebuild": "rimraf dist",
         "build": "nest build",
+        "heroku-postbuild": "echo This runs after Heroku installs dependencies, but before Heroku prunes and caches dependencies.",
         "format": "prettier --write \"migrations/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\"",
         "format:check": "prettier --check \"migrations/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\"",
         "start": "npm run start:prod",
