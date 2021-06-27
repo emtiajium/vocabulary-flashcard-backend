@@ -44,6 +44,8 @@
 
 ➜ Set the environment variables by navigating to the Heroku dashboard's settings' tab
 
+➜ Modify the environment `NPM_CONFIG_PRODUCTION` using the command: `heroku config:set NPM_CONFIG_PRODUCTION=false`
+
 ➜ Follow the [steps](https://devcenter.heroku.com/articles/deploying-nodejs)
 
 ## Change Log
