@@ -35,22 +35,22 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         vocabularyQueryResult = this.rejectNull(vocabularyQueryResult);
 
+        // TODO remove "totalNumberOfVocabularies" from the "vocabularyQueryResult"
+
         return new SearchResult(vocabularyQueryResult, vocabularyQueryResult[0]?.totalNumberOfVocabularies || 0);
     }
 
     // eslint-disable-next-line class-methods-use-this
-    rejectNull(result: Vocabulary[]): Vocabulary[] {
-        // as LEFT join result[index].definitions can be [null]
-        return _.map(result, (eachResult) => {
-            return {
-                ...eachResult,
-                definitions: eachResult.definitions[0] ? eachResult.definitions : [],
-            };
-        });
+    rejectNull(results: Vocabulary[]): Vocabulary[] {
+        // as LEFT join results[index].definitions can be [null]
+        return _.map(results, (result) => ({
+            ...result,
+            definitions: result.definitions[0] ? result.definitions : [],
+        }));
     }
 
     async findVocabularyById(id: string): Promise<Vocabulary> {
-        let result = await this.query(
+        const results = await this.query(
             `
                 SELECT vocabulary.*,
                        json_agg(definition.*) AS definitions
@@ -62,8 +62,6 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             [id],
         );
 
-        result = this.rejectNull(result);
-
-        return result[0];
+        return this.rejectNull(results)[0];
     }
 }
