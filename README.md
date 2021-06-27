@@ -42,15 +42,13 @@
 
 ➜ [Install Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
-➜ Set the environment variables by navigating to the Heroku dashboard's settings' tab
-
-➜ Modify the environment `NPM_CONFIG_PRODUCTION` using the command: `heroku config:set NPM_CONFIG_PRODUCTION=false`
+➜ Set the environment variables by navigating to the [Heroku dashboard's](https://dashboard.heroku.com/) settings' tab
 
 ➜ Follow the [steps](https://devcenter.heroku.com/articles/deploying-nodejs)
 
 ## Change Log
 
--   `0.3.1`: Added vocabulary search/removal functionality
+-   `0.3.1`: Added vocabulary find/removal functionality
 -   `0.3.0`: Added vocabulary creation/update functionality
 -   `0.2.0`: Added cohort functionality
 -   `0.1.0`: Added user functionality
