@@ -13,7 +13,7 @@
         "build": "nest build",
         "format": "prettier --write \"migrations/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\"",
         "format:check": "prettier --check \"migrations/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\"",
-        "start": "nest start",
+        "start": "npm run start:prod",
         "start:dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "npm run typeorm migration:run && node dist/main",
