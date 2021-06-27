@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { DatabaseType } from 'typeorm/driver/types/DatabaseType';
 import { Injectable } from '@nestjs/common';
+import * as path from 'path';
 
 @Injectable()
 export default class DatabaseConfig {
@@ -20,6 +21,8 @@ export default class DatabaseConfig {
 
     synchronize: boolean;
 
+    entities: string[];
+
     migrations: string[];
 
     migrationDirectory: string;
@@ -35,7 +38,8 @@ export default class DatabaseConfig {
         this.password = this.configService.get<string>('TYPEORM_PASSWORD');
         this.database = this.configService.get<string>('TYPEORM_DATABASE');
         this.synchronize = this.configService.get<boolean>('TYPEORM_SYNCHRONIZE');
-        this.migrations = [this.configService.get<string>('TYPEORM_MIGRATIONS')];
+        this.entities = [path.join(process.cwd(), this.configService.get<string>('TYPEORM_MIGRATIONS'))];
+        this.migrations = [`${process.cwd()}/${this.configService.get<string>('TYPEORM_MIGRATIONS')}`];
         this.logging = this.configService.get<string>('TYPEORM_LOGGING').split(',');
         this.migrationDirectory = this.configService.get<string>('TYPEORM_MIGRATIONS_DIR');
     }

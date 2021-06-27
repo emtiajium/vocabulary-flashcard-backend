@@ -1,16 +1,24 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import DatabaseConfig from '@/common/configs/DatabaseConfig';
-import User from '@/user/domains/User';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import Cohort from '@/user/domains/Cohort';
-import Definition from '@/vocabulary/domains/Definition';
-import Vocabulary from '@/vocabulary/domains/Vocabulary';
+import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
+import UserRepository from '@/user/repositories/UserRepository';
+import CohortRepository from '@/user/repositories/CohortRepository';
+import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
+            imports: [
+                ConfigModule,
+                TypeOrmModule.forFeature([
+                    UserRepository,
+                    CohortRepository,
+                    VocabularyRepository,
+                    DefinitionRepository,
+                ]),
+            ],
             useFactory: (): TypeOrmModuleOptions => {
                 const databaseConfig = new DatabaseConfig();
                 const {
@@ -21,6 +29,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
                     database,
                     synchronize,
                     connection,
+                    entities,
                     migrations,
                     migrationDirectory,
                     logging,
@@ -33,10 +42,9 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
                     username,
                     password,
                     database,
-                    entities: [User, Cohort, Definition, Vocabulary],
+                    entities,
                     synchronize,
-                    // eslint-disable-next-line unicorn/prefer-module
-                    migrations: [`${__dirname}/${migrations}`],
+                    migrations,
                     cli: {
                         migrationsDir: migrationDirectory,
                     },

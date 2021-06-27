@@ -120,13 +120,6 @@
             }
         },
         {
-            "files": ["src/common/EnvVars.ts"],
-            "rules": {
-                "node/no-process-env": "off",
-                "unicorn/no-static-only-class": "off"
-            }
-        },
-        {
             "files": ["migrations/**/*.ts"],
             "rules": {
                 "class-methods-use-this": "off"
@@ -142,6 +135,13 @@
                 "import/no-dynamic-require": "off",
                 "node/global-require": "off",
                 "global-require": "off"
+            }
+        },
+        {
+            "files": ["src/common/configs/DatabaseConfig.ts"],
+            "rules": {
+                "unicorn/prefer-node-protocol": "off",
+                "unicorn/import-style": "off"
             }
         }
     ]

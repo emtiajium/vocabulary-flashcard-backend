@@ -1,5 +1,5 @@
-import Vocabulary from '@/vocabulary/domains/Vocabulary';
-import Definition from '@/vocabulary/domains/Definition';
+import Vocabulary from '../src/vocabulary/domains/Vocabulary';
+import Definition from '../src/vocabulary/domains/Definition';
 
 type CustomDefinition = Required<Pick<Definition, 'meaning' | 'examples' | 'notes' | 'externalLinks'>>;
 type VocabularyWithoutDefinitions = Required<
