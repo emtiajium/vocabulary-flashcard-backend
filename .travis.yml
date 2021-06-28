@@ -1,5 +1,23 @@
-import:
-    - source: .travis.integration.yml
-    # blocking as could not find a way to set the environment variable before selecting the config file
-    # - source: .travis.deployment.yml
-    #  if: branch = master AND env(READY_TO_DEPLOY) = yes
+language: node_js
+node_js:
+    - 14.15.4
+before_install:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+install:
+    - npm install
+script:
+    # Prettier
+    - npm run format:check
+    # ESLint
+    - npm run lint:check
+    # Docker container
+    - docker-compose up -d
+    - docker-compose ps
+    # Create environment variables
+    - npm run create:env
+    # Database Table CRUD
+    - npm run typeorm migration:run
+    # Automated Test
+    - npm run test
+after_script:
+    - docker-compose stop && docker-compose rm -f && docker-compose down --volumes
