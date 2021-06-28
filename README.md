@@ -38,13 +38,15 @@
 
 ➜ `npm run typeorm migration:create -- -n name-of-the-migration`
 
-## Deploy to Heroku
+## Deploy to AWS Elastic Beanstalk
 
-➜ [Install Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+➜ Create an application at AWS Elastic Beanstalk
 
-➜ Set the environment variables by navigating to the [Heroku dashboard's](https://dashboard.heroku.com/) settings' tab
+➜ Create a deployment pipeline at AWS CodePipeline
 
-➜ Follow the [steps](https://devcenter.heroku.com/articles/deploying-nodejs)
+➜ Set the environment variables at AWS Elastic Beanstalk
+
+➜ Deploy!
 
 ## Change Log
 
