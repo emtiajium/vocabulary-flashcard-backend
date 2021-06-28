@@ -3,7 +3,7 @@ node_js:
     - 14.15.4
 install:
     - npm install
-scripts:
+script:
     - npm run build
     - npm run start:prod
 deploy:
@@ -17,4 +17,3 @@ deploy:
     secret_access_key: $AWS_SECRET_KEY
     on:
         branch: master
-        condition: '$READY_TO_DEPLOY = yes'

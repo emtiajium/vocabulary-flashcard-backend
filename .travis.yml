@@ -1,5 +1,5 @@
 import:
     - source: .travis.deployment.yml
-      if: branch = release
+      if: branch = master AND env(READY_TO_DEPLOY) = yes
     - source: .travis.integration.yml
-      if: branch != release
+      if: env(READY_TO_DEPLOY) = no
