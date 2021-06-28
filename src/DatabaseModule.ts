@@ -2,23 +2,11 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import DatabaseConfig from '@/common/configs/DatabaseConfig';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import UserRepository from '@/user/repositories/UserRepository';
-import CohortRepository from '@/user/repositories/CohortRepository';
-import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
-            imports: [
-                ConfigModule,
-                TypeOrmModule.forFeature([
-                    UserRepository,
-                    CohortRepository,
-                    VocabularyRepository,
-                    DefinitionRepository,
-                ]),
-            ],
+            imports: [ConfigModule],
             useFactory: (): TypeOrmModuleOptions => {
                 // do we need it?
                 // https://typeorm.io/#/using-ormconfig/which-configuration-file-is-used-by-typeorm
