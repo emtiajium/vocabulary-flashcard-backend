@@ -29,8 +29,9 @@ deploy:
     app: 'IELTS back-end'
     env: 'Ieltsbackend-env'
     bucket_name: $ELASSTIC_BEANSTALK_S3_BUCKET
+    bucket_path: 'IELTS back-end'
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
     on:
         branch: master
         condition: '$READY_TO_DEPLOY = yes'
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
