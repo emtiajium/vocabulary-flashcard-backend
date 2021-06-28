@@ -1,37 +1,5 @@
-language: node_js
-node_js:
-    - 14.15.4
-before_install:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-install:
-    - npm install
-scripts:
-    # Prettier
-    - npm run format:check
-    # ESLint
-    - npm run lint:check
-    # Docker container
-    - docker-compose up -d
-    - docker-compose ps
-    # Create environment variables
-    - npm run create:env
-    # Database Table CRUD
-    - npm run typeorm migration:run
-    # Automated Test
-    - npm run test
-    # Build
-    - npm run build
-after_script:
-    - docker-compose stop && docker-compose rm -f && docker-compose down --volumes
-deploy:
-    provider: elasticbeanstalk
-    region: 'ap-south-1'
-    app: 'IELTS back-end'
-    env: 'Ieltsbackend-env'
-    bucket_name: $ELASSTIC_BEANSTALK_S3_BUCKET
-    bucket_path: 'IELTS back-end'
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    on:
-        branch: master
-        condition: '$READY_TO_DEPLOY = yes'
+import:
+    - source: .travis.deployment.yml
+      if: branch = release
+    - source: .travis.integration.yml
+      if: branch != release
