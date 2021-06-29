@@ -14,7 +14,7 @@
 
 ➜ `npm install`
 
-###### Create your configuration running the command below and editing the .env environment
+###### Create your configuration running the command below and edit the .env
 
 ➜ `npm run create:env`
 
@@ -43,6 +43,8 @@
 ➜ Create an application at AWS Elastic Beanstalk
 
 ➜ Create a deployment pipeline at AWS CodePipeline
+
+➜ Create the database at AWS RDS
 
 ➜ Set the environment variables at AWS Elastic Beanstalk
 
