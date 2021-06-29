@@ -45,7 +45,7 @@
 ➜ Create a deployment pipeline at AWS CodePipeline
 
 ➜ Create the database at AWS RDS
-> Carefully set VPC/Security group
+> Carefully set VPC/Security groups
 
 ➜ Set the environment variables at AWS Elastic Beanstalk
 
