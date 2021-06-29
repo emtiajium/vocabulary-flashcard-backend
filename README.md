@@ -47,6 +47,8 @@
 ➜ Create the database at AWS RDS
 > Carefully set VPC/Security groups
 
+> Follow [this](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/rds-external-defaultvpc.html) to connect to the Amazon RDS instance in a VPC
+
 ➜ Set the environment variables at AWS Elastic Beanstalk
 
 ➜ Deploy!
