@@ -1,9 +1,19 @@
 import BaseEntity from '@/common/domains/BaseEntity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { ArrayNotEmpty, IsArray, IsDefined, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+    ArrayNotEmpty,
+    IsArray,
+    IsDefined,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+    IsUUID,
+    ValidateIf,
+} from 'class-validator';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Type } from 'class-transformer';
 import { v4 as uuidV4 } from 'uuid';
+import IsArrayContainsOnlyUrl from '@/common/validators/IsArrayContainsOnlyUrl';
 
 @Entity('Definition')
 export default class Definition extends BaseEntity {
@@ -25,7 +35,8 @@ export default class Definition extends BaseEntity {
     notes?: string[];
 
     @Column({ type: 'varchar', array: true, default: [] })
-    // TODO add validation for the URLs
+    @ValidateIf((definition) => !!definition.externalLinks)
+    @IsArrayContainsOnlyUrl()
     @IsArray()
     @IsOptional()
     externalLinks?: string[];

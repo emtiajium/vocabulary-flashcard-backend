@@ -125,6 +125,32 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
+            it('SHOULD return 400 BAD_REQUEST for payload vocabulary.genericExternalLinks is not an array', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                payload.genericExternalLinks = 'NOT_AN_ARRAY';
+                payload.definitions = [];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload vocabulary.genericExternalLinks does not contain URL', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.genericExternalLinks = ['NOT_AN_URL'];
+                payload.definitions = [];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].vocabularyId', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
@@ -162,6 +188,36 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
+            it('SHOULD return 400 BAD_REQUEST for payload definitions[X].externalLinks is not an array', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                const definition = {
+                    ...getBaseDefinitionPayloadWithoutRelations(payload.id),
+                    externalLinks: 'NOT_AN_ARRAY',
+                };
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                payload.definitions = [definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload definitions[X].externalLinks does not contain URL', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                const definition = getBaseDefinitionPayloadWithoutRelations(payload.id);
+                definition.externalLinks.push('NOT_AN_URL');
+                payload.definitions = [definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].examples', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
@@ -185,6 +241,33 @@ describe('/v1/vocabularies', () => {
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
+            });
+
+            it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations()];
+                delete payload.definitions[0].externalLinks;
+
+                const { status } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+            });
+
+            it('SHOULD return 201 CREATED for payload WHEN vocabulary.genericExternalLinks is not defined', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.cohortId = cohort.id;
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.definitions = [];
+
+                const { status } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
             });
 
             it('SHOULD return 201 CREATED for payload WHEN definitions is an empty array', async () => {
