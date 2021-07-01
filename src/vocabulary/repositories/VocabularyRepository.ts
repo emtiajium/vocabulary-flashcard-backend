@@ -52,8 +52,19 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     async findVocabularyById(id: string): Promise<Vocabulary> {
         const results = await this.query(
             `
-                SELECT vocabulary.*,
-                       json_agg(definition.*) AS definitions
+                SELECT vocabulary.id,
+                       vocabulary."cohortId",
+                       vocabulary.word,
+                       vocabulary."genericNotes",
+                       vocabulary."genericExternalLinks",
+                       vocabulary."linkerWords",
+                       vocabulary."isDraft",
+                       json_agg(json_build_object('id', definition.id,
+                                                  'vocabularyId', definition."vocabularyId",
+                                                  'meaning', definition.meaning,
+                                                  'examples', definition.examples,
+                                                  'notes', definition.notes, 'externalLinks',
+                                                  definition."externalLinks")) AS definitions
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
                 WHERE vocabulary.id = $1
