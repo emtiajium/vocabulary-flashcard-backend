@@ -45,7 +45,11 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         // as LEFT join results[index].definitions can be [null]
         return _.map(results, (result) => ({
             ...result,
-            definitions: result.definitions[0] ? result.definitions : [],
+            definitions: _.isNull(result.definitions[0])
+                ? []
+                : _.isNull(result.definitions[0].id)
+                ? []
+                : result.definitions,
         }));
     }
 
