@@ -44,4 +44,8 @@ export default class CohortService {
     private async associateUsersWithCohort(userIds: string[], cohort): Promise<void> {
         await Promise.all(userIds.map((userId) => this.userRepository.updateCohort(userId, cohort.id)));
     }
+
+    async findCohortById(id: string): Promise<Cohort> {
+        return this.cohortRepository.findCohortById(id);
+    }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import CohortService from '@/user/services/CohortService';
 import Cohort from '@/user/domains/Cohort';
 
@@ -14,5 +14,10 @@ export default class CohortController {
     @Put('/:name')
     async addUsersToCohort(@Body() userIds: string[], @Param('name') name: string): Promise<void> {
         await this.cohortService.addUsersToCohort(name, userIds);
+    }
+
+    @Get('/:id')
+    async findCohortById(@Param('id') id: string): Promise<Cohort> {
+        return this.cohortService.findCohortById(id);
     }
 }

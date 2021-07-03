@@ -21,4 +21,8 @@ export default class CohortRepository extends Repository<Cohort> {
         }
         return cohort;
     }
+
+    async findCohortById(id: string): Promise<Cohort> {
+        return this.findOne({ where: { id }, relations: ['users'] });
+    }
 }
