@@ -23,6 +23,10 @@ export default class CohortRepository extends Repository<Cohort> {
     }
 
     async findCohortById(id: string): Promise<Cohort> {
-        return this.findOne({ where: { id }, relations: ['users'] });
+        const cohort = await this.findOne({ where: { id }, relations: ['users'] });
+        if (!cohort) {
+            throw new EntityNotFoundException(`Cohort with id "${id}" does not exist`);
+        }
+        return cohort;
     }
 }
