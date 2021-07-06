@@ -14,7 +14,7 @@ export default class VocabularyService {
         private readonly definitionRepository: DefinitionRepository,
     ) {}
 
-    async createVocabulary(vocabulary: Vocabulary): Promise<Vocabulary> {
+    async createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {
         const existingVocabulary = await this.findVocabularyById(vocabulary.id);
         if (existingVocabulary) {
             // this is a workaround
@@ -22,11 +22,13 @@ export default class VocabularyService {
             await this.removeVocabularyAndDefinitions(existingVocabulary);
         }
         const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
+        // TODO investigate why vocabularyInstance.setCohortId(cohortId) is not working
+        vocabularyInstance.cohortId = cohortId;
         return this.vocabularyRepository.save(vocabularyInstance);
     }
 
-    async findVocabularies(vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
-        return this.vocabularyRepository.findVocabularies(vocabularySearch);
+    async findVocabularies(cohortId: string, vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
+        return this.vocabularyRepository.findVocabularies(cohortId, vocabularySearch);
     }
 
     async findVocabularyById(id: string): Promise<Vocabulary> {
