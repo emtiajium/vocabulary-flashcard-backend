@@ -21,3 +21,7 @@ export async function removeUsersByUsernames(usernames: string[]): Promise<void>
 export async function createUser(user: User): Promise<User> {
     return getRepository(User).save(user);
 }
+
+export async function createApiRequester(): Promise<User> {
+    return getRepository(User).save({ username: `requester@request.com`, firstname: 'Requester' });
+}
