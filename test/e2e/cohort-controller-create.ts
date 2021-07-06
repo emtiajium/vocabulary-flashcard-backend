@@ -9,11 +9,19 @@ import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
 import { removeCohortByName } from '@test/util/cohort-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import User from '@/user/domains/User';
-import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
+import {
+    createApiRequester,
+    createUser,
+    getUsersByUsernames,
+    removeUserByUsername,
+    removeUsersByUsernames,
+} from '@test/util/user-util';
 import { getRepository } from 'typeorm';
 
 describe('/v1/cohorts', () => {
     let app: INestApplication;
+
+    let requester: User;
 
     const getBasePayload = (userIds: string[] = []): Cohort => ({
         name: `Summer of Sixty Nine!`,
@@ -29,15 +37,18 @@ describe('/v1/cohorts', () => {
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
+        requester = await createApiRequester();
     });
 
     afterAll(async () => {
+        await removeUserByUsername(requester.username);
         await app.close();
     });
 
     const makeApiRequest = async (cohort?: Cohort): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/cohorts`)
+            .set('X-User-Id', requester.id)
             .send(cohort);
         return {
             status,
@@ -46,6 +57,13 @@ describe('/v1/cohorts', () => {
     };
 
     describe('POST /', () => {
+        describe('UnAuthorized', () => {
+            it('SHOULD return 403 FORBIDDEN WHEN request header X-User-Id is missing', async () => {
+                const { status } = await request(app.getHttpServer()).post(`${getAppAPIPrefix()}/v1/cohorts`).send();
+                expect(status).toBe(403);
+            });
+        });
+
         describe('Bad Payload', () => {
             it('SHOULD return 400 BAD_REQUEST for empty payload', async () => {
                 const { status } = await makeApiRequest();

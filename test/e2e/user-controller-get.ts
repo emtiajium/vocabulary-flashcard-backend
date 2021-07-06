@@ -25,24 +25,33 @@ describe('/v1/users', () => {
         await app.close();
     });
 
-    const makeApiRequest = async (): Promise<SupertestResponse<User>> => {
-        const { status, body } = await request(app.getHttpServer()).get(`${getAppAPIPrefix()}/v1/users/${username}`);
+    const makeApiRequest = async (id: string): Promise<SupertestResponse<User>> => {
+        const { status, body } = await request(app.getHttpServer())
+            .get(`${getAppAPIPrefix()}/v1/users/self`)
+            .set('X-User-Id', id);
         return {
             status,
             body,
         };
     };
 
-    describe('GET /:username', () => {
+    describe('GET /self', () => {
+        let requester: User;
+
         beforeAll(async () => {
-            await app.get(UserService).createUser({
+            requester = await app.get(UserService).createUser({
                 username,
                 firstname: 'John',
             } as User);
         });
 
+        it('SHOULD return 403 FORBIDDEN WHEN request header X-User-Id is missing', async () => {
+            const { status } = await request(app.getHttpServer()).get(`${getAppAPIPrefix()}/v1/users/self`);
+            expect(status).toBe(403);
+        });
+
         it('SHOULD return 200 OK with user details', async () => {
-            const { body } = await makeApiRequest();
+            const { body } = await makeApiRequest(requester.id);
             const user = body as User;
             expect(user).toBeDefined();
             expect(user.username).toBe(username);

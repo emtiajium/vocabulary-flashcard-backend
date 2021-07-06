@@ -8,10 +8,18 @@ import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortByName } from '@test/util/cohort-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import User from '@/user/domains/User';
-import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
+import {
+    createApiRequester,
+    createUser,
+    getUsersByUsernames,
+    removeUserByUsername,
+    removeUsersByUsernames,
+} from '@test/util/user-util';
 
 describe('/v1/cohorts/:name', () => {
     let app: INestApplication;
+
+    let requester: User;
 
     const getBasePayload = (userIds: string[] = []): Cohort => ({
         name: `What a wonderful world!`,
@@ -27,15 +35,18 @@ describe('/v1/cohorts/:name', () => {
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
+        requester = await createApiRequester();
     });
 
     afterAll(async () => {
+        await removeUserByUsername(requester.username);
         await app.close();
     });
 
-    const makeApiRequest = async (name: string, userIds: string[] = []): Promise<SupertestResponse<void>> => {
+    const makeAuthorizedApiRequest = async (name: string, userIds: string[] = []): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .put(`${getAppAPIPrefix()}/v1/cohorts/${name}`)
+            .set('X-User-Id', requester.id)
             .send(userIds);
         return {
             status,
@@ -62,14 +73,21 @@ describe('/v1/cohorts/:name', () => {
             await removeCohortByName(getBasePayload().name);
         });
 
+        it('SHOULD return 403 FORBIDDEN WHEN request header X-User-Id is missing', async () => {
+            const { status } = await request(app.getHttpServer())
+                .put(`${getAppAPIPrefix()}/v1/cohorts/${uuidV4()}`)
+                .send();
+            expect(status).toBe(403);
+        });
+
         it('SHOULD return 404 NOT_FOUND WHEN cohort does not exist', async () => {
-            const { status } = await makeApiRequest('I Do not exist', [uuidV4()]);
+            const { status } = await makeAuthorizedApiRequest('I Do not exist', [uuidV4()]);
             expect(status).toBe(404);
         });
 
         it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
             const invalidUserIds = [uuidV4(), uuidV4(), uuidV4()];
-            const { status: status1, body: body1 } = await makeApiRequest(getBasePayload().name, [
+            const { status: status1, body: body1 } = await makeAuthorizedApiRequest(getBasePayload().name, [
                 invalidUserIds[0],
                 invalidUserIds[1],
             ]);
@@ -78,7 +96,7 @@ describe('/v1/cohorts/:name', () => {
                 `There are no such users having IDs ${[invalidUserIds[0], invalidUserIds[1]].join(', ')}`,
             );
 
-            const { status: status2, body: body2 } = await makeApiRequest(getBasePayload().name, [
+            const { status: status2, body: body2 } = await makeAuthorizedApiRequest(getBasePayload().name, [
                 firstUser.id,
                 invalidUserIds[2],
             ]);
@@ -89,7 +107,7 @@ describe('/v1/cohorts/:name', () => {
         });
 
         it('SHOULD return 200 OK', async () => {
-            const { status } = await makeApiRequest(getBasePayload().name, [firstUser.id, secondUser.id]);
+            const { status } = await makeAuthorizedApiRequest(getBasePayload().name, [firstUser.id, secondUser.id]);
             expect(status).toBe(200);
 
             const [firstUserWithCohort, secondUserWithCohort] = await getUsersByUsernames([

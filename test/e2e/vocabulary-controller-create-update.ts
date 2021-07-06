@@ -11,19 +11,28 @@ import { createCohort, removeCohortByName } from '@test/util/cohort-util';
 import Definition from '@/vocabulary/domains/Definition';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import { getDefinitionByVocabularyId, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
+import User from '@/user/domains/User';
+import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
+import CohortService from '@/user/services/CohortService';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
+
+    let requester: User;
 
     let cohort: Cohort;
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
-        cohort = await createCohort({ name: 'Vocabulary Automated Test Cohort', userIds: [] } as Cohort);
+        requester = await createApiRequester();
+        const cohortName = 'Vocabulary Automated Test Cohort';
+        cohort = await createCohort({ name: cohortName, userIds: [] } as Cohort);
+        await app.get(CohortService).addUsersToCohort(cohortName, [requester.id]);
     });
 
     afterAll(async () => {
         await removeVocabularyAndRelationsByCohortId(cohort.id);
+        await removeUserByUsername(requester.username);
         await removeCohortByName(cohort.name);
         await app.close();
     });
@@ -31,6 +40,7 @@ describe('/v1/vocabularies', () => {
     async function makeApiRequest(vocabulary?: Vocabulary): Promise<SupertestResponse<Vocabulary>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies`)
+            .set('X-User-Id', requester.id)
             .send(vocabulary);
         return {
             status,
@@ -50,6 +60,15 @@ describe('/v1/vocabularies', () => {
     }
 
     describe('POST /', () => {
+        describe('UnAuthorized', () => {
+            it('SHOULD return 403 FORBIDDEN WHEN request header X-User-Id is missing', async () => {
+                const { status } = await request(app.getHttpServer())
+                    .post(`${getAppAPIPrefix()}/v1/vocabularies`)
+                    .send();
+                expect(status).toBe(403);
+            });
+        });
+
         describe('Bad Payload', () => {
             it('SHOULD return 400 BAD_REQUEST for empty payload', async () => {
                 const { status } = await makeApiRequest();
@@ -58,7 +77,6 @@ describe('/v1/vocabularies', () => {
 
             it('SHOULD return 400 BAD_REQUEST for payload without id', async () => {
                 const payload = new Vocabulary();
-                payload.cohortId = cohort.id;
                 payload.word = 'Word1';
                 payload.isDraft = true;
                 const { status } = await makeApiRequest(payload);
@@ -68,28 +86,7 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload without word', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = true;
-                const { status } = await makeApiRequest(payload);
-                expect(status).toBe(400);
-            });
-
-            it('SHOULD return 400 BAD_REQUEST for payload without cohortId', async () => {
-                const payload = new Vocabulary();
-                payload.id = uuidV4();
-                payload.isDraft = true;
-                payload.cohortId = null;
-                payload.word = 'Word1';
-                const { status } = await makeApiRequest(payload);
-                expect(status).toBe(400);
-            });
-
-            it('SHOULD return 400 BAD_REQUEST for payload for invalid type of cohortId', async () => {
-                const payload = new Vocabulary();
-                payload.id = uuidV4();
-                payload.isDraft = true;
-                payload.cohortId = 'NOT_A_UUID';
-                payload.word = 'Word1';
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
@@ -97,7 +94,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload without isDraft', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.word = 'Word1';
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
@@ -106,7 +102,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload without definitions', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 payload.definitions = null;
@@ -117,7 +112,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload with empty definitions', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 payload.definitions = [];
@@ -128,7 +122,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload vocabulary.genericExternalLinks is not an array', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -142,7 +135,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload vocabulary.genericExternalLinks does not contain URL', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 payload.genericExternalLinks = ['NOT_AN_URL'];
@@ -154,7 +146,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].vocabularyId', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations() };
@@ -166,7 +157,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload with invalid definitions[X].vocabularyId', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations('NOT_A_UUID') };
@@ -178,7 +168,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].meaning', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 const definition = getBaseDefinitionPayloadWithoutRelations(payload.id);
@@ -191,7 +180,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload definitions[X].externalLinks is not an array', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 const definition = {
@@ -208,7 +196,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload definitions[X].externalLinks does not contain URL', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 const definition = getBaseDefinitionPayloadWithoutRelations(payload.id);
@@ -221,7 +208,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].examples', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id) } as ObjectLiteral;
@@ -234,7 +220,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 400 BAD_REQUEST for payload with empty definitions[X].examples', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id), examples: [] };
@@ -246,7 +231,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 payload.definitions = [getBaseDefinitionPayloadWithoutRelations()];
@@ -260,7 +244,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 201 CREATED for payload WHEN vocabulary.genericExternalLinks is not defined', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 payload.definitions = [];
@@ -273,7 +256,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 201 CREATED for payload WHEN definitions is an empty array', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 payload.definitions = [];
@@ -292,7 +274,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 201 CREATED with created vocabulary', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id)];
@@ -311,7 +292,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 201 CREATED with same vocabulary ID WHEN definition is defined later', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 payload.definitions = [];
@@ -349,7 +329,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 201 CREATED with same vocabulary ID', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id)];
@@ -398,7 +377,6 @@ describe('/v1/vocabularies', () => {
             it('SHOULD return 201 CREATED for the payload with multiple definitions', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
-                payload.cohortId = cohort.id;
                 payload.isDraft = false;
                 payload.word = 'Word1';
                 payload.definitions = [
