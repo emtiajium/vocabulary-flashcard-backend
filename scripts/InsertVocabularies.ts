@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { v4 as uuidV4 } from 'uuid';
 import { validateOrReject } from 'class-validator';
-import { createConnection, getRepository } from 'typeorm';
+import { createConnection, getConnectionManager, getRepository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
 import { ConfigService } from '@nestjs/config';
@@ -17,7 +17,11 @@ export default class InsertVocabularies {
             this.setCohortId(new ConfigService().get<string>('SEED_SCRIPT_COHORT_ID'));
             this.generateVocabularyPayload();
             await validateOrReject(this.vocabularies);
-            await createConnection();
+            // TODO remove the condition
+            // workaround as couldn't find a way to execute the script in a separate thread in AEB
+            if (!getConnectionManager().has('default')) {
+                await createConnection();
+            }
             await this.remove();
             await this.persist();
         } catch (error) {
