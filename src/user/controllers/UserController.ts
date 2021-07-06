@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
+import AuthGuard from '@/common/guards/AuthGuard';
+import AuthorizedUser from '@/common/http-decorators/AuthorizedUser';
 
 @Controller('/v1/users')
 export default class UserController {
@@ -11,8 +13,9 @@ export default class UserController {
         return this.userService.createUser(user);
     }
 
-    @Get('/:username')
-    async getUserByUsername(@Param('username') username: string): Promise<User> {
-        return this.userService.getUserByUsername(username);
+    @Get('/self')
+    @UseGuards(AuthGuard)
+    async getSelfDetails(@AuthorizedUser() user: User): Promise<User> {
+        return this.userService.getUserByUsername(user.username);
     }
 }
