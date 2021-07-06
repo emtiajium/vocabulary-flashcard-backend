@@ -1,6 +1,9 @@
 import { isDefined, isUUID, registerDecorator } from 'class-validator';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 
+// TODO remove it
+// equivalent to @IsUUID(undefined, { each: true })
+
 export default function IsArrayContainsOnlyUuid<T>(): PropertyDecorator {
     return function validator(object: ObjectLiteral, propertyName: string): void {
         registerDecorator({

@@ -1,6 +1,9 @@
 import { isDefined, isURL, registerDecorator } from 'class-validator';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 
+// TODO remove it
+// equivalent to @IsUrl(undefined, { each: true })
+
 export default function IsArrayContainsOnlyUrl<T>(): PropertyDecorator {
     return function validator(object: ObjectLiteral, propertyName: string): void {
         registerDecorator({
