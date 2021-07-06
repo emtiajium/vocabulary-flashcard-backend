@@ -7,13 +7,13 @@ import {
     IsNotEmpty,
     IsOptional,
     IsString,
+    IsUrl,
     IsUUID,
     ValidateIf,
 } from 'class-validator';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Type } from 'class-transformer';
 import { v4 as uuidV4 } from 'uuid';
-import IsArrayContainsOnlyUrl from '@/common/validators/IsArrayContainsOnlyUrl';
 
 @Entity('Definition')
 export default class Definition extends BaseEntity {
@@ -24,6 +24,7 @@ export default class Definition extends BaseEntity {
     meaning: string;
 
     @Column({ type: 'varchar', array: true, default: [] })
+    @IsNotEmpty({ each: true })
     @ArrayNotEmpty()
     @IsArray()
     @IsDefined()
@@ -36,7 +37,7 @@ export default class Definition extends BaseEntity {
 
     @Column({ type: 'varchar', array: true, default: [] })
     @ValidateIf((definition) => !!definition.externalLinks)
-    @IsArrayContainsOnlyUrl()
+    @IsUrl(undefined, { each: true })
     @IsArray()
     @IsOptional()
     externalLinks?: string[];

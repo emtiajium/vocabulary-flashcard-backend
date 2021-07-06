@@ -7,6 +7,7 @@ import {
     IsNotEmpty,
     IsOptional,
     IsString,
+    IsUrl,
     IsUUID,
     ValidateIf,
     ValidateNested,
@@ -16,7 +17,6 @@ import { plainToClass, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
 import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
-import IsArrayContainsOnlyUrl from '@/common/validators/IsArrayContainsOnlyUrl';
 
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntityWithMandatoryId {
@@ -33,7 +33,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
 
     @Column({ type: 'varchar', array: true, default: [] })
     @ValidateIf((vocabulary) => !!vocabulary.genericExternalLinks)
-    @IsArrayContainsOnlyUrl()
+    @IsUrl(undefined, { each: true })
     @IsArray()
     @IsOptional()
     genericExternalLinks?: string[];

@@ -2,8 +2,7 @@ import BaseEntity from '@/common/domains/BaseEntity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import User from '@/user/domains/User';
 import { Type } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
-import IsArrayContainsOnlyUuid from '@/common/validators/IsArrayContainsOnlyUuid';
+import { IsArray, IsNotEmpty, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 export const cohortNameSize = 36;
@@ -17,7 +16,7 @@ export default class Cohort extends BaseEntity {
     @Column({ type: 'varchar', unique: true })
     name: string;
 
-    @IsArrayContainsOnlyUuid()
+    @IsUUID(undefined, { each: true })
     @IsOptional()
     // why do we need it?
     userIds?: string[];
