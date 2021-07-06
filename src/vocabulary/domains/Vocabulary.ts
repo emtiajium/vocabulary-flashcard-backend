@@ -62,8 +62,12 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
 
     @Column({ type: 'uuid', nullable: false })
     @IsUUID()
-    @IsNotEmpty()
-    cohortId: string;
+    @IsOptional()
+    cohortId?: string;
+
+    setCohortId?(cohortId: string): void {
+        this.cohortId = cohortId;
+    }
 
     static populateMeanings(vocabulary: Vocabulary): Vocabulary {
         const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
