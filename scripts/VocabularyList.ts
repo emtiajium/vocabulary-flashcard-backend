@@ -1189,11 +1189,11 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'আতঙ্কে দিশাহারা অবস্থা',
+        word: 'Stampede',
         definitions: [
             {
-                meaning: 'People stampeded from the burning theatre.',
-                examples: [],
+                meaning: 'আতঙ্কে দিশাহারা অবস্থা',
+                examples: [`People stampeded from the burning theatre.`],
                 notes: [],
                 externalLinks: [],
             },
