@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/comm
 import CohortService from '@/user/services/CohortService';
 import Cohort from '@/user/domains/Cohort';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthorizedUser from '@/common/http-decorators/AuthorizedUser';
+import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 import User from '@/user/domains/User';
 
 @Controller('/v1/cohorts')
@@ -23,7 +23,7 @@ export default class CohortController {
 
     @Get('/self')
     @UseGuards(AuthGuard)
-    async findCohortById(@AuthorizedUser() user: User): Promise<Cohort> {
+    async findCohortById(@AuthenticatedUser() user: User): Promise<Cohort> {
         return this.cohortService.findCohortById(user.cohortId);
     }
 }

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthorizedUser from '@/common/http-decorators/AuthorizedUser';
+import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 
 @Controller('/v1/users')
 export default class UserController {
@@ -15,7 +15,7 @@ export default class UserController {
 
     @Get('/self')
     @UseGuards(AuthGuard)
-    async getSelfDetails(@AuthorizedUser() user: User): Promise<User> {
+    async getSelfDetails(@AuthenticatedUser() user: User): Promise<User> {
         return this.userService.getUserByUsername(user.username);
     }
 }

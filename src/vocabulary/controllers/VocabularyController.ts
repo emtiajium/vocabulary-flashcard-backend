@@ -4,7 +4,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthorizedUser from '@/common/http-decorators/AuthorizedUser';
+import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 import User from '@/user/domains/User';
 
 @Controller('/v1/vocabularies')
@@ -13,7 +13,7 @@ export default class VocabularyController {
 
     @Post()
     @UseGuards(AuthGuard)
-    async createVocabulary(@Body() vocabulary: Vocabulary, @AuthorizedUser() user: User): Promise<Vocabulary> {
+    async createVocabulary(@Body() vocabulary: Vocabulary, @AuthenticatedUser() user: User): Promise<Vocabulary> {
         return this.vocabularyService.createVocabulary(vocabulary, user.cohortId);
     }
 
@@ -21,7 +21,7 @@ export default class VocabularyController {
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     async findVocabularies(
-        @AuthorizedUser() user: User,
+        @AuthenticatedUser() user: User,
         @Body() vocabularySearch: VocabularySearch,
     ): Promise<SearchResult<Vocabulary>> {
         return this.vocabularyService.findVocabularies(user.cohortId, vocabularySearch);
