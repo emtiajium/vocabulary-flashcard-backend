@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import UserRepository from '@/user/repositories/UserRepository';
 import User from '@/user/domains/User';
 import CohortService from '@/user/services/CohortService';
+import EntityNotFoundException from '@/exceptions/EntityNotFoundException';
 
 @Injectable()
 export default class UserService {
@@ -16,6 +17,18 @@ export default class UserService {
     }
 
     async getUserByUsername(username: string): Promise<User> {
-        return this.userRepository.findOne({ username });
+        const user = await this.userRepository.findOne({ username });
+        if (!user) {
+            throw new EntityNotFoundException(`User with username "${username}" does not exist`);
+        }
+        return user;
+    }
+
+    async getUserById(id: string): Promise<User> {
+        const user = await this.userRepository.findOne({ id });
+        if (!user) {
+            throw new EntityNotFoundException(`User with id "${id}" does not exist`);
+        }
+        return user;
     }
 }
