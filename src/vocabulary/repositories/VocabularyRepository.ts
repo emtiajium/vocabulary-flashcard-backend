@@ -10,10 +10,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         await this.delete({ id });
     }
 
-    async findVocabularies(vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
+    async findVocabularies(cohortId: string, vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
         const {
             pagination: { pageSize, pageNumber },
-            cohortId,
         } = vocabularySearch;
 
         const currentPage = pageSize * (pageNumber - 1);
