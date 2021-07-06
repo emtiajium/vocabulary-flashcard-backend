@@ -228,6 +228,17 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
+            it('SHOULD return 400 BAD_REQUEST for payload WHEN definitions[X].examples contains empty string', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id), examples: [''] };
+                payload.definitions = [definition as Definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
