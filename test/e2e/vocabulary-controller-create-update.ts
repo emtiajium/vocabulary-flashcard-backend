@@ -14,6 +14,7 @@ import { getDefinitionByVocabularyId, removeVocabularyAndRelationsByCohortId } f
 import User from '@/user/domains/User';
 import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
+import generateJwToken from '@test/util/auth-util';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -40,7 +41,7 @@ describe('/v1/vocabularies', () => {
     async function makeApiRequest(vocabulary?: Vocabulary): Promise<SupertestResponse<Vocabulary>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies`)
-            .set('X-User-Id', requester.id)
+            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
             .send(vocabulary);
         return {
             status,

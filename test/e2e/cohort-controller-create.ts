@@ -17,6 +17,7 @@ import {
     removeUsersByUsernames,
 } from '@test/util/user-util';
 import { getRepository } from 'typeorm';
+import generateJwToken from '@test/util/auth-util';
 
 describe('/v1/cohorts', () => {
     let app: INestApplication;
@@ -48,7 +49,7 @@ describe('/v1/cohorts', () => {
     const makeApiRequest = async (cohort?: Cohort): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/cohorts`)
-            .set('X-User-Id', requester.id)
+            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
             .send(cohort);
         return {
             status,

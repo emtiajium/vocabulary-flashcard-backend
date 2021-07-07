@@ -15,6 +15,7 @@ import {
     removeUserByUsername,
     removeUsersByUsernames,
 } from '@test/util/user-util';
+import generateJwToken from '@test/util/auth-util';
 
 describe('/v1/cohorts/:name', () => {
     let app: INestApplication;
@@ -46,7 +47,7 @@ describe('/v1/cohorts/:name', () => {
     const makeAuthorizedApiRequest = async (name: string, userIds: string[] = []): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .put(`${getAppAPIPrefix()}/v1/cohorts/${name}`)
-            .set('X-User-Id', requester.id)
+            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
             .send(userIds);
         return {
             status,

@@ -8,11 +8,14 @@ import User from '@/user/domains/User';
 import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
 import { removeCohortByName } from '@test/util/cohort-util';
+import generateJwToken from '@test/util/auth-util';
 
 describe('/v1/users', () => {
     let app: INestApplication;
 
     const username = 'example20@gibberish.com';
+
+    let requester: User;
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
@@ -25,10 +28,10 @@ describe('/v1/users', () => {
         await app.close();
     });
 
-    const makeApiRequest = async (id: string): Promise<SupertestResponse<User>> => {
+    const makeApiRequest = async (): Promise<SupertestResponse<User>> => {
         const { status, body } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/users/self`)
-            .set('X-User-Id', id);
+            .set('Authorization', `Bearer ${generateJwToken(requester)}`);
         return {
             status,
             body,
@@ -36,8 +39,6 @@ describe('/v1/users', () => {
     };
 
     describe('GET /self', () => {
-        let requester: User;
-
         beforeAll(async () => {
             requester = await app.get(UserService).createUser({
                 username,
@@ -51,7 +52,7 @@ describe('/v1/users', () => {
         });
 
         it('SHOULD return 200 OK with user details', async () => {
-            const { body } = await makeApiRequest(requester.id);
+            const { body } = await makeApiRequest();
             const user = body as User;
             expect(user).toBeDefined();
             expect(user.username).toBe(username);
