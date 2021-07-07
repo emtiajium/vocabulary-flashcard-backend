@@ -74,7 +74,7 @@ describe('/v1/cohorts/:name', () => {
             await removeCohortByName(getBasePayload().name);
         });
 
-        it('SHOULD return 403 FORBIDDEN WHEN request header X-User-Id is missing', async () => {
+        it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
             const { status } = await request(app.getHttpServer())
                 .put(`${getAppAPIPrefix()}/v1/cohorts/${uuidV4()}`)
                 .send();

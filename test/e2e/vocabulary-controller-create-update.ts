@@ -62,7 +62,7 @@ describe('/v1/vocabularies', () => {
 
     describe('POST /', () => {
         describe('UnAuthorized', () => {
-            it('SHOULD return 403 FORBIDDEN WHEN request header X-User-Id is missing', async () => {
+            it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
                 const { status } = await request(app.getHttpServer())
                     .post(`${getAppAPIPrefix()}/v1/vocabularies`)
                     .send();

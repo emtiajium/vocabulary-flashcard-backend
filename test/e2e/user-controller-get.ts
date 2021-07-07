@@ -46,7 +46,7 @@ describe('/v1/users', () => {
             } as User);
         });
 
-        it('SHOULD return 403 FORBIDDEN WHEN request header X-User-Id is missing', async () => {
+        it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
             const { status } = await request(app.getHttpServer()).get(`${getAppAPIPrefix()}/v1/users/self`);
             expect(status).toBe(403);
         });
