@@ -38,4 +38,10 @@ export default class VocabularyController {
     async removeVocabularyById(@Param('id') id: string): Promise<void> {
         await this.vocabularyService.removeVocabularyById(id);
     }
+
+    @Post('/bootstrap')
+    @UseGuards(AuthGuard)
+    async createInitialVocabularies(@AuthenticatedUser() user: User): Promise<SearchResult<Vocabulary>> {
+        return this.vocabularyService.createInitialVocabularies(user.cohortId);
+    }
 }

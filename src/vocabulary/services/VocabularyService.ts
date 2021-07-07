@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
+import VocabularyList from '@script/VocabularyList';
+import { createVocabularies } from '@/vocabulary/domains/CustomVocabulary';
 
 @Injectable()
 export default class VocabularyService {
@@ -57,5 +59,18 @@ export default class VocabularyService {
 
     async removeVocabularyById(id: string): Promise<void> {
         await this.assertExistenceAndRemoveVocabularyAndDefinitions(id);
+    }
+
+    private generateVocabularyPayload = (cohortId: string): Vocabulary[] => {
+        const sampleVocabularies = 20;
+        return createVocabularies(cohortId, VocabularyList.slice(0, sampleVocabularies));
+    };
+
+    async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
+        const payload = this.generateVocabularyPayload(cohortId);
+        const vocabularies = await Promise.all(
+            _.map(payload, (vocabulary) => this.vocabularyRepository.save(vocabulary)),
+        );
+        return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
 }
