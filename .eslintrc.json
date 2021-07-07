@@ -152,7 +152,7 @@
             }
         },
         {
-            "files": ["scripts/*.ts"],
+            "files": ["src/manual-scripts/*.ts"],
             "rules": {
                 "unicorn/no-process-exit": "off",
                 "no-console": "off"

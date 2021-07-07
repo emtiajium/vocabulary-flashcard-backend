@@ -13,7 +13,6 @@
         "incremental": true,
         "paths": {
             "@/*": ["./src/*"],
-            "@script/*": ["./scripts/*"],
             "@test/*": ["./test/*"]
         }
     },

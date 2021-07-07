@@ -6,8 +6,8 @@ import * as _ from 'lodash';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
-import VocabularyList from '@script/VocabularyList';
 import { createVocabularies } from '@/vocabulary/domains/CustomVocabulary';
+import VocabularyList from '@/manual-scripts/VocabularyList';
 
 @Injectable()
 export default class VocabularyService {

@@ -20,7 +20,7 @@
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
         "test": "jest --detectOpenHandles --forceExit",
         "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-        "seed-script:insert-vocabularies": "node -r ts-node/register -r tsconfig-paths/register scripts/SeedScript.ts"
+        "seed-script:insert-vocabularies": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/SeedScript.ts"
     },
     "dependencies": {
         "@nestjs/common": "^7.6.15",
