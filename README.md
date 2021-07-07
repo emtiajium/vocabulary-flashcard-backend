@@ -55,6 +55,7 @@
 
 ## Change Log
 
+-   `0.4.0`: Added authentication using JWT
 -   `0.3.2`: Added validation for external links
 -   `0.3.1`: Added vocabulary find/removal functionality
 -   `0.3.0`: Added vocabulary creation/update functionality
