@@ -31,21 +31,30 @@ export default class AuthGuard implements CanActivate {
         return authorizationParts[1];
     }
 
-    private decodeJwToken = (token: string): ExtendedUser => {
+    private extractUsername = (extendedUser: ExtendedUser): string => {
+        // `email` is supposed to be come from the Google API
+        if (!extendedUser?.username && !extendedUser?.email) {
+            throw new ForbiddenException();
+        }
+        if (!extendedUser.username && extendedUser.email) {
+            return extendedUser.email;
+        }
+        return extendedUser.username;
+    };
+
+    private decodeJwToken(token: string): ExtendedUser {
         let extendedUser: ExtendedUser;
         try {
             extendedUser = decode(token, { json: true }) as ExtendedUser;
-            if (!extendedUser) {
-                throw new ForbiddenException();
-            }
+            extendedUser.username = this.extractUsername(extendedUser);
         } catch {
             throw new ForbiddenException();
         }
         return extendedUser;
-    };
+    }
 
     private getUsernameFromToken(request: Request): string {
-        return this.decodeJwToken(this.getJwToken(request)).username;
+        return this.decodeJwToken(this.getJwToken(request))?.username;
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
