@@ -5,6 +5,7 @@ import { createConnection, getConnectionManager, getRepository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
 import { ConfigService } from '@nestjs/config';
+import { createVocabularies } from '@/vocabulary/domains/CustomVocabulary';
 import VocabularyList from './VocabularyList';
 
 export default class InsertVocabularies {
@@ -38,23 +39,7 @@ export default class InsertVocabularies {
     }
 
     private generateVocabularyPayload(): void {
-        const existingVocabularies = _.cloneDeep(VocabularyList);
-        this.vocabularies = _.map(existingVocabularies, (vocabulary) => {
-            const vocabularyId = InsertVocabularies.getNewId();
-            return {
-                ...vocabulary,
-                id: vocabularyId,
-                cohortId: this.cohortId,
-                definitions: _.map(vocabulary.definitions, (definition) => {
-                    return {
-                        ...definition,
-                        id: InsertVocabularies.getNewId(),
-                        vocabularyId,
-                    } as Definition;
-                }),
-                isDraft: false,
-            } as Vocabulary;
-        });
+        this.vocabularies = createVocabularies(this.cohortId, VocabularyList);
     }
 
     private async remove(): Promise<void> {

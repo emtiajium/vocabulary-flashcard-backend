@@ -1,11 +1,4 @@
-import Vocabulary from '@/vocabulary/domains/Vocabulary';
-import Definition from '@/vocabulary/domains/Definition';
-
-type CustomDefinition = Required<Pick<Definition, 'meaning' | 'examples' | 'notes' | 'externalLinks'>>;
-type VocabularyWithoutDefinitions = Required<
-    Pick<Vocabulary, 'word' | 'linkerWords' | 'genericNotes' | 'genericExternalLinks'>
->;
-type CustomVocabulary = Required<VocabularyWithoutDefinitions & { definitions: CustomDefinition[] }>;
+import CustomVocabulary from '@/vocabulary/domains/CustomVocabulary';
 
 const VocabularyList: CustomVocabulary[] = [
     {
