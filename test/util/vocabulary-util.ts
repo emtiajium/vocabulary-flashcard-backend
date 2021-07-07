@@ -22,3 +22,14 @@ export async function getDefinitionByVocabularyId(vocabularyId: string): Promise
          WHERE "vocabularyId" = '${vocabularyId}';`,
     );
 }
+
+export async function getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {
+    return (
+        await getRepository(Vocabulary).query(
+            `SELECT *
+             FROM "Vocabulary"
+             WHERE "cohortId" = $1;`,
+            [cohortId],
+        )
+    )[0];
+}
