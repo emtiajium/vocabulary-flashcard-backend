@@ -120,6 +120,13 @@
             }
         },
         {
+            "files": ["test/util/auth-util.ts"],
+            "rules": {
+                "unicorn/prefer-node-protocol": "off",
+                "node/no-sync": "off"
+            }
+        },
+        {
             "files": ["migrations/**/*.ts"],
             "rules": {
                 "class-methods-use-this": "off"

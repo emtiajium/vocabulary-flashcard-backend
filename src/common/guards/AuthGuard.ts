@@ -4,6 +4,8 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@
 import { Request } from 'express';
 import { decode, JwtPayload } from 'jsonwebtoken';
 
+type ExtendedUser = JwtPayload & User;
+
 @Injectable()
 export default class AuthGuard implements CanActivate {
     constructor(private readonly userService: UserService) {}
@@ -29,21 +31,21 @@ export default class AuthGuard implements CanActivate {
         return authorizationParts[1];
     }
 
-    private decodeJwToken = (token: string): JwtPayload => {
-        let jwtPayload: JwtPayload;
+    private decodeJwToken = (token: string): ExtendedUser => {
+        let extendedUser: ExtendedUser;
         try {
-            jwtPayload = decode(token, { json: true });
-            if (!jwtPayload) {
+            extendedUser = decode(token, { json: true }) as ExtendedUser;
+            if (!extendedUser) {
                 throw new ForbiddenException();
             }
         } catch {
             throw new ForbiddenException();
         }
-        return jwtPayload;
+        return extendedUser;
     };
 
     private getUsernameFromToken(request: Request): string {
-        return this.decodeJwToken(this.getJwToken(request)).email;
+        return this.decodeJwToken(this.getJwToken(request)).username;
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
