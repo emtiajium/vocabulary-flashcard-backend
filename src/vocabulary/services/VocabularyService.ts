@@ -1,5 +1,5 @@
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import * as _ from 'lodash';
@@ -67,6 +67,9 @@ export default class VocabularyService {
     };
 
     async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
+        if (await this.vocabularyRepository.getSingleVocabularyByCohortId(cohortId)) {
+            throw new ConflictException(`Cohort with ID: "${cohortId}" has at least one vocabulary`);
+        }
         const payload = this.generateVocabularyPayload(cohortId);
         const vocabularies = await Promise.all(
             _.map(payload, (vocabulary) => this.vocabularyRepository.save(vocabulary)),

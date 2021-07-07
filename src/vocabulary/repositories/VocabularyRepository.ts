@@ -78,4 +78,14 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         return this.rejectNull(results)[0];
     }
+
+    async getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {
+        const queryResult = await this.query(
+            `SELECT *
+             FROM "Vocabulary"
+             WHERE "cohortId" = $1;`,
+            [cohortId],
+        );
+        return queryResult[0];
+    }
 }
