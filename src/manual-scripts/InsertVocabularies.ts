@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { v4 as uuidV4 } from 'uuid';
 import { validateOrReject } from 'class-validator';
 import { createConnection, getConnectionManager, getRepository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
