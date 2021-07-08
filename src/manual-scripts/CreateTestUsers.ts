@@ -11,25 +11,25 @@ export default class CreateTestUsers {
             firstname: `Kateryna`,
             lastname: `Shevchenko`,
             username: `kateryna.shevchenko@firecracker.com`,
-            profilePictureUrl: ``,
+            profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairCurvy&accessoriesType=Blank&hairColor=Blonde&facialHairType=Blank&clotheType=Overall&clotheColor=PastelGreen&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light`,
         },
         {
             firstname: `Joao da`,
             lastname: `Silva`,
             username: `joao.silva@firecracker.com`,
-            profilePictureUrl: ``,
+            profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=Brown&facialHairType=Blank&clotheType=Hoodie&clotheColor=Gray02&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
         },
         {
             firstname: `Shashwata`,
             lastname: `Noor`,
             username: `shashwata.noor@firecracker.com`,
-            profilePictureUrl: ``,
+            profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortFlat&accessoriesType=Blank&hairColor=Black&facialHairType=BeardLight&facialHairColor=Black&clotheType=BlazerSweater&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=DarkBrown`,
         },
         {
             firstname: `Shraban`,
             lastname: `Dhara`,
             username: `shraban.dhara@firecracker.com`,
-            profilePictureUrl: ``,
+            profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight2&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=CollarSweater&clotheColor=Blue03&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
         },
     ];
 
