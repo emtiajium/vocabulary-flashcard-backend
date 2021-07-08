@@ -2,7 +2,6 @@ import User from '@/user/domains/User';
 import { createConnection, getRepository, In } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
-import { plainToClass } from 'class-transformer';
 
 type PartialUser = Pick<User, 'firstname' | 'lastname' | 'username' | 'profilePictureUrl'>;
 
@@ -36,8 +35,6 @@ export default class CreateTestUsers {
 
     private readonly cohortName = `Fantastic Four!`;
 
-    private userIds: string[];
-
     private cohortId: string;
 
     async execute(): Promise<void> {
@@ -65,8 +62,7 @@ export default class CreateTestUsers {
     }
 
     private async createUsers(): Promise<void> {
-        const insertResult = await getRepository(User).insert(this.users);
-        this.userIds = _.map(plainToClass(User, insertResult.generatedMaps), 'id');
+        await getRepository(User).insert(this.users);
     }
 
     private async associateUsersWithCohort(): Promise<void> {
