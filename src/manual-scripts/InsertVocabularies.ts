@@ -34,10 +34,6 @@ export default class InsertVocabularies {
         this.cohortId = cohortId;
     }
 
-    static getNewId(): string {
-        return uuidV4();
-    }
-
     private generateVocabularyPayload(): void {
         this.vocabularies = createVocabularies(this.cohortId, VocabularyList);
     }
