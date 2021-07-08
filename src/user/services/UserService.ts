@@ -23,12 +23,4 @@ export default class UserService {
         }
         return user;
     }
-
-    async getUserById(id: string): Promise<User> {
-        const user = await this.userRepository.findOne({ id });
-        if (!user) {
-            throw new EntityNotFoundException(`User with id "${id}" does not exist`);
-        }
-        return user;
-    }
 }
