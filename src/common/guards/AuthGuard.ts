@@ -36,10 +36,7 @@ export default class AuthGuard implements CanActivate {
         if (!extendedUser?.username && !extendedUser?.email) {
             throw new ForbiddenException();
         }
-        if (!extendedUser.username && extendedUser.email) {
-            return extendedUser.email;
-        }
-        return extendedUser.username;
+        return extendedUser.username || extendedUser.email;
     };
 
     private decodeJwToken(token: string): ExtendedUser {
@@ -62,8 +59,8 @@ export default class AuthGuard implements CanActivate {
         let isValidUser: boolean;
         try {
             const user: User = await this.userService.getUserByUsername(await this.getUsernameFromToken(request));
-            request.user = user;
             isValidUser = !!user;
+            request.user = user;
         } catch {
             isValidUser = false;
         }
