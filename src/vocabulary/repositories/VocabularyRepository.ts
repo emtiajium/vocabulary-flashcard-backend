@@ -13,6 +13,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     async findVocabularies(cohortId: string, vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
         const {
             pagination: { pageSize, pageNumber },
+            searchKeyword,
         } = vocabularySearch;
 
         const currentPage = pageSize * (pageNumber - 1);
@@ -25,6 +26,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
                 WHERE vocabulary."cohortId" = $1
+                    ${searchKeyword ? `AND vocabulary.word ILIKE '${searchKeyword}%'` : ''}
                 GROUP BY vocabulary.id
                 ORDER BY vocabulary."createdAt" DESC
                 OFFSET $2 LIMIT $3;
