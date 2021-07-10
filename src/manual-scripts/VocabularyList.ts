@@ -1,6 +1,6 @@
-import CustomVocabulary from '@/vocabulary/domains/CustomVocabulary';
+import PartialVocabulary from '@/vocabulary/domains/CustomVocabulary';
 
-const VocabularyList: CustomVocabulary[] = [
+const VocabularyList: PartialVocabulary[] = [
     {
         word: 'Ecstasy',
         definitions: [
@@ -23,7 +23,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'অরক্ষণীয়',
-                examples: ['the towns were tactically indefensible'],
+                examples: ['The towns were tactically indefensible'],
                 notes: [],
                 externalLinks: [],
             },
@@ -208,7 +208,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'Blurt out, uncover ফাঁস করা',
                 examples: [
-                    'She was offered 10 millions by the competitor’s informant for only the sales data of the company she works for. But she refused to divulge it as she prioritized honesty and loyalty other than everything.',
+                    `She was offered 10 millions by the competitor's informant for only the sales data of the company she works for. But she refused to divulge it as she prioritized honesty and loyalty other than everything.`,
                 ],
                 notes: [],
                 externalLinks: [],
@@ -240,7 +240,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'Fadeaway, Decrescent ক্ষীয়মান',
-                examples: ['I couldn’t see his facial expression as the moonlight was waning.'],
+                examples: [`I couldn't see his facial expression as the moonlight was waning.`],
                 notes: [],
                 externalLinks: [],
             },
@@ -342,6 +342,22 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
+        word: 'Porcupine',
+        definitions: [
+            {
+                meaning: 'সজারু',
+                examples: [
+                    `Porcupines are a type of rodent found in two main regions of the world, so scientists group them into either Old World or New World porcupines.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
         word: 'Antipathy',
         definitions: [
             {
@@ -376,7 +392,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'Suddenly reject or abandon (a lover)',
                 examples: [
-                    ' If a jilted wife gave birth to a child, in the past the child was also considered as jilted.',
+                    'If a jilted wife gave birth to a child, in the past the child was also considered as jilted.',
                     'She was stalked by a jilted ex-boyfriend.',
                 ],
                 notes: [],
@@ -395,25 +411,28 @@ const VocabularyList: CustomVocabulary[] = [
                 examples: [
                     'Whenever I call our local ISP for an internet speed issue they always give me hackneyed (adjective) explanation like "Please, turn on the router after switching it off."',
                     'It sounds a bit hackneyed but the best is seeing people grow and do things that are the result of your support or coaching.',
+                    `She quickly learned to ignore her children's hackney complaints like "It isn't fair" and "Why me?"`,
                 ],
                 notes: [],
                 externalLinks: [],
             },
             {
-                meaning: 'Hackney is a district in East London, England ',
-                examples: [],
+                meaning: 'Hackney is a district in East London, England',
+                examples: [`Have you ever been to Hackney?`],
                 notes: [],
                 externalLinks: [],
             },
             {
                 meaning: 'A horse suitable for ordinary riding or driving',
-                examples: [],
+                examples: [`Still people are fond of riding a hackney.`],
                 notes: [],
                 externalLinks: [],
             },
             {
                 meaning: 'a carriage or automobile kept for hire',
-                examples: [],
+                examples: [
+                    `Feinberg is still driving under the same hackney carriage medallion that he was issued in 1975, according to police.`,
+                ],
                 notes: [],
                 externalLinks: [],
             },
@@ -426,7 +445,7 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Ichthyology',
         definitions: [
             {
-                meaning: 'the branch of zoology that deals with fishes ',
+                meaning: 'the branch of zoology that deals with fishes',
                 examples: ['She has an interest in ichthyology.'],
                 notes: [],
                 externalLinks: [],
@@ -441,7 +460,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'endanger, to imperil; ঝুঁকিপূর্ণ করা',
-                examples: ['I can’t jeopardize our friendship by revealing his truth.'],
+                examples: [`I can't jeopardize our friendship by revealing his truth.`],
                 notes: [],
                 externalLinks: [],
             },
@@ -714,7 +733,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
             {
                 meaning: 'Versatile সব্যসাচী',
-                examples: ['Rabindranath was an ambidextrous genius'],
+                examples: ['Rabindranath Tagore was an ambidextrous genius.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -804,7 +823,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning:
-                    'Hatred against men Misandry is the same as misogyny except that it is used against men, instead of women.',
+                    'Hatred against men "Misandry" is the same as misogyny except that it is used against men, instead of women.',
                 examples: [
                     `Television advertising, for example, is deeply infected by misandry. In adverts for everything from jeans to yogurt, men are portrayed as idiots. A man cannot wash his children's clothes without getting them mixed up with those of their friends. He cannot mix a packet of sauce without a female being present.`,
                 ],
@@ -817,7 +836,7 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Osculate ',
+        word: 'Osculate',
         definitions: [
             {
                 meaning: 'Kiss',
@@ -1039,10 +1058,10 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Conjunctivitis',
         definitions: [
             {
-                meaning: 'Conjunctivitis passes from person to person or spread through contaminated objects or water.',
+                meaning: 'Pink eye চোখ উঠা',
                 examples: [
-                    'Pink eye চোখ উঠা',
-                    ' I took sick leave as my eyes were burning and I was suspecting conjunctitives',
+                    `Conjunctivitis passes from person to person or spread through contaminated objects or water.`,
+                    'I took sick leave as my eyes were burning and I was suspecting conjunctitives',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -1092,7 +1111,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
             {
                 meaning: 'Harshly ironic or sinister (অশুভ, অমঙ্গলসূচক)',
-                examples: [' The accident serves as a grim reminder of the dangers of drinking and driving.'],
+                examples: ['The accident serves as a grim reminder of the dangers of drinking and driving.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -1156,7 +1175,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning:
                     'A building or complex of buildings containing a number of individually owned apartments or houses',
-                examples: ['Chowdhury Aunt and Uncle own an apartment in the condominium of Uttara- Diabari project.'],
+                examples: ['Chowdhury aunt and uncle own an apartment in the condominium of Uttara - Diabari project.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -1171,7 +1190,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'Grasp (something) tightly',
                 examples: [
-                    'Our trains and buses are always crowded and often you’ll see people clutching onto the door handle (for the entire journey) in order to not fall off.',
+                    `Our trains and buses are always crowded and often you'll see people clutching onto the door handle (for the entire journey) in order to not fall off.`,
                 ],
                 notes: [],
                 externalLinks: [],
@@ -1185,7 +1204,7 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Stampede',
         definitions: [
             {
-                meaning: 'আতঙ্কে দিশাহারা অবস্থা',
+                meaning: 'আতঙ্কে দিশাহারা অবস্থায় ধাবন',
                 examples: [`People stampeded from the burning theatre.`],
                 notes: [],
                 externalLinks: [],
@@ -1201,9 +1220,11 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning:
                     '(Noun) a mammal that lives in the sea, swims in groups, and looks similar to a dolphin but has a shorter rounder nose',
-                examples: [],
+                examples: [
+                    `People use the terms dolphins, porpoises, and whales to describe marine mammals belonging to the order Cetacea (from the Greek work ketos, "large sea creature"), and often use them interchangeably.`,
+                ],
                 notes: [],
-                externalLinks: [],
+                externalLinks: [`https://oceanservice.noaa.gov/facts/dolphin_porpoise.html`],
             },
             {
                 meaning: '(Verb) move through the water like a porpoise, alternately rising above it and submerging.',
@@ -1236,7 +1257,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning:
                     'behaving in a way that is thought to be typical of a man, esp. by seeming strong and powerful but also seeming too determined to avoid showing weakness and sympathy/men who are very conscious and proud of their masculinity',
-                examples: ['He’s too macho to admit that a woman can do her job as well as he can.'],
+                examples: [`He's too macho to admit that a woman can do her job as well as he can.`],
                 notes: [],
                 externalLinks: [],
             },
@@ -1251,7 +1272,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'A break from work in which a full-time job holder can pursue his/her interests',
                 examples: ['We need a sabbatical leave for breathing out in peace.'],
-                notes: ['(Sabbatical originated from the Hebrew word Sabbath means to rest or break from the work!)'],
+                notes: ['Sabbatical originated from the Hebrew word Sabbath means to rest or break from the work!'],
                 externalLinks: [],
             },
         ],
@@ -1279,7 +1300,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'Spend time in ineffectual activity, Need a lot of effort to solve silly problems',
                 examples: [
-                    'Most people don’t want to deal with the kind of faff a 3D printer takes to produce good prints.',
+                    `Most people don't want to deal with the kind of faff a 3D printer takes to produce good prints.`,
                 ],
                 notes: [],
                 externalLinks: [],
@@ -1308,7 +1329,9 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'Botanical variety of the onion',
-                examples: ['We Asians find no difference between shallots and onions; we consider both as onions.'],
+                examples: [
+                    `We Asians find no difference between shallots and onions, basically we consider both as onions.`,
+                ],
                 notes: [],
                 externalLinks: [],
             },
@@ -1340,9 +1363,9 @@ const VocabularyList: CustomVocabulary[] = [
                 meaning:
                     'Baptism of fire অগ্নিপরীক্ষা, in the past, a way of trying to find out if someone is guilty or innocent by making them suffer extreme pain. If they did not die, this was considered proof from God that they were innocent',
                 examples: [
-                    'According to Ramayana, "Seeta undergoes an ordeal by fire in order to prove her chastity (সতীত্ব) before she is accepted by Rama." (though this incident is not true according to Valmiki Ramayana)',
+                    'According to Ramayana, "Seeta undergoes an ordeal by fire in order to prove her chastity (সতীত্ব) before she is accepted by Rama."',
                 ],
-                notes: [],
+                notes: [`Seets's ordeal is not true according to Valmiki Ramayana`],
                 externalLinks: [],
             },
             {
@@ -1426,7 +1449,7 @@ const VocabularyList: CustomVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: ['Hackney, Badger'],
+        linkerWords: ['Hackney', 'Badger'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -1473,7 +1496,7 @@ const VocabularyList: CustomVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: ['Hackney, Drumbeat'],
+        linkerWords: ['Hackney', 'Drumbeat'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -1513,9 +1536,9 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'A model of excellence or perfection',
                 examples: [
-                    ' I was briefed by the Hackney Carriage Trade, which is the paragon of private enterprise, never receiving 1p of public subsidy.',
+                    'I was briefed by the "Hackney Carriage Trade", which is the paragon of private enterprise, never receiving 1p of public subsidy.',
                 ],
-                notes: [],
+                notes: [`A brand: Frozen roti, paratha`],
                 externalLinks: [],
             },
         ],
@@ -1554,11 +1577,11 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Poggers ',
+        word: 'Poggers',
         definitions: [
             {
                 meaning: 'To express excitement when something exciting occurs. ',
-                examples: [' Project 550 went successful. Poggers!'],
+                examples: ['Project 550 went successful. Poggers!'],
                 notes: [],
                 externalLinks: [],
             },
@@ -1587,7 +1610,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning:
                     'It is an abnormal weather pattern caused by the warming of the Pacific Ocean near the equator, off the coast of South America. The sun warms the water near the equator, which can make more clouds and, therefore, more rain. However, normally there are trade winds, which blow that warm water west.',
-                examples: [' Rains came late to the region because of El Nino.'],
+                examples: ['Rains came late to the region because of El Nino.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -1674,19 +1697,19 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Trachea (ট্রাকিয়া)',
+        word: 'Trachea',
         definitions: [
             {
                 meaning: 'শ্বাসনালী',
                 examples: [
                     'If you punch someone in the throat hard enough, you may crush their trachea and prevent them from breathing, which will kill them.',
                 ],
-                notes: [],
+                notes: [`শ্বাসনালী, খাদ্যনালী না`],
                 externalLinks: [],
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Pronunciation: ট্রাকিয়া`],
         genericExternalLinks: [],
     },
     {
@@ -1758,7 +1781,9 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning:
                     'a person who stands in temporarily for someone else of the same profession, especially a cleric (ইমাম, ফাদার ইত্যাদি priest) or doctor',
-                examples: ['Public buses in Dhaka metro is mostly operated by locums rather than licensed drivers'],
+                examples: [
+                    'Public buses in Dhaka metro is mostly operated by locums (conductor) rather than licensed drivers',
+                ],
                 notes: [],
                 externalLinks: [],
             },
@@ -1789,7 +1814,9 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'A person whose job is to compile the dictionary',
-                examples: ['Emtiaj is developing an app to store our vocab learning. He is a lexicographer indeed.'],
+                examples: [
+                    'Emtiaj is developing an app to store our vocabularies in a structured way. Can we say him lexicographer? [wink emoticon]',
+                ],
                 notes: [],
                 externalLinks: [],
             },
@@ -1802,14 +1829,14 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Drudge',
         definitions: [
             {
-                meaning: '(Verb) to do hard, menial, or monotonous work ',
+                meaning: '(Verb) to do hard, menial, or monotonous work',
                 examples: ['Her husband was drudging in the smoke of London'],
                 notes: [],
                 externalLinks: [],
             },
             {
-                meaning: '(Noun) One who is obliged to do menial work  ',
-                examples: ['I felt like a household drudge'],
+                meaning: '(Noun) One who is obliged to do menial work',
+                examples: [`I feel like a real drudge - I've done nothing but clean all day!`],
                 notes: [],
                 externalLinks: [],
             },
@@ -1819,7 +1846,7 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Loggia লৌজিয়া, লৌজা',
+        word: 'Loggia',
         definitions: [
             {
                 meaning:
@@ -1830,11 +1857,11 @@ const VocabularyList: CustomVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Pronunciation: লৌজিয়া, লৌজা`],
         genericExternalLinks: [],
     },
     {
-        word: 'Myriad মিরিয়েড',
+        word: 'Myriad',
         definitions: [
             {
                 meaning: 'অগুণতি ',
@@ -1844,7 +1871,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Pronunciation: মিরিয়েড`],
         genericExternalLinks: [],
     },
     {
@@ -1852,7 +1879,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'Hidden',
-                examples: [' If the sun goes in, it becomes hidden from view by clouds.'],
+                examples: ['If the sun goes in, it becomes hidden from view by clouds.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -1928,7 +1955,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'Uncontrolled movement',
-                examples: [' The boat gave a violent lurch and he missed his footing.'],
+                examples: ['The boat gave a violent lurch and he missed his footing.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -1958,7 +1985,7 @@ const VocabularyList: CustomVocabulary[] = [
                 meaning:
                     'opposition to the spread of knowledge, a policy of withholding knowledge from the general public especially in order to prevent people from finding out the truth ',
                 examples: [
-                    'In 2003 there a campaign was conducted against the enforcing religious obscurantism in the educational institutions.',
+                    'In 2003, a campaign was conducted against the enforcing religious obscurantism in the educational institutions.',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -1973,7 +2000,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'one that is 100 years old or older',
-                examples: [' There are lots of centenarians in Japan.'],
+                examples: ['There are lots of centenarians in Japan.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -2020,7 +2047,13 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: '(Verb) to make a musical and especially a harmonious sound',
-                examples: [' When a bell or a clock chimes, it makes ringing sounds. '],
+                examples: ['When a bell or a clock chimes, it makes ringing sounds.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(Noun) a ringing sound',
+                examples: ['(Noun) a ringing sound'],
                 notes: [],
                 externalLinks: [],
             },
@@ -2032,7 +2065,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Amazon Chime: a streaming solution!`],
         genericExternalLinks: [],
     },
     {
@@ -2105,13 +2138,13 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'to leave without being noticed',
-                examples: [' He slipped away while we were all sleeping.'],
+                examples: ['He slipped away while we were all sleeping.'],
                 notes: [],
                 externalLinks: [],
             },
             {
                 meaning: '(of time) pass; elapse',
-                examples: [' Time was slipping away and she had to make a decision soon.'],
+                examples: ['Time was slipping away and she had to make a decision soon.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -2124,8 +2157,14 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Prosthetic',
         definitions: [
             {
-                meaning: 'An artificial body part, such as an arm, foot, or tooth, that replaces a missing part ',
+                meaning: 'An artificial body part, such as an arm, foot, or tooth, that replaces a missing part',
                 examples: ['Some of them are in wheelchairs, some wearing prosthetics.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'the science of or the part of medicine that deals with artificial body parts',
+                examples: ['Computer-aided design is one of the most recent advances in prosthetics.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -2141,9 +2180,8 @@ const VocabularyList: CustomVocabulary[] = [
                 meaning: 'Critical or mocking in an indirect or sarcastic way',
                 examples: [
                     'I spent an hour writing a post about this and it was all sarcastic and snarky and I was very proud of it.',
-                    'আপনারা এত দ্রুত গুটিয়ে গেলেন কেন? সাকিবঃ বিরিয়ানি খাওয়ায় যাতে দেরী না হয়.',
                 ],
-                notes: [],
+                notes: ['আপনারা এত দ্রুত গুটিয়ে গেলেন কেন? সাকিবঃ বিরিয়ানি খাওয়ায় যাতে দেরী না হয়'],
                 externalLinks: [],
             },
         ],
@@ -2152,7 +2190,7 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Insatiable ইনসেইশ্যাব্‌ল',
+        word: 'Insatiable',
         definitions: [
             {
                 meaning: '(of a desire or need) too great to be satisfied ',
@@ -2164,7 +2202,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Pronunciation: ইনসেইশ্যাব্‌ল`],
         genericExternalLinks: [],
     },
     {
@@ -2202,9 +2240,9 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Vicinity',
         definitions: [
             {
-                meaning: 'the area around a place or where the speaker is ',
+                meaning: 'the area around a place or where the speaker is সন্নিকটে',
                 examples: [
-                    'Alongwith the air traffic controller, pilots would need to be aware of every plane in the vicinity of the airport.',
+                    'Without the air traffic controller, pilots would need to be aware of every plane in the vicinity of the airport.',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -2220,7 +2258,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'Make confused',
                 examples: [
-                    ' I went to the professor to have a clear understanding of relativity theory, but alas he only befogged me.',
+                    'I went to the professor to have a clear understanding of relativity theory, but alas he only befogged me.',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -2255,7 +2293,7 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Repentance ',
+        word: 'Repentance',
         definitions: [
             {
                 meaning: `the activity of reviewing one's actions and feeling contrition or regret for past wrongs, which is accompanied by commitment to and actual actions that show and prove a change for the better অনুশোচনা`,
@@ -2271,14 +2309,25 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Moribund ',
+        word: 'Moribund',
         definitions: [
             {
-                meaning: 'at the point of death',
+                meaning: '(of a person) at the point of death মুমূর্ষু ',
                 examples: [
                     'Because the wounded man has lost a great deal of blood, he is moribund and probably will not make it through the night.',
-                    'Bangladesh Jute Mill Corporation passes its moribund state.',
                 ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(of a thing) in terminal decline; lacking vitality or vigour',
+                examples: ['***'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(especially of an organization or business) not active or successful',
+                examples: ['Bangladesh Jute Mill Corporation passes its moribund state.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -2438,7 +2487,11 @@ const VocabularyList: CustomVocabulary[] = [
                 meaning:
                     'commonly known as food pipe or gullet, is an organ in vertebrates through which food passes,খাদ্যনালী ',
                 examples: ['he died of cancer of the esophagus.'],
-                notes: [],
+                notes: [
+                    `মানবদেহের খাদ্যনালী আর শ্বাসনালী একই। শ্বাসনালী > trachea`,
+                    `US English: Esophagus`,
+                    `Diarrhea versus Diarrhoea`,
+                ],
                 externalLinks: [],
             },
         ],
@@ -2452,7 +2505,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning: 'Earnestly wished for or sought after ঈপ্সিত',
                 examples: ['The Nobel prize is the most coveted international award.'],
-                notes: [],
+                notes: [`Covet ব্যাকুলভাবে কামনা করা`],
                 externalLinks: [],
             },
         ],
@@ -2485,17 +2538,17 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Surmountable সেমানট্যাবল',
+        word: 'Surmountable',
         definitions: [
             {
                 meaning: 'Possible to deal with or solve successfully, overcome',
-                examples: [' Every barrier is surmountable if you could be with me!'],
+                examples: ['Every barrier is surmountable if you could be with me!'],
                 notes: [],
                 externalLinks: [],
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Pronunciation: সেমানট্যাবল`],
         genericExternalLinks: [],
     },
     {
@@ -2549,13 +2602,13 @@ const VocabularyList: CustomVocabulary[] = [
             },
             {
                 meaning: 'To quickly repeat or give the main points of something ',
-                examples: [' Could you just run through the main points again, please?'],
+                examples: ['Could you just run through the main points again, please?'],
                 notes: [],
                 externalLinks: [],
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Go through means to read, look at or examine something carefully`],
         genericExternalLinks: [],
     },
     {
@@ -2563,7 +2616,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning:
-                    'It is generally stereotyped as having a blonde bob haircut, asking to speak to retail and restaurant managers to voice complaints or make demands',
+                    'Karen is a mocking slang term for an entitled, obnoxious(extremely unpleasant), middle-aged white woman. It is generally stereotyped as having a blonde bob haircut, asking to speak to retail and restaurant managers to voice complaints or make demands',
                 examples: ['Use the word Karen cautiously as it is slang in many countries'],
                 notes: [],
                 externalLinks: [],
@@ -2579,10 +2632,8 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning:
                     'to kill (humanely) an animal (person or animal) because it is very old or sick or because there is no one to take care of it',
-                examples: [
-                    `Hritwik played a role in the Guzarish movie who wished to be euthanized Here Hritwik's name was Ethan`,
-                ],
-                notes: [],
+                examples: [`Hritwik played a role in the Guzarish movie who wished to be euthanized.`],
+                notes: [`Hritwik's name was Ethan`],
                 externalLinks: [],
             },
         ],
@@ -2612,14 +2663,14 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'existing or reaching over a large area',
-                examples: [' A sprawling fire has devastated the Musa Mansion at Armanitola'],
+                examples: ['A sprawling fire has devastated the Musa Mansion at Armanitola (in April 2021).'],
                 notes: [],
                 externalLinks: [],
             },
             {
                 meaning: 'describe things that extend across a large area',
-                examples: [' Bushes sprawling along the road.'],
-                notes: [],
+                examples: ['Bushes sprawling along the road.'],
+                notes: [`Sprawling slums`],
                 externalLinks: [],
             },
         ],
@@ -2638,7 +2689,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Verb is broil`],
         genericExternalLinks: [],
     },
     {
@@ -2661,7 +2712,7 @@ const VocabularyList: CustomVocabulary[] = [
             {
                 meaning:
                     'a talk on a religious or moral subject, esp. one given by a religious leader during a religious ceremony',
-                examples: ['After the sermon , they all stood for prayer'],
+                examples: ['After the sermon, they all stood for prayer'],
                 notes: [],
                 externalLinks: [],
             },
@@ -2780,16 +2831,17 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: '',
+        word: 'Strut',
         definitions: [
             {
-                meaning: '',
-                examples: [],
+                meaning:
+                    'walk (with your chest pushed forward and your shoulders back to show) with pride to establish importance',
+                examples: [`The boys strutted around trying to get the attention of a group of girls who were nearby.`],
                 notes: [],
                 externalLinks: [],
             },
         ],
-        linkerWords: ['strut, pretentious, pompous'],
+        linkerWords: ['haughtily'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -2804,7 +2856,7 @@ const VocabularyList: CustomVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: ['haughtily, strut, pretentious, pompous'],
+        linkerWords: ['haughtily', 'strut', 'pretentious', 'pompous'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -2876,13 +2928,13 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Malevolence',
         definitions: [
             {
-                meaning: 'He is egocentric with a touch of malevolence.',
-                examples: [],
+                meaning: 'অমঙ্গল কামনা',
+                examples: [`He is egocentric with a touch of malevolence.`],
                 notes: [],
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`benevolence`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -2890,13 +2942,13 @@ const VocabularyList: CustomVocabulary[] = [
         word: 'Malevolent',
         definitions: [
             {
-                meaning: 'অমঙ্গলকারী ',
+                meaning: 'অমঙ্গলকারী',
                 examples: ['His failures made him malevolent toward those who were successful.'],
                 notes: [],
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`benevolent`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -2925,7 +2977,7 @@ const VocabularyList: CustomVocabulary[] = [
                 externalLinks: [],
             },
             {
-                meaning: 'impossible to remove by washing or by any other method ',
+                meaning: 'impossible to remove by washing or by any other method',
                 examples: ['The menstrual blood had left an indelible mark on her pyjama.'],
                 notes: [],
                 externalLinks: [],
@@ -2940,7 +2992,7 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'to look quickly at someone',
-                examples: [' She darted an angry look at me.'],
+                examples: ['She darted an angry look at me.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -2991,7 +3043,7 @@ const VocabularyList: CustomVocabulary[] = [
                 meaning:
                     'to fail to do something at a time when it is urgent, usually because you suddenly lose confidence',
                 examples: [
-                    ' Do you choke when you have to decide when to use who and whom? ',
+                    'Do you choke when you have to decide when to use who and whom? ',
                     'Why do South Africa choke so often at the World Cup?',
                 ],
                 notes: [],
@@ -3006,7 +3058,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
             {
                 meaning: 'to fill something such as a road or pipe, so that nothing can pass through',
-                examples: [' At lunchtime the streets were choked with traffic.'],
+                examples: ['At lunchtime the streets were choked with traffic.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -3016,10 +3068,10 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Manoeuvre ',
+        word: 'Manoeuvre',
         definitions: [
             {
-                meaning: ' set of movements needing skill and care',
+                meaning: 'set of movements needing skill and care',
                 examples: [
                     'Reversing around a corner is one of the manoeuvres you are required to perform in a driving test.',
                 ],
@@ -3041,7 +3093,7 @@ const VocabularyList: CustomVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Banter বানটা(র)',
+        word: 'Banter',
         definitions: [
             {
                 meaning: '(Noun) the conversation that is funny and not serious লঘু/হালকা/গাম্ভীর্যহীন/চটুল আলাপ ',
@@ -3057,11 +3109,11 @@ const VocabularyList: CustomVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Pronunciation: বানটা(র)`],
         genericExternalLinks: [],
     },
     {
-        word: 'Imbecile ইম্বেসিল',
+        word: 'Imbecile',
         definitions: [
             {
                 meaning: 'a stupid person',
@@ -3071,7 +3123,7 @@ const VocabularyList: CustomVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Pronunciation: ইম্বেসিল`],
         genericExternalLinks: [],
     },
     {
@@ -3109,7 +3161,2973 @@ const VocabularyList: CustomVocabulary[] = [
         definitions: [
             {
                 meaning: 'Consumed, decreased নষ্ট হয়ে গেছে, ক্ষয়প্রাপ্ত',
-                examples: [''],
+                examples: [
+                    `Adults in our society believe that the 'rules' around the relationship are eroded as young people prefer to choose their partner by themselves.`,
+                    `Rust can erode iron-based material.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Dissipate',
+        definitions: [
+            {
+                meaning: 'Cause to scatter or disappear something gradually',
+                examples: ['The wind dissipated the cloud.', 'His anger dissipated as the situation became clear.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Abet',
+        definitions: [
+            {
+                meaning:
+                    'to help or encourage a person or thing to do something, in particular, to commit a crime (প্ররোচনা)',
+                examples: [
+                    'A charge of abetting the suicide of a teenage girl was brought against the MD of the Basundhara group of industries.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Amputee',
+        definitions: [
+            {
+                meaning:
+                    'Amputation is the removal of a limb (e.g., arms, legs) and the amputated person is called an amputee',
+                examples: [
+                    'For amputees of colour around the world, living with a limb or body part opposite to their natural skin tone is a daily reality. (সাধারণত নকল অঙ্গগুলো White People দের গায়ের রঙের মত হয়)',
+                    'In 1997, he was the first leg amputee to complete the 250km Great Sahara Run.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`prosthetic`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Calender',
+        definitions: [
+            {
+                meaning: 'A machine in which cloth or paper is pressed by rollers to glaze or smooth it.',
+                examples: ['***'],
+                notes: [`French origin`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Calendar vs. Calender`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Acrophobia',
+        definitions: [
+            {
+                meaning: 'Fear of heights',
+                examples: ['She has acrophobia and always becomes dizzy in a high - rise elevator.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Galvanise',
+        definitions: [
+            {
+                meaning: 'Excite someone to take action',
+                examples: ['The speeches of Bangabandhu always galvanise the juvenile of our country.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Abet`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Euphemism',
+        definitions: [
+            {
+                meaning: 'A word or phrase used to avoid unpleasant words',
+                examples: [
+                    `"Senior home" is the euphemism for "old home".`,
+                    `Nowadays in western, civil society uses the euphemism Black instead of Nigro. But in the real scenario, racism isn't obliterated from society.`,
+                ],
+                notes: [`Kick the bucket > pass away`, `দড়ি > সাপ`, `He who must not be named > Voldemort`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Dolittle',
+        definitions: [
+            {
+                meaning: 'a lazy person; one who does little but does not admit to it',
+                examples: ['***'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning:
+                    'a fictional character who can talk to the animals (Doctor Dolittle) [সদাশিবের সাঙ্গোপাঙ্গ translated by Biplob Das]',
+                examples: ['***'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Appall',
+        definitions: [
+            {
+                meaning: 'to give someone strong feelings of shock হতবাক or of disapproval',
+                examples: [
+                    'Barack Obama, former president of the USA recently said on his Facebook status he had been appalled by the violence against the civilians in Myanmar.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Exuberance',
+        definitions: [
+            {
+                meaning: 'to encourage someone to do or feel something unpleasant or violent উত্তেজিত করা',
+                examples: [
+                    'Madani is known as Sishu Bokta incited violence against the government, the atheist and the religious minority people.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Galvanise`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Brouhaha',
+        definitions: [
+            {
+                meaning: 'a situation that causes upset, anger, or confusion',
+                examples: ['There was a big brouhaha when the government passed a law for equal assets distribution.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(old-fashioned) a noisy and overexcited reaction or response to something',
+                examples: ['There were lots of brouhahas when Taslima Nasreen published her novel "Lajja"'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Mayhem`],
+        genericNotes: [`Pronunciation: ব্রু-হা-হা`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Guerrilla marketing',
+        definitions: [
+            {
+                meaning: 'creative, low cost, unconventional strategy to promote the products or services',
+                examples: ['A startup like Nerddevs should use guerrilla marketing to promote their services.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Delirium',
+        definitions: [
+            {
+                meaning:
+                    'a serious disturbance in mental abilities that results in confused thinking and reduced awareness of the environment ',
+                examples: [
+                    `Delirium would soon follow if he didn't get out of the broiling sun.`,
+                    'Somewhere a patient shouted in delirium',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Portmanteau word',
+        definitions: [
+            {
+                meaning: 'a word blending the sounds and combining the meanings of two others',
+                examples: ['Brexit = Britain + Exit', `Brunch = Breakfast + Lunch`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Behemoth',
+        definitions: [
+            {
+                meaning: 'something that is extremely large and often extremely powerful',
+                examples: [
+                    `Pictures can be deceiving and the Statue of Liberty isn't this towering behemoth like many tourists think it is.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning:
+                    'is a beast from the biblical Book of Job, and is a form of the primaeval chaos monster created by God at the beginning of creation',
+                examples: [`***`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Pronunciation: বিহিমথ`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Butt out',
+        definitions: [
+            {
+                meaning: 'to stop being involved in something নাক গলানো বন্ধ করা',
+                examples: ['This is none of your business, so butt out.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Trickle',
+        definitions: [
+            {
+                meaning:
+                    '(Verb) [commonly used with down, from, out of, etc. sth] (of a liquid) flow in a small stream',
+                examples: ['Blood trickled out of the corner of his mouth.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning:
+                    '(Verb) [commonly used with, in, out, back, etc.] to arrive or move somewhere slowly and gradually, in small numbers',
+                examples: ['Spectators trickled back into the theatre for the second half.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(Noun) a small number',
+                examples: ['We usually only get a trickle of customers in the mornings.'],
+                notes: [`অসংখ্য - Myriad`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Cradle',
+        definitions: [
+            {
+                meaning: '(Noun) বাচ্চাদের ঘুমপাড়ানি দোলনা',
+                examples: ['***'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(Verb) to hold something or someone gently, especially by supporting with the arms',
+                examples: ['He was sitting at the big table cradling a large bowl of milky coffee.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Everything under the sun',
+        definitions: [
+            {
+                meaning: 'everything that exists or is possible',
+                examples: [
+                    'In his last Facebook live he talked about virtually everything under the sun, from football matches to film stars.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Rechristen',
+        definitions: [
+            {
+                meaning: 'Baptize (christen) someone again, Give a new name to',
+                examples: [
+                    'Here few Muslims started rechristening Haleem to Daleem as Haleem is one of the names of Allah.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Snowclone',
+        definitions: [
+            {
+                meaning:
+                    'A snowclone is a customizable formulaic phrase that consists of a framework that can be adapted for different situations by changing some of the words.',
+                examples: [
+                    'In space, no one can hear you X. X = scream, belch, bitch, blog, cream, DJ, dream, drink, etc.',
+                    'X is the new Y.',
+                    'Snow is the new clay.',
+                    'Purple is the new pink.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Spoonerism',
+        definitions: [
+            {
+                meaning:
+                    'A verbal error in which a speaker accidentally transposes the initial sounds or letters of two or more words, often to humorous effect',
+                examples: [
+                    `"Is it kisstomary to cuss the bride?" > customary to kiss`,
+                    `মাঠ চলে গেল বলের বাইরে`,
+                    `মিষ্টি দিয়ে চামচ খেলাম`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Enormity',
+        definitions: [
+            {
+                meaning: 'Something overwhelmingly horrible',
+                examples: [`The liberation war of 1971's enormity ensures that it will not be easily forgotten.`],
+                notes: [`Enormousness means something huge`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Schadenfreude',
+        definitions: [
+            {
+                meaning: 'a feeling of pleasure at the bad things that happen to other people',
+                examples: [
+                    "Few Bangladeshi Muslims' schadenfreude fests on the dead and dying due to the Covid second wave in India disgusts me.",
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Pronunciation: শাদুনফ্রইদা`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Arbitrage',
+        definitions: [
+            {
+                meaning:
+                    'the method on the stock exchange of buying something in one place and selling it in another place at the same time, in order to make a profit from the difference in price in the two places',
+                examples: ['In a global world, regulatory arbitrage is a real factor.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Exhort',
+        definitions: [
+            {
+                meaning: 'to strongly encourage or try to persuade someone to do something',
+                examples: ['We should exhort ourselves to wear the mask all the time amid this Covid situation.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Consolidation',
+        definitions: [
+            {
+                meaning: 'process of making something stronger or more solid',
+                examples: [`The company has been expanding rapidly, and I feel it's now time to consolidate`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Ignite with',
+        definitions: [
+            {
+                meaning: 'arouse or inflame (an emotion or situation)',
+                examples: [
+                    `My eyes ignited with anger hearing the bloody man's lame excuses and I darted an angry look at him.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`ইগনাইট`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Inebriated',
+        definitions: [
+            {
+                meaning: 'Drunk',
+                examples: [`It's not bad to be inebriated occasionally as it may help you to heal yourself.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Sloshed'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Stoned',
+        definitions: [
+            {
+                meaning: 'being strongly influenced by drugs especially cannabis / very drunk',
+                examples: ['I saw her in the local pub getting stoned with Marijuana.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Quilt',
+        definitions: [
+            {
+                meaning: 'a decorative cover for a bad',
+                examples: ['A patchwork quilt is a good way of using up scraps of material.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Lectern',
+        definitions: [
+            {
+                meaning:
+                    'a tall stand with a sloping top to hold a book or notes, from which someone, typically a preacher or lecturer, can read while standing up. গান গাইবার, ভাষণ দেবার সময় ব্যবহারের জন্য এক ধরনের হেলানো ডেস্ক',
+                examples: ['The lectern was draped in yellow silk sheets.'],
+                notes: [`lecture > lectern (মনে রাখার সুবিধার জন্য)`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Malapropisms',
+        definitions: [
+            {
+                meaning: 'Malapropisms occur when someone substitutes a similar-sounding word for another word',
+                examples: [
+                    `He is the very pineapple of politeness > pinnacle of politeness`,
+                    'Texas has a lot of electrical votes > electoral votes',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Spoonerism '],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Intonation',
+        definitions: [
+            {
+                meaning: 'the rise and fall of the voice in speaking স্বরভঙ্গি',
+                examples: [
+                    'In many languages, including English, intonation serves a grammatical function, distinguishing one type of phrase or sentence from another. Thus, "Your name is John", beginning with a medium pitch and ending with a lower one (falling intonation), is a simple assertion; "Your name is John?", with a rising intonation (high final pitch), indicates a question.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Buoyancy',
+        definitions: [
+            {
+                meaning: 'the ability or tendency of something to float in water or other fluid',
+                examples: [
+                    'Along with other light objects, even a human being can float in the Dead Sea for its natural buoyancy (due to excessive salinity).',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Pronunciation: বয়েনসি`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Stave off sth/sb',
+        definitions: [
+            {
+                meaning:
+                    'to delay something, to stop something bad from happening, to keep or hold someone or something off কোনমতে ঠেকিয়ে রাখা',
+                examples: [
+                    'She is hoping to stave off her matrimony until the next fall semester.',
+                    `Health officials are trying to stave off an outbreak of disease.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Procrastination'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Venerate',
+        definitions: [
+            {
+                meaning: 'to honour or very much respect a person or thing',
+                examples: [
+                    'Bangabandhu Sheikh Mujibur Rahman is the most venerated (সম্মানিত) person of Bangladesh for the deeds he did to liberate the country.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Inkling',
+        definitions: [
+            {
+                meaning:
+                    'a feeling that something is true or likely to happen, although you are not certain আন্দাজ, আভাস, টের',
+                examples: [`She saw the look on Nick's face but had no inkling of what it meant.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Sarcophagus',
+        definitions: [
+            {
+                meaning: 'a stone coffin, often decorated, that was used in ancient times',
+                examples: ['I peered into the sarcophagus.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Plural is sarcophagi`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Tumbledown',
+        definitions: [
+            {
+                meaning: '(of a building) in a very bad condition, especially in a state of decay প্রায়ভগ্ন',
+                examples: ['They lived in a tumbledown cottage near the railroad tracks.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Grotty',
+        definitions: [
+            {
+                meaning: '(Informal) unpleasant or of bad quality',
+                examples: [
+                    'Nabila and I had to spend our night at a grotty hotel because we were not able to cross the border timely.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Treble',
+        definitions: [
+            {
+                meaning: 'Three times greater in amount, number, or size',
+                examples: [
+                    'Mashru is supposed to earn almost treble of her present remuneration if she could be promoted to band 6.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Grandiose',
+        definitions: [
+            {
+                meaning: 'very large or wonderful, or intended to seem great and important ',
+                examples: ['Grandiose building'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: `(Psychiatry) having an exaggerated belief in one's importance, sometimes reaching delusional proportions, and occurring as a common symptom of mental illnesses, as a manic disorder [Grandiosity and Grandiose Delusions in Bipolar Disorder]`,
+                examples: ['***'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Mondegreen',
+        definitions: [
+            {
+                meaning:
+                    'A misunderstood or misinterpreted word or phrase resulting from a mishearing of the lyrics of a song',
+                examples: [
+                    `We started calling Suny to 'Somephot' because when Rezaul Karim Sir uttered the word "Somewhat" he asked, "Is it 'Somephot'?". After all this time, I came to know this kind of misinterpretation is called mondegreen!`,
+                ],
+                notes: ['কেউ কেউ অবিরাম চুপি চুপি > পিউ পিউ অবিরাম চুপি চুপি'],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Oligarchy',
+        definitions: [
+            {
+                meaning: 'a government in which power is held by a small group of people',
+                examples: ['He believed Britain was an oligarchy'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Confiscation',
+        definitions: [
+            {
+                meaning: `Seizing someone's property usually by legal authority বাজেয়াপ্তকরন`,
+                examples: ['Court ordered the confiscation of his land property.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Crawling',
+        definitions: [
+            {
+                meaning: 'move forward on the hands and knees or by dragging the body close to the ground হামাগুড়ি',
+                examples: ['Crawling is one of the basic parts of military training.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Huddle',
+        definitions: [
+            {
+                meaning: '(Verb) to come close together in a group (for example, because it is cold)',
+                examples: ['Everyone huddled around the fire to keep warm.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(Noun) a small group of people or things that are close together',
+                examples: ['Do hard things with your huddle.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(Verb) to discuss something privately in a small group',
+                examples: ['After huddling with advisors, the president gave a speech.'],
+                notes: [`Morning huddle`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Hair of the dog',
+        definitions: [
+            {
+                meaning:
+                    'A colloquial expression in the English language predominantly used to refer to alcohol that is consumed with the aim of lessening the effects of a hangover.',
+                examples: [`***`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Oceanographer',
+        definitions: [
+            {
+                meaning: 'the scientific study of the sea',
+                examples: [
+                    'Experienced oceanographers -- the top 75 percent of the field- earn an average of $99,690, or $47.93 per hour.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Burl',
+        definitions: [
+            {
+                meaning: 'tree growth in a deformed manner. It mostly happens due to fungal infection in trees',
+                examples: [
+                    'Burls formed in the trees of the historical mango orchard located in Meherpur due to the fungal attack that leads the way to extinction.',
+                    `A bowl made from a plum tree burl.`,
+                ],
+                notes: [],
+                externalLinks: [`https://www.facebook.com/DIYCraftsTV/videos/846389039278007`],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: `In (someone's) wheelhouse`,
+        definitions: [
+            {
+                meaning: `within one's area of expertise or interest`,
+                examples: ['There are some subjects that are in your wheelhouse and some that are not.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Surefire',
+        definitions: [
+            {
+                meaning: 'certain or likely, especially to succeed',
+                examples: ['The film looks like a surefire Oscar winner.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Tantrum',
+        definitions: [
+            {
+                meaning: 'An uncontrolled outburst of anger and frustration',
+                examples: [`My mom would throw a tantrum if I didn't eat.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Take the bull by the horns',
+        definitions: [
+            {
+                meaning: 'to do something difficult in a brave and determined way',
+                examples: [`I took the bull by the horns and confronted him about his mistreatment of the workers.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: '(be) at odds',
+        definitions: [
+            {
+                meaning: 'to disagree মতভেদ',
+                examples: [`Her version of events was at odds with (= very different from) the police report.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Boil down to',
+        definitions: [
+            {
+                meaning: 'summarize',
+                examples: [
+                    `You can mention lots of reasons why people are getting out amid this Covid situation, but easily you boil down to one point - they have to earn to feed their family!`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Pep up',
+        definitions: [
+            {
+                meaning: `stimulate, to increase or enhance someone's excitement, interest, energy, or alertness`,
+                examples: [`We were passing a boring time, then Shoaib came out and pepped us!`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Wonk',
+        definitions: [
+            {
+                meaning: '(Informal/Slang) a studious or hard working person আঁতেল',
+                examples: ['To Bush, it would seem, policy is for wonks.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning:
+                    '(Informal) a person who takes an enthusiastic or excessive interest in the specialized details of a particular subject or field, especially political policy',
+                examples: ['The Senator was considered to be a policy wonk.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Vindication',
+        definitions: [
+            {
+                meaning: 'Proof of someone is out of guilt after other people thought he/she was guilty দায়মুক্তি',
+                examples: [`Truth is generally the best vindication against slander.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Purview',
+        definitions: [
+            {
+                meaning: 'Range of experience or thought or responsibility (of the authority) আওতা বহির্ভূত',
+                examples: [`The police officer's purview is confined to the area he works.`],
+                notes: [`মতিঝিল থানার মধ্যে আইডি কার্ড হারিয়ে গেলে শাহবাগ থানায় জিডি করা যাবেনা`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Podiatrist',
+        definitions: [
+            {
+                meaning:
+                    'A podiatrist or podiatric physician is a medical professional devoted to the treatment of disorders of the foot, ankle, and related structures of the leg',
+                examples: [
+                    `Girls normally pedicure as any kind of foot treatment but in case of fungal attack, they should consult with a podiatrist.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Capitulate',
+        definitions: [
+            {
+                meaning: 'to accept something or agree to do something unwillingly',
+                examples: [`She capitulated and let her daughter go with her friends.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Recapitulate',
+        definitions: [
+            {
+                meaning: 'the formal version of the recap: to repeat the main points of an explanation or description',
+                examples: [
+                    `I clearly remember the irritation of Tomi Mia when the presenter wanted him to recapitulate the process at the end of the show.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Boil down to'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Allude',
+        definitions: [
+            {
+                meaning: 'To refer to indirectly',
+                examples: [`She told me the story but alluded to something else as her spouse was present there.`],
+                notes: [`নাম বললে চাকরি থাকবে না`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Elude',
+        definitions: [
+            {
+                meaning: 'To avoid capture',
+                examples: [`They hope to find a secret exit to elude the operative.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Persnickety',
+        definitions: [
+            {
+                meaning:
+                    'giving too much attention to small details that are not important in a way that annoys other people',
+                examples: [
+                    `Persnickety people like things neat and tidy, but the etymology of persnickety doesn't provide the kind of clean, clear explanation that appeals to the fastidious.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Meticulous`],
+        genericNotes: [`British English: Pernickety`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Fastidiousness',
+        definitions: [
+            {
+                meaning:
+                    'the fact of giving too much attention to small details and wanting everything to be correct and perfect',
+                examples: ['As a teenager, he displayed a fastidiousness unusual for his years.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'a very strong dislike of anything dirty or unpleasant',
+                examples: [`Her fastidiousness developed into an obsession with personal hygiene.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Lament',
+        definitions: [
+            {
+                meaning: 'To express sadness and regret about something',
+                examples: [`My grandmother, as usual, lamented the decline in moral standards in today's society.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: `a song, poem, or other piece of writing that expresses sadness about someone's death`,
+                examples: [
+                    `There are professional mourners in India, called Rudaali, especially in the Western Indian state of Rajasthan, who express their mourn by singing laments.`,
+                ],
+                notes: [`ভোরের তারা, রাতের তারা তোরা কোথায় আছিস….  মা/জেমস`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Paint the town red',
+        definitions: [
+            {
+                meaning:
+                    'to go out and enjoy yourself by doing an enjoyable thing, for example, by drinking alcohol, dancing, laughing with friends, etc.',
+                examples: [`After our exams finished, we all decided to get dressed up and paint the town red.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Entrant',
+        definitions: [
+            {
+                meaning: 'A person who becomes a member of a group or organization',
+                examples: [`Mashru used to prepare new entrants' learning packs at HSBC.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Endearment',
+        definitions: [
+            {
+                meaning: 'a word or phrase that you use to show that you love someone, e.g., Darling, Baby, etc',
+                examples: [`Between kisses he was murmuring endearments.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Pronunciation: ইন্ডিয়ামেন্ট`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Founder',
+        definitions: [
+            {
+                meaning: 'to fail or be unsuccessful, because of problems',
+                examples: [`I'm worried about Sue; she's foundering in college.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Flounder',
+        definitions: [
+            {
+                meaning:
+                    'to experience great difficulties or be completely unable to decide what to do or say next / to be in an awkward situation / struggle mentally / to be confused',
+                examples: [`He lost the next page of his speech and floundered for a few seconds.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(Noun) a fish',
+                examples: [`***`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Under the weather',
+        definitions: [
+            {
+                meaning: 'slightly sick',
+                examples: [`I'm feeling a bit under the weather - I think I'm getting a cold.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Serology',
+        definitions: [
+            {
+                meaning: 'the scientific study of serum and other body fluids',
+                examples: [`In some instances, serology results can be difficult to interpret.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Pique',
+        definitions: [
+            {
+                meaning: 'stimulate (interest or curiosity)',
+                examples: [`She piqued his interest in the theatre and took him to see performances often.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning:
+                    'a feeling of anger, especially caused by someone damaging your feeling of being proud of yourself আঁতে ঘা লাগা',
+                examples: [`She was greatly piqued when they refused her invitation.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'to take pride in (oneself) ',
+                examples: [`She piques herself on her editing skills.`],
+                notes: [`look "Pompous"`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Peek',
+        definitions: [
+            {
+                meaning: 'a quick or furtive look উঁকি দেয়া',
+                examples: [`Open the box and peek inside, please.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'In a fit of pique',
+        definitions: [
+            {
+                meaning:
+                    'If someone does something in a fit of pique, they do it suddenly because they are annoyed at being not treated properly, ঝোঁকের বশে',
+                examples: [`Lawrence, in a fit of pique, left the Army and took up the teaching profession.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Impulse'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Impulse',
+        definitions: [
+            {
+                meaning: 'If you do something on impulse, you do it because you suddenly want to',
+                examples: [`I bought this expensive sweater on impulse.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['In a fit of pique'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Batty',
+        definitions: [
+            {
+                meaning: '(Informal) Insane বোকাসোকা, পাগলাটে, কনফিউজড চরিত্রের, উন্মাদ',
+                examples: [`She is more modern than her husband, which drives him batty.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Dutch door',
+        definitions: [
+            {
+                meaning:
+                    'A door divided horizontally in such a fashion that the bottom half may remain shut while the top half opens.',
+                examples: [
+                    `His girlfriend was waiting for him in the Dutch door, leaning on the lower part while the top half was open.`,
+                ],
+                notes: [
+                    `The initial purpose of this door was to keep animals out of farmhouses or keep children inside while allowing light and air to filter through the open top.`,
+                ],
+                externalLinks: [],
+            },
+            {
+                meaning: 'bisexual',
+                examples: [`Whoa, that guy is a Dutch Door`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Catcall',
+        definitions: [
+            {
+                meaning:
+                    'a loud shout or whistle (= high sound) expressing disapproval, especially made by people in a crowd',
+                examples: [`Once the song ended, the crowd erupted into a loud wave of catcalls.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'to whistle or yell something sexually suggestive to a stranger, usually in passing',
+                examples: [
+                    `Every single time I go running in a public place without my male running partner, I am the target of catcalls.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Rile',
+        definitions: [
+            {
+                meaning: '(Informal) to make someone angry',
+                examples: [`Many farmers have been riled by Department of Agriculture fines.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Riled up',
+        definitions: [
+            {
+                meaning:
+                    'To cause someone or some group to become particularly excited and animated, especially in an angry or irritated manner',
+                examples: [`The community has been riled up since the passing of this new law.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Pristine',
+        definitions: [
+            {
+                meaning: 'new or almost new, and in very good condition',
+                examples: [
+                    `Washing machine for sale - only two months old and in pristine condition.`,
+                    `The beauty of kiwi beaches is out of this world, and they're mostly pristine and empty - except in a few urban areas, there's no soul around.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Pronunciation: প্রিস্টিন`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Heyday',
+        definitions: [
+            {
+                meaning: 'the most successful or popular period of someone or something',
+                examples: [
+                    `Oil wells were everywhere in the 1930s during their heyday in California and it looked like a jungle of Eiffel towers!`,
+                ],
+                notes: [],
+                externalLinks: [
+                    `https://snapshotsofhistory.quora.com/What-was-totally-common-to-see-in-Los-Angeles-50-100-years-ago-that-you-would-not-see-today?ch=10`,
+                ],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Detox',
+        definitions: [
+            {
+                meaning:
+                    'a process or period of time in which one abstains from or rids the body of toxic or unhealthy substances; detoxification.',
+                examples: [
+                    `When a (toxic) relationship has run its course, one has to detox itself from the beliefs and values that he/she created together and remind itself of the importance of the self.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Chip away',
+        definitions: [
+            {
+                meaning: 'to slowly and steadily reduce',
+                examples: [
+                    `After the arrival of the smartphone, Nokia's dominance in the market gradually chipped away.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Ricochet',
+        definitions: [
+            {
+                meaning: 'to bounce or skip with or as if with a glancing rebound ',
+                examples: [
+                    `News of Bill and Melinda Gates' divorce ricocheted around the world this week, raising a number of questions: What, why?`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Swatting',
+        definitions: [
+            {
+                meaning: 'The action of making a false report of a serious emergency to draw a strong police response',
+                examples: [`The man who allegedly placed the swatting call has been arrested.`],
+                notes: [`SWAT team এসে ধরে নিয়ে যাবে যদি এভাবে উল্টাপাল্টা অভিযোগ কর`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Shroud',
+        definitions: [
+            {
+                meaning: 'A layer of something that covers or surrounds something',
+                examples: [`Everything was covered in a thick shroud of dust in the haunted house.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'A loose piece of cloth to wrap a dead body before it is buried.',
+                examples: [`the body was washed and shrouded`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Footloose',
+        definitions: [
+            {
+                meaning:
+                    'Free to do what you like and go where you like as you have no responsibilities, commitments দায়দায়িত্বহীন, মুক্ত বিহঙ্গ',
+                examples: [
+                    `Mashru wishes she were footloose - she fantasizes to take one year of sabbatical leave to hike the Mount Everest trail!`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Detractor',
+        definitions: [
+            {
+                meaning: 'someone who criticizes something or someone, often unfairly ',
+                examples: [`His detractors claim that his fierce temper makes him unsuitable for leadership.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Polemical`, 'Slander', 'Malign'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Don',
+        definitions: [
+            {
+                meaning: 'wear (কাপড়) পরা',
+                examples: [`He donned his finest coat and hat.`],
+                notes: [`Synonym: put on - Julie had put on a cotton dress.`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Upholster',
+        definitions: [
+            {
+                meaning: 'to fill a seat, chair, or sofa with suitable material and cover it with cloth',
+                examples: [`Anyway, how soon can you reupholster the sofa?`],
+                notes: [`Upholster versus Reupholster`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Oxymoron',
+        definitions: [
+            {
+                meaning: 'two words used together that have, or seem to have opposite meanings',
+                examples: [
+                    `Living dead`,
+                    'Open secret',
+                    `Controlled chaos`,
+                    'Jumbo shrimp',
+                    `Random order`,
+                    `True fiction`,
+                    'friendly fight: My sister and I had a friendly fight over the lipstick.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Sommelier',
+        definitions: [
+            {
+                meaning: 'someone whose job is to serve and give advice about wine in a restaurant ',
+                examples: [`Though I am a sommelier, I had never seen that wine before.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Barista'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Abomination',
+        definitions: [
+            {
+                meaning: 'a feeling of hatred',
+                examples: [
+                    `Although once common, torture is now an abomination to the civilized peoples of the earth.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Loathe', 'Antipathy'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Ward off',
+        definitions: [
+            {
+                meaning: 'to keep someone or something away or prevent something from happening or harming you',
+                examples: [
+                    `Drinking urine of the cow won't ward off Covid-19, so please stay away from it.`,
+                    `He used his umbrella to ward off the broiling sun.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Hiatus',
+        definitions: [
+            {
+                meaning: 'a pause or break in continuity in a sequence or activity বিরতি',
+                examples: [
+                    `We always take a ten-minute hiatus that we call a coffee break during the long sprint planning.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Pronunciation: হাইএটাস`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Aversion',
+        definitions: [
+            {
+                meaning: 'A strong dislike or disinclination(= a reluctance or lack of enthusiasm)',
+                examples: [`Nabila has a deep aversion to getting up in the morning.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Regale',
+        definitions: [
+            {
+                meaning: 'to entertain someone with stories or jokes',
+                examples: [`Grandpa regaled us with tales of his small-town childhood.`],
+                notes: [`When Daddy Was a Little Boy by Alexander Raskin`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Wring',
+        definitions: [
+            {
+                meaning: 'squeeze and twist (something) to force liquid from it দুই হাতে শক্ত করে ধরে মোচরানো',
+                examples: [`She wrung out the shirt and hung it out to dry.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Excruciating',
+        definitions: [
+            {
+                meaning: 'Intensely painful',
+                examples: [`I am suffering from excruciating back pain.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'extremely boring or embarrassing',
+                examples: [`His confession, when it came, was excruciating.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Etymologist ',
+        definitions: [
+            {
+                meaning: 'A person who studies the history and origin of a word',
+                examples: [`The task of our etymologist is to determine the earliest recorded occurrence of a word.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Demeanour',
+        definitions: [
+            {
+                meaning: 'Attitude চালচলন, আচরণ, হাবভাব',
+                examples: [`I infer from your demeanour that you aren't going to confess.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Raisin',
+        definitions: [
+            {
+                meaning: 'a partially dried grape',
+                examples: [`People often use raisin when they cook polao (Pilaf)`],
+                notes: [],
+                externalLinks: [`https://www.healthline.com/nutrition/raisins-sultanas-currants#what-they-are`],
+            },
+        ],
+        linkerWords: [`Currant`, `Sultana`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Boggle',
+        definitions: [
+            {
+                meaning:
+                    'to have difficulty imagining or accepting something as true or possible, or to give the mind such difficulty ',
+                examples: ['The Inca constructed the most mind-bogglingly extensive road network in all the Americas.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Despise',
+        definitions: [
+            {
+                meaning:
+                    'to feel a strong dislike for someone or something because you think that that person or thing is bad or has no value ',
+                examples: ['The recent trend of wearing ripped jeans despises me.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Culminate',
+        definitions: [
+            {
+                meaning: 'A point where a series of events ended ইতিটানা',
+                examples: [
+                    'Their years of research have culminated with the invention of the vaccine for the disease.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Diaspora',
+        definitions: [
+            {
+                meaning:
+                    'A group of people who spread from one original country to other countries, or the act of spreading in this way ',
+                examples: [
+                    `The Jewish diaspora realised that as long as they are in a minority they would never be at peace. The Jews living in different parts of the world outside Israel, or the various places outside Israel in which they live.`,
+                ],
+                notes: [
+                    `the Diaspora: the Jews living in different parts of the world outside Israel, or the various places outside Israel in which they live`,
+                ],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Sapphire',
+        definitions: [
+            {
+                meaning: 'Blue/transparent bluestone',
+                examples: [`The moon lights up the vast sapphire sky each night.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Scribble',
+        definitions: [
+            {
+                meaning: 'A piece of careless writing/drawing',
+                examples: [`After moving to Patharghata, we scribbled on the wall of the drawing room.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Epicurism',
+        definitions: [
+            {
+                meaning:
+                    'devotion or adaptation to luxurious tastes, especially in drinking and eating, or to indulgence in sensual pleasures ভোগবাদ',
+                examples: [`The hunger for epicurism has led us to an inevitable disaster.`],
+                notes: [`Palestine vs. Israel: Why did I write it at that time? (Emtiaj)`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Diffidence',
+        definitions: [
+            {
+                meaning: 'Shyness resulting from lack of confidence',
+                examples: [`We should use English in everyday life to overcome our diffidence.`],
+                notes: [`look the similarity of the spelling of confidence and diffidence `],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Confidence`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Hot potato',
+        definitions: [
+            {
+                meaning: 'a controversial issue or situation which is awkward to deal with',
+                examples: [`The abortion issue is a political hot potato in the United States.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Surmountable`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: `Morton's toe`,
+        definitions: [
+            {
+                meaning: 'describes the condition where the second toe looks longer than the big toe',
+                examples: [
+                    `Morton's toe is considered by many ancient artists and cultures a high mark of beauty, dominance, and intelligence.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Midget',
+        definitions: [
+            {
+                meaning: '(considered offensive) an unusually small person বামন',
+                examples: [
+                    `Midgets have always been popular entertainers, but were often regarded with disgust and revulsion in society`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'use to describe an object that is much smaller than usual',
+                examples: [`a midget submarine/car`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Carnage',
+        definitions: [
+            {
+                meaning: 'the violent killing of large numbers of people, especially in war',
+                examples: [
+                    `The United Nations was set up after two wars involving the worst carnage to try and prevent a repeat.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Stammer',
+        definitions: [
+            {
+                meaning:
+                    'to speak or say something with unusual pauses or repeated sounds, either because of speech problems or because of fear or nervousness',
+                examples: [
+                    `"Wh-when can we g-go?" she stammered.`,
+                    `They work not only with child stammers and stutters but with children with a range of psychological and physical disabilities.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Flounder`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Diverge',
+        definitions: [
+            {
+                meaning:
+                    '(of a road, route, or line) separate from another route and go in a different direction ওয়াই শেপের পথ',
+                examples: [
+                    `They walked along the road together until they reached the village, but then their paths diverged.`,
+                    `Two roads diverged in a wood and I took the one less travelled by and that has made all the difference. `,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'to follow a different direction, or to be or become different ',
+                examples: [
+                    `Although the two organizations have worked together for many years, their objectives have diverged recently.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Divulge`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Bone up',
+        definitions: [
+            {
+                meaning: '(Informal) to learn as much as possible about something for a special purpose',
+                examples: [`We should bone up on our English before migrating to Canada.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Wallow',
+        definitions: [
+            {
+                meaning:
+                    '(chiefly of large mammals) roll about or lie in mud or water, especially to keep cool or avoid biting insects.',
+                examples: [
+                    `There were watering places where buffalo liked to wallow.`,
+                    `Bison and water buffalo wallow and neither does Gaur.`,
+                ],
+                notes: [`Gaur is also known as Indian Bison`],
+                externalLinks: [],
+            },
+            {
+                meaning:
+                    '(of emotion or situation) to stay in that state without trying to change that means to devote oneself entirely to it ',
+                examples: [
+                    `To improve the quality of your life you should figure out ways to move forward avoiding moping and wallowing in sorrow (দুঃখ বিলাস).`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Mod',
+        definitions: [
+            {
+                meaning:
+                    '(short for moderator) someone who makes sure that the rules of an internet discussion are not broken, for example by removing any threatening or offensive messages',
+                examples: [`You can be instantly banned from the chatroom if a mod finds your chat abusive.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: '(short for modification) a change made to a video game by its maker or a player',
+                examples: [
+                    `Mods are made by the general public or a developer and can be entirely new games in themselves.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Ominous',
+        definitions: [
+            {
+                meaning: 'suggesting that something unpleasant is likely to happen অশুভ লক্ষণপূর্ণ',
+                examples: [`There was an ominous silence when I asked whether my contract was going to be renewed.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Abate',
+        definitions: [
+            {
+                meaning: 'to become less strong',
+                examples: [
+                    `The storm/wind/rain has started to abate.`,
+                    `Gains in oil prices are unlikely to abate within the next few months.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Abet`, `Ablate`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Contempt',
+        definitions: [
+            {
+                meaning:
+                    '(also contempt of court) behaviour that is illegal because it does not obey or respect the rules of a law court আদালত অবমাননা ',
+                examples: [
+                    `The tobacco companies may be guilty of contempt of court for refusing to produce the documents.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'a strong feeling of lack of respect for someone or something তুচ্ছতাচ্ছিল্য মনোভাব',
+                examples: [`She has displayed a profound contempt for her opponents.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning:
+                    'Contempt is a pattern of attitudes and behaviour, often towards an individual or group, but sometimes towards an ideology, which has the characteristics of disgust and anger',
+                examples: [`This action displays an arrogant contempt for the wishes of the majority`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Disdain',
+        definitions: [
+            {
+                meaning: `the feeling that someone or something is unworthy of one's consideration or respect.`,
+                examples: [`The older musicians disdain the new, rock-influenced music.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Contempt`],
+        genericNotes: [
+            `In many ways the words (contempt, disdain) are synonymous; one may be said to have either disdain or contempt for a thing one scorns, without a significant change in meaning. Disdain more commonly functions as a verb (the verb sense of contempt is no longer in common use), so one would write "I disdained the offer" rather than "I contempt the offer." And contempt is found used in legal settings (in the phrase contempt of court, for instance), while disdain is not.`,
+        ],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Go long',
+        definitions: [
+            {
+                meaning: '(Stock market) to buy at a lower price, sell at a higher price.',
+                examples: [
+                    `Whether day trading or going long, nobody wants to buy into a dollar stock that seems likely to decline.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Go short',
+        definitions: [
+            {
+                meaning: `(Stock market) to try to sell it at a higher price, because you're borrowing shares from your broker, and then you're repurchasing it later at a lower price capitalizing on the difference.`,
+                examples: [
+                    `An investor goes short when he anticipates the price of a security will fall in the short term.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Seedy',
+        definitions: [
+            {
+                meaning: '(Old-fashioned) unwell',
+                examples: [
+                    `Maybe in the past, she was in a seedy relationship.`,
+                    `She felt seedy and left the office early.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'inferior in condition or quality',
+                examples: [`seedy clothes, seedy lawyer, seedy hotel`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Grotty`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Tussle',
+        definitions: [
+            {
+                meaning: 'To have disagreements or strong arguments (উত্তপ্ত বাক্য বিনিময়) over any issue',
+                examples: [`Hridi started to tussle with her next-door neighbour over her car parking in the street.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'to fight, struggle, etc. vigorously তীব্র লড়াই',
+                examples: [
+                    `The tussle between the Crusaders and the Caliphates continued for over half a millennia.`,
+                    `Several Indian states are in an ugly political tussle with the central government over oxygen allocation and supply.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'to fight with another person using your arms and body ধস্তাধস্তি',
+                examples: [`The boys started to tussle in the playground.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'knots used in Saree/scarf জামা-ওড়না-শাড়ীর টাসেল',
+                examples: [`This saree has tussle-knots in the achol.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Plummet',
+        definitions: [
+            {
+                meaning: 'A rapid fall or drop',
+                examples: [
+                    `In Dhaka, house rent has plummeted due to the Covid pandemic.`,
+                    `The blue-footed Boobie bird can plummet from heights as high as 80 feet.`,
+                ],
+                notes: [],
+                externalLinks: [`https://en.wikipedia.org/wiki/Booby`],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Dibby',
+        definitions: [
+            {
+                meaning: 'worthless',
+                examples: [`Don't come to me with your dibby-dibby excuses.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Divvy'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Divvy',
+        definitions: [
+            {
+                meaning: 'Stupid person.',
+                examples: [`Don't be such a divvy! `],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Dibby'],
+        genericNotes: [`Divvied up: Share out > They divvied up the profit.`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Contend',
+        definitions: [
+            {
+                meaning: 'Struggle to surmount',
+                examples: [`I had to contend with his uncertain temper.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Pincer grasp',
+        definitions: [
+            {
+                meaning: 'দুই আঙুল দিয়ে আলতো করে কিছু ধরা, সাধারণত ইরেজার যেভাবে ধরে',
+                examples: [
+                    `Children use their pincer grasp to pick things up and feed themselves, and it lays the foundation for a good pencil grip when they start school.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Austere',
+        definitions: [
+            {
+                meaning: 'Severe or strict in behaviour',
+                examples: [`Though she appeared austere, she is very kind in nature.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Woft',
+        definitions: [
+            {
+                meaning: '***',
+                examples: [`***`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Waftt',
+        definitions: [
+            {
+                meaning: '***',
+                examples: [`***`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Waft',
+        definitions: [
+            {
+                meaning: '(with reference to a scent, sound, etc.) pass or cause to pass gently through the air.',
+                examples: [`The smell of ghee wafted out from the kitchen when Nabila was cooking chicken roast`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Bibulous',
+        definitions: [
+            {
+                meaning: 'excessively fond of drinking alcohol',
+                examples: [
+                    `My ex colleague Mahatir is a bibulous. He spends at least 50k monthly for drinking purpose.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Slosh'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Catapult',
+        definitions: [
+            {
+                meaning: 'Something or someone thrown forward with great force.',
+                examples: [`We should catapult ourselves to grab every opportunity.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Propel`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Impuissant',
+        definitions: [
+            {
+                meaning: 'Unable to take effective actions.',
+                examples: [
+                    `My Uni prof Rakib sir assigned me a survey question before the pandemic. I couldn't complete this as the office shut down all of a sudden. That's why I apologised to him for my impuissance.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Stifle',
+        definitions: [
+            {
+                meaning: 'Make unable to breathe, suffocate.',
+                examples: [`We all are stifling on this hot summer day!`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Demystify',
+        definitions: [
+            {
+                meaning: 'Making things easily understandable',
+                examples: [`Emtiaj is trying to demystify programming languages  for me.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Apostle',
+        definitions: [
+            {
+                meaning: 'A group of people travelled around the world to tell about Jesus Christ are called apostles.',
+                examples: [`***`],
+                notes: [
+                    `Disciple vs apostle: Disciple is the student who learns from the teacher and the apostle is the messenger who shares his learning with others.`,
+                ],
+                externalLinks: [],
+            },
+            {
+                meaning: 'Who strongly supports a particular belief or political movement',
+                examples: [
+                    `A group of people travelled around the world to tell about Jesus Christ are called apostles.`,
+                ],
+                notes: [
+                    `Disciple vs apostle: Disciple is the student who learns from the teacher and the apostle is the messenger who shares his learning with others.`,
+                ],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Hustler',
+        definitions: [
+            {
+                meaning: 'Someone who tries to deceive people into giving them money.',
+                examples: [
+                    'The street of Gotham city  is full of hustlers, drug addicts, pimps (controller of brothels).',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Satirize',
+        definitions: [
+            {
+                meaning: 'Criticise by means of satire.',
+                examples: [`Police arrested cartoonist Kishore as his piece of art satirized the ongoing bureaucracy`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Decimation',
+        definitions: [
+            {
+                meaning: 'Demolish- to kill a large number of something.',
+                examples: [`Our growing hunger for fish has resulted in the decimation of fish stock.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Eviction',
+        definitions: [
+            {
+                meaning: 'the action of expelling someone from a property; expulsion উচ্ছেদ',
+                examples: [`He was sent an eviction notice by registered post`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Chivalry',
+        definitions: [
+            {
+                meaning: 'Very polite behaviour especially men towards women',
+                examples: [`He opened the car door as an act of chivalry.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Flogging',
+        definitions: [
+            {
+                meaning: 'A punishment in which the victim is hit repeatedly with a whip or a stick.',
+                examples: [`If I could not find the moneybag, I will flog you all.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Inflict',
+        definitions: [
+            {
+                meaning: 'Force someone or something to experience something very unpleasant.',
+                examples: [`I consider artificial insemination as a crime as it inflicts pain on innocent animals.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Frowned',
+        definitions: [
+            {
+                meaning: `Bring one's eyebrows together as an expression of disapproval, displeasure or concentration.`,
+                examples: [`She frowned as she reread his sms.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Mundane',
+        definitions: [
+            {
+                meaning: 'Having no excitement, lacking interest একঘেঁয়ে',
+                examples: [
+                    ` A bookworm couple like Nabila- Emtiaj should not pay much attention to the mundane daily chores.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Monotonous'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Proscribe',
+        definitions: [
+            {
+                meaning: 'Forbid by law, condemn',
+                examples: [
+                    `Bangladesh Cricket Board is planning to ban a certain cricketer for the upcoming series as there is a suspicious report on him for using proscribed drugs.`,
+                ],
+                notes: [`নিষিদ্ধ লোবান`],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Glitch',
+        definitions: [
+            {
+                meaning: 'Sudden malfunction of anything/equipment.',
+                examples: [
+                    'The elevators glitched.',
+                    'The draft version of the programme prepared by Emtiaj was lost in a computer glitch.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Subtle',
+        definitions: [
+            {
+                meaning: 'small but impactive one',
+                examples: ['British racism is too subtle.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`সাডল???`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Anguish',
+        definitions: [
+            {
+                meaning: 'Extreme unhappiness caused by physical or mental suffering.',
+                examples: ['After reading the  text from him, she shut her eyes in anguish.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Resonate',
+        definitions: [
+            {
+                meaning: 'Produce or fill with sound by vibrating',
+                examples: ['The noise of the bell resonated through the building.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Tumultuous',
+        definitions: [
+            {
+                meaning: 'Loud, excited, emotional, confused sound.',
+                examples: ['Trevor always gets tumultuous applause on his stage performances.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Enclave',
+        definitions: [
+            {
+                meaning: 'An enclave is a territory completely surrounded by the territories of another state.',
+                examples: [`India- Bangladesh formally exchanged 162 enclaves in August 2015.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Scoff',
+        definitions: [
+            {
+                meaning: 'Mock',
+                examples: [
+                    'Before the invention of airlines, people used to scoff at the idea that they can fly in the sky like birds!',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Sleazy',
+        definitions: [
+            {
+                meaning: 'Morally bad in quality',
+                examples: ['The sleazy sales techniques of this renowned showroom disgusted me.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Snub',
+        definitions: [
+            {
+                meaning: 'Scolding, Insult someone by not giving them the importance they deserve.',
+                examples: [`She didn't take this snub to heart.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Vengeance',
+        definitions: [
+            {
+                meaning: 'Revenge',
+                examples: ['I swear by God, I will take the vengeance in time.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`Pronunciation: ভ্যাঞ্জেন্স`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Annihilation',
+        definitions: [
+            {
+                meaning: 'Complete destruction',
+                examples: [
+                    'According to Hinduism, death only ensures the annihilation of the physical body, not the mind.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Enrapture',
+        definitions: [
+            {
+                meaning: 'Filled with great pleasure',
+                examples: [`The audiences were enraptured by (Shayan Chowdhury) Arnob's performance.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Nonchalant',
+        definitions: [
+            {
+                meaning: 'Behaving like you are not frightened or not interested',
+                examples: ['Though I am showing a nonchalant attitude, the inner me is just broken at this ditching.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [`ননশালান্ট`],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Convoluted',
+        definitions: [
+            {
+                meaning: 'Twisted, very complex, intricately folded',
+                examples: [
+                    'Walnuts come in hard and convoluted shells.',
+                    'Letter to Juliet is full of convoluted sentences.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Flamboyant',
+        definitions: [
+            {
+                meaning: 'Bright, confident.',
+                examples: ['The flamboyant fashionista became a dreaded lawyer.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Subjugation',
+        definitions: [
+            {
+                meaning: 'Dominating, snatching freedom',
+                examples: ['The subjugation of women is a common phenomenon throughout the world.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Inculcate',
+        definitions: [
+            {
+                meaning: 'Teach an attitude by persistent instruction.',
+                examples: [
+                    'Jawaharlal Nehru mentioned in his book "The Discovery of India" that for a long time the women of the sub-continent have been inculcated with the idea that their only motto should be to preserve their chastity as losing it means a terrible sin.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'indoctrination',
+        definitions: [
+            {
+                meaning: 'Teaching a person or group to accept a set of beliefs without questioning them.',
+                examples: ['Victim blaming in rape case is the result of indoctrination of chastity.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Valorize',
+        definitions: [
+            {
+                meaning: 'To give or ascribe value or validity to.',
+                examples: ['Consciously or subconsciously we have valorized Misogyny in our society.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Rhetoric',
+        definitions: [
+            {
+                meaning: 'Speech or writing intended to be effective and influence people.',
+                examples: ['The audience was impressed by the rhetoric the young girl used in her speech.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Aberration',
+        definitions: [
+            {
+                meaning: 'Deviated from normal or usual behaviour',
+                examples: ['2 degree celsius temperature in Dhaka is an aberration indeed.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Dissociate',
+        definitions: [
+            {
+                meaning: 'Disconnect, separate',
+                examples: [
+                    'Dissociating emotions from actions is the most important part of maturity/ professionalism.',
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Vehemently',
+        definitions: [
+            {
+                meaning: 'Firmly, in an intense manner',
+                examples: [`The scoundrel vehemently denied that he was amid relationship while dating with me!`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Forlorn',
+        definitions: [
+            {
+                meaning: 'Pitifully sad and abandoned or lonely.',
+                examples: [`She looked like a forlorn figure standing at the bus stop.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Gruesome',
+        definitions: [
+            {
+                meaning: 'Horror, mostly unpleasant',
+                examples: ['The article included a gruesome description of the Rana Plaza collapse'],
                 notes: [],
                 externalLinks: [],
             },
