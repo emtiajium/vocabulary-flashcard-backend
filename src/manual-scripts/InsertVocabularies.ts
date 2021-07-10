@@ -4,7 +4,7 @@ import { createConnection, getConnectionManager, getRepository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
 import { ConfigService } from '@nestjs/config';
-import { createVocabularies } from '@/vocabulary/domains/CustomVocabulary';
+import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import VocabularyList from './VocabularyList';
 
 export default class InsertVocabularies {

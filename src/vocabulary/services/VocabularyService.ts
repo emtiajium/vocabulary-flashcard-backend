@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
-import { createVocabularies } from '@/vocabulary/domains/CustomVocabulary';
+import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import VocabularyList from '@/manual-scripts/VocabularyList';
 
 @Injectable()

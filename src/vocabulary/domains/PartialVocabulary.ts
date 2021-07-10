@@ -3,15 +3,15 @@ import Definition from '@/vocabulary/domains/Definition';
 import * as _ from 'lodash';
 import { v4 as uuidV4 } from 'uuid';
 
-type CustomDefinition = Required<Pick<Definition, 'meaning' | 'examples' | 'notes' | 'externalLinks'>>;
+type PartialDefinition = Required<Pick<Definition, 'meaning' | 'examples' | 'notes' | 'externalLinks'>>;
 type VocabularyWithoutDefinitions = Required<
     Pick<Vocabulary, 'word' | 'linkerWords' | 'genericNotes' | 'genericExternalLinks'>
 >;
-type CustomVocabulary = Required<VocabularyWithoutDefinitions & { definitions: CustomDefinition[] }>;
+type PartialVocabulary = Required<VocabularyWithoutDefinitions & { definitions: PartialDefinition[] }>;
 
-export default CustomVocabulary;
+export default PartialVocabulary;
 
-export function createVocabularies(cohortId: string, vocabularies: CustomVocabulary[]): Vocabulary[] {
+export function createVocabularies(cohortId: string, vocabularies: PartialVocabulary[]): Vocabulary[] {
     return _.map(_.cloneDeep(vocabularies), (vocabulary) => {
         const vocabularyId = uuidV4();
         return {

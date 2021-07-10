@@ -1,4 +1,4 @@
-import PartialVocabulary from '@/vocabulary/domains/CustomVocabulary';
+import PartialVocabulary from '@/vocabulary/domains/PartialVocabulary';
 
 const VocabularyList: PartialVocabulary[] = [
     {
