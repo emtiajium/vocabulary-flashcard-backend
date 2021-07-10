@@ -7,7 +7,7 @@ import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
-import VocabularyList from '@/manual-scripts/VocabularyList';
+import NewJoinerVocabularyList from '@/manual-scripts/NewJoinerVocabularyList';
 
 @Injectable()
 export default class VocabularyService {
@@ -61,16 +61,11 @@ export default class VocabularyService {
         await this.assertExistenceAndRemoveVocabularyAndDefinitions(id);
     }
 
-    private generateVocabularyPayload = (cohortId: string): Vocabulary[] => {
-        const sampleVocabularies = 20;
-        return createVocabularies(cohortId, VocabularyList.slice(0, sampleVocabularies));
-    };
-
     async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
         if (await this.vocabularyRepository.getSingleVocabularyByCohortId(cohortId)) {
             throw new ConflictException(`Cohort with ID: "${cohortId}" has at least one vocabulary`);
         }
-        const payload = this.generateVocabularyPayload(cohortId);
+        const payload = createVocabularies(cohortId, NewJoinerVocabularyList);
         const vocabularies = await Promise.all(
             _.map(payload, (vocabulary) => this.vocabularyRepository.save(vocabulary)),
         );
