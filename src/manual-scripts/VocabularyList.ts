@@ -253,7 +253,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Interred',
         definitions: [
             {
-                meaning: 'sowed, planted into, buried, driven into সমাহিত করা',
+                meaning: 'sowed, planted into, buried, driven into সমাহিত (করা)',
                 examples: [`Actress Kabari's body was interred at Banani graveyard.`],
                 notes: [],
                 externalLinks: [],
@@ -303,7 +303,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'secure (someone) against legal liability for their actions',
                 examples: [
-                    'the company has taken out insurance to indemnify its directors against liability when acting for the group',
+                    'The company has taken out insurance to indemnify its directors against liability when acting for the group',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -452,7 +452,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Plural of fish: একই প্রজাতির অনেক মাছ হলে fish কিন্তু ভিন্ন ভিন্ন হলে fishes`],
         genericExternalLinks: [],
     },
     {
@@ -475,12 +475,12 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'bandana, fabric/piece of cloth used for covering the head',
                 examples: ['Mashru has been using her red kerchief since our university days.'],
-                notes: ['handkerchief রুমাল'],
+                notes: [],
                 externalLinks: [],
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: ['handkerchief রুমাল'],
         genericExternalLinks: [],
     },
     {
@@ -552,7 +552,7 @@ const VocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Zenith ',
+        word: 'Zenith',
         definitions: [
             {
                 meaning: 'The best or most successful point or time',
@@ -598,7 +598,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`with (one's) pants down`],
         genericExternalLinks: [],
     },
     {
@@ -607,6 +607,20 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'Self-important আত্মম্ভরী',
                 examples: ['Nurul Haq Nur is a pompous ass who pretends he knows everything.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Abscess',
+        definitions: [
+            {
+                meaning: 'ফোড়া',
+                examples: ['Skin abscesses are common and have become more common in recent years.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -633,7 +647,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Remorse',
         definitions: [
             {
-                meaning: 'Deep regret or guilt for a wrong committed অনুশোচনা ',
+                meaning: 'Deep regret or guilt for a wrong committed অনুশোচনা',
                 examples: [
                     'Expressing remorse is not enough for the killing and rape Pakistanis did in 1971 against Bangladeshi.',
                 ],
@@ -670,7 +684,7 @@ const VocabularyList: PartialVocabulary[] = [
                 examples: [
                     'BNP led alliance govt. used to provide a black Bengal goat to the bereaved family members of the deceased person as a reparation (compensation) especially when they died because of a launch accident.',
                 ],
-                notes: [],
+                notes: [`bereaved`, `reparation`],
                 externalLinks: [],
             },
         ],
@@ -682,7 +696,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Expat',
         definitions: [
             {
-                meaning: 'a person who lives outside their native country প্রবাসী',
+                meaning: '(Informal) a person who lives outside their native country প্রবাসী',
                 examples: ['How do you invest as an expat if you do not know where you will eventually settle?'],
                 notes: [],
                 externalLinks: [],
@@ -702,7 +716,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: ['Malign'],
+        linkerWords: ['Malign', 'Slender'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -711,12 +725,12 @@ const VocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning: 'Extremely thin',
-                examples: ['Advertisement agencies always search for girls with slender ankles and fair skin tone'],
+                examples: ['Advertisement agencies always search for the girls with slender ankles and fair skin tone'],
                 notes: [],
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`Slander`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -726,7 +740,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'Able to use right and left hand equally well',
                 examples: [
-                    'Her right hand is critically injured by a road accident. As she is not ambidextrous; I suspect the cheque is signed by fraud.',
+                    'Her right hand was critically injured by a road accident. As she is not ambidextrous; I suspect the cheque is signed by fraud.',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -760,7 +774,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Stray',
         definitions: [
             {
-                meaning: 'To wander and deviate from target পথভ্রষ্ট হওয়া',
+                meaning: 'To wander and deviate from target পথভ্রষ্ট হওয়া / ইতস্ততঃ ঘুরে বেড়ান',
                 examples: ['In Amazon tourist often gets lost and stray into dangerous areas.'],
                 notes: [],
                 externalLinks: [],
@@ -774,11 +788,11 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Curmudgeon',
         definitions: [
             {
-                meaning: 'A bad-tempered person especially an old one',
+                meaning: 'A bad-tempered person especially an old one বদমেজাজি / খিটখিটে লোক (old-fashioned)',
                 examples: [
                     'The bearded man behind them who looked really stereotypically Muslim went on a curmudgeonly rant as she laid her head on his shoulder.',
                 ],
-                notes: [],
+                notes: [`Rant: তারস্বরে কথা বলা`],
                 externalLinks: [],
             },
         ],
@@ -805,7 +819,7 @@ const VocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning:
-                    'display (something) ostentatiously (দম্ভপূর্ণভাবে), especially in order to provoke admiration',
+                    'display (something) ostentatiously (দম্ভপূর্ণভাবে), especially in order to provoke admiration জাঁকালভাবে প্রদর্শন করা show off',
                 examples: [
                     'Newly rich consumers eager to flaunt their prosperity.',
                     `I come from a very Catholic family so it wasn't seen as a good thing to flaunt yourself like that. I can handle being sexy with clothes on but not with them off', said Jessica Alba.`,
@@ -823,7 +837,7 @@ const VocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning:
-                    'Hatred against men "Misandry" is the same as misogyny except that it is used against men, instead of women.',
+                    'Hatred against men. "Misandry" is the same as misogyny except that it is used against men, instead of women.',
                 examples: [
                     `Television advertising, for example, is deeply infected by misandry. In adverts for everything from jeans to yogurt, men are portrayed as idiots. A man cannot wash his children's clothes without getting them mixed up with those of their friends. He cannot mix a packet of sauce without a female being present.`,
                 ],
@@ -923,7 +937,7 @@ const VocabularyList: PartialVocabulary[] = [
                 examples: [
                     'Laozi, the author of renowned Tao Te Ching and founder of philosophical Taoism, who is known by some traditions that he spent his final days as a hermit.',
                 ],
-                notes: [],
+                notes: [`মোহাম্মদ, হেরা গুহা??`],
                 externalLinks: [],
             },
             {
@@ -1027,7 +1041,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Mallard',
         definitions: [
             {
-                meaning: 'বুনোহাঁস ',
+                meaning: 'বুনোহাঁস',
                 examples: [
                     `A famous fiction about mallard is "The wonderful adventures of Nils". Abanindranath Tagore translated it partially in Bengali. He titled it "Buro Angla".`,
                 ],
@@ -1257,7 +1271,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning:
                     'behaving in a way that is thought to be typical of a man, esp. by seeming strong and powerful but also seeming too determined to avoid showing weakness and sympathy/men who are very conscious and proud of their masculinity',
-                examples: [`He's too macho to admit that a woman can do her job as well as he can.`],
+                examples: [`He's too macho to admit that a woman can do her job just like him.`],
                 notes: [],
                 externalLinks: [],
             },
@@ -1267,7 +1281,7 @@ const VocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Sabbatical ',
+        word: 'Sabbatical',
         definitions: [
             {
                 meaning: 'A break from work in which a full-time job holder can pursue his/her interests',
@@ -1504,7 +1518,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Peeve',
         definitions: [
             {
-                meaning: 'বিরক্তির কারণ',
+                meaning: 'ববিরক্ত করা (verb), বিরক্তির কারণ (noun) ',
                 examples: [`What peeved her most was that he hadn't even replied to her message.`],
                 notes: [],
                 externalLinks: [],
@@ -1580,7 +1594,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Poggers',
         definitions: [
             {
-                meaning: 'To express excitement when something exciting occurs. ',
+                meaning: '(Pop-culture) To express excitement when something exciting occurs. ',
                 examples: ['Project 550 went successful. Poggers!'],
                 notes: [],
                 externalLinks: [],
