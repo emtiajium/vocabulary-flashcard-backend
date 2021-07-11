@@ -1,6 +1,6 @@
 import PartialVocabulary from '@/vocabulary/domains/PartialVocabulary';
 
-const VocabularyList: PartialVocabulary[] = [
+const vocabularyList: PartialVocabulary[] = [
     {
         word: 'Ecstasy',
         definitions: [
@@ -6182,4 +6182,4 @@ const VocabularyList: PartialVocabulary[] = [
     },
 ];
 
-export default VocabularyList;
+export default vocabularyList;
