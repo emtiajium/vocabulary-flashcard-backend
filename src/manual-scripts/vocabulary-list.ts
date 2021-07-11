@@ -3551,9 +3551,17 @@ const vocabularyList: PartialVocabulary[] = [
         word: 'Rechristen',
         definitions: [
             {
-                meaning: 'Baptize (christen) someone again, Give a new name to',
+                meaning: 'Baptize (christen) someone again',
                 examples: [
-                    'Here few Muslims started rechristening Haleem to Daleem as Haleem is one of the names of Allah.',
+                    `Thomas Bayne was born into slavery in Norfolk under the name Nixon, but escaped to New England and rechristened himself.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'Give a new name to',
+                examples: [
+                    'Here few Muslims started rechristening Haleem to Daleem as Haleem is one of the names of Allah. Such a falacy!',
                 ],
                 notes: [],
                 externalLinks: [],
