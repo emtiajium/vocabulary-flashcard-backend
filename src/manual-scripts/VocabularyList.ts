@@ -1669,7 +1669,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Desultory',
         definitions: [
             {
-                meaning: 'Without a clear plan or purpose and showing little effort or interest ',
+                meaning: 'Without a clear plan or purpose and showing little effort or interest',
                 examples: [
                     'I wandered about in a desultory fashion.',
                     `The students were confused by the teacher's desultory lecture which seemed to have no real focus.`,
@@ -1700,7 +1700,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Chickpeas',
         definitions: [
             {
-                meaning: 'ছোলা ',
+                meaning: 'ছোলা',
                 examples: ['The perfect Chotpoti preparation mostly depends on the proper boiling of chickpeas.'],
                 notes: [],
                 externalLinks: [],
@@ -1749,7 +1749,7 @@ const VocabularyList: PartialVocabulary[] = [
                 meaning: 'To gather information or material bit by bit',
                 examples: [
                     'People are often moved and challenged by nuggets gleaned on a daily basis whether from a tip-a-day calendar or a regularly e-mailed newsletter.',
-                    'I could not glean what she really want to do.',
+                    'I could not glean what she really wanted to do.',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -1795,9 +1795,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning:
                     'a person who stands in temporarily for someone else of the same profession, especially a cleric (ইমাম, ফাদার ইত্যাদি priest) or doctor',
-                examples: [
-                    'Public buses in Dhaka metro is mostly operated by locums (conductor) rather than licensed drivers',
-                ],
+                examples: ['Public buses in Dhaka metro is mostly operated by locums rather than licensed drivers'],
                 notes: [],
                 externalLinks: [],
             },
@@ -1815,6 +1813,20 @@ const VocabularyList: PartialVocabulary[] = [
                     `If someone insults you, don't retaliate as it only makes the situation worse.`,
                     `If Israel does not retaliate against Hamas's rocket launchers, more airstrikes keep coming in and Israeli get hurt.`,
                 ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Operative',
+        definitions: [
+            {
+                meaning: '(US) a secret agent or private detective',
+                examples: [`***`],
                 notes: [],
                 externalLinks: [],
             },
@@ -2216,7 +2228,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: ইনসেইশ্যাব্‌ল`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -2277,6 +2289,12 @@ const VocabularyList: PartialVocabulary[] = [
                 notes: [],
                 externalLinks: [],
             },
+            {
+                meaning: 'to surround with fog',
+                examples: ['***'],
+                notes: [],
+                externalLinks: [],
+            },
         ],
         linkerWords: [],
         genericNotes: [],
@@ -2326,7 +2344,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Moribund',
         definitions: [
             {
-                meaning: '(of a person) at the point of death মুমূর্ষু ',
+                meaning: '(of a person) at the point of death মুমূর্ষু',
                 examples: [
                     'Because the wounded man has lost a great deal of blood, he is moribund and probably will not make it through the night.',
                 ],
@@ -2436,7 +2454,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: ['Hackney', 'Badger', 'Peeve'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -2500,7 +2518,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning:
                     'commonly known as food pipe or gullet, is an organ in vertebrates through which food passes,খাদ্যনালী ',
-                examples: ['he died of cancer of the esophagus.'],
+                examples: ['He died of the esophagus cancer.'],
                 notes: [
                     `মানবদেহের খাদ্যনালী আর শ্বাসনালী একই। শ্বাসনালী > trachea`,
                     `US English: Esophagus`,
@@ -2519,7 +2537,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'Earnestly wished for or sought after ঈপ্সিত',
                 examples: ['The Nobel prize is the most coveted international award.'],
-                notes: [`Covet ব্যাকুলভাবে কামনা করা`],
+                notes: [`Covet: ব্যাকুলভাবে কামনা করা`],
                 externalLinks: [],
             },
         ],
@@ -2562,7 +2580,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: সেমানট্যাবল`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -2594,6 +2612,12 @@ const VocabularyList: PartialVocabulary[] = [
                 notes: [],
                 externalLinks: [],
             },
+            {
+                meaning: 'of, relating to, or characteristic of disease',
+                examples: [`***`],
+                notes: [],
+                externalLinks: [],
+            },
         ],
         linkerWords: [],
         genericNotes: [],
@@ -2603,7 +2627,7 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Run through',
         definitions: [
             {
-                meaning: 'To spend or consume wastefully and rapidly,  নকড়া ছকড়া, উড়নচণ্ডী ',
+                meaning: 'To spend or consume wastefully and rapidly, নকড়া ছকড়া, উড়নচণ্ডী',
                 examples: [' It took him just a few months to run through all the money his father left him.'],
                 notes: [],
                 externalLinks: [],
@@ -2611,7 +2635,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'To look at, examine, or deal with a set of things, especially quickly',
                 examples: ['We ran through the list of machines, but none of them was what we were looking for.'],
-                notes: [],
+                notes: [`Go through means to read, look at or examine something carefully`],
                 externalLinks: [],
             },
             {
@@ -2622,7 +2646,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Go through means to read, look at or examine something carefully`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -2727,7 +2751,7 @@ const VocabularyList: PartialVocabulary[] = [
                 meaning:
                     'a talk on a religious or moral subject, esp. one given by a religious leader during a religious ceremony',
                 examples: ['After the sermon, they all stood for prayer'],
-                notes: [],
+                notes: [`খুতবা বলা যেতে পারে`],
                 externalLinks: [],
             },
             {
@@ -2845,21 +2869,6 @@ const VocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Strut',
-        definitions: [
-            {
-                meaning:
-                    'walk (with your chest pushed forward and your shoulders back to show) with pride to establish importance',
-                examples: [`The boys strutted around trying to get the attention of a group of girls who were nearby.`],
-                notes: [],
-                externalLinks: [],
-            },
-        ],
-        linkerWords: ['haughtily'],
-        genericNotes: [],
-        genericExternalLinks: [],
-    },
-    {
         word: 'Swagger',
         definitions: [
             {
@@ -2948,7 +2957,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [`benevolence`],
+        linkerWords: [`Benevolence`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -2962,7 +2971,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [`benevolent`],
+        linkerWords: [`Benevolent`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -3057,7 +3066,7 @@ const VocabularyList: PartialVocabulary[] = [
                 meaning:
                     'to fail to do something at a time when it is urgent, usually because you suddenly lose confidence',
                 examples: [
-                    'Do you choke when you have to decide when to use who and whom? ',
+                    'Do you choke when you have to decide when to use who and whom?',
                     'Why do South Africa choke so often at the World Cup?',
                 ],
                 notes: [],
@@ -3066,7 +3075,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning:
                     '(of a person or animal) have severe difficulty in breathing because of a constricted or obstructed throat or a lack of air',
-                examples: [' Peanuts can choke a small child.'],
+                examples: ['Peanuts can choke a small child.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -3103,7 +3112,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`US: Maneuver`],
         genericExternalLinks: [],
     },
     {
@@ -3123,7 +3132,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: বানটা(র)`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -3131,22 +3140,7 @@ const VocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning: 'a stupid person',
-                examples: ['The king was imbecile'],
-                notes: [],
-                externalLinks: [],
-            },
-        ],
-        linkerWords: [],
-        genericNotes: [`Pronunciation: ইম্বেসিল`],
-        genericExternalLinks: [],
-    },
-    {
-        word: 'Analogy',
-        definitions: [
-            {
-                meaning:
-                    'a comparison between things that have similar features often used to help explain a principle or idea',
-                examples: [' He drew an analogy between the brain and a vast computer.'],
+                examples: ['The king was an imbecile'],
                 notes: [],
                 externalLinks: [],
             },
@@ -3156,12 +3150,30 @@ const VocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
+        word: 'Analogy',
+        definitions: [
+            {
+                meaning:
+                    'a comparison between things that have similar features often used to help explain a principle or idea',
+                examples: ['He drew an analogy between the brain and a vast computer.'],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: ['Juxtaposition'],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
         word: 'Reel off (something)',
         definitions: [
             {
                 meaning:
                     'to say or repeat something quickly without having to stop or think about it গড়গড় করে বলে যাওয়া',
-                examples: ['He reeled off the names of his grandchildren.'],
+                examples: [
+                    'He reeled off the names of his grandchildren.',
+                    `She reeled off nine straight points in a short amount of time. খেলতে খেলতে এমন হয়েছে যে এখন আর মাথা খাঁটাতে হয়না`,
+                ],
                 notes: [],
                 externalLinks: [],
             },
@@ -3232,7 +3244,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [`prosthetic`],
+        linkerWords: [`Prosthetic`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -3329,11 +3341,25 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`US: Appal`],
         genericExternalLinks: [],
     },
     {
         word: 'Exuberance',
+        definitions: [
+            {
+                meaning: 'The quality of feeling energetic উদ্দীপনা',
+                examples: [`Dance is the outpouring of the exuberance of one’s life energies.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Galvanise`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Incite',
         definitions: [
             {
                 meaning: 'to encourage someone to do or feel something unpleasant or violent উত্তেজিত করা',
@@ -3365,7 +3391,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [`Mayhem`],
-        genericNotes: [`Pronunciation: ব্রু-হা-হা`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -3373,7 +3399,7 @@ const VocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning: 'creative, low cost, unconventional strategy to promote the products or services',
-                examples: ['A startup like Nerddevs should use guerrilla marketing to promote their services.'],
+                examples: ['A startup should use guerrilla marketing to promote their services.'],
                 notes: [],
                 externalLinks: [],
             },
@@ -3434,7 +3460,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: বিহিমথ`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -3597,7 +3623,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: শাদুনফ্রইদা`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -3625,7 +3651,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`Galvanise`, 'Incite'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -3633,8 +3659,10 @@ const VocabularyList: PartialVocabulary[] = [
         word: 'Consolidation',
         definitions: [
             {
-                meaning: 'process of making something stronger or more solid',
-                examples: [`The company has been expanding rapidly, and I feel it's now time to consolidate`],
+                meaning: 'process of making something stronger or more solid পোক্ত করা',
+                examples: [
+                    `The company has been expanding rapidly, and I feel it's now time to consolidate (= stop growing and make our present position stronger).`,
+                ],
                 notes: [],
                 externalLinks: [],
             },
@@ -3656,7 +3684,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`ইগনাইট`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -3729,7 +3757,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: ['Spoonerism '],
+        linkerWords: ['Spoonerism'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -3758,11 +3786,11 @@ const VocabularyList: PartialVocabulary[] = [
                     'Along with other light objects, even a human being can float in the Dead Sea for its natural buoyancy (due to excessive salinity).',
                 ],
                 notes: [],
-                externalLinks: [],
+                externalLinks: [`https://youtu.be/XtWWOxa3BeI`],
             },
         ],
-        linkerWords: [],
-        genericNotes: [`Pronunciation: বয়েনসি`],
+        linkerWords: ['Floating'],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -3885,7 +3913,9 @@ const VocabularyList: PartialVocabulary[] = [
             },
             {
                 meaning: `(Psychiatry) having an exaggerated belief in one's importance, sometimes reaching delusional proportions, and occurring as a common symptom of mental illnesses, as a manic disorder [Grandiosity and Grandiose Delusions in Bipolar Disorder]`,
-                examples: ['***'],
+                examples: [
+                    'The person who are affected with grandiosity regards themselves as unique or special when compared to other people.',
+                ],
                 notes: [],
                 externalLinks: [],
             },
@@ -4000,7 +4030,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'the scientific study of the sea',
                 examples: [
-                    'Experienced oceanographers -- the top 75 percent of the field- earn an average of $99,690, or $47.93 per hour.',
+                    'Experienced oceanographers - the top 75 percent of the field, earn an average of $99,690 or $47.93 per hour.',
                 ],
                 notes: [],
                 externalLinks: [],
@@ -4110,7 +4140,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Boil down to (something)`],
         genericExternalLinks: [],
     },
     {
@@ -4183,7 +4213,7 @@ const VocabularyList: PartialVocabulary[] = [
                 meaning:
                     'A podiatrist or podiatric physician is a medical professional devoted to the treatment of disorders of the foot, ankle, and related structures of the leg',
                 examples: [
-                    `Girls normally pedicure as any kind of foot treatment but in case of fungal attack, they should consult with a podiatrist.`,
+                    `People normally pedicure as any kind of foot treatment but in case of fungal attack, they should consult with a podiatrist.`,
                 ],
                 notes: [],
                 externalLinks: [],
@@ -4219,7 +4249,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: ['Boil down to'],
+        linkerWords: ['Boil down to', `Capitulate`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -4228,7 +4258,7 @@ const VocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning: 'To refer to indirectly',
-                examples: [`She told me the story but alluded to something else as her spouse was present there.`],
+                examples: [`She told me the story but alluded to something else as her partner was present there.`],
                 notes: [`নাম বললে চাকরি থাকবে না`],
                 externalLinks: [],
             },
@@ -4285,7 +4315,7 @@ const VocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`Persnickety`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -4351,7 +4381,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: ইন্ডিয়ামেন্ট`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -4382,7 +4412,7 @@ const VocabularyList: PartialVocabulary[] = [
                 meaning: '(Noun) a fish',
                 examples: [`***`],
                 notes: [],
-                externalLinks: [],
+                externalLinks: [`https://en.wikipedia.org/wiki/Flounder`],
             },
         ],
         linkerWords: [],
@@ -4436,7 +4466,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'to take pride in (oneself) ',
                 examples: [`She piques herself on her editing skills.`],
-                notes: [`look "Pompous"`],
+                notes: [`Look "Pompous"`],
                 externalLinks: [],
             },
         ],
@@ -4592,7 +4622,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: প্রিস্টিন`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -4609,7 +4639,7 @@ const VocabularyList: PartialVocabulary[] = [
                 ],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`Zenith`, 'Pinnacle'],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -4813,7 +4843,7 @@ const VocabularyList: PartialVocabulary[] = [
             {
                 meaning: 'to keep someone or something away or prevent something from happening or harming you',
                 examples: [
-                    `Drinking urine of the cow won't ward off Covid-19, so please stay away from it.`,
+                    `Dear Indian, drinking urine of the cow won't ward off Covid-19, so please stay away from it.`,
                     `He used his umbrella to ward off the broiling sun.`,
                 ],
                 notes: [],
@@ -4837,7 +4867,7 @@ const VocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: হাইএটাস`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
