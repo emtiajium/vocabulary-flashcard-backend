@@ -38,6 +38,12 @@
 
 ➜ `npm run typeorm migration:create -- -n name-of-the-migration`
 
+## Seed scripts
+
+➜ Create users: `npm run seed-script:insert-test-users`
+
+➜ Create vocabularies: `npm run seed-script:insert-vocabularies`
+
 ## Deploy to AWS Elastic Beanstalk
 
 ➜ Create an application at AWS Elastic Beanstalk
