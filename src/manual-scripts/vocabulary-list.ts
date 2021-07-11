@@ -1291,7 +1291,7 @@ const vocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning: 'A break from work in which a full-time job holder can pursue his/her interests',
-                examples: ['We need a sabbatical leave for breathing out in peace.'],
+                examples: ['I need a sabbatical leave for breathing out in peace.'],
                 notes: ['Sabbatical originated from the Hebrew word Sabbath means to rest or break from the work!'],
                 externalLinks: [],
             },
