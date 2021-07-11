@@ -3174,10 +3174,9 @@ const vocabularyList: PartialVocabulary[] = [
         word: 'Reel off',
         definitions: [
             {
-                meaning:
-                    'to say or repeat something quickly without having to stop or think about it গড়গড় করে বলে যাওয়া',
+                meaning: 'to say or repeat something quickly without having to stop or think about it',
                 examples: [
-                    'He reeled off the names of his grandchildren.',
+                    'He reeled off the names of his grandchildren. গড়গড় করে বলে যাওয়া',
                     `She reeled off nine straight points in a short amount of time. খেলতে খেলতে এমন হয়েছে যে এখন আর মাথা খাঁটাতে হয়না`,
                 ],
                 notes: [],
