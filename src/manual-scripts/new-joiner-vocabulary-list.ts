@@ -46,12 +46,8 @@ const words: string[] = [
     'Ward off',
 ];
 
-const newJoinerVocabularyList: PartialVocabulary[] = [];
-
-_.each(vocabularyList, (vocabulary) => {
-    if (_.includes(words, vocabulary.word)) {
-        newJoinerVocabularyList.push(vocabulary);
-    }
+const newJoinerVocabularyList: PartialVocabulary[] = _.filter(vocabularyList, (vocabulary) => {
+    return _.includes(words, vocabulary.word);
 });
 
 export default newJoinerVocabularyList;
