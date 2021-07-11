@@ -925,7 +925,7 @@ const vocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`Flogging`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -1141,6 +1141,12 @@ const vocabularyList: PartialVocabulary[] = [
                 meaning:
                     'Full of confusion, change, or uncertainty বিক্ষোভপূর্ণ, আলোড়নপূর্ণ, দাঙ্গাপূর্ণ, সংশয়পূর্ণ',
                 examples: ['After the tumultuous events of 1990, Europe was completely transformed.'],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: 'Loud, excited, emotional, confused sound',
+                examples: [`Trevor always gets tumultuous applause on his stage performances.`],
                 notes: [],
                 externalLinks: [],
             },
@@ -5233,7 +5239,7 @@ const vocabularyList: PartialVocabulary[] = [
                     `Bison and water buffalo wallow and neither does Gaur.`,
                 ],
                 notes: [`Gaur is also known as Indian Bison`],
-                externalLinks: [],
+                externalLinks: [`https://www.facebook.com/bbcearth/photos/a.138589359507962/4418112414888947`],
             },
             {
                 meaning:
@@ -5361,7 +5367,7 @@ const vocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`Go short`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -5377,7 +5383,7 @@ const vocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [],
+        linkerWords: [`Go long`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -5400,7 +5406,7 @@ const vocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
         ],
-        linkerWords: [`Grotty`],
+        linkerWords: [`Grotty`, `Under the weather`],
         genericNotes: [],
         genericExternalLinks: [],
     },
@@ -5449,7 +5455,7 @@ const vocabularyList: PartialVocabulary[] = [
                     `The blue-footed Boobie bird can plummet from heights as high as 80 feet.`,
                 ],
                 notes: [],
-                externalLinks: [`https://en.wikipedia.org/wiki/Booby`],
+                externalLinks: [`https://www.facebook.com/bbcearth/photos/a.138589359507962/4434596506573871`],
             },
         ],
         linkerWords: [],
@@ -5595,6 +5601,12 @@ const vocabularyList: PartialVocabulary[] = [
                 notes: [],
                 externalLinks: [],
             },
+            {
+                meaning: 'A device that can throw objects with great force',
+                examples: [`***`],
+                notes: [],
+                externalLinks: [],
+            },
         ],
         linkerWords: [`Propel`],
         genericNotes: [],
@@ -5691,7 +5703,7 @@ const vocabularyList: PartialVocabulary[] = [
         definitions: [
             {
                 meaning: 'Criticise by means of satire.',
-                examples: [`Police arrested cartoonist Kishore as his piece of art satirized the ongoing bureaucracy`],
+                examples: [`Cop arrested cartoonist Kishore as his piece of art satirized the ongoing bureaucracy`],
                 notes: [],
                 externalLinks: [],
             },
@@ -5704,7 +5716,7 @@ const vocabularyList: PartialVocabulary[] = [
         word: 'Decimation',
         definitions: [
             {
-                meaning: 'Demolish- to kill a large number of something.',
+                meaning: 'Demolish - to kill a large number of something.',
                 examples: [`Our growing hunger for fish has resulted in the decimation of fish stock.`],
                 notes: [],
                 externalLinks: [],
@@ -5844,7 +5856,7 @@ const vocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`সাডল???`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -5876,26 +5888,12 @@ const vocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Tumultuous',
-        definitions: [
-            {
-                meaning: 'Loud, excited, emotional, confused sound.',
-                examples: ['Trevor always gets tumultuous applause on his stage performances.'],
-                notes: [],
-                externalLinks: [],
-            },
-        ],
-        linkerWords: [],
-        genericNotes: [],
-        genericExternalLinks: [],
-    },
-    {
         word: 'Enclave',
         definitions: [
             {
                 meaning: 'An enclave is a territory completely surrounded by the territories of another state.',
                 examples: [`India- Bangladesh formally exchanged 162 enclaves in August 2015.`],
-                notes: [],
+                notes: [`ছিটমহল`],
                 externalLinks: [],
             },
         ],
@@ -5958,7 +5956,7 @@ const vocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`Pronunciation: ভ্যাঞ্জেন্স`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -6002,7 +6000,7 @@ const vocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [`ননশালান্ট`],
+        genericNotes: [],
         genericExternalLinks: [],
     },
     {
@@ -6067,7 +6065,7 @@ const vocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'indoctrination',
+        word: 'Indoctrination',
         definitions: [
             {
                 meaning: 'Teaching a person or group to accept a set of beliefs without questioning them.',

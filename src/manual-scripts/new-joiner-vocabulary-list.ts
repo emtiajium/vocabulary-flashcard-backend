@@ -44,6 +44,18 @@ const words: string[] = [
     'Heyday',
     'Oxymoron',
     'Ward off',
+    'Diaspora',
+    'Hot potato',
+    `Morton's toe`,
+    'Stammer',
+    'Diverge',
+    'Bone up',
+    'Wallow',
+    `Go short`,
+    `Go long`,
+    `Plummet`,
+    `Tumultuous`,
+    `Inculcate`,
 ];
 
 const newJoinerVocabularyList: PartialVocabulary[] = _.filter(vocabularyList, (vocabulary) => {
