@@ -3171,7 +3171,7 @@ const vocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Reel off (something)',
+        word: 'Reel off',
         definitions: [
             {
                 meaning:
@@ -3185,7 +3185,7 @@ const vocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Reel off (something)`],
         genericExternalLinks: [],
     },
     {

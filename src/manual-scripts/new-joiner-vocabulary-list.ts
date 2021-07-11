@@ -26,7 +26,7 @@ const words: string[] = [
     `Indelible`,
     `Hog`,
     `Choke`,
-    `Reel off (something)`,
+    `Reel off`,
     `Euphemism`,
     `Guerrilla marketing`,
     `Portmanteau word`,
