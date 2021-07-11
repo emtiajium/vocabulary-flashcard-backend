@@ -1217,7 +1217,7 @@ const vocabularyList: PartialVocabulary[] = [
             },
         ],
         linkerWords: [],
-        genericNotes: [],
+        genericNotes: [`Clutch bag`],
         genericExternalLinks: [],
     },
     {
