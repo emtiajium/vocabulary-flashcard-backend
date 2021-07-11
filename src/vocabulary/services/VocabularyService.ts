@@ -7,7 +7,7 @@ import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
-import NewJoinerVocabularyList from '@/manual-scripts/NewJoinerVocabularyList';
+import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 
 @Injectable()
 export default class VocabularyService {
@@ -65,7 +65,7 @@ export default class VocabularyService {
         if (await this.vocabularyRepository.getSingleVocabularyByCohortId(cohortId)) {
             throw new ConflictException(`Cohort with ID: "${cohortId}" has at least one vocabulary`);
         }
-        const payload = createVocabularies(cohortId, NewJoinerVocabularyList);
+        const payload = createVocabularies(cohortId, newJoinerVocabularyList);
         const vocabularies = await Promise.all(
             _.map(payload, (vocabulary) => this.vocabularyRepository.save(vocabulary)),
         );

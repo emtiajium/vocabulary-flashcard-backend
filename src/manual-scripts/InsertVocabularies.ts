@@ -5,7 +5,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
 import { ConfigService } from '@nestjs/config';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
-import VocabularyList from './VocabularyList';
+import vocabularyList from './vocabulary-list';
 
 export default class InsertVocabularies {
     private cohortId: string;
@@ -34,7 +34,7 @@ export default class InsertVocabularies {
     }
 
     private generateVocabularyPayload(): void {
-        this.vocabularies = createVocabularies(this.cohortId, VocabularyList);
+        this.vocabularies = createVocabularies(this.cohortId, vocabularyList);
     }
 
     private async remove(): Promise<void> {
