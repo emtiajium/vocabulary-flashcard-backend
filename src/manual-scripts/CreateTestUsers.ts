@@ -2,6 +2,8 @@ import User from '@/user/domains/User';
 import { createConnection, getRepository, In } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
+import Definition from '@/vocabulary/domains/Definition';
+import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 type PartialUser = Pick<User, 'firstname' | 'lastname' | 'username' | 'profilePictureUrl'>;
 
@@ -10,25 +12,25 @@ export default class CreateTestUsers {
         {
             firstname: `Kateryna`,
             lastname: `Shevchenko`,
-            username: `kateryna.shevchenko@firecracker.com`,
+            username: `k.shevchenko@firecracker.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairCurvy&accessoriesType=Blank&hairColor=Blonde&facialHairType=Blank&clotheType=Overall&clotheColor=PastelGreen&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light`,
         },
         {
             firstname: `Joao da`,
             lastname: `Silva`,
-            username: `joao.silva@firecracker.com`,
+            username: `j.silva@firecracker.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=Brown&facialHairType=Blank&clotheType=Hoodie&clotheColor=Gray02&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
         },
         {
             firstname: `Shashwata`,
             lastname: `Noor`,
-            username: `shashwata.noor@firecracker.com`,
+            username: `s.noor@firecracker.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortFlat&accessoriesType=Blank&hairColor=Black&facialHairType=BeardLight&facialHairColor=Black&clotheType=BlazerSweater&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=DarkBrown`,
         },
         {
             firstname: `Shraban`,
             lastname: `Dhara`,
-            username: `shraban.dhara@firecracker.com`,
+            username: `s.dhara@firecracker.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight2&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=CollarSweater&clotheColor=Blue03&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
         },
     ];
@@ -40,6 +42,8 @@ export default class CreateTestUsers {
     async execute(): Promise<void> {
         try {
             await createConnection();
+            await this.removeDefinitions();
+            await this.removeVocabularies();
             await this.removeUsers();
             await this.removeCohort();
             await Promise.all([this.createCohort(), this.createUsers()]);
@@ -47,6 +51,38 @@ export default class CreateTestUsers {
         } catch (error) {
             console.log(`Error`, error);
         }
+    }
+
+    private async removeDefinitions(): Promise<void> {
+        await getRepository(Definition).query(
+            `DELETE
+             FROM "Definition"
+             WHERE "vocabularyId" IN (
+                 SELECT id
+                 FROM "Vocabulary"
+                 WHERE "cohortId" = (
+                     SELECT id
+                     FROM "Cohort"
+                     WHERE name = $1
+                 )
+             );`,
+            [this.cohortName],
+        );
+    }
+
+    private async removeVocabularies(): Promise<void> {
+        await getRepository(Vocabulary).query(
+            `
+                DELETE
+                FROM "Vocabulary"
+                WHERE "cohortId" = (
+                    SELECT id
+                    FROM "Cohort"
+                    WHERE name = $1
+                )
+            `,
+            [this.cohortName],
+        );
     }
 
     private async removeCohort(): Promise<void> {
