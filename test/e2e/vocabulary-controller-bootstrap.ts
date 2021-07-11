@@ -12,6 +12,8 @@ import User from '@/user/domains/User';
 import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
+import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
+import SearchResult from '@/common/domains/SearchResult';
 
 describe('/v1/vocabularies/bootstrap', () => {
     let app: INestApplication;
@@ -34,7 +36,7 @@ describe('/v1/vocabularies/bootstrap', () => {
         await app.close();
     });
 
-    async function makeApiRequest(): Promise<SupertestResponse<Vocabulary>> {
+    async function makeApiRequest(): Promise<SupertestResponse<SearchResult<Vocabulary>>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/bootstrap`)
             .set('Authorization', `Bearer ${generateJwToken(requester)}`)
@@ -53,11 +55,22 @@ describe('/v1/vocabularies/bootstrap', () => {
     });
 
     it('SHOULD return 201 CREATED for the brand new user', async () => {
-        const { status } = await makeApiRequest();
+        const { status, body } = await makeApiRequest();
+
         expect(status).toBe(201);
+
         const vocabulary = await getSingleVocabularyByCohortId(cohort.id);
         expect(vocabulary.id).toBeDefined();
         expect(vocabulary.cohortId).toBe(cohort.id);
+
+        const vocabularies = (body as SearchResult<Vocabulary>).results;
+
+        expect(vocabularies).toHaveLength(newJoinerVocabularyList.length);
+        expect((body as SearchResult<Vocabulary>).total).toBe(newJoinerVocabularyList.length);
+
+        vocabularies.forEach(({ cohortId }) => {
+            expect(cohortId).toBe(cohort.id);
+        });
         await removeVocabularyAndRelationsByCohortId(cohort.id);
     });
 
