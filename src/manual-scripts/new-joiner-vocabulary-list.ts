@@ -65,7 +65,7 @@ const words: string[] = [
     `Inculcate`,
 ];
 
-const newJoinerVocabularyList: PartialVocabulary[] = _.filter(vocabularyList, (vocabulary) => {
+const newJoinerVocabularyList: PartialVocabulary[] = _.filter(_.cloneDeep(vocabularyList), (vocabulary) => {
     return _.includes(words, vocabulary.word);
 });
 
