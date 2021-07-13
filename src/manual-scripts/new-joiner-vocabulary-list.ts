@@ -29,6 +29,7 @@ const words: string[] = [
     `Reel off`,
     `Euphemism`,
     `Guerrilla marketing`,
+    `Consolidation`,
     `Portmanteau word`,
     `Trickle`,
     `Rechristen`,
