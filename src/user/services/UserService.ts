@@ -11,7 +11,7 @@ export default class UserService {
     async createUser(user: User): Promise<User> {
         const createdUser = await this.userRepository.insertAndUpdateIfExist(user);
         if (createdUser.version === 1) {
-            await this.cohortService.createCohort({ name: user.username, userIds: [createdUser.id] });
+            await this.cohortService.createCohort({ name: user.username, usernames: [createdUser.username] });
         }
         return this.getUserByUsername(user.username);
     }

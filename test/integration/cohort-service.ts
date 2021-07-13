@@ -34,11 +34,11 @@ describe('Cohort Service', () => {
         const secondUserPayload = getUserPayload('example405@gibberish.com');
         const secondUser = await createUser(secondUserPayload);
 
-        const cohortPayload: Cohort = { name: 'The best cohort ever exist', userIds: [] } as Cohort;
+        const cohortPayload: Cohort = { name: 'The best cohort ever exist', usernames: [] } as Cohort;
         await cohortService.createCohort(cohortPayload);
         const cohort: Cohort = await getCohortByName(cohortPayload.name);
 
-        await cohortService.addUsersToCohort(cohortPayload.name, [firstUser.id, secondUser.id]);
+        await cohortService.addUsersToCohort(cohortPayload.name, [firstUser.username, secondUser.username]);
 
         const updatedCohort: Cohort = await getCohortByName(cohortPayload.name);
 

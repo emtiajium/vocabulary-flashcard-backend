@@ -26,7 +26,11 @@ export default class UserRepository extends Repository<User> {
         return this.find({ id: In(ids) });
     }
 
-    async updateCohort(ids: string[], cohortId: string): Promise<void> {
-        await this.update({ id: In(ids) }, { cohort: { id: cohortId } });
+    async getUsersByUsernames(usernames: string[]): Promise<User[]> {
+        return this.find({ username: In(usernames) });
+    }
+
+    async updateCohort(usernames: string[], cohortId: string): Promise<void> {
+        await this.update({ username: In(usernames) }, { cohort: { id: cohortId } });
     }
 }

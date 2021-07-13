@@ -17,8 +17,8 @@ export default class CohortController {
 
     @Put('/:name')
     @UseGuards(AuthGuard)
-    async addUsersToCohort(@Body() userIds: string[], @Param('name') name: string): Promise<void> {
-        await this.cohortService.addUsersToCohort(name, userIds);
+    async addUsersToCohort(@Body() usernames: string[], @Param('name') name: string): Promise<void> {
+        await this.cohortService.addUsersToCohort(name, usernames);
     }
 
     @Get('/self')

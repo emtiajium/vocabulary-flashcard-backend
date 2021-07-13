@@ -22,9 +22,9 @@ describe('/v1/cohorts/:name', () => {
 
     let requester: User;
 
-    const getBasePayload = (userIds: string[] = []): Cohort => ({
+    const getBasePayload = (usernames: string[] = []): Cohort => ({
         name: `What a wonderful world!`,
-        userIds,
+        usernames,
     });
 
     const getUserCreationBasePayload = (username?: string): User =>
@@ -44,11 +44,14 @@ describe('/v1/cohorts/:name', () => {
         await app.close();
     });
 
-    const makeAuthorizedApiRequest = async (name: string, userIds: string[] = []): Promise<SupertestResponse<void>> => {
+    const makeAuthorizedApiRequest = async (
+        name: string,
+        usernames: string[] = [],
+    ): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .put(`${getAppAPIPrefix()}/v1/cohorts/${name}`)
             .set('Authorization', `Bearer ${generateJwToken(requester)}`)
-            .send(userIds);
+            .send(usernames);
         return {
             status,
             body,
@@ -87,28 +90,31 @@ describe('/v1/cohorts/:name', () => {
         });
 
         it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
-            const invalidUserIds = [uuidV4(), uuidV4(), uuidV4()];
+            const invalidUsernames = [uuidV4(), uuidV4(), uuidV4()];
             const { status: status1, body: body1 } = await makeAuthorizedApiRequest(getBasePayload().name, [
-                invalidUserIds[0],
-                invalidUserIds[1],
+                invalidUsernames[0],
+                invalidUsernames[1],
             ]);
             expect(status1).toBe(404);
             expect((body1 as SupertestErrorResponse).message).toBe(
-                `There are no such users having IDs ${[invalidUserIds[0], invalidUserIds[1]].join(', ')}`,
+                `There are no such users having usernames ${[invalidUsernames[0], invalidUsernames[1]].join(', ')}`,
             );
 
             const { status: status2, body: body2 } = await makeAuthorizedApiRequest(getBasePayload().name, [
-                firstUser.id,
-                invalidUserIds[2],
+                firstUser.username,
+                invalidUsernames[2],
             ]);
             expect(status2).toBe(404);
             expect((body2 as SupertestErrorResponse).message).toBe(
-                `There is no such user having ID ${invalidUserIds[2]}`,
+                `There is no such user having username ${invalidUsernames[2]}`,
             );
         });
 
         it('SHOULD return 200 OK', async () => {
-            const { status } = await makeAuthorizedApiRequest(getBasePayload().name, [firstUser.id, secondUser.id]);
+            const { status } = await makeAuthorizedApiRequest(getBasePayload().name, [
+                firstUser.username,
+                secondUser.username,
+            ]);
             expect(status).toBe(200);
 
             const [firstUserWithCohort, secondUserWithCohort] = await getUsersByUsernames([

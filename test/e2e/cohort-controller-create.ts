@@ -24,9 +24,9 @@ describe('/v1/cohorts', () => {
 
     let requester: User;
 
-    const getBasePayload = (userIds: string[] = []): Cohort => ({
+    const getBasePayload = (usernames: string[] = []): Cohort => ({
         name: `Summer of Sixty Nine!`,
-        userIds,
+        usernames,
     });
 
     const getUserCreationBasePayload = (username?: string): User =>
@@ -89,20 +89,36 @@ describe('/v1/cohorts', () => {
             });
 
             // skipping as it is not working
-            it.skip('SHOULD return 400 BAD_REQUEST for payload WHEN userIds is not defined', async () => {
-                const cohort = { ...getBasePayload(), userIds: null } as Cohort;
+            it.skip('SHOULD return 400 BAD_REQUEST for payload WHEN usernames is not defined', async () => {
+                const cohort = { ...getBasePayload(), usernames: null } as Cohort;
                 const { status } = await makeApiRequest(cohort as Cohort);
                 expect(status).toBe(400);
             });
 
-            it('SHOULD return 400 BAD_REQUEST for payload with invalid userIds', async () => {
-                const cohort = { ...getBasePayload(), userIds: ['Hello!', null, undefined, ''] } as Cohort;
-                const { status } = await makeApiRequest(cohort as Cohort);
+            it('SHOULD return 400 BAD_REQUEST for payload with invalid usernames', async () => {
+                let cohort = { ...getBasePayload(), usernames: ['Hello!'] } as Cohort;
+                let { status } = await makeApiRequest(cohort as Cohort);
+                expect(status).toBe(400);
+
+                cohort = { ...getBasePayload(), usernames: [null] } as Cohort;
+                status = (await makeApiRequest(cohort as Cohort)).status;
+                expect(status).toBe(400);
+
+                cohort = { ...getBasePayload(), usernames: [undefined] } as Cohort;
+                status = (await makeApiRequest(cohort as Cohort)).status;
+                expect(status).toBe(400);
+
+                cohort = { ...getBasePayload(), usernames: [''] } as Cohort;
+                status = (await makeApiRequest(cohort as Cohort)).status;
+                expect(status).toBe(400);
+
+                cohort = { ...getBasePayload(), usernames: ['NotAnEmail'] } as Cohort;
+                status = (await makeApiRequest(cohort as Cohort)).status;
                 expect(status).toBe(400);
             });
         });
 
-        describe('Payload with empty user IDs', () => {
+        describe('Payload with empty usernames', () => {
             afterAll(async () => {
                 await removeCohortByName(getBasePayload().name);
             });
@@ -129,7 +145,7 @@ describe('/v1/cohorts', () => {
             });
         });
 
-        describe('Payload with user IDs', () => {
+        describe('Payload with usernames', () => {
             let firstUser: User;
             let secondUser: User;
 
@@ -147,24 +163,32 @@ describe('/v1/cohorts', () => {
             });
 
             it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
-                const invalidUserId = uuidV4();
-                const { status: status1, body: body1 } = await makeApiRequest(getBasePayload([invalidUserId]));
+                const invalidUsername = `${uuidV4()}@firecracker.com`;
+                const { status: status1, body: body1 } = await makeApiRequest(getBasePayload([invalidUsername]));
                 expect(status1).toBe(404);
                 expect((body1 as SupertestErrorResponse).message).toBe(
-                    `There is no such user having ID ${invalidUserId}`,
+                    `There is no such user having username ${invalidUsername}`,
                 );
 
                 const { status: status2, body: body2 } = await makeApiRequest(
-                    getBasePayload([firstUser.id, invalidUserId]),
+                    getBasePayload([firstUser.username, invalidUsername]),
                 );
                 expect(status2).toBe(404);
                 expect((body2 as SupertestErrorResponse).message).toBe(
-                    `There is no such user having ID ${invalidUserId}`,
+                    `There is no such user having username ${invalidUsername}`,
+                );
+
+                const { status: status3, body: body3 } = await makeApiRequest(
+                    getBasePayload([invalidUsername, invalidUsername]),
+                );
+                expect(status3).toBe(404);
+                expect((body3 as SupertestErrorResponse).message).toBe(
+                    `There are no such users having usernames ${[invalidUsername, invalidUsername].join(', ')}`,
                 );
             });
 
             it('SHOULD return 201 CREATED', async () => {
-                const { status } = await makeApiRequest(getBasePayload([firstUser.id, secondUser.id]));
+                const { status } = await makeApiRequest(getBasePayload([firstUser.username, secondUser.username]));
                 expect(status).toBe(201);
 
                 const [firstUserWithCohort, secondUserWithCohort] = await getUsersByUsernames([

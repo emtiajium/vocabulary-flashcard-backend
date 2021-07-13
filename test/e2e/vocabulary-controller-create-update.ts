@@ -27,8 +27,8 @@ describe('/v1/vocabularies', () => {
         app = await bootstrap(AppModule);
         requester = await createApiRequester();
         const cohortName = 'Vocabulary Automated Test Cohort';
-        cohort = await createCohort({ name: cohortName, userIds: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.id]);
+        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
+        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
     });
 
     afterAll(async () => {
