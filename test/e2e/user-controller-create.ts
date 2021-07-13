@@ -53,6 +53,12 @@ describe('/v1/users', () => {
                 expect(status).toBe(400);
             });
 
+            it('SHOULD return 400 BAD_REQUEST WHEN username is not an email', async () => {
+                const user = { ...getBasePayload(), username: 'NotAnEmail' };
+                const { status } = await makeApiRequest(user as User);
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 400 BAD_REQUEST for payload without firstname', async () => {
                 const user = { ...getBasePayload() };
                 delete user.firstname;

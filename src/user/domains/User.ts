@@ -1,6 +1,6 @@
 import BaseEntity from '@/common/domains/BaseEntity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { Expose } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 
@@ -13,6 +13,7 @@ export const profilePictureUrlSize = 100;
 export default class User extends BaseEntity {
     @Column({ type: 'varchar', unique: true })
     @MaxLength(usernameSize)
+    @IsEmail()
     @IsString()
     @IsNotEmpty()
     username: string;
