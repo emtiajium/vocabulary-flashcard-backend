@@ -6185,6 +6185,222 @@ const vocabularyList: PartialVocabulary[] = [
         genericNotes: [],
         genericExternalLinks: [],
     },
+    {
+        word: `Engrave`,
+        definitions: [
+            {
+                meaning: `to cut a picture or design, or letters into the surface of a hard substance such as metal, wood, or stone`,
+                examples: [`The bracelet was engraved with his name and date of birth.`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: `If something is engraved in your memory, mind, or heart, it is something you will never forget.`,
+                examples: [`Baba is engraved in my heart; sometimes I feel like he is still alive!.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: `Preclude`,
+        definitions: [
+            {
+                meaning: `prevent from happening; make impossible.`,
+                examples: [`His difficulties preclude him from leading a normal life`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Salvage',
+        definitions: [
+            {
+                meaning: `Rescue from loss of asset especially from sea`,
+                examples: [`a salvage operation was under way`],
+                notes: [],
+                externalLinks: [],
+            },
+            {
+                meaning: `apprehend and execute (a suspected criminal) without trial.`,
+                examples: [`those who are salvaged simply disappear from their homes or workplaces`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Ostentation',
+        definitions: [
+            {
+                meaning: `the pretentious or showy display of wealth and luxury, designed to impress.`,
+                examples: [`Her luxurious lifestyle and personal ostentation were both hated and envied`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'precarious',
+        definitions: [
+            {
+                meaning: `Uncertain, risky, dangerous`,
+                examples: [
+                    `By borrowing money from one after another of our friends, Moutushi brought herself in a precarious condition.`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'machinations',
+        definitions: [
+            {
+                meaning: `complicated and secret plans to get power or control or to gain an advantage`,
+                examples: [
+                    `You never know the machinations of Jamat- Shibir for increasing their numbers of disciples`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'feckless',
+        definitions: [
+            {
+                meaning: `weak in character and lacking determination`,
+                examples: [`He was portrayed as a feckless drunk.`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Evoke',
+        definitions: [
+            {
+                meaning: `to make someone remember something or feel an emotion`,
+                examples: [`The smell of chalk always evokes memories of my school days`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Fluke',
+        definitions: [
+            {
+                meaning: `Lucky, something good that has happened that is the result of chance instead of skill or planning`,
+                examples: [`The goal made by D Maria in Copa final is just a fluke`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Berate',
+        definitions: [
+            {
+                meaning: `schold sharply`,
+                examples: [
+                    `Doctors are often berated for being poor communicators, particularly when they have to give patients bad news`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'consequential',
+        definitions: [
+            {
+                meaning: `self important`,
+                examples: [`The new congress lacked consequential leaders`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`pompous`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Gallant',
+        definitions: [
+            {
+                meaning: `a man who is charmingly attentive to women`,
+                examples: [
+                    `It is very common in fairy tale that a gallant prince will come over and kiss the princess hand`,
+                ],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [`Chivarly`],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'Macerate',
+        definitions: [
+            {
+                meaning: `soften or become softened by soaking in a liquid`,
+                examples: [`Emtiaj used to macerate pineapples in saline water before cutting them down`],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
+    {
+        word: 'cornucopia',
+        definitions: [
+            {
+                meaning: `abundant supply`,
+                examples: [`In buffet, normally he table held a veritable cornucopia of every kind of food or drink `],
+                notes: [],
+                externalLinks: [],
+            },
+        ],
+        linkerWords: [],
+        genericNotes: [],
+        genericExternalLinks: [],
+    },
 ];
 
 export default vocabularyList;
