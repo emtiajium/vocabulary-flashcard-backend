@@ -51,6 +51,7 @@
 ➜ Create a deployment pipeline at AWS CodePipeline
 
 ➜ Create the database at AWS RDS
+
 > Carefully set VPC/Security groups
 
 > Follow [this](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/rds-external-defaultvpc.html) to connect to the Amazon RDS instance in a VPC
@@ -61,6 +62,7 @@
 
 ## Change Log
 
+-   `0.4.3`: Ordered cohort members by their firstname (`/v1/cohorts/self`)
 -   `0.4.2`: Modified the cohort related APIs to accept usernames instead of user IDs
 -   `0.4.1`: Added API for populating the new user with few vocabularies
 -   `0.4.0`: Added authentication using JWT
