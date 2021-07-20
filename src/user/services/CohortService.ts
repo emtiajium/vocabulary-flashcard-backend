@@ -26,6 +26,7 @@ export default class CohortService {
         const cohort: Cohort = await this.cohortRepository.getCohortByName(name);
         await this.validateUsers(usernames);
         await this.associateUsersWithCohort(usernames, cohort);
+        // TODO move all vocabularies to the cohort
     }
 
     private async validateUsers(usernames: string[]): Promise<void> {
