@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import DatabaseModule from '@/DatabaseModule';
 import AutorunScriptsModule from '@/AutorunScriptsModule';
 import VocabularyModule from '@/vocabulary/VocabularyModule';
+import AndroidModule from '@/android/AndroidModule';
 
 @Module({
     imports: [
@@ -12,6 +13,7 @@ import VocabularyModule from '@/vocabulary/VocabularyModule';
         UserModule,
         AutorunScriptsModule,
         VocabularyModule,
+        AndroidModule,
     ],
 })
 export default class AppModule {}
