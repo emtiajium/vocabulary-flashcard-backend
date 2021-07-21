@@ -71,7 +71,6 @@ describe('/v1/androids', () => {
             const android = body as Android;
             expect(android.versionName).toBe(payload.versionName);
             expect(android.versionCode).toBe(payload.versionCode);
-            expect(android.id).toBeUndefined();
             expect(android.secret).toBeUndefined();
         });
 
@@ -87,7 +86,6 @@ describe('/v1/androids', () => {
             const android = body as Android;
             expect(android.versionName).toBe(payload.versionName);
             expect(android.versionCode).toBe(2);
-            expect(android.id).toBeUndefined();
             expect(android.secret).toBeUndefined();
             expect((await getAndroid()).length).toBe(1);
         });
