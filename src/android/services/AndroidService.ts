@@ -12,9 +12,7 @@ export default class AndroidService {
             throw new UnauthorizedException();
         }
         const existingAndroid = await this.fetch();
-        const persistedAndroid = await this.androidRepository.save(Android.create(android, existingAndroid?.id));
-        delete persistedAndroid.id;
-        return persistedAndroid;
+        return this.androidRepository.save(Android.create(android, existingAndroid?.id));
     }
 
     async fetch(): Promise<Android | undefined> {
