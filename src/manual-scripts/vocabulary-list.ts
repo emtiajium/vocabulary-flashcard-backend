@@ -5542,34 +5542,6 @@ const vocabularyList: PartialVocabulary[] = [
         genericExternalLinks: [],
     },
     {
-        word: 'Woft',
-        definitions: [
-            {
-                meaning: '***',
-                examples: [`***`],
-                notes: [],
-                externalLinks: [],
-            },
-        ],
-        linkerWords: [],
-        genericNotes: [],
-        genericExternalLinks: [],
-    },
-    {
-        word: 'Waftt',
-        definitions: [
-            {
-                meaning: '***',
-                examples: [`***`],
-                notes: [],
-                externalLinks: [],
-            },
-        ],
-        linkerWords: [],
-        genericNotes: [],
-        genericExternalLinks: [],
-    },
-    {
         word: 'Waft',
         definitions: [
             {
