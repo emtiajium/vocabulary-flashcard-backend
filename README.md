@@ -62,6 +62,7 @@
 
 ## Change Log
 
+-   `0.4.4`: Module for Android stuff
 -   `0.4.3`: Ordered cohort members by their firstname (`/v1/cohorts/self`)
 -   `0.4.2`: Modified the cohort related APIs to accept usernames instead of user IDs
 -   `0.4.1`: Added API for populating the new user with few vocabularies
