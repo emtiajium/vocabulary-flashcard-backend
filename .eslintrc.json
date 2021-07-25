@@ -157,6 +157,12 @@
                 "unicorn/no-process-exit": "off",
                 "no-console": "off"
             }
+        },
+        {
+            "files": ["src/vocabulary/domains/LeitnerBoxType.ts"],
+            "rules": {
+                "no-magic-numbers": "off"
+            }
         }
     ]
 }
