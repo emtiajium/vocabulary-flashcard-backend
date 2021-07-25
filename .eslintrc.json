@@ -159,7 +159,10 @@
             }
         },
         {
-            "files": ["src/vocabulary/domains/LeitnerBoxType.ts"],
+            "files": [
+                "src/vocabulary/domains/LeitnerBoxAppearanceDifference.ts",
+                "src/vocabulary/domains/LeitnerBoxType.ts"
+            ],
             "rules": {
                 "no-magic-numbers": "off"
             }
