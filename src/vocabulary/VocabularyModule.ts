@@ -9,6 +9,8 @@ import UserRepository from '@/user/repositories/UserRepository';
 import CohortService from '@/user/services/CohortService';
 import CohortRepository from '@/user/repositories/CohortRepository';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
+import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
+import LeitnerSystemsController from '@/vocabulary/controllers/LeitnerSystemsController';
 
 @Module({
     imports: [
@@ -20,7 +22,7 @@ import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
             LeitnerSystems,
         ]),
     ],
-    providers: [UserService, CohortService, VocabularyService],
-    controllers: [VocabularyController],
+    providers: [UserService, CohortService, VocabularyService, LeitnerSystemsService],
+    controllers: [VocabularyController, LeitnerSystemsController],
 })
 export default class VocabularyModule {}
