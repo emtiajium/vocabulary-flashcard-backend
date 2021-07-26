@@ -2,12 +2,20 @@ import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRe
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
+import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
 
 @Injectable()
 export default class LeitnerSystemsService {
-    constructor(private readonly leitnerSystemsRepository: LeitnerSystemsRepository) {}
+    constructor(
+        private readonly leitnerSystemsRepository: LeitnerSystemsRepository,
+        private readonly vocabularyRepository: VocabularyRepository,
+    ) {}
 
     async placeIntoFirstLeitnerBox(userId: string, vocabularyId: string): Promise<void> {
+        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId))) {
+            throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
+        }
+
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
         if (boxItem) {
@@ -22,6 +30,10 @@ export default class LeitnerSystemsService {
     }
 
     async moveForward(userId: string, vocabularyId: string): Promise<void> {
+        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId))) {
+            throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
+        }
+
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
         if (!boxItem) {
@@ -37,6 +49,10 @@ export default class LeitnerSystemsService {
     }
 
     async moveBackward(userId: string, vocabularyId: string): Promise<void> {
+        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId))) {
+            throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
+        }
+
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
         if (!boxItem) {

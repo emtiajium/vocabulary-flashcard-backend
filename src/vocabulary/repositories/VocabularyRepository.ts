@@ -90,4 +90,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         );
         return queryResult[0];
     }
+
+    async isVocabularyExist(id: string): Promise<boolean> {
+        const vocabulary = await this.findOne({ id }, { select: ['id'] });
+        return !!vocabulary;
+    }
 }
