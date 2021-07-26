@@ -239,7 +239,9 @@ describe('/v1/vocabularies', () => {
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
+        });
 
+        describe('Success', () => {
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
