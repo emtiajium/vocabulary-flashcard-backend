@@ -1,5 +1,5 @@
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
@@ -7,24 +7,21 @@ import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 export default class LeitnerSystemsService {
     constructor(private readonly leitnerSystemsRepository: LeitnerSystemsRepository) {}
 
-    async moveToNextLeitnerBox(box: LeitnerBoxType, userId: string, vocabularyId: string): Promise<void> {
+    async placeIntoFirstLeitnerBox(userId: string, vocabularyId: string): Promise<void> {
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
-        if (!boxItem && box > LeitnerBoxType.BOX_1) {
-            throw new NotFoundException(
-                `There is no such vocabulary with ID "${vocabularyId}" for the user "${userId}"`,
+        if (boxItem) {
+            throw new ConflictException(
+                `Vocabulary with ID "${vocabularyId}" for the user "${userId}" is already exist`,
             );
         }
 
-        await (box === 1
-            ? this.leitnerSystemsRepository.save(LeitnerSystems.create(box, userId, vocabularyId, true))
-            : this.leitnerSystemsRepository.update(
-                  { id: boxItem.id },
-                  LeitnerSystems.create(box, userId, vocabularyId, true),
-              ));
+        await this.leitnerSystemsRepository.save(
+            LeitnerSystems.create(LeitnerBoxType.BOX_1, userId, vocabularyId, true),
+        );
     }
 
-    async moveToPreviousLeitnerBox(box: LeitnerBoxType, userId: string, vocabularyId: string): Promise<void> {
+    async moveForward(userId: string, vocabularyId: string): Promise<void> {
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
         if (!boxItem) {
@@ -35,7 +32,22 @@ export default class LeitnerSystemsService {
 
         await this.leitnerSystemsRepository.update(
             { id: boxItem.id },
-            LeitnerSystems.create(box, userId, vocabularyId, false),
+            LeitnerSystems.create(LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`], userId, vocabularyId, true),
+        );
+    }
+
+    async moveBackward(userId: string, vocabularyId: string): Promise<void> {
+        const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
+
+        if (!boxItem) {
+            throw new NotFoundException(
+                `There is no such vocabulary with ID "${vocabularyId}" for the user "${userId}"`,
+            );
+        }
+
+        await this.leitnerSystemsRepository.update(
+            { id: boxItem.id },
+            LeitnerSystems.create(LeitnerBoxType[`BOX_${boxItem.currentBox - 1}`], userId, vocabularyId, false),
         );
     }
 
