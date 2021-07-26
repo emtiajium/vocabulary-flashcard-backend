@@ -61,4 +61,15 @@ export default class LeitnerSystems extends BaseEntity {
     static calculatePreviousBoxAppearanceDate(): Date {
         return new Date();
     }
+
+    static create(box: LeitnerBoxType, userId: string, vocabularyId: string, isForward?: boolean): LeitnerSystems {
+        const leitnerSystems = new LeitnerSystems();
+        leitnerSystems.userId = userId;
+        leitnerSystems.vocabularyId = vocabularyId;
+        leitnerSystems.currentBox = box;
+        leitnerSystems.boxAppearanceDate = isForward
+            ? LeitnerSystems.calculateNextBoxAppearanceDate(box)
+            : LeitnerSystems.calculatePreviousBoxAppearanceDate();
+        return leitnerSystems;
+    }
 }
