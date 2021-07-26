@@ -92,7 +92,13 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     }
 
     async isVocabularyExist(id: string): Promise<boolean> {
-        const vocabulary = await this.findOne({ id }, { select: ['id'] });
-        return !!vocabulary;
+        const vocabulary = await this.query(
+            `SELECT id
+             FROM "Vocabulary"
+             WHERE id = $1
+             LIMIT 1;`,
+            [id],
+        );
+        return !!vocabulary[0];
     }
 }
