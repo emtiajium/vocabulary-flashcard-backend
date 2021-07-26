@@ -14,7 +14,7 @@ export default class LeitnerSystems extends BaseEntity {
     @Column({ type: 'uuid', nullable: false })
     vocabularyId: string;
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'enum', enum: LeitnerBoxType, nullable: false })
     currentBox: LeitnerBoxType;
 
     @Column({ type: 'timestamp with time zone', nullable: false })
