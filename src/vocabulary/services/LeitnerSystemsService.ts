@@ -11,8 +11,8 @@ export default class LeitnerSystemsService {
         private readonly vocabularyRepository: VocabularyRepository,
     ) {}
 
-    async placeIntoFirstLeitnerBox(userId: string, vocabularyId: string): Promise<void> {
-        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId))) {
+    async placeIntoFirstLeitnerBox(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
+        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
             throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
         }
 
@@ -29,8 +29,8 @@ export default class LeitnerSystemsService {
         );
     }
 
-    async moveForward(userId: string, vocabularyId: string): Promise<void> {
-        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId))) {
+    async moveForward(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
+        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
             throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
         }
 
@@ -48,8 +48,8 @@ export default class LeitnerSystemsService {
         );
     }
 
-    async moveBackward(userId: string, vocabularyId: string): Promise<void> {
-        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId))) {
+    async moveBackward(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
+        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
             throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
         }
 

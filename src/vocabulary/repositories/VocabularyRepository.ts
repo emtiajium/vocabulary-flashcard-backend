@@ -91,13 +91,14 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return queryResult[0];
     }
 
-    async isVocabularyExist(id: string): Promise<boolean> {
+    async isVocabularyExist(id: string, cohortId: string): Promise<boolean> {
         const vocabulary = await this.query(
             `SELECT id
              FROM "Vocabulary"
              WHERE id = $1
+               AND "cohortId" = $2
              LIMIT 1;`,
-            [id],
+            [id, cohortId],
         );
         return !!vocabulary[0];
     }

@@ -14,18 +14,18 @@ export default class LeitnerSystemsController {
         @Param('vocabularyId') vocabularyId: string,
         @AuthenticatedUser() user: User,
     ): Promise<void> {
-        await this.leitnerSystemsService.placeIntoFirstLeitnerBox(user.id, vocabularyId);
+        await this.leitnerSystemsService.placeIntoFirstLeitnerBox(user.id, user.cohortId, vocabularyId);
     }
 
     @Put('/forward/:vocabularyId')
     @UseGuards(AuthGuard)
     async moveForward(@Param('vocabularyId') vocabularyId: string, @AuthenticatedUser() user: User): Promise<void> {
-        await this.leitnerSystemsService.moveForward(user.id, vocabularyId);
+        await this.leitnerSystemsService.moveForward(user.id, user.cohortId, vocabularyId);
     }
 
     @Put('/backward/:vocabularyId')
     @UseGuards(AuthGuard)
     async moveBackward(@Param('vocabularyId') vocabularyId: string, @AuthenticatedUser() user: User): Promise<void> {
-        await this.leitnerSystemsService.moveBackward(user.id, vocabularyId);
+        await this.leitnerSystemsService.moveBackward(user.id, user.cohortId, vocabularyId);
     }
 }
