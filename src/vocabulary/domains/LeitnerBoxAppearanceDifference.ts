@@ -1,3 +1,4 @@
+// relative to current day
 enum LeitnerBoxAppearanceDifference {
     BOX_1 = 0,
     BOX_2 = 1,
