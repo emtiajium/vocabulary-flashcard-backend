@@ -54,3 +54,8 @@ export function momentDiff(firstMoment: Date, secondMoment: Date, unit: MomentUn
     }
     return Math.floor(differenceInSeconds);
 }
+
+export function getToday(): string {
+    const now = new Date();
+    return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+}
