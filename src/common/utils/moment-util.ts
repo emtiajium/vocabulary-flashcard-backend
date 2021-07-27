@@ -57,5 +57,10 @@ export function momentDiff(firstMoment: Date, secondMoment: Date, unit: MomentUn
 
 export function getToday(): string {
     const now = new Date();
-    return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+    return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+}
+
+export function getTomorrow(): string {
+    const tomorrow = makeItNewer(new Date(), MomentUnit.DAYS, 1);
+    return `${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrow.getDate()}`;
 }
