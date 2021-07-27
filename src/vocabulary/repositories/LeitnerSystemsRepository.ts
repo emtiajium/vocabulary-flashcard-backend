@@ -3,7 +3,7 @@ import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import Pagination from '@/common/domains/Pagination';
-import { getToday } from '@/common/utils/moment-util';
+import { getTomorrow } from '@/common/utils/moment-util';
 
 @EntityRepository(LeitnerSystems)
 export default class LeitnerSystemsRepository extends Repository<LeitnerSystems> {
@@ -18,8 +18,8 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         const [items, total] = await this.findAndCount({
             where: {
                 userId,
-                currentBox: box,
-                boxAppearanceDate: Raw((alias) => `${alias} <= '${getToday()}'::DATE`),
+                currentBox: Number.parseInt(box.toString(), 10),
+                boxAppearanceDate: Raw((alias) => `${alias} < '${getTomorrow()}'::DATE`),
             },
             select: ['vocabularyId'],
             skip: toBeSkipped,

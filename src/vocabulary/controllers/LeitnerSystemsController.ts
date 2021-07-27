@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
 import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
@@ -35,6 +35,7 @@ export default class LeitnerSystemsController {
 
     @Post('/items/:box')
     @UseGuards(AuthGuard)
+    @HttpCode(HttpStatus.OK)
     async getBoxItems(
         @Param('box') box: LeitnerBoxType,
         @Body('pagination') pagination: Pagination,

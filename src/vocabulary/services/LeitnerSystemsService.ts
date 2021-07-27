@@ -86,6 +86,9 @@ export default class LeitnerSystemsService {
         pagination: Pagination,
     ): Promise<SearchResult<LeitnerBoxItem>> {
         const { results, total } = await this.leitnerSystemsRepository.getBoxItems(userId, box, pagination);
+        if (!total) {
+            return new SearchResult<LeitnerBoxItem>([], total);
+        }
         const vocabularies: Record<string, Vocabulary[]> = _.groupBy(
             await this.vocabularyRepository.findWords(_.map(results, 'vocabularyId')),
             ({ id }) => id,
