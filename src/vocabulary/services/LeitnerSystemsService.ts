@@ -3,6 +3,8 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
+import Pagination from '@/common/domains/Pagination';
+import SearchResult from '@/common/domains/SearchResult';
 
 @Injectable()
 export default class LeitnerSystemsService {
@@ -73,5 +75,13 @@ export default class LeitnerSystemsService {
 
     private async getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems> {
         return this.leitnerSystemsRepository.findOne({ userId, vocabularyId });
+    }
+
+    async getBoxItems(
+        userId: string,
+        box: LeitnerBoxType,
+        pagination: Pagination,
+    ): Promise<SearchResult<LeitnerSystems>> {
+        return this.leitnerSystemsRepository.getBoxItems(userId, box, pagination);
     }
 }
