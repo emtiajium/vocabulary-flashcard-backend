@@ -227,5 +227,46 @@ describe('Leitner Systems Entry', () => {
                 body,
             };
         }
+
+        it('SHOULD return 404 NOT FOUND WHEN the vocabulary does not exist', async () => {
+            const { status } = await makeApiRequest(uuidV4());
+            expect(status).toBe(404);
+
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), fakeCohort.id);
+
+            const { status: status2 } = await makeApiRequest(vocabulary.id);
+            expect(status2).toBe(404);
+        });
+
+        it('SHOULD return 404 NOT FOUND WHEN the vocabulary does not exist into the leitner box', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(404);
+        });
+
+        it('SHOULD return 200 OK WHEN moving from Box 2 to Box 1', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_2);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(200);
+
+            const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
+            expect(item.currentBox).toBe(LeitnerBoxType.BOX_1);
+            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(0);
+        });
+
+        it('SHOULD return 200 OK WHEN moving from Box 4 to Box 3', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_4);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(200);
+
+            const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
+            expect(item.currentBox).toBe(LeitnerBoxType.BOX_3);
+            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(0);
+        });
     });
 });
