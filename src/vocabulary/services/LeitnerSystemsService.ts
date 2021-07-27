@@ -42,9 +42,17 @@ export default class LeitnerSystemsService {
             );
         }
 
+        const nextBox = LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`];
+
+        if (boxItem && boxItem.currentBox === nextBox) {
+            throw new ConflictException(
+                `Vocabulary with ID "${vocabularyId}" for the user "${userId}" is already exist in the requested box`,
+            );
+        }
+
         await this.leitnerSystemsRepository.update(
             { id: boxItem.id },
-            LeitnerSystems.create(LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`], userId, vocabularyId, true),
+            LeitnerSystems.create(nextBox, userId, vocabularyId, true),
         );
     }
 
@@ -61,9 +69,17 @@ export default class LeitnerSystemsService {
             );
         }
 
+        const previousBox = LeitnerBoxType[`BOX_${boxItem.currentBox - 1}`];
+
+        if (boxItem && boxItem.currentBox === previousBox) {
+            throw new ConflictException(
+                `Vocabulary with ID "${vocabularyId}" for the user "${userId}" is already exist in the requested box`,
+            );
+        }
+
         await this.leitnerSystemsRepository.update(
             { id: boxItem.id },
-            LeitnerSystems.create(LeitnerBoxType[`BOX_${boxItem.currentBox - 1}`], userId, vocabularyId, false),
+            LeitnerSystems.create(previousBox, userId, vocabularyId, false),
         );
     }
 
