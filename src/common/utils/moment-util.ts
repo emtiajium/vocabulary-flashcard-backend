@@ -55,12 +55,12 @@ export function momentDiff(firstMoment: Date, secondMoment: Date, unit: MomentUn
     return Math.floor(differenceInSeconds);
 }
 
-export function getToday(): string {
-    const now = new Date();
-    return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+export function getFormattedDate(moment: Date): string {
+    const clonedMoment = new Date(moment.valueOf());
+    return `${clonedMoment.getFullYear()}-${clonedMoment.getMonth() + 1}-${clonedMoment.getDate()}`;
 }
 
-export function getTomorrow(): string {
+export function getFormattedTomorrow(): string {
     const tomorrow = makeItNewer(new Date(), MomentUnit.DAYS, 1);
-    return `${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrow.getDate()}`;
+    return getFormattedDate(tomorrow);
 }

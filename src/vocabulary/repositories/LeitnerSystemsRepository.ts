@@ -3,10 +3,16 @@ import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import Pagination from '@/common/domains/Pagination';
-import { getTomorrow } from '@/common/utils/moment-util';
+import { getFormattedTomorrow } from '@/common/utils/moment-util';
 
 @EntityRepository(LeitnerSystems)
 export default class LeitnerSystemsRepository extends Repository<LeitnerSystems> {
+    // shitty code just for the easiness of jest.spyOn()
+    // eslint-disable-next-line class-methods-use-this
+    getTomorrow(): string {
+        return getFormattedTomorrow();
+    }
+
     async getBoxItems(
         userId: string,
         box: LeitnerBoxType,
@@ -19,7 +25,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
             where: {
                 userId,
                 currentBox: Number.parseInt(box.toString(), 10),
-                boxAppearanceDate: Raw((alias) => `${alias} < '${getTomorrow()}'::DATE`),
+                boxAppearanceDate: Raw((alias) => `${alias} < '${this.getTomorrow()}'::DATE`),
             },
             select: ['vocabularyId'],
             skip: toBeSkipped,
