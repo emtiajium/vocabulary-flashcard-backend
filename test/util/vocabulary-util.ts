@@ -33,3 +33,7 @@ export async function getSingleVocabularyByCohortId(cohortId: string): Promise<V
         )
     )[0];
 }
+
+export async function createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {
+    return getRepository(Vocabulary).save({ ...vocabulary, cohortId });
+}
