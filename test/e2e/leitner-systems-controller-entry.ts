@@ -14,9 +14,10 @@ import CohortService from '@/user/services/CohortService';
 import { createVocabulary, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
-import { getLeitnerBoxItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
+import { createItem, getLeitnerBoxItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { momentDiff } from '@/common/utils/moment-util';
+import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
 
 describe('Leitner Systems Entry', () => {
     let app: INestApplication;
@@ -119,6 +120,100 @@ describe('Leitner Systems Entry', () => {
                 body,
             };
         }
+
+        it('SHOULD return 404 NOT FOUND WHEN the vocabulary does not exist', async () => {
+            const { status } = await makeApiRequest(uuidV4());
+            expect(status).toBe(404);
+
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), fakeCohort.id);
+
+            const { status: status2 } = await makeApiRequest(vocabulary.id);
+            expect(status2).toBe(404);
+        });
+
+        it('SHOULD return 404 NOT FOUND WHEN the vocabulary does not exist into the leitner box', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(404);
+        });
+
+        it('SHOULD return 200 OK WHEN moving from Box 1 to Box 2', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(200);
+
+            const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
+            expect(item.currentBox).toBe(LeitnerBoxType.BOX_2);
+            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
+                LeitnerBoxAppearanceDifference.BOX_2,
+            );
+        });
+
+        it('SHOULD return 200 OK WHEN moving from Box 2 to Box 3', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+
+            // Box 2
+            await makeApiRequest(vocabulary.id);
+
+            // Box 3
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(200);
+
+            const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
+            expect(item.currentBox).toBe(LeitnerBoxType.BOX_3);
+            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
+                LeitnerBoxAppearanceDifference.BOX_3,
+            );
+        });
+
+        it('SHOULD return 200 OK WHEN moving from Box 3 to Box 4', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+
+            // Box 2
+            await makeApiRequest(vocabulary.id);
+
+            // Box 3
+            await makeApiRequest(vocabulary.id);
+
+            // Box 4
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(200);
+
+            const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
+            expect(item.currentBox).toBe(LeitnerBoxType.BOX_4);
+            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
+                LeitnerBoxAppearanceDifference.BOX_4,
+            );
+        });
+
+        it('SHOULD return 200 OK WHEN moving from Box 4 to Box 5', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+
+            // Box 2
+            await makeApiRequest(vocabulary.id);
+
+            // Box 3
+            await makeApiRequest(vocabulary.id);
+
+            // Box 4
+            await makeApiRequest(vocabulary.id);
+
+            // Box 5
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(200);
+
+            const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
+            expect(item.currentBox).toBe(LeitnerBoxType.BOX_5);
+            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
+                LeitnerBoxAppearanceDifference.BOX_5,
+            );
+        });
     });
 
     describe('moveBackward', () => {
