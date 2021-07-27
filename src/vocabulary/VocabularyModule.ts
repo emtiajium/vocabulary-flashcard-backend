@@ -8,9 +8,9 @@ import UserService from '@/user/services/UserService';
 import UserRepository from '@/user/repositories/UserRepository';
 import CohortService from '@/user/services/CohortService';
 import CohortRepository from '@/user/repositories/CohortRepository';
-import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
 import LeitnerSystemsController from '@/vocabulary/controllers/LeitnerSystemsController';
+import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 
 @Module({
     imports: [
@@ -19,7 +19,7 @@ import LeitnerSystemsController from '@/vocabulary/controllers/LeitnerSystemsCon
             CohortRepository,
             VocabularyRepository,
             DefinitionRepository,
-            LeitnerSystems,
+            LeitnerSystemsRepository,
         ]),
     ],
     providers: [UserService, CohortService, VocabularyService, LeitnerSystemsService],
