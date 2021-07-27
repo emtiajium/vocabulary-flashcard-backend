@@ -44,7 +44,7 @@ const oneSecondInMilliSeconds = 1000;
 export function momentDiff(firstMoment: Date, secondMoment: Date, unit: MomentUnit): number {
     const differenceInSeconds = Math.abs(firstMoment.getTime() - secondMoment.getTime()) / oneSecondInMilliSeconds;
     if (unit === MomentUnit.DAYS) {
-        return Math.floor(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds * oneDayInHours));
+        return Math.abs(firstMoment.getDate() - secondMoment.getDate());
     }
     if (unit === MomentUnit.HOURS) {
         return Math.floor(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds));
