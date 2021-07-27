@@ -14,6 +14,9 @@ import CohortService from '@/user/services/CohortService';
 import { createVocabulary, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
+import { getLeitnerBoxItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
+import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
+import MomentUnit, { momentDiff } from '@/common/utils/moment-util';
 
 describe('Leitner Systems Entry', () => {
     let app: INestApplication;
@@ -58,6 +61,7 @@ describe('Leitner Systems Entry', () => {
         ]);
         await removeUserByUsername(requester.username);
         await Promise.all([removeCohortByName(cohort.name), removeCohortByName(fakeCohort.name)]);
+        await removeLeitnerBoxItems(requester.id);
         await app.close();
     });
 
@@ -81,6 +85,26 @@ describe('Leitner Systems Entry', () => {
 
             const { status: status2 } = await makeApiRequest(vocabulary.id);
             expect(status2).toBe(404);
+        });
+
+        it('SHOULD return 201 CREATED', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(201);
+
+            const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
+            expect(item.currentBox).toBe(LeitnerBoxType.BOX_1);
+            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(0);
+        });
+
+        it('SHOULD return 409 CONFLICT', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            await makeApiRequest(vocabulary.id);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(409);
         });
     });
 
