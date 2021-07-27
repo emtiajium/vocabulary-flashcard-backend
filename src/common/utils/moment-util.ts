@@ -44,13 +44,13 @@ const oneSecondInMilliSeconds = 1000;
 export function momentDiff(firstMoment: Date, secondMoment: Date, unit: MomentUnit): number {
     const differenceInSeconds = Math.abs(firstMoment.getTime() - secondMoment.getTime()) / oneSecondInMilliSeconds;
     if (unit === MomentUnit.DAYS) {
-        return Math.ceil(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds * oneDayInHours));
+        return Math.floor(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds * oneDayInHours));
     }
     if (unit === MomentUnit.HOURS) {
-        return Math.ceil(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds));
+        return Math.floor(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds));
     }
     if (unit === MomentUnit.MINUTES) {
-        return Math.ceil(differenceInSeconds / oneMinuteInSeconds);
+        return Math.floor(differenceInSeconds / oneMinuteInSeconds);
     }
-    return Math.ceil(differenceInSeconds);
+    return Math.floor(differenceInSeconds);
 }
