@@ -102,4 +102,13 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         );
         return !!vocabulary[0];
     }
+
+    async findWords(ids: string[]): Promise<Vocabulary[]> {
+        return this.query(
+            `SELECT id, word
+             FROM "Vocabulary"
+             WHERE id IN ($1);`,
+            [...ids],
+        );
+    }
 }
