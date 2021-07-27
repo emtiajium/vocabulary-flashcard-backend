@@ -24,7 +24,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         const [items, total] = await this.findAndCount({
             where: {
                 userId,
-                currentBox: Number.parseInt(box.toString(), 10),
+                currentBox: box,
                 boxAppearanceDate: Raw((alias) => `${alias} < '${this.getTomorrow()}'::DATE`),
             },
             select: ['vocabularyId'],
