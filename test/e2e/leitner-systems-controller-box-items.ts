@@ -18,6 +18,9 @@ import generateJwToken from '@test/util/auth-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
+import MomentUnit, { getFormattedDate, makeItNewer } from '@/common/utils/moment-util';
+import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
+import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
 
 describe('Leitner Systems Box Items', () => {
     let app: INestApplication;
@@ -99,6 +102,47 @@ describe('Leitner Systems Box Items', () => {
                 expect(item.word).toBe(vocabulary.word);
                 expect(item.vocabularyId).toBe(vocabulary.id);
             });
+        });
+    });
+
+    describe('Box 2', () => {
+        beforeEach(async () => {
+            await removeLeitnerBoxItems(requester.id);
+        });
+
+        it('SHOULD return 200 OK with empty results for an early request', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_2);
+
+            const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_2);
+
+            expect(status).toBe(200);
+            const response = body as SearchResult<LeitnerBoxItem>;
+            expect(response.total).toBe(0);
+            expect(response.results.length).toBe(0);
+        });
+
+        it('SHOULD return 200 OK', async () => {
+            const future = makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_2);
+            const getTomorrowMock = jest
+                .spyOn(app.get(LeitnerSystemsRepository), 'getTomorrow')
+                .mockImplementation(() => getFormattedDate(future));
+
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_2);
+
+            const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_2);
+
+            expect(status).toBe(200);
+            const response = body as SearchResult<LeitnerBoxItem>;
+            expect(response.total).toBe(1);
+            expect(response.results.length).toBe(1);
+            response.results.forEach((item) => {
+                expect(item.word).toBe(vocabulary.word);
+                expect(item.vocabularyId).toBe(vocabulary.id);
+            });
+
+            getTomorrowMock.mockRestore();
         });
     });
 });
