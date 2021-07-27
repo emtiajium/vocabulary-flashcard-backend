@@ -68,8 +68,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                                   'vocabularyId', definition."vocabularyId",
                                                   'meaning', definition.meaning,
                                                   'examples', definition.examples,
-                                                  'notes', definition.notes, 'externalLinks',
-                                                  definition."externalLinks")) AS definitions
+                                                  'notes', definition.notes,
+                                                  'externalLinks', definition."externalLinks")) AS definitions
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
                 WHERE vocabulary.id = $1
