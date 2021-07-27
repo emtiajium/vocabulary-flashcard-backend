@@ -6,7 +6,7 @@ import User from '@/user/domains/User';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import Pagination from '@/common/domains/Pagination';
 import SearchResult from '@/common/domains/SearchResult';
-import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
+import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
 
 @Controller('/v1/leitner-systems')
 export default class LeitnerSystemsController {
@@ -39,7 +39,7 @@ export default class LeitnerSystemsController {
         @Param('box') box: LeitnerBoxType,
         @Body('pagination') pagination: Pagination,
         @AuthenticatedUser() user: User,
-    ): Promise<SearchResult<LeitnerSystems>> {
+    ): Promise<SearchResult<LeitnerBoxItem>> {
         return this.leitnerSystemsService.getBoxItems(user.id, box, pagination);
     }
 }
