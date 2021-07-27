@@ -21,7 +21,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
                 currentBox: box,
                 boxAppearanceDate: Raw((alias) => `${alias} <= '${getToday()}'::DATE`),
             },
-            select: ['id'],
+            select: ['vocabularyId'],
             skip: toBeSkipped,
             take: pageSize,
         });
