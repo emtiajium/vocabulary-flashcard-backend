@@ -107,8 +107,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return this.query(
             `SELECT id, word
              FROM "Vocabulary"
-             WHERE id IN ($1);`,
-            [...ids],
+             WHERE id = ANY(ARRAY[${ids.map((id) => `'${id}'`)}]::UUID[]);`,
         );
     }
 }
