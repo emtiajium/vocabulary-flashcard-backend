@@ -108,7 +108,29 @@ describe('Leitner Systems Entry', () => {
         });
     });
 
-    describe('moveForward', () => {});
+    describe('moveForward', () => {
+        async function makeApiRequest(vocabularyId: string): Promise<SupertestResponse<void>> {
+            const { status, body } = await request(app.getHttpServer())
+                .put(`${getAppAPIPrefix()}/v1/leitner-systems/forward/${vocabularyId}`)
+                .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+                .send();
+            return {
+                status,
+                body,
+            };
+        }
+    });
 
-    describe('moveBackward', () => {});
+    describe('moveBackward', () => {
+        async function makeApiRequest(vocabularyId: string): Promise<SupertestResponse<void>> {
+            const { status, body } = await request(app.getHttpServer())
+                .put(`${getAppAPIPrefix()}/v1/leitner-systems/backward/${vocabularyId}`)
+                .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+                .send();
+            return {
+                status,
+                body,
+            };
+        }
+    });
 });
