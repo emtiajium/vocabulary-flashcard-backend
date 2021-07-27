@@ -18,7 +18,7 @@ import generateJwToken from '@test/util/auth-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
-import MomentUnit, { getFormattedDate, makeItNewer } from '@/common/utils/moment-util';
+import MomentUnit, { getFormattedDate, makeItNewer, makeItOlder } from '@/common/utils/moment-util';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
 
@@ -111,6 +111,11 @@ describe('Leitner Systems Box Items', () => {
         });
 
         it('SHOULD return 200 OK with empty results for an early request', async () => {
+            const past = makeItOlder(new Date(), MomentUnit.DAYS, 1);
+            const getTomorrowMock = jest
+                .spyOn(app.get(LeitnerSystemsRepository), 'getTomorrow')
+                .mockImplementation(() => getFormattedDate(past));
+
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_2);
 
@@ -120,6 +125,8 @@ describe('Leitner Systems Box Items', () => {
             const response = body as SearchResult<LeitnerBoxItem>;
             expect(response.total).toBe(0);
             expect(response.results.length).toBe(0);
+
+            getTomorrowMock.mockRestore();
         });
 
         it('SHOULD return 200 OK', async () => {
