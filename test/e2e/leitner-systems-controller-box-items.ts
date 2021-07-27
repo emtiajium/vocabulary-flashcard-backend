@@ -57,11 +57,6 @@ describe('Leitner Systems Box Items', () => {
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
-
-        // await Promise.all([removeVocabularyAndRelationsByCohortId('76cf9cd7-9cf5-4747-b01c-ed9703e5958e')]);
-        // await removeUserByUsername(`requester@request.com`);
-        // await Promise.all([removeCohortByName('Leitner Systems Automated Test')]);
-
         requester = await createApiRequester();
         const cohortName = 'Leitner Systems Automated Test';
         cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
@@ -101,8 +96,8 @@ describe('Leitner Systems Box Items', () => {
             expect(response.total).toBeGreaterThanOrEqual(1);
             expect(response.results.length).toBeGreaterThanOrEqual(1);
             response.results.forEach((item) => {
-                expect(item.word).toBeDefined();
-                expect(item.vocabularyId).toBeDefined();
+                expect(item.word).toBe(vocabulary.word);
+                expect(item.vocabularyId).toBe(vocabulary.id);
             });
         });
     });

@@ -103,7 +103,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return !!vocabulary[0];
     }
 
-    async findWords(ids: string[]): Promise<Vocabulary[]> {
+    async findWords(ids: string[]): Promise<Pick<Vocabulary, 'id' | 'word'>[]> {
         return this.query(
             `SELECT id, word
              FROM "Vocabulary"

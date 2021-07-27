@@ -89,7 +89,7 @@ export default class LeitnerSystemsService {
         if (!total) {
             return new SearchResult<LeitnerBoxItem>([], total);
         }
-        const vocabularies: Record<string, Vocabulary[]> = _.groupBy(
+        const vocabularies: Record<string, Pick<Vocabulary, 'id' | 'word'>[]> = _.groupBy(
             await this.vocabularyRepository.findWords(_.map(results, 'vocabularyId')),
             ({ id }) => id,
         );
