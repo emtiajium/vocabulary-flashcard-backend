@@ -105,4 +105,9 @@ export default class LeitnerSystemsService {
         });
         return new SearchResult<LeitnerBoxItem>(items, total);
     }
+
+    async isVocabularyExistForUser(userId: string, vocabularyId: string): Promise<boolean> {
+        const item = await this.getLeitnerBoxItem(userId, vocabularyId);
+        return !!item;
+    }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
 import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
@@ -42,5 +42,14 @@ export default class LeitnerSystemsController {
         @AuthenticatedUser() user: User,
     ): Promise<SearchResult<LeitnerBoxItem>> {
         return this.leitnerSystemsService.getBoxItems(user.id, box, pagination);
+    }
+
+    @Get('/exists/user/:vocabularyId')
+    @UseGuards(AuthGuard)
+    async getLeitnerBoxItem(
+        @Param('vocabularyId') vocabularyId: string,
+        @AuthenticatedUser() user: User,
+    ): Promise<boolean> {
+        return this.leitnerSystemsService.isVocabularyExistForUser(user.id, vocabularyId);
     }
 }
