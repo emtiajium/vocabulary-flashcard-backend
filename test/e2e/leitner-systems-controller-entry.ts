@@ -11,9 +11,11 @@ import generateJwToken from '@test/util/auth-util';
 import { createCohort, removeCohortByName } from '@test/util/cohort-util';
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
-import { createVocabulary, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
-import Vocabulary from '@/vocabulary/domains/Vocabulary';
-import Definition from '@/vocabulary/domains/Definition';
+import {
+    createVocabulary,
+    getVocabularyWithDefinitions,
+    removeVocabularyAndRelationsByCohortId,
+} from '@test/util/vocabulary-util';
 import { createItem, getLeitnerBoxItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { momentDiff } from '@/common/utils/moment-util';
@@ -27,24 +29,6 @@ describe('Leitner Systems Entry', () => {
     let cohort: Cohort;
 
     let fakeCohort: Cohort;
-
-    function getVocabularyWithDefinitions(): Vocabulary {
-        const definition = new Definition();
-        definition.id = uuidV4();
-        definition.meaning = 'Meaning 1';
-        definition.examples = ['Example 1'];
-        definition.notes = ['Notes 1'];
-        definition.externalLinks = ['https://gibberish.com/public/static/blah.html'];
-
-        const vocabulary = new Vocabulary();
-        vocabulary.id = uuidV4();
-        vocabulary.isDraft = false;
-        vocabulary.word = 'Word 1';
-        definition.vocabularyId = vocabulary.id;
-        vocabulary.definitions = [definition];
-
-        return vocabulary;
-    }
 
     beforeAll(async () => {
         app = await bootstrap(AppModule);
