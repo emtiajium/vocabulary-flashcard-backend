@@ -140,7 +140,7 @@ describe('Leitner Systems Entry', () => {
 
         it('SHOULD return 200 OK WHEN moving from Box 1 to Box 2', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
             const { status } = await makeApiRequest(vocabulary.id);
             expect(status).toBe(200);
@@ -154,7 +154,7 @@ describe('Leitner Systems Entry', () => {
 
         it('SHOULD return 200 OK WHEN moving from Box 2 to Box 3', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
             // Box 2
             await makeApiRequest(vocabulary.id);
@@ -172,7 +172,7 @@ describe('Leitner Systems Entry', () => {
 
         it('SHOULD return 200 OK WHEN moving from Box 3 to Box 4', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
             // Box 2
             await makeApiRequest(vocabulary.id);
@@ -193,7 +193,7 @@ describe('Leitner Systems Entry', () => {
 
         it('SHOULD return 200 OK WHEN moving from Box 4 to Box 5', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
             // Box 2
             await makeApiRequest(vocabulary.id);
@@ -247,7 +247,7 @@ describe('Leitner Systems Entry', () => {
 
         it('SHOULD return 200 OK WHEN moving from Box 2 to Box 1', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_2);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
 
             const { status } = await makeApiRequest(vocabulary.id);
             expect(status).toBe(200);
@@ -259,7 +259,7 @@ describe('Leitner Systems Entry', () => {
 
         it('SHOULD return 200 OK WHEN moving from Box 4 to Box 3', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_4);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_4);
 
             const { status } = await makeApiRequest(vocabulary.id);
             expect(status).toBe(200);

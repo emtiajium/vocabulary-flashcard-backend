@@ -90,7 +90,7 @@ describe('Leitner Systems Box Items', () => {
 
         it('SHOULD return 200 OK', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_1);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
             const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_1);
 
@@ -117,7 +117,7 @@ describe('Leitner Systems Box Items', () => {
                 .mockImplementation(() => getFormattedDate(past));
 
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_2);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
 
             const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_2);
 
@@ -136,7 +136,7 @@ describe('Leitner Systems Box Items', () => {
                 .mockImplementation(() => getFormattedDate(future));
 
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, requester.cohortId, vocabulary.id, LeitnerBoxType.BOX_2);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
 
             const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_2);
 

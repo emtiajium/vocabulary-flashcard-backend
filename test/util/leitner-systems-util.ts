@@ -10,11 +10,6 @@ export async function removeLeitnerBoxItems(userId: string): Promise<void> {
     await getRepository(LeitnerSystems).delete({ userId });
 }
 
-export async function createItem(
-    userId: string,
-    cohortId: string,
-    vocabularyId: string,
-    box: LeitnerBoxType,
-): Promise<LeitnerSystems> {
+export async function createItem(userId: string, vocabularyId: string, box: LeitnerBoxType): Promise<LeitnerSystems> {
     return getRepository(LeitnerSystems).save(LeitnerSystems.create(box, userId, vocabularyId, true));
 }
