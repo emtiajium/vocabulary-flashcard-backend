@@ -80,6 +80,10 @@ export default class LeitnerSystemsService {
         return this.leitnerSystemsRepository.findOne({ userId, vocabularyId });
     }
 
+    async getLeitnerBoxItemByVocabularyId(vocabularyId: string): Promise<LeitnerSystems> {
+        return this.leitnerSystemsRepository.findOne({ vocabularyId });
+    }
+
     async getBoxItems(
         userId: string,
         box: LeitnerBoxType,

@@ -1,5 +1,5 @@
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import * as _ from 'lodash';
@@ -8,12 +8,14 @@ import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
+import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
 
 @Injectable()
 export default class VocabularyService {
     constructor(
         private readonly vocabularyRepository: VocabularyRepository,
         private readonly definitionRepository: DefinitionRepository,
+        private readonly leitnerSystemsService: LeitnerSystemsService,
     ) {}
 
     async createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {
@@ -50,6 +52,15 @@ export default class VocabularyService {
         }
     }
 
+    async assertExistenceIntoLeitnerSystems(id: string): Promise<void> {
+        const leitnerItem = await this.leitnerSystemsService.getLeitnerBoxItemByVocabularyId(id);
+        if (leitnerItem) {
+            throw new UnprocessableEntityException(
+                `This vocabulary cannot be removed as one of the members of your cohort put this into a Leitner box.`,
+            );
+        }
+    }
+
     async removeVocabularyAndDefinitions(vocabulary: Vocabulary): Promise<void> {
         if (!_.isEmpty(vocabulary.definitions)) {
             await this.definitionRepository.removeDefinitionsByIds(this.extractDefinitionIds(vocabulary.definitions));
@@ -58,6 +69,7 @@ export default class VocabularyService {
     }
 
     async removeVocabularyById(id: string): Promise<void> {
+        await this.assertExistenceIntoLeitnerSystems(id);
         await this.assertExistenceAndRemoveVocabularyAndDefinitions(id);
     }
 
