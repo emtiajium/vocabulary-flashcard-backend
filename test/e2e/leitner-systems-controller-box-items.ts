@@ -49,9 +49,9 @@ describe('Leitner Systems Box Items', () => {
     });
 
     afterAll(async () => {
-        await Promise.all([removeVocabularyAndRelationsByCohortId(cohort.id)]);
+        await removeVocabularyAndRelationsByCohortId(cohort.id);
         await removeUserByUsername(requester.username);
-        await Promise.all([removeCohortByName(cohort.name)]);
+        await removeCohortByName(cohort.name);
         await removeLeitnerBoxItems(requester.id);
         await app.close();
     });
