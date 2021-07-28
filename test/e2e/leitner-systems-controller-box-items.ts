@@ -130,7 +130,7 @@ describe('Leitner Systems Box Items', () => {
         });
 
         it('SHOULD return 200 OK', async () => {
-            const future = makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_2);
+            const future = makeItNewer(new Date(), MomentUnit.DAYS, 5);
             const getTomorrowMock = jest
                 .spyOn(app.get(LeitnerSystemsRepository), 'getTomorrow')
                 .mockImplementation(() => getFormattedDate(future));
