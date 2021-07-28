@@ -25,6 +25,7 @@ export default class LeitnerSystemsService {
 
         if (boxItem) {
             throw new ConflictException(
+                `This vocabulary already is in a Leitner box.`,
                 `Vocabulary with ID "${vocabularyId}" for the user "${userId}" is already exist`,
             );
         }
