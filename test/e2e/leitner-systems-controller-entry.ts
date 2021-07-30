@@ -229,6 +229,14 @@ describe('Leitner Systems Entry', () => {
             expect(status).toBe(404);
         });
 
+        it('SHOULD return 409 CONFLICT WHEN the vocabulary in in the first leitner box', async () => {
+            const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+
+            const { status } = await makeApiRequest(vocabulary.id);
+            expect(status).toBe(409);
+        });
+
         it('SHOULD return 200 OK WHEN moving from Box 2 to Box 1', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);

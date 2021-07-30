@@ -69,6 +69,10 @@ export default class LeitnerSystemsService {
             );
         }
 
+        if (boxItem.currentBox === LeitnerBoxType.BOX_1) {
+            throw new ConflictException(`This vocabulary is in the first Leitner box.`);
+        }
+
         const previousBox = LeitnerBoxType[`BOX_${boxItem.currentBox - 1}`];
 
         await this.leitnerSystemsRepository.update(
