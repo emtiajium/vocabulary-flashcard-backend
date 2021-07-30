@@ -48,6 +48,10 @@ export default class LeitnerSystemsService {
             );
         }
 
+        if (boxItem.currentBox === LeitnerBoxType.BOX_5) {
+            throw new ConflictException(`This vocabulary is in the last Leitner box.`);
+        }
+
         const nextBox = LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`];
 
         await this.leitnerSystemsRepository.update(
