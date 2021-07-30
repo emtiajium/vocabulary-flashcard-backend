@@ -42,17 +42,17 @@ const oneDayInHours = 24;
 const oneSecondInMilliSeconds = 1000;
 
 export function momentDiff(firstMoment: Date, secondMoment: Date, unit: MomentUnit): number {
-    const differenceInSeconds = Math.abs(firstMoment.getTime() - secondMoment.getTime()) / oneSecondInMilliSeconds;
+    const differenceInSeconds = (firstMoment.getTime() - secondMoment.getTime()) / oneSecondInMilliSeconds;
     if (unit === MomentUnit.DAYS) {
-        return Math.abs(firstMoment.getDate() - secondMoment.getDate());
+        return Math.abs(Math.floor(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds * oneDayInHours)));
     }
     if (unit === MomentUnit.HOURS) {
-        return Math.floor(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds));
+        return Math.abs(Math.floor(differenceInSeconds / (oneMinuteInSeconds * oneMinuteInSeconds)));
     }
     if (unit === MomentUnit.MINUTES) {
-        return Math.floor(differenceInSeconds / oneMinuteInSeconds);
+        return Math.abs(Math.floor(differenceInSeconds / oneMinuteInSeconds));
     }
-    return Math.floor(differenceInSeconds);
+    return Math.abs(Math.floor(differenceInSeconds));
 }
 
 export function getFormattedDate(moment: Date): string {
