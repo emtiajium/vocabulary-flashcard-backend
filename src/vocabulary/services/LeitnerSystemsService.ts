@@ -119,4 +119,8 @@ export default class LeitnerSystemsService {
         const item = await this.getLeitnerBoxItem(userId, vocabularyId);
         return !!item;
     }
+
+    async countBoxItems(userId: string, box: LeitnerBoxType): Promise<number> {
+        return this.leitnerSystemsRepository.countBoxItems(userId, box);
+    }
 }

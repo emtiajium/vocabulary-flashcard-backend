@@ -52,4 +52,10 @@ export default class LeitnerSystemsController {
     ): Promise<boolean> {
         return this.leitnerSystemsService.isVocabularyExistForUser(user.id, vocabularyId);
     }
+
+    @Get('/items/count/:box')
+    @UseGuards(AuthGuard)
+    async countBoxItems(@Param('box') box: LeitnerBoxType, @AuthenticatedUser() user: User): Promise<number> {
+        return this.leitnerSystemsService.countBoxItems(user.id, box);
+    }
 }

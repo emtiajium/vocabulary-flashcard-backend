@@ -34,4 +34,13 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
 
         return new SearchResult<LeitnerSystems>(items, total);
     }
+
+    async countBoxItems(userId: string, box: LeitnerBoxType): Promise<number> {
+        return this.count({
+            where: {
+                userId,
+                currentBox: box,
+            },
+        });
+    }
 }
