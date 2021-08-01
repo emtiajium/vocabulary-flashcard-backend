@@ -62,13 +62,14 @@
 
 ## Change Log
 
--   `0.4.4`: Module for Android stuff
--   `0.4.3`: Ordered cohort members by their firstname (`/v1/cohorts/self`)
--   `0.4.2`: Modified the cohort related APIs to accept usernames instead of user IDs
--   `0.4.1`: Added API for populating the new user with few vocabularies
--   `0.4.0`: Added authentication using JWT
--   `0.3.2`: Added validation for external links
--   `0.3.1`: Added vocabulary find/removal functionality
--   `0.3.0`: Added vocabulary creation/update functionality
--   `0.2.0`: Added cohort functionality
--   `0.1.0`: Added user functionality
+- `0.5.0`: Leitner systems  
+- `0.4.4`: Module for Android stuff
+- `0.4.3`: Ordered cohort members by their firstname (`/v1/cohorts/self`)
+- `0.4.2`: Modified the cohort related APIs to accept usernames instead of user IDs
+- `0.4.1`: Added API for populating the new user with few vocabularies
+- `0.4.0`: Added authentication using JWT
+- `0.3.2`: Added validation for external links
+- `0.3.1`: Added vocabulary find/removal functionality
+- `0.3.0`: Added vocabulary creation/update functionality
+- `0.2.0`: Added cohort functionality
+- `0.1.0`: Added user functionality
