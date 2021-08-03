@@ -10,7 +10,11 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         await this.delete({ id });
     }
 
-    async findVocabularies(cohortId: string, vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
+    async findVocabularies(
+        userId: string,
+        cohortId: string,
+        vocabularySearch: VocabularySearch,
+    ): Promise<SearchResult<Vocabulary>> {
         const {
             pagination: { pageSize, pageNumber },
             searchKeyword,
@@ -21,17 +25,21 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         let vocabularyQueryResult = await this.query(
             `
                 SELECT vocabulary.*,
-                       json_agg(definition.*)      AS definitions,
-                       (COUNT(*) OVER ())::INTEGER AS "totalNumberOfVocabularies"
+                       json_agg(definition.*)                             AS definitions,
+                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN AS "isInLeitnerBox",
+                       (COUNT(*) OVER ())::INTEGER                        AS "totalNumberOfVocabularies"
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
-                WHERE vocabulary."cohortId" = $1
+                         LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
+                                   ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
+                                      "leitnerSystems"."userId" = $1
+                WHERE vocabulary."cohortId" = $2
                     ${searchKeyword ? `AND vocabulary.word ILIKE '${searchKeyword}%'` : ''}
                 GROUP BY vocabulary.id
                 ORDER BY vocabulary."createdAt" DESC
-                OFFSET $2 LIMIT $3;
+                OFFSET $3 LIMIT $4;
             `,
-            [cohortId, currentPage, pageSize],
+            [userId, cohortId, currentPage, pageSize],
         );
 
         vocabularyQueryResult = this.rejectNull(vocabularyQueryResult);
@@ -107,7 +115,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return this.query(
             `SELECT id, word
              FROM "Vocabulary"
-             WHERE id = ANY(ARRAY[${ids.map((id) => `'${id}'`)}]::UUID[]);`,
+             WHERE id = ANY (ARRAY [${ids.map((id) => `'${id}'`)}]::UUID[]);`,
         );
     }
 }

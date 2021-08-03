@@ -31,8 +31,12 @@ export default class VocabularyService {
         return this.vocabularyRepository.save(vocabularyInstance);
     }
 
-    async findVocabularies(cohortId: string, vocabularySearch: VocabularySearch): Promise<SearchResult<Vocabulary>> {
-        return this.vocabularyRepository.findVocabularies(cohortId, vocabularySearch);
+    async findVocabularies(
+        userId: string,
+        cohortId: string,
+        vocabularySearch: VocabularySearch,
+    ): Promise<SearchResult<Vocabulary>> {
+        return this.vocabularyRepository.findVocabularies(userId, cohortId, vocabularySearch);
     }
 
     async findVocabularyById(id: string): Promise<Vocabulary> {
