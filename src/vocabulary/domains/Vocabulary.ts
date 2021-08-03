@@ -65,6 +65,9 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @IsOptional()
     cohortId?: string;
 
+    @IsOptional()
+    isInLeitnerBox?: number;
+
     setCohortId?(cohortId: string): void {
         this.cohortId = cohortId;
     }

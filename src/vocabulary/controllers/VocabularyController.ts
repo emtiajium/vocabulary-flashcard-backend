@@ -24,7 +24,7 @@ export default class VocabularyController {
         @AuthenticatedUser() user: User,
         @Body() vocabularySearch: VocabularySearch,
     ): Promise<SearchResult<Vocabulary>> {
-        return this.vocabularyService.findVocabularies(user.cohortId, vocabularySearch);
+        return this.vocabularyService.findVocabularies(user.id, user.cohortId, vocabularySearch);
     }
 
     @Get('/:id')
