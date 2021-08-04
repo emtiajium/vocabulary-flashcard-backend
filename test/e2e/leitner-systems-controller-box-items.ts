@@ -83,6 +83,7 @@ describe('Leitner Systems Box Items', () => {
             response.results.forEach((item) => {
                 expect(item.word).toBe(vocabulary.word);
                 expect(item.vocabularyId).toBe(vocabulary.id);
+                expect(item.updatedAt).toBeDefined();
             });
         });
     });
@@ -129,6 +130,7 @@ describe('Leitner Systems Box Items', () => {
             response.results.forEach((item) => {
                 expect(item.word).toBe(vocabulary.word);
                 expect(item.vocabularyId).toBe(vocabulary.id);
+                expect(item.updatedAt).toBeDefined();
             });
 
             getTomorrowMock.mockRestore();

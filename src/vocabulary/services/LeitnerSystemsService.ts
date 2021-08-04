@@ -100,7 +100,7 @@ export default class LeitnerSystemsService {
     ): Promise<SearchResult<LeitnerBoxItem>> {
         const { results, total } = await this.leitnerSystemsRepository.getBoxItems(userId, box, pagination);
         if (!total) {
-            return new SearchResult<LeitnerBoxItem>([], total);
+            return new SearchResult<LeitnerBoxItem>([], 0);
         }
         const vocabularies: Record<string, Pick<Vocabulary, 'id' | 'word'>[]> = _.groupBy(
             await this.vocabularyRepository.findWords(_.map(results, 'vocabularyId')),
@@ -110,6 +110,7 @@ export default class LeitnerSystemsService {
             return {
                 vocabularyId: result.vocabularyId,
                 word: vocabularies[result.vocabularyId][0].word,
+                updatedAt: result.updatedAt,
             };
         });
         return new SearchResult<LeitnerBoxItem>(items, total);
