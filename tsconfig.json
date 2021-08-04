@@ -11,10 +11,12 @@
         "outDir": "./dist",
         "baseUrl": "./",
         "incremental": true,
+        "resolveJsonModule": true,
         "paths": {
             "@/*": ["./src/*"],
-            "@test/*": ["./test/*"]
+            "@test/*": ["./test/*"],
+            "@root/*": ["./*"]
         }
     },
-    "include": ["migrations", "src", "test", ".eslintrc.json"]
+    "include": ["migrations", "src", "test", ".eslintrc.json", "package.json"]
 }
