@@ -30,6 +30,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
             select: ['vocabularyId', 'updatedAt'],
             skip: toBeSkipped,
             take: pageSize,
+            order: { createdAt: 'ASC' },
         });
 
         return new SearchResult<LeitnerSystems>(items, total);
