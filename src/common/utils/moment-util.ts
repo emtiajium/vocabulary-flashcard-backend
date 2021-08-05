@@ -64,3 +64,11 @@ export function getFormattedTomorrow(): string {
     const tomorrow = makeItNewer(new Date(), MomentUnit.DAYS, 1);
     return getFormattedDate(tomorrow);
 }
+
+export async function delay(second: number): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, second * oneSecondInMilliSeconds);
+    });
+}

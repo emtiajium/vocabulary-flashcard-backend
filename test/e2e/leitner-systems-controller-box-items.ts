@@ -19,7 +19,7 @@ import generateJwToken from '@test/util/auth-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
-import MomentUnit, { getFormattedDate, makeItNewer, makeItOlder } from '@/common/utils/moment-util';
+import MomentUnit, { delay, getFormattedDate, makeItNewer, makeItOlder } from '@/common/utils/moment-util';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 
 describe('Leitner Systems Box Items', () => {
@@ -85,6 +85,24 @@ describe('Leitner Systems Box Items', () => {
                 expect(item.vocabularyId).toBe(vocabulary.id);
                 expect(item.updatedAt).toBeDefined();
             });
+        });
+
+        it('SHOULD return 200 OK with ascending order', async () => {
+            const [vocabulary, secondVocabulary] = await Promise.all([
+                createVocabulary(getVocabularyWithDefinitions(), cohort.id),
+                createVocabulary(getVocabularyWithDefinitions(), cohort.id),
+            ]);
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+            await delay(2);
+            await createItem(requester.id, secondVocabulary.id, LeitnerBoxType.BOX_1);
+
+            const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_1);
+
+            expect(status).toBe(200);
+            const response = body as SearchResult<LeitnerBoxItem>;
+            expect(response.total).toBe(2);
+            expect(response.results[0].vocabularyId).toBe(vocabulary.id);
+            expect(response.results[1].vocabularyId).toBe(secondVocabulary.id);
         });
     });
 
