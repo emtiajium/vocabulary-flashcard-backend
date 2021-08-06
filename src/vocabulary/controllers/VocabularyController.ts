@@ -14,7 +14,7 @@ export default class VocabularyController {
     @Post()
     @UseGuards(AuthGuard)
     async createVocabulary(@Body() vocabulary: Vocabulary, @AuthenticatedUser() user: User): Promise<Vocabulary> {
-        return this.vocabularyService.createVocabulary(vocabulary, user.cohortId);
+        return this.vocabularyService.createVocabulary(vocabulary, user.id, user.cohortId);
     }
 
     @Post('/search')
@@ -29,14 +29,14 @@ export default class VocabularyController {
 
     @Get('/:id')
     @UseGuards(AuthGuard)
-    async findVocabularyById(@Param('id') id: string): Promise<Vocabulary> {
-        return this.vocabularyService.findVocabularyById(id);
+    async findVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<Vocabulary> {
+        return this.vocabularyService.findVocabularyById(id, user.id);
     }
 
     @Delete('/:id')
     @UseGuards(AuthGuard)
-    async removeVocabularyById(@Param('id') id: string): Promise<void> {
-        await this.vocabularyService.removeVocabularyById(id);
+    async removeVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<void> {
+        await this.vocabularyService.removeVocabularyById(id, user.id);
     }
 
     @Post('/bootstrap')
