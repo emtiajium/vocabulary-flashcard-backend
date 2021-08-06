@@ -66,14 +66,14 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     cohortId?: string;
 
     @IsOptional()
-    isInLeitnerBox?: number;
+    isInLeitnerBox?: boolean;
 
     setCohortId?(cohortId: string): void {
         this.cohortId = cohortId;
     }
 
     static populateMeanings(vocabulary: Vocabulary): Vocabulary {
-        const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
+        const vocabularyInstance = plainToClass(Vocabulary, { ...vocabulary, word: _.capitalize(vocabulary.word) });
         if (!_.isEmpty(vocabulary.definitions)) {
             vocabularyInstance.definitions = vocabulary.definitions.map((definition) =>
                 Definition.create(vocabulary.id, definition),
