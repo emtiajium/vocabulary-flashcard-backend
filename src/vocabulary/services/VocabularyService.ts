@@ -18,8 +18,8 @@ export default class VocabularyService {
         private readonly leitnerSystemsService: LeitnerSystemsService,
     ) {}
 
-    async createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {
-        const existingVocabulary = await this.findVocabularyById(vocabulary.id);
+    async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
+        const existingVocabulary = await this.findVocabularyById(vocabulary.id, userId);
         if (existingVocabulary) {
             // this is a workaround
             // facing issues during "UPDATE"
@@ -28,7 +28,9 @@ export default class VocabularyService {
         const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
         // TODO investigate why vocabularyInstance.setCohortId(cohortId) is not working
         vocabularyInstance.cohortId = cohortId;
-        return this.vocabularyRepository.save(vocabularyInstance);
+        const newVocabulary = await this.vocabularyRepository.save(vocabularyInstance);
+        newVocabulary.isInLeitnerBox = !!existingVocabulary?.isInLeitnerBox;
+        return newVocabulary;
     }
 
     async findVocabularies(
@@ -39,16 +41,16 @@ export default class VocabularyService {
         return this.vocabularyRepository.findVocabularies(userId, cohortId, vocabularySearch);
     }
 
-    async findVocabularyById(id: string): Promise<Vocabulary> {
-        return this.vocabularyRepository.findVocabularyById(id);
+    async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
+        return this.vocabularyRepository.findVocabularyById(id, userId);
     }
 
     private extractDefinitionIds = (definitions: Definition[]): string[] => {
         return _.map(definitions, 'id');
     };
 
-    async assertExistenceAndRemoveVocabularyAndDefinitions(id: string): Promise<void> {
-        const existingVocabulary = await this.findVocabularyById(id);
+    async assertExistenceAndRemoveVocabularyAndDefinitions(id: string, userId: string): Promise<void> {
+        const existingVocabulary = await this.findVocabularyById(id, userId);
         if (existingVocabulary) {
             await this.removeVocabularyAndDefinitions(existingVocabulary);
         } else {
@@ -72,9 +74,9 @@ export default class VocabularyService {
         await this.vocabularyRepository.removeVocabularyById(vocabulary.id);
     }
 
-    async removeVocabularyById(id: string): Promise<void> {
+    async removeVocabularyById(id: string, userId: string): Promise<void> {
         await this.assertExistenceIntoLeitnerSystems(id);
-        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id);
+        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id, userId);
     }
 
     async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
