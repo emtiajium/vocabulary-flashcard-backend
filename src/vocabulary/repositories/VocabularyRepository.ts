@@ -62,7 +62,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         }));
     }
 
-    async findVocabularyById(id: string): Promise<Vocabulary> {
+    async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
         const results = await this.query(
             `
                 SELECT vocabulary.id,
@@ -77,13 +77,17 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                                   'meaning', definition.meaning,
                                                   'examples', definition.examples,
                                                   'notes', definition.notes,
-                                                  'externalLinks', definition."externalLinks")) AS definitions
+                                                  'externalLinks', definition."externalLinks")) AS definitions,
+                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN                       AS "isInLeitnerBox"
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
+                         LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
+                                   ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
+                                      "leitnerSystems"."userId" = $2
                 WHERE vocabulary.id = $1
                 GROUP BY vocabulary.id;
             `,
-            [id],
+            [id, userId],
         );
 
         return this.rejectNull(results)[0];
