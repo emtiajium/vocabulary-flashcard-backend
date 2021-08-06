@@ -15,6 +15,9 @@ import User from '@/user/domains/User';
 import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
+import { createItem } from '@test/util/leitner-systems-util';
+import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
+import * as _ from 'lodash';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -242,6 +245,21 @@ describe('/v1/vocabularies', () => {
         });
 
         describe('Success', () => {
+            it('SHOULD return 201 CREATED with capitalized word', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'lower cased word';
+                payload.definitions = [];
+
+                const { status, body } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+
+                const vocabulary = body as Vocabulary;
+                expect(vocabulary.word).toBe(_.capitalize(payload.word));
+            });
+
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
@@ -412,6 +430,43 @@ describe('/v1/vocabularies', () => {
                     expect(definition.id).toBe(payload.definitions[index].id);
                     expect(definition.id).toBe(vocabulary.definitions[index].id);
                 });
+            });
+
+            it('SHOULD return 201 CREATED with falsy isInLeitnerBox', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.definitions = [];
+
+                const { status, body } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+
+                const vocabulary = body as Vocabulary;
+                expect(vocabulary.isInLeitnerBox).toBe(false);
+            });
+
+            it('SHOULD return 201 CREATED with truthy isInLeitnerBox', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.definitions = [];
+
+                await makeApiRequest(payload);
+                await createItem(requester.id, payload.id, LeitnerBoxType.BOX_1);
+
+                // second attempt
+
+                payload.isDraft = false;
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4())];
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary.isInLeitnerBox).toBe(true);
             });
         });
     });
