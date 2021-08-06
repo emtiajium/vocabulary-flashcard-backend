@@ -62,6 +62,7 @@
 
 ## Change Log
 
+-   `0.5.4`: Populated leitner box existence info
 -   `0.5.3`: Applied ordering for the leitner items
 -   `0.5.2`: Attached triggering time with Leitner box item
 -   `0.5.1`: Attached Leitner box info within the response payload of the vocab search API
