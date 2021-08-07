@@ -48,7 +48,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @IsBoolean()
     isDraft: boolean;
 
-    @OneToMany(() => Definition, (definition) => definition.id, { eager: true, cascade: true })
+    @OneToMany(() => Definition, (definition) => definition.vocabulary, { eager: true, cascade: true })
     @ValidateIf((vocabulary) => vocabulary.isDraft === false)
     @ValidateNested({ each: true })
     @ArrayNotEmpty()
@@ -69,11 +69,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @IsOptional()
     isInLeitnerBox?: boolean;
 
-    setCohortId?(cohortId: string): void {
-        this.cohortId = cohortId;
-    }
-
-    static populateMeanings(vocabulary: Vocabulary): Vocabulary {
+    static populateDefinitions(vocabulary: Vocabulary): Vocabulary {
         const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
         if (!_.isEmpty(vocabulary.definitions)) {
             vocabularyInstance.definitions = vocabulary.definitions.map((definition) =>

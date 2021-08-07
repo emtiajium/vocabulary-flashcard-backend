@@ -43,7 +43,7 @@ export default class Definition extends BaseEntity {
     externalLinks?: string[];
 
     @Type(() => Vocabulary)
-    @ManyToOne(() => Vocabulary, (vocabulary) => vocabulary.id, { eager: false, cascade: true })
+    @ManyToOne(() => Vocabulary, (vocabulary) => vocabulary.definitions, { eager: false, cascade: false })
     vocabulary?: Vocabulary;
 
     @Column({ type: 'uuid' })
