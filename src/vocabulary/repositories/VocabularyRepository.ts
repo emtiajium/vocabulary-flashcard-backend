@@ -80,7 +80,11 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                                   'externalLinks', definition."externalLinks")) AS definitions,
                        COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN                       AS "isInLeitnerBox"
                 FROM "Vocabulary" AS vocabulary
-                         LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
+                         LEFT JOIN (SELECT *
+                                    FROM "Definition"
+                                    WHERE "vocabularyId" = $1
+                                    ORDER BY "createdAt" ASC
+                ) AS definition ON vocabulary.id = definition."vocabularyId"
                          LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
                                    ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
                                       "leitnerSystems"."userId" = $2
