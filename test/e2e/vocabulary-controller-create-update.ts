@@ -455,8 +455,9 @@ describe('/v1/vocabularies', () => {
                 const definitions = await getDefinitionsByVocabularyId(payload.id);
 
                 expect(definitions).toHaveLength(2);
-                definitions.forEach((definition) => {
+                definitions.forEach((definition, index) => {
                     expect(definition.vocabularyId).toBe(payload.id);
+                    expect(definition.id).toBe(payload.definitions[index].id);
                 });
             });
 

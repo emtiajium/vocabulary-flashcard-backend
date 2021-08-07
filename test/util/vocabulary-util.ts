@@ -20,7 +20,8 @@ export async function getDefinitionsByVocabularyId(vocabularyId: string): Promis
     return getRepository(Definition).query(
         `SELECT *
          FROM "Definition"
-         WHERE "vocabularyId" = '${vocabularyId}';`,
+         WHERE "vocabularyId" = '${vocabularyId}'
+         ORDER BY "createdAt" ASC;`,
     );
 }
 
