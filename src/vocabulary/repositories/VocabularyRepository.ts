@@ -36,7 +36,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 WHERE vocabulary."cohortId" = $2
                     ${searchKeyword ? `AND vocabulary.word ILIKE '${searchKeyword}%'` : ''}
                 GROUP BY vocabulary.id
-                ORDER BY vocabulary."createdAt" DESC
+                ORDER BY vocabulary."updatedAt" DESC
                 OFFSET $3 LIMIT $4;
             `,
             [userId, cohortId, currentPage, pageSize],
