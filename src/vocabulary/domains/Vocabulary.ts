@@ -13,7 +13,7 @@ import {
     ValidateNested,
 } from 'class-validator';
 import Definition from '@/vocabulary/domains/Definition';
-import { plainToClass, Type } from 'class-transformer';
+import { plainToClass, Transform, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
 import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
@@ -21,6 +21,7 @@ import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryI
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar' })
+    @Transform(({ value }) => _.capitalize(value))
     @IsNotEmpty()
     @IsString()
     @IsDefined()
@@ -73,7 +74,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     }
 
     static populateMeanings(vocabulary: Vocabulary): Vocabulary {
-        const vocabularyInstance = plainToClass(Vocabulary, { ...vocabulary, word: _.capitalize(vocabulary.word) });
+        const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
         if (!_.isEmpty(vocabulary.definitions)) {
             vocabularyInstance.definitions = vocabulary.definitions.map((definition) =>
                 Definition.create(vocabulary.id, definition),
