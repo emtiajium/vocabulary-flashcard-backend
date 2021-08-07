@@ -16,7 +16,7 @@ export async function removeVocabularyAndRelationsByCohortId(cohortId: string): 
     await getRepository(Vocabulary).delete({ cohortId });
 }
 
-export async function getDefinitionByVocabularyId(vocabularyId: string): Promise<Definition[]> {
+export async function getDefinitionsByVocabularyId(vocabularyId: string): Promise<Definition[]> {
     return getRepository(Definition).query(
         `SELECT *
          FROM "Definition"
