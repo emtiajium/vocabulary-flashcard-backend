@@ -8,7 +8,6 @@ import { getFormattedTomorrow } from '@/common/utils/moment-util';
 @EntityRepository(LeitnerSystems)
 export default class LeitnerSystemsRepository extends Repository<LeitnerSystems> {
     // shitty code just for the easiness of jest.spyOn()
-    // eslint-disable-next-line class-methods-use-this
     getTomorrow(): string {
         return getFormattedTomorrow();
     }

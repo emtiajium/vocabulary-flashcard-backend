@@ -49,7 +49,6 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return new SearchResult(vocabularyQueryResult, vocabularyQueryResult[0]?.totalNumberOfVocabularies || 0);
     }
 
-    // eslint-disable-next-line class-methods-use-this
     rejectNull(results: Vocabulary[]): Vocabulary[] {
         // as LEFT join results[index].definitions can be [null]
         return _.map(results, (result) => ({
