@@ -487,6 +487,55 @@ describe('/v1/vocabularies', () => {
                 });
             });
 
+            it('SHOULD return 201 CREATED with modified number of definitions', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [
+                    getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                    { ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()), meaning: 'Meaning 2' },
+                ];
+
+                await makeApiRequest(payload);
+
+                const existingDefinitions = await getDefinitionsByVocabularyId(payload.id);
+
+                // second attempt
+
+                payload.definitions = [{ ...existingDefinitions[0], examples: ['Aug 8, 2021'] }];
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary.definitions).toHaveLength(1);
+                expect(vocabulary.definitions[0].id).toBe(payload.definitions[0].id);
+            });
+
+            it('SHOULD return 201 CREATED with empty definitions', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [
+                    getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                    { ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()), meaning: 'Meaning 2' },
+                ];
+
+                await makeApiRequest(payload);
+
+                // second attempt
+                payload.definitions = [];
+                payload.isDraft = true;
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary.definitions).toHaveLength(0);
+            });
+
             it('SHOULD return 201 CREATED with falsy isInLeitnerBox', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();

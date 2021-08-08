@@ -20,6 +20,14 @@ export default class VocabularyService {
 
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
         const existingVocabulary = await this.findVocabularyById(vocabulary.id, userId);
+        if (existingVocabulary) {
+            await this.definitionRepository.removeDefinitionsByIds(
+                _.difference(
+                    this.extractDefinitionIds(existingVocabulary.definitions),
+                    this.extractDefinitionIds(vocabulary.definitions),
+                ),
+            );
+        }
         const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
         vocabularyInstance.cohortId = cohortId;
         const newVocabulary = await this.vocabularyRepository.save(vocabularyInstance);
