@@ -123,6 +123,26 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(400);
             });
 
+            it('SHOULD return 400 BAD_REQUEST for empty definitions', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [
+                    getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                    { ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()), meaning: 'Meaning 2' },
+                ];
+
+                await makeApiRequest(payload);
+
+                // second attempt
+                payload.definitions = [];
+
+                const { status } = await makeApiRequest(payload);
+
+                expect(status).toBe(400);
+            });
+
             it('SHOULD return 400 BAD_REQUEST for payload vocabulary.genericExternalLinks is not an array', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
@@ -535,7 +555,9 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
                 expect(vocabulary.definitions).toHaveLength(0);
             });
+        });
 
+        describe('Leitner Box', () => {
             it('SHOULD return 201 CREATED with falsy isInLeitnerBox', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
