@@ -37,7 +37,7 @@
         "unicorn/no-null": "off",
         "unicorn/no-reduce": "off",
         "unicorn/no-array-for-each": "off",
-        "class-methods-use-this": ["error", { "exceptMethods": ["map"] }],
+        "class-methods-use-this": "off",
         "complexity": ["error", 5],
         "max-params": ["error", 4],
         "curly": "error",
@@ -115,7 +115,6 @@
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "unicorn/consistent-function-scoping": "off",
                 "max-classes-per-file": "off",
-                "class-methods-use-this": "off",
                 "import/prefer-default-export": "off"
             }
         },
@@ -127,16 +126,9 @@
             }
         },
         {
-            "files": ["migrations/**/*.ts"],
-            "rules": {
-                "class-methods-use-this": "off"
-            }
-        },
-        {
             "files": ["src/auto-run-scripts/index.ts"],
             "rules": {
                 "unicorn/prefer-node-protocol": "off",
-                "class-methods-use-this": "off",
                 "unicorn/prefer-module": "off",
                 "@typescript-eslint/no-var-requires": "off",
                 "import/no-dynamic-require": "off",
