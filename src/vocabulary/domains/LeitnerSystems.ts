@@ -1,4 +1,4 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import BaseEntity from '@/common/domains/BaseEntity';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { makeItNewer } from '@/common/utils/moment-util';
@@ -7,7 +7,7 @@ import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppea
 // Big NO to foreign key concept
 
 @Entity('LeitnerSystems')
-@Index(['userId', 'vocabularyId'], { unique: true })
+// @Index(['userId', 'vocabularyId'], { unique: true })
 export default class LeitnerSystems extends BaseEntity {
     @Column({ type: 'uuid', nullable: false })
     userId: string;
