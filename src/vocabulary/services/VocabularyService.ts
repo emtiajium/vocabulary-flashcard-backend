@@ -21,12 +21,9 @@ export default class VocabularyService {
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
         const existingVocabulary = await this.findVocabularyById(vocabulary.id, userId);
         if (existingVocabulary) {
-            await this.definitionRepository.removeDefinitionsByIds(
-                _.difference(
-                    this.extractDefinitionIds(existingVocabulary.definitions),
-                    this.extractDefinitionIds(vocabulary.definitions),
-                ),
-            );
+            // why do I have to manually remove?
+            // Instead of removing why TypeORM tries to set vocabularyId to null?
+            await this.removeOrphanDefinitions(existingVocabulary, vocabulary);
         }
         const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
         vocabularyInstance.cohortId = cohortId;
@@ -69,6 +66,15 @@ export default class VocabularyService {
         }
     }
 
+    private async removeOrphanDefinitions(existingVocabulary: Vocabulary, vocabulary: Vocabulary): Promise<void> {
+        await this.definitionRepository.removeDefinitionsByIds(
+            _.difference(
+                this.extractDefinitionIds(existingVocabulary.definitions),
+                this.extractDefinitionIds(vocabulary.definitions),
+            ),
+        );
+    }
+
     async removeVocabularyAndDefinitions(vocabulary: Vocabulary): Promise<void> {
         if (!_.isEmpty(vocabulary.definitions)) {
             await this.definitionRepository.removeDefinitionsByIds(this.extractDefinitionIds(vocabulary.definitions));
@@ -86,9 +92,7 @@ export default class VocabularyService {
             throw new ConflictException(`Cohort with ID: "${cohortId}" has at least one vocabulary`);
         }
         const payload = createVocabularies(cohortId, newJoinerVocabularyList);
-        const vocabularies = await Promise.all(
-            _.map(payload, (vocabulary) => this.vocabularyRepository.save(vocabulary)),
-        );
+        const vocabularies = await this.vocabularyRepository.save(payload);
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
 }
