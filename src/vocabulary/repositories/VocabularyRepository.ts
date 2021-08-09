@@ -3,6 +3,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
+import { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 
 @EntityRepository(Vocabulary)
 export default class VocabularyRepository extends Repository<Vocabulary> {
@@ -17,7 +18,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     ): Promise<SearchResult<Vocabulary>> {
         const {
             pagination: { pageSize, pageNumber },
-            sort: { field, direction },
+            sort,
             searchKeyword,
         } = vocabularySearch;
 
@@ -37,7 +38,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 WHERE vocabulary."cohortId" = $2
                     ${searchKeyword ? `AND vocabulary.word ILIKE '${searchKeyword}%'` : ''}
                 GROUP BY vocabulary.id
-                ORDER BY vocabulary."${field}" ${direction}
+                ORDER BY vocabulary."${sort?.field || SupportedSortFields.updatedAt}" ${
+                sort?.direction || SortDirection.DESC
+            }
                 OFFSET $3 LIMIT $4;
             `,
             [userId, cohortId, currentPage, pageSize],
