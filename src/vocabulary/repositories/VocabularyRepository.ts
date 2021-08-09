@@ -17,6 +17,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     ): Promise<SearchResult<Vocabulary>> {
         const {
             pagination: { pageSize, pageNumber },
+            sort: { field, direction },
             searchKeyword,
         } = vocabularySearch;
 
@@ -36,7 +37,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 WHERE vocabulary."cohortId" = $2
                     ${searchKeyword ? `AND vocabulary.word ILIKE '${searchKeyword}%'` : ''}
                 GROUP BY vocabulary.id
-                ORDER BY vocabulary."updatedAt" DESC
+                ORDER BY vocabulary."${field}" ${direction}
                 OFFSET $3 LIMIT $4;
             `,
             [userId, cohortId, currentPage, pageSize],

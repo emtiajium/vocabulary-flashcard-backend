@@ -7,6 +7,8 @@ export enum SortDirection {
 
 export enum SupportedSortFields {
     createdAt = 'createdAt',
+    updatedAt = 'updatedAt',
+    word = 'word',
 }
 
 export default class Sort {
