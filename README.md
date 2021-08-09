@@ -62,6 +62,7 @@
 
 ## Change Log
 
+-   `0.6.2`: Dynamic vocab ordering
 -   `0.6.1`: Added script to remove an leitner item for a user
 -   `0.6.0`: Added functionality to remove definitions
 -   `0.5.5`: Fixed the (TypeORM) relationship between Vocabulary and Definition + Ordered definitions by their creation time
