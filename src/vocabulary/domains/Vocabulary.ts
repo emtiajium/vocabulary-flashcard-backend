@@ -49,7 +49,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     isDraft: boolean;
 
     @OneToMany(() => Definition, (definition) => definition.vocabulary, { eager: true, cascade: true })
-    @ValidateIf((vocabulary) => vocabulary.isDraft === false)
+    @ValidateIf((vocabulary) => vocabulary.isDraft === false || _.isEmpty(vocabulary.definitions) === false)
     @ValidateNested({ each: true })
     @ArrayNotEmpty()
     @IsArray()
@@ -72,6 +72,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     static populateDefinitions(vocabulary: Vocabulary): Vocabulary {
         const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
         if (!_.isEmpty(vocabulary.definitions)) {
+            vocabularyInstance.isDraft = false;
             vocabularyInstance.definitions = vocabulary.definitions.map((definition) =>
                 Definition.create(vocabulary.id, definition),
             );

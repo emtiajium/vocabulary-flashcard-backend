@@ -262,6 +262,18 @@ describe('/v1/vocabularies', () => {
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
+
+            it('SHOULD return 400 BAD_REQUEST and validate definition even if isDraft = true', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                const definition = getBaseDefinitionPayloadWithoutRelations(payload.id);
+                delete definition.meaning;
+                payload.definitions = [definition as Definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
         });
 
         describe('Success', () => {
@@ -285,7 +297,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.isDraft = true;
                 payload.word = 'Word1';
-                payload.definitions = [getBaseDefinitionPayloadWithoutRelations()];
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id)];
                 delete payload.definitions[0].externalLinks;
 
                 const { status } = await makeApiRequest(payload);
@@ -299,6 +311,7 @@ describe('/v1/vocabularies', () => {
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 payload.definitions = [];
+                delete payload.genericExternalLinks;
 
                 const { status } = await makeApiRequest(payload);
 
@@ -358,7 +371,6 @@ describe('/v1/vocabularies', () => {
 
                 // second attempt
 
-                payload.isDraft = false;
                 payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4())];
 
                 const { status, body: body2 } = await makeApiRequest(payload);
@@ -372,6 +384,7 @@ describe('/v1/vocabularies', () => {
                 expect(vocabulary.updatedAt).not.toBe(vocabulary.createdAt);
                 expect(vocabulary.definitions).toHaveLength(1);
                 expect(vocabulary.definitions[0].vocabularyId).toBe(payload.id);
+                expect(vocabulary.isDraft).toBe(false);
 
                 const definitions = await getDefinitionsByVocabularyId(payload.id);
 
