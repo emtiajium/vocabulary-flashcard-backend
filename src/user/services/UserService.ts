@@ -3,6 +3,7 @@ import UserRepository from '@/user/repositories/UserRepository';
 import User from '@/user/domains/User';
 import CohortService from '@/user/services/CohortService';
 import EntityNotFoundException from '@/exceptions/EntityNotFoundException';
+import * as _ from 'lodash';
 
 @Injectable()
 export default class UserService {
@@ -22,5 +23,10 @@ export default class UserService {
             throw new EntityNotFoundException(`User with username "${username}" does not exist`);
         }
         return user;
+    }
+
+    async getAll(): Promise<UserReport[]> {
+        const users = await this.userRepository.getAll();
+        return _.map(users, (user) => _.pick(user, ['username', 'name', 'cohortName']));
     }
 }

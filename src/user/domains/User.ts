@@ -50,4 +50,9 @@ export default class User extends BaseEntity {
     get cohortId(): string {
         return this.cohort?.id || '';
     }
+
+    @Expose()
+    get cohortName(): string {
+        return this.cohort?.name || '';
+    }
 }

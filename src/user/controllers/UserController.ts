@@ -9,13 +9,19 @@ export default class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Post()
-    async createUser(@Body() user: User): Promise<User> {
+    createUser(@Body() user: User): Promise<User> {
         return this.userService.createUser(user);
     }
 
     @Get('/self')
     @UseGuards(AuthGuard)
-    async getSelfDetails(@AuthenticatedUser() user: User): Promise<User> {
+    getSelfDetails(@AuthenticatedUser() user: User): Promise<User> {
         return this.userService.getUserByUsername(user.username);
+    }
+
+    @Get('/all')
+    @UseGuards(AuthGuard)
+    getUsers(@AuthenticatedUser() user: User): Promise<UserReport[]> {
+        return this.userService.getAll();
     }
 }
