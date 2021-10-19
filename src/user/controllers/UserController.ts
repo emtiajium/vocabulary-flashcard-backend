@@ -3,6 +3,8 @@ import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
+import UserReport from '@/user/domains/UserReport';
+import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 
 @Controller('/v1/users')
 export default class UserController {

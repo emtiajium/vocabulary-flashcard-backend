@@ -4,6 +4,7 @@ import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import Pagination from '@/common/domains/Pagination';
 import { getFormattedTomorrow } from '@/common/utils/moment-util';
+import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 
 @EntityRepository(LeitnerSystems)
 export default class LeitnerSystemsRepository extends Repository<LeitnerSystems> {

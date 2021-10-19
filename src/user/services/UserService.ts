@@ -5,6 +5,8 @@ import CohortService from '@/user/services/CohortService';
 import EntityNotFoundException from '@/exceptions/EntityNotFoundException';
 import * as _ from 'lodash';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
+import UserReport from '@/user/domains/UserReport';
+import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 
 @Injectable()
 export default class UserService {
