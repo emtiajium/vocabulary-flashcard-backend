@@ -17,6 +17,7 @@ import * as request from 'supertest';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
+import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 
 describe('GET /v1/users/using-leitner-systems', () => {
     let app: INestApplication;

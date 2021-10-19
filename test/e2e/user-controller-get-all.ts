@@ -9,6 +9,7 @@ import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
 import { removeCohortByName } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
+import UserReport from '@/user/domains/UserReport';
 
 describe('/v1/users/all', () => {
     let app: INestApplication;
