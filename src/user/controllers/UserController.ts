@@ -21,7 +21,13 @@ export default class UserController {
 
     @Get('/all')
     @UseGuards(AuthGuard)
-    getUsers(@AuthenticatedUser() user: User): Promise<UserReport[]> {
+    getUsers(): Promise<UserReport[]> {
         return this.userService.getAll();
+    }
+
+    @Get('/using-leitner-systems')
+    @UseGuards(AuthGuard)
+    getLeitnerLoverUsers(): Promise<LeitnerSystemsLoverUsersReport[]> {
+        return this.userService.getLeitnerLoverUsers();
     }
 }
