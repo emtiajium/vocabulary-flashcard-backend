@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Connection, QueryRunner } from 'typeorm';
+import Health from '@/health-check/domains/Health';
 
 @Controller('/v1/health')
 export default class HealthCheckController {
@@ -10,7 +11,7 @@ export default class HealthCheckController {
     ) {}
 
     @Get()
-    async check(): Promise<boolean> {
+    async check(): Promise<Health> {
         let queryRunner: QueryRunner;
         let status: boolean;
         try {
@@ -25,6 +26,8 @@ export default class HealthCheckController {
                 await queryRunner.release();
             }
         }
-        return status;
+        return {
+            database: status,
+        };
     }
 }
