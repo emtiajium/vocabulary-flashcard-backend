@@ -36,7 +36,7 @@
 
 ## Generate the migration
 
-➜ `npm run typeorm migration:create -- -n name-of-the-migration`
+➜ `npm run typeorm migration:generate -- -n name-of-the-migration`
 
 ## Seed scripts
 
