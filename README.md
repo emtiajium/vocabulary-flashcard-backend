@@ -62,6 +62,8 @@
 
 ## Change Log
 
+-   `0.7.1`: Fixed import issue in the test files
+-   `0.7.0`: Added APIs for reporting purpose
 -   `0.6.3`: Auto setting of `isDraft` if a vocab has at least one definition
 -   `0.6.2`: Dynamic vocab ordering
 -   `0.6.1`: Added script to remove an leitner item for a user
