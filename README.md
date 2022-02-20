@@ -38,9 +38,9 @@
 
 ➜ `npm run typeorm migration:generate -- -n name-of-the-migration`
 
-## Seed scripts
+> After setting the environment variable `SEED_SCRIPT_COHORT_ID`
 
-➜ Create users: `npm run seed-script:insert-test-users`
+## Seed scripts
 
 ➜ Create vocabularies: `npm run seed-script:insert-vocabularies`
 

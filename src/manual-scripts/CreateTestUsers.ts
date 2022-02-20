@@ -12,25 +12,25 @@ export default class CreateTestUsers {
         {
             firstname: `Kateryna`,
             lastname: `Shevchenko`,
-            username: `k.shevchenko@firecracker.com`,
+            username: `k.shevchenko@firecrackervocabulary.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairCurvy&accessoriesType=Blank&hairColor=Blonde&facialHairType=Blank&clotheType=Overall&clotheColor=PastelGreen&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light`,
         },
         {
             firstname: `Joao da`,
             lastname: `Silva`,
-            username: `j.silva@firecracker.com`,
+            username: `j.silva@firecrackervocabulary.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=Brown&facialHairType=Blank&clotheType=Hoodie&clotheColor=Gray02&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
         },
         {
             firstname: `Shashwata`,
             lastname: `Noor`,
-            username: `s.noor@firecracker.com`,
+            username: `s.noor@firecrackervocabulary.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortFlat&accessoriesType=Blank&hairColor=Black&facialHairType=BeardLight&facialHairColor=Black&clotheType=BlazerSweater&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=DarkBrown`,
         },
         {
             firstname: `Shraban`,
             lastname: `Dhara`,
-            username: `s.dhara@firecracker.com`,
+            username: `s.dhara@firecrackervocabulary.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight2&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=CollarSweater&clotheColor=Blue03&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
         },
     ];
