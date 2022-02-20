@@ -38,12 +38,6 @@
 
 ➜ `npm run typeorm migration:generate -- -n name-of-the-migration`
 
-> After setting the environment variable `SEED_SCRIPT_COHORT_ID`
-
-## Seed scripts
-
-➜ Create vocabularies: `npm run seed-script:insert-vocabularies`
-
 ## Deploy to AWS Elastic Beanstalk
 
 ➜ Create an application at AWS Elastic Beanstalk
