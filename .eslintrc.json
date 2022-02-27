@@ -122,7 +122,8 @@
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "unicorn/consistent-function-scoping": "off",
                 "max-classes-per-file": "off",
-                "import/prefer-default-export": "off"
+                "import/prefer-default-export": "off",
+                "node/no-process-env": "off"
             }
         },
         {

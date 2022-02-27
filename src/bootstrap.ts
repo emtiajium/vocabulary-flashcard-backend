@@ -8,7 +8,7 @@ import ServiceConfig from '@/common/configs/ServiceConfig';
 import * as fs from 'fs';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
 
-class Bootstrap {
+export class Bootstrap {
     private readonly serviceConfig: ServiceConfig;
 
     constructor(private readonly appModule: AppModule) {
