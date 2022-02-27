@@ -108,6 +108,13 @@
             }
         },
         {
+            "files": ["src/bootstrap.ts"],
+            "rules": {
+                "unicorn/prefer-node-protocol": "off",
+                "node/no-sync": "off"
+            }
+        },
+        {
             "files": ["test/**/*.ts"],
             "rules": {
                 "@typescript-eslint/no-explicit-any": "off",
