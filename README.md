@@ -34,10 +34,6 @@
 
 ➜ `npm run start:dev`
 
-## Generate the migration
-
-➜ `npm run typeorm migration:generate -- -n name-of-the-migration`
-
 ## Deploy to AWS Elastic Beanstalk
 
 ➜ Create an application at AWS Elastic Beanstalk
@@ -56,6 +52,7 @@
 
 ## Change Log
 
+-   `0.9.0`: HTTPS for the localhost/development environment
 -   `0.8.0`: Introduced health check endpoint
 -   `0.7.1`: Fixed import issue in the test files
 -   `0.7.0`: Added APIs for reporting purpose

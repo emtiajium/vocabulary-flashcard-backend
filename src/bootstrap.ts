@@ -35,6 +35,10 @@ export class Bootstrap {
 
         if (this.serviceConfig.environment === 'development') {
             options = {
+                // Enabling HTTPS by following the steps mentioned at
+                // https://www.section.io/engineering-education/how-to-get-ssl-https-for-localhost/
+                // We also need to import certificate authority by hitting
+                // <chrome://settings/certificates>
                 httpsOptions: {
                     key: fs.readFileSync('cert/CA/localhost/localhost.decrypted.key'),
                     cert: fs.readFileSync('cert/CA/localhost/localhost.crt'),
