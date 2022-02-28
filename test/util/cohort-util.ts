@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 
 export default async function getCohortByName(name: string): Promise<Cohort> {
@@ -7,6 +7,10 @@ export default async function getCohortByName(name: string): Promise<Cohort> {
 
 export async function removeCohortByName(name: string): Promise<void> {
     await getRepository(Cohort).delete({ name });
+}
+
+export async function removeCohortsByNames(names: string[]): Promise<void> {
+    await getRepository(Cohort).delete({ name: In(names) });
 }
 
 export async function createCohort(cohort: Cohort): Promise<Cohort> {

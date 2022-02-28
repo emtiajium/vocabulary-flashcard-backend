@@ -1,6 +1,7 @@
 import User from '@/user/domains/User';
 import { EntityRepository, In, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
+import { SortDirection } from '@/common/domains/Sort';
 
 @EntityRepository(User)
 export default class UserRepository extends Repository<User> {
@@ -35,6 +36,10 @@ export default class UserRepository extends Repository<User> {
     }
 
     getAll(): Promise<User[]> {
-        return this.find({ relations: ['cohort'], select: ['username', 'firstname', 'lastname'] });
+        return this.find({
+            relations: ['cohort'],
+            select: ['username', 'firstname', 'lastname'],
+            order: { createdAt: SortDirection.ASC },
+        });
     }
 }

@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
+import SearchResult from '@/common/domains/SearchResult';
 
 @Injectable()
 export default class UserService {
@@ -32,9 +33,12 @@ export default class UserService {
         return user;
     }
 
-    async getAll(): Promise<UserReport[]> {
+    async getAll(): Promise<SearchResult<UserReport>> {
         const users = await this.userRepository.getAll();
-        return _.map(users, (user) => _.pick(user, ['username', 'name', 'cohortName']));
+        return new SearchResult<UserReport>(
+            _.map(users, (user) => _.pick(user, ['username', 'name', 'cohortName'])),
+            users.length,
+        );
     }
 
     getLeitnerLoverUsers(): Promise<LeitnerSystemsLoverUsersReport[]> {

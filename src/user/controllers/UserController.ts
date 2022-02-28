@@ -5,6 +5,7 @@ import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
+import SearchResult from '@/common/domains/SearchResult';
 
 @Controller('/v1/users')
 export default class UserController {
@@ -23,7 +24,7 @@ export default class UserController {
 
     @Get('/all')
     @UseGuards(AuthGuard)
-    getUsers(): Promise<UserReport[]> {
+    getUsers(): Promise<SearchResult<UserReport>> {
         return this.userService.getAll();
     }
 

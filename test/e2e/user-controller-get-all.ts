@@ -3,18 +3,19 @@ import * as request from 'supertest';
 import bootstrap from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { removeUserByUsername } from '@test/util/user-util';
+import { removeUsersByUsernames } from '@test/util/user-util';
 import User from '@/user/domains/User';
 import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
-import { removeCohortByName } from '@test/util/cohort-util';
+import { removeCohortsByNames } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
 import UserReport from '@/user/domains/UserReport';
+import SearchResult from '@/common/domains/SearchResult';
 
 describe('/v1/users/all', () => {
     let app: INestApplication;
 
-    const username = 'example23@gibberish.com';
+    const usernames = ['example23@gibberish.com', 'example24@gibberish.com'];
 
     let requester: User;
 
@@ -22,18 +23,18 @@ describe('/v1/users/all', () => {
         app = await bootstrap(AppModule);
 
         requester = await app.get(UserService).createUser({
-            username,
+            username: usernames[0],
             firstname: 'John',
         } as User);
     });
 
     afterAll(async () => {
-        await removeUserByUsername(username);
-        await removeCohortByName(username);
+        await removeUsersByUsernames(usernames);
+        await removeCohortsByNames(usernames);
         await app.close();
     });
 
-    const makeApiRequest = async (): Promise<SupertestResponse<UserReport[]>> => {
+    const makeApiRequest = async (): Promise<SupertestResponse<SearchResult<UserReport>>> => {
         const { status, body } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/users/all`)
             .set('Authorization', `Bearer ${generateJwToken(requester)}`);
@@ -51,12 +52,27 @@ describe('/v1/users/all', () => {
 
         it('SHOULD return 200 OK with users', async () => {
             const { body } = await makeApiRequest();
-            const users = body as UserReport[];
-            expect(users).not.toHaveLength(0);
-            users.forEach((user) => {
+            const response = body as SearchResult<UserReport>;
+            expect(response.results).not.toHaveLength(0);
+            expect(response.total).not.toBe(0);
+            response.results.forEach((user) => {
                 expect(user.username).toBeDefined();
                 expect(user.name).toBeDefined();
                 expect(user.cohortName).toBeDefined();
+            });
+        });
+
+        it('SHOULD return 200 OK with users ordered by creation time', async () => {
+            const anotherUser = await app.get(UserService).createUser({
+                username: usernames[1],
+                firstname: 'John',
+            } as User);
+            const { body } = await makeApiRequest();
+            const response = body as SearchResult<UserReport>;
+            const mostRecentUser = response.results[response.total - 1];
+            expect(mostRecentUser).toMatchObject({
+                username: anotherUser.username,
+                cohortName: anotherUser.username,
             });
         });
     });
