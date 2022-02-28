@@ -52,7 +52,8 @@
 
 ## Change Log
 
--   `0.9.0`: HTTPS for the localhost/development environment
+-   `0.9.1`: Refactored the API `/v1/users/all` to apply ordering and send total number of users
+-   `0.9.0`: HTTPS for the localhost
 -   `0.8.0`: Introduced health check endpoint
 -   `0.7.1`: Fixed import issue in the test files
 -   `0.7.0`: Added APIs for reporting purpose
