@@ -10,11 +10,14 @@ import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortByName } from '@test/util/cohort-util';
 import Definition from '@/vocabulary/domains/Definition';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
-import { getDefinitionByVocabularyId, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
+import { getDefinitionsByVocabularyId, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
+import { createItem } from '@test/util/leitner-systems-util';
+import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
+import * as _ from 'lodash';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -117,6 +120,26 @@ describe('/v1/vocabularies', () => {
                 payload.word = 'Word1';
                 payload.definitions = [];
                 const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for empty definitions', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [
+                    getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                    { ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()), meaning: 'Meaning 2' },
+                ];
+
+                await makeApiRequest(payload);
+
+                // second attempt
+                payload.definitions = [];
+
+                const { status } = await makeApiRequest(payload);
+
                 expect(status).toBe(400);
             });
 
@@ -239,15 +262,42 @@ describe('/v1/vocabularies', () => {
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
             });
+
+            it('SHOULD return 400 BAD_REQUEST and validate definition even if isDraft = true', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                const definition = getBaseDefinitionPayloadWithoutRelations(payload.id);
+                delete definition.meaning;
+                payload.definitions = [definition as Definition];
+                const { status } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+            });
         });
 
         describe('Success', () => {
+            it('SHOULD return 201 CREATED with capitalized word', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'lower cased word';
+                payload.definitions = [];
+
+                const { status, body } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+
+                const vocabulary = body as Vocabulary;
+                expect(vocabulary.word).toBe(_.capitalize(payload.word));
+            });
+
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
                 payload.isDraft = true;
                 payload.word = 'Word1';
-                payload.definitions = [getBaseDefinitionPayloadWithoutRelations()];
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id)];
                 delete payload.definitions[0].externalLinks;
 
                 const { status } = await makeApiRequest(payload);
@@ -261,6 +311,7 @@ describe('/v1/vocabularies', () => {
                 payload.isDraft = true;
                 payload.word = 'Word1';
                 payload.definitions = [];
+                delete payload.genericExternalLinks;
 
                 const { status } = await makeApiRequest(payload);
 
@@ -281,7 +332,7 @@ describe('/v1/vocabularies', () => {
                 const vocabulary = body as Vocabulary;
                 expect(vocabulary.definitions).toHaveLength(0);
 
-                const definitions = await getDefinitionByVocabularyId(payload.id);
+                const definitions = await getDefinitionsByVocabularyId(payload.id);
                 expect(definitions).toHaveLength(0);
             });
 
@@ -300,7 +351,7 @@ describe('/v1/vocabularies', () => {
                     expect(definition.vocabularyId).toBe(payload.id);
                     expect(definition.id).toBeDefined();
                 });
-                expect(await getDefinitionByVocabularyId(vocabulary.id)).toHaveLength(1);
+                expect(await getDefinitionsByVocabularyId(vocabulary.id)).toHaveLength(1);
             });
 
             it('SHOULD return 201 CREATED with same vocabulary ID WHEN definition is defined later', async () => {
@@ -315,12 +366,11 @@ describe('/v1/vocabularies', () => {
                 expect(draftVocabulary).toBeDefined();
                 expect(draftVocabulary.id).toBe(payload.id);
 
-                const draftDefinitions = await getDefinitionByVocabularyId(payload.id);
+                const draftDefinitions = await getDefinitionsByVocabularyId(payload.id);
                 expect(draftDefinitions).toHaveLength(0);
 
                 // second attempt
 
-                payload.isDraft = false;
                 payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4())];
 
                 const { status, body: body2 } = await makeApiRequest(payload);
@@ -329,10 +379,14 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
                 expect(vocabulary).toBeDefined();
                 expect(vocabulary.id).toBe(payload.id);
+                expect(vocabulary.version).toBe(2);
+                expect(vocabulary.updatedAt).not.toBe(draftVocabulary.updatedAt);
+                expect(vocabulary.updatedAt).not.toBe(vocabulary.createdAt);
                 expect(vocabulary.definitions).toHaveLength(1);
                 expect(vocabulary.definitions[0].vocabularyId).toBe(payload.id);
+                expect(vocabulary.isDraft).toBe(false);
 
-                const definitions = await getDefinitionByVocabularyId(payload.id);
+                const definitions = await getDefinitionsByVocabularyId(payload.id);
 
                 expect(definitions).toHaveLength(1);
                 expect(definitions).toHaveLength(1);
@@ -351,17 +405,17 @@ describe('/v1/vocabularies', () => {
                 const definitionId = (draftVocabulary as Vocabulary).definitions[0].id;
                 expect(definitionId).toBeDefined();
 
-                const draftDefinitions = await getDefinitionByVocabularyId(payload.id);
+                const draftDefinitions = await getDefinitionsByVocabularyId(payload.id);
                 expect(draftDefinitions).toHaveLength(1);
                 expect(draftDefinitions[0].vocabularyId).toBe(payload.id);
                 expect(draftDefinitions[0].id).toBe(definitionId);
 
                 // second attempt
 
-                // different definition
+                // update definition
                 payload.definitions = [
                     {
-                        ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                        ...getBaseDefinitionPayloadWithoutRelations(payload.id, definitionId),
                         meaning: 'Updated meaning',
                         examples: ['Updated example'],
                     },
@@ -379,13 +433,65 @@ describe('/v1/vocabularies', () => {
                 expect(vocabulary.definitions[0].examples).toHaveLength(1);
                 expect(vocabulary.definitions[0].examples[0]).toBe(payload.definitions[0].examples[0]);
 
-                const definitions = await getDefinitionByVocabularyId(payload.id);
+                const definitions = await getDefinitionsByVocabularyId(payload.id);
 
                 expect(definitions).toHaveLength(1);
-                expect(definitions).toHaveLength(1);
                 expect(definitions[0].vocabularyId).toBe(payload.id);
-                expect(definitions[0].id).not.toBe(definitionId);
+                expect(definitions[0].id).toBe(definitionId);
                 expect(definitions[0].id).toBe(payload.definitions[0].id);
+            });
+
+            it('SHOULD return 201 CREATED with same vocabulary ID WHEN a definition is added later', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id)];
+
+                const { body: draftVocabulary } = await makeApiRequest(payload);
+                const definitionId = (draftVocabulary as Vocabulary).definitions[0].id;
+                expect(definitionId).toBeDefined();
+
+                const draftDefinitions = await getDefinitionsByVocabularyId(payload.id);
+                expect(draftDefinitions).toHaveLength(1);
+                expect(draftDefinitions[0].vocabularyId).toBe(payload.id);
+                expect(draftDefinitions[0].id).toBe(definitionId);
+
+                // second attempt
+
+                payload.definitions = [
+                    // existing definition
+                    draftDefinitions[0],
+                    // different definition
+                    {
+                        ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                        meaning: 'Another meaning',
+                        examples: ['example'],
+                    },
+                ];
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary).toBeDefined();
+                expect(vocabulary.id).toBe(payload.id);
+                expect(vocabulary.definitions).toHaveLength(2);
+                vocabulary.definitions.forEach((definition, index) => {
+                    expect(definition.id).toBe(payload.definitions[index].id);
+                    expect(definition.vocabularyId).toBe(payload.id);
+                    expect(definition.meaning).toBe(payload.definitions[index].meaning);
+                    expect(definition.examples).toHaveLength(1);
+                    expect(definition.examples[0]).toBe(payload.definitions[index].examples[0]);
+                });
+
+                const definitions = await getDefinitionsByVocabularyId(payload.id);
+
+                expect(definitions).toHaveLength(2);
+                definitions.forEach((definition, index) => {
+                    expect(definition.vocabularyId).toBe(payload.id);
+                    expect(definition.id).toBe(payload.definitions[index].id);
+                });
             });
 
             it('SHOULD return 201 CREATED for the payload with multiple definitions', async () => {
@@ -404,7 +510,7 @@ describe('/v1/vocabularies', () => {
                 expect(vocabulary.id).toBe(payload.id);
                 expect(vocabulary.definitions).toHaveLength(2);
 
-                const definitions = await getDefinitionByVocabularyId(vocabulary.id);
+                const definitions = await getDefinitionsByVocabularyId(vocabulary.id);
 
                 expect(definitions).toHaveLength(2);
                 definitions.forEach((definition, index) => {
@@ -412,6 +518,94 @@ describe('/v1/vocabularies', () => {
                     expect(definition.id).toBe(payload.definitions[index].id);
                     expect(definition.id).toBe(vocabulary.definitions[index].id);
                 });
+            });
+
+            it('SHOULD return 201 CREATED with modified number of definitions', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [
+                    getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                    { ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()), meaning: 'Meaning 2' },
+                ];
+
+                await makeApiRequest(payload);
+
+                const existingDefinitions = await getDefinitionsByVocabularyId(payload.id);
+
+                // second attempt
+
+                payload.definitions = [{ ...existingDefinitions[0], examples: ['Aug 8, 2021'] }];
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary.definitions).toHaveLength(1);
+                expect(vocabulary.definitions[0].id).toBe(payload.definitions[0].id);
+            });
+
+            it('SHOULD return 201 CREATED with empty definitions', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                payload.definitions = [
+                    getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()),
+                    { ...getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4()), meaning: 'Meaning 2' },
+                ];
+
+                await makeApiRequest(payload);
+
+                // second attempt
+                payload.definitions = [];
+                payload.isDraft = true;
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary.definitions).toHaveLength(0);
+            });
+        });
+
+        describe('Leitner Box', () => {
+            it('SHOULD return 201 CREATED with falsy isInLeitnerBox', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.definitions = [];
+
+                const { status, body } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+
+                const vocabulary = body as Vocabulary;
+                expect(vocabulary.isInLeitnerBox).toBe(false);
+            });
+
+            it('SHOULD return 201 CREATED with truthy isInLeitnerBox', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'Word1';
+                payload.definitions = [];
+
+                await makeApiRequest(payload);
+                await createItem(requester.id, payload.id, LeitnerBoxType.BOX_1);
+
+                // second attempt
+
+                payload.isDraft = false;
+                payload.definitions = [getBaseDefinitionPayloadWithoutRelations(payload.id, uuidV4())];
+
+                const { status, body } = await makeApiRequest(payload);
+                const vocabulary = body as Vocabulary;
+
+                expect(status).toBe(201);
+                expect(vocabulary.isInLeitnerBox).toBe(true);
             });
         });
     });

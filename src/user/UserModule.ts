@@ -6,9 +6,10 @@ import CohortController from '@/user/controllers/CohortController';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import UserRepository from '@/user/repositories/UserRepository';
 import CohortRepository from '@/user/repositories/CohortRepository';
+import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserRepository, CohortRepository])],
+    imports: [TypeOrmModule.forFeature([UserRepository, CohortRepository, LeitnerSystemsRepository])],
     controllers: [UserController, CohortController],
     providers: [UserService, CohortService],
 })

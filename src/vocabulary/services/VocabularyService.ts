@@ -18,17 +18,18 @@ export default class VocabularyService {
         private readonly leitnerSystemsService: LeitnerSystemsService,
     ) {}
 
-    async createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {
-        const existingVocabulary = await this.findVocabularyById(vocabulary.id);
+    async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
+        const existingVocabulary = await this.findVocabularyById(vocabulary.id, userId);
         if (existingVocabulary) {
-            // this is a workaround
-            // facing issues during "UPDATE"
-            await this.removeVocabularyAndDefinitions(existingVocabulary);
+            // why do I have to manually remove?
+            // Instead of removing why TypeORM tries to set vocabularyId to null?
+            await this.removeOrphanDefinitions(existingVocabulary, vocabulary);
         }
-        const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
-        // TODO investigate why vocabularyInstance.setCohortId(cohortId) is not working
+        const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
         vocabularyInstance.cohortId = cohortId;
-        return this.vocabularyRepository.save(vocabularyInstance);
+        const newVocabulary = await this.vocabularyRepository.save(vocabularyInstance);
+        newVocabulary.isInLeitnerBox = !!existingVocabulary?.isInLeitnerBox;
+        return newVocabulary;
     }
 
     async findVocabularies(
@@ -39,16 +40,16 @@ export default class VocabularyService {
         return this.vocabularyRepository.findVocabularies(userId, cohortId, vocabularySearch);
     }
 
-    async findVocabularyById(id: string): Promise<Vocabulary> {
-        return this.vocabularyRepository.findVocabularyById(id);
+    async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
+        return this.vocabularyRepository.findVocabularyById(id, userId);
     }
 
     private extractDefinitionIds = (definitions: Definition[]): string[] => {
         return _.map(definitions, 'id');
     };
 
-    async assertExistenceAndRemoveVocabularyAndDefinitions(id: string): Promise<void> {
-        const existingVocabulary = await this.findVocabularyById(id);
+    async assertExistenceAndRemoveVocabularyAndDefinitions(id: string, userId: string): Promise<void> {
+        const existingVocabulary = await this.findVocabularyById(id, userId);
         if (existingVocabulary) {
             await this.removeVocabularyAndDefinitions(existingVocabulary);
         } else {
@@ -65,6 +66,15 @@ export default class VocabularyService {
         }
     }
 
+    private async removeOrphanDefinitions(existingVocabulary: Vocabulary, vocabulary: Vocabulary): Promise<void> {
+        await this.definitionRepository.removeDefinitionsByIds(
+            _.difference(
+                this.extractDefinitionIds(existingVocabulary.definitions),
+                this.extractDefinitionIds(vocabulary.definitions),
+            ),
+        );
+    }
+
     async removeVocabularyAndDefinitions(vocabulary: Vocabulary): Promise<void> {
         if (!_.isEmpty(vocabulary.definitions)) {
             await this.definitionRepository.removeDefinitionsByIds(this.extractDefinitionIds(vocabulary.definitions));
@@ -72,9 +82,9 @@ export default class VocabularyService {
         await this.vocabularyRepository.removeVocabularyById(vocabulary.id);
     }
 
-    async removeVocabularyById(id: string): Promise<void> {
+    async removeVocabularyById(id: string, userId: string): Promise<void> {
         await this.assertExistenceIntoLeitnerSystems(id);
-        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id);
+        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id, userId);
     }
 
     async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
@@ -82,9 +92,7 @@ export default class VocabularyService {
             throw new ConflictException(`Cohort with ID: "${cohortId}" has at least one vocabulary`);
         }
         const payload = createVocabularies(cohortId, newJoinerVocabularyList);
-        const vocabularies = await Promise.all(
-            _.map(payload, (vocabulary) => this.vocabularyRepository.save(vocabulary)),
-        );
+        const vocabularies = await this.vocabularyRepository.save(payload);
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
 }

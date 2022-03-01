@@ -34,16 +34,6 @@
 
 ➜ `npm run start:dev`
 
-## Generate the migration
-
-➜ `npm run typeorm migration:create -- -n name-of-the-migration`
-
-## Seed scripts
-
-➜ Create users: `npm run seed-script:insert-test-users`
-
-➜ Create vocabularies: `npm run seed-script:insert-vocabularies`
-
 ## Deploy to AWS Elastic Beanstalk
 
 ➜ Create an application at AWS Elastic Beanstalk
@@ -62,6 +52,17 @@
 
 ## Change Log
 
+-   `0.9.1`: Refactored the API `/v1/users/all` to apply ordering and send total number of users
+-   `0.9.0`: HTTPS for the localhost
+-   `0.8.0`: Introduced health check endpoint
+-   `0.7.1`: Fixed import issue in the test files
+-   `0.7.0`: Added APIs for reporting purpose
+-   `0.6.3`: Auto setting of `isDraft` if a vocab has at least one definition
+-   `0.6.2`: Dynamic vocab ordering
+-   `0.6.1`: Added script to remove an leitner item for a user
+-   `0.6.0`: Added functionality to remove definitions
+-   `0.5.5`: Fixed the (TypeORM) relationship between Vocabulary and Definition + Ordered definitions by their creation time
+-   `0.5.4`: Populated leitner box existence info
 -   `0.5.3`: Applied ordering for the leitner items
 -   `0.5.2`: Attached triggering time with Leitner box item
 -   `0.5.1`: Attached Leitner box info within the response payload of the vocab search API

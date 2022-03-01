@@ -5,13 +5,15 @@ import DatabaseModule from '@/DatabaseModule';
 import AutorunScriptsModule from '@/AutorunScriptsModule';
 import VocabularyModule from '@/vocabulary/VocabularyModule';
 import AndroidModule from '@/android/AndroidModule';
+import HealthCheckModule from '@/health-check/HealthCheckModule';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ envFilePath: '.env' }),
         DatabaseModule,
-        UserModule,
+        HealthCheckModule,
         AutorunScriptsModule,
+        UserModule,
         VocabularyModule,
         AndroidModule,
     ],

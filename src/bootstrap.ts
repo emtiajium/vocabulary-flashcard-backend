@@ -5,11 +5,13 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import AppModule from '@/AppModule';
 import ServiceConfig from '@/common/configs/ServiceConfig';
+import * as fs from 'fs';
+import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { version, name } from '@root/package.json';
+// import { version, name } from '@root/package.json';
 
-class Bootstrap {
-    private serviceConfig: ServiceConfig;
+export class Bootstrap {
+    private readonly serviceConfig: ServiceConfig;
 
     private app: INestApplication;
 
@@ -17,19 +19,8 @@ class Bootstrap {
         this.serviceConfig = new ServiceConfig();
     }
 
-    initSwagger(): void {
-        const config = new DocumentBuilder()
-            .addServer(this.serviceConfig.serviceApiPrefix)
-            .setTitle(name)
-            .setVersion(version)
-            .addApiKey({ type: 'apiKey', name: 'Authorization', in: 'header' }, 'Authorization')
-            .build();
-        const document = SwaggerModule.createDocument(this.app, config);
-        SwaggerModule.setup(`${this.serviceConfig.serviceApiPrefix}/swagger`, this.app, document);
-    }
-
     async start(): Promise<INestApplication> {
-        const app: INestApplication = await NestFactory.create(this.appModule);
+        const app: INestApplication = await NestFactory.create(this.appModule, this.getAppOptions());
         this.app = app;
         this.initSwagger();
         app.enableCors();
@@ -43,6 +34,36 @@ class Bootstrap {
         app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
         await app.listen(port);
         return app;
+    }
+
+    initSwagger(): void {
+        const config = new DocumentBuilder()
+            .addServer(this.serviceConfig.serviceApiPrefix)
+            // .setTitle(name)
+            // .setVersion(version)
+            .addApiKey({ type: 'apiKey', name: 'Authorization', in: 'header' }, 'Authorization')
+            .build();
+        const document = SwaggerModule.createDocument(this.app, config);
+        SwaggerModule.setup(`${this.serviceConfig.serviceApiPrefix}/swagger`, this.app, document);
+    }
+
+    private getAppOptions(): NestApplicationOptions {
+        let options: NestApplicationOptions;
+
+        if (this.serviceConfig.environment === 'development') {
+            options = {
+                // Enabling HTTPS by following the steps mentioned at
+                // https://www.section.io/engineering-education/how-to-get-ssl-https-for-localhost/
+                // We also need to import certificate authority by hitting
+                // <chrome://settings/certificates>
+                httpsOptions: {
+                    key: fs.readFileSync('cert/CA/localhost/localhost.decrypted.key'),
+                    cert: fs.readFileSync('cert/CA/localhost/localhost.crt'),
+                },
+            };
+        }
+
+        return options;
     }
 }
 

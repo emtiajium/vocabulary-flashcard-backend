@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import {
     ArrayNotEmpty,
     IsArray,
@@ -13,7 +13,7 @@ import {
     ValidateNested,
 } from 'class-validator';
 import Definition from '@/vocabulary/domains/Definition';
-import { plainToClass, Type } from 'class-transformer';
+import { plainToClass, Transform, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
 import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
@@ -21,6 +21,7 @@ import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryI
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar' })
+    @Transform(({ value }) => _.capitalize(value))
     @IsNotEmpty()
     @IsString()
     @IsDefined()
@@ -47,15 +48,15 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @IsBoolean()
     isDraft: boolean;
 
-    @OneToMany(() => Definition, (definition) => definition.id, { eager: true, cascade: true })
-    @ValidateIf((vocabulary) => vocabulary.isDraft === false)
+    @OneToMany(() => Definition, (definition) => definition.vocabulary, { eager: true, cascade: true })
+    @ValidateIf((vocabulary) => vocabulary.isDraft === false || _.isEmpty(vocabulary.definitions) === false)
     @ValidateNested({ each: true })
     @ArrayNotEmpty()
     @IsArray()
     @Type(() => Definition)
     definitions?: Definition[];
 
-    @ManyToOne(() => Cohort, (cohort) => cohort.id, { eager: false, cascade: false })
+    @OneToMany(() => Cohort, (cohort) => cohort.id, { eager: false, cascade: false })
     @IsOptional()
     @Type(() => Cohort)
     cohort?: Cohort;
@@ -66,15 +67,12 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     cohortId?: string;
 
     @IsOptional()
-    isInLeitnerBox?: number;
+    isInLeitnerBox?: boolean;
 
-    setCohortId?(cohortId: string): void {
-        this.cohortId = cohortId;
-    }
-
-    static populateMeanings(vocabulary: Vocabulary): Vocabulary {
+    static populateDefinitions(vocabulary: Vocabulary): Vocabulary {
         const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
         if (!_.isEmpty(vocabulary.definitions)) {
+            vocabularyInstance.isDraft = false;
             vocabularyInstance.definitions = vocabulary.definitions.map((definition) =>
                 Definition.create(vocabulary.id, definition),
             );

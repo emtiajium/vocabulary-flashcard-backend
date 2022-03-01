@@ -54,7 +54,7 @@ export default class InsertVocabularies {
     private async persist(): Promise<void> {
         await Promise.all(
             _.map(this.vocabularies, (vocabulary) => {
-                const vocabularyInstance = Vocabulary.populateMeanings(vocabulary);
+                const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
                 return getRepository(Vocabulary).save(vocabularyInstance);
             }),
         );

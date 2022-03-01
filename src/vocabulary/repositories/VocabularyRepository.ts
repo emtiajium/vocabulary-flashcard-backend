@@ -3,6 +3,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
+import { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 
 @EntityRepository(Vocabulary)
 export default class VocabularyRepository extends Repository<Vocabulary> {
@@ -17,6 +18,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     ): Promise<SearchResult<Vocabulary>> {
         const {
             pagination: { pageSize, pageNumber },
+            sort,
             searchKeyword,
         } = vocabularySearch;
 
@@ -36,7 +38,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 WHERE vocabulary."cohortId" = $2
                     ${searchKeyword ? `AND vocabulary.word ILIKE '${searchKeyword}%'` : ''}
                 GROUP BY vocabulary.id
-                ORDER BY vocabulary."createdAt" DESC
+                ORDER BY vocabulary."${sort?.field || SupportedSortFields.updatedAt}" ${
+                sort?.direction || SortDirection.DESC
+            }
                 OFFSET $3 LIMIT $4;
             `,
             [userId, cohortId, currentPage, pageSize],
@@ -49,7 +53,6 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return new SearchResult(vocabularyQueryResult, vocabularyQueryResult[0]?.totalNumberOfVocabularies || 0);
     }
 
-    // eslint-disable-next-line class-methods-use-this
     rejectNull(results: Vocabulary[]): Vocabulary[] {
         // as LEFT join results[index].definitions can be [null]
         return _.map(results, (result) => ({
@@ -62,7 +65,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         }));
     }
 
-    async findVocabularyById(id: string): Promise<Vocabulary> {
+    async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
         const results = await this.query(
             `
                 SELECT vocabulary.id,
@@ -77,13 +80,21 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                                   'meaning', definition.meaning,
                                                   'examples', definition.examples,
                                                   'notes', definition.notes,
-                                                  'externalLinks', definition."externalLinks")) AS definitions
+                                                  'externalLinks', definition."externalLinks")) AS definitions,
+                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN                       AS "isInLeitnerBox"
                 FROM "Vocabulary" AS vocabulary
-                         LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
+                         LEFT JOIN (SELECT *
+                                    FROM "Definition"
+                                    WHERE "vocabularyId" = $1
+                                    ORDER BY "createdAt" ASC
+                ) AS definition ON vocabulary.id = definition."vocabularyId"
+                         LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
+                                   ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
+                                      "leitnerSystems"."userId" = $2
                 WHERE vocabulary.id = $1
                 GROUP BY vocabulary.id;
             `,
-            [id],
+            [id, userId],
         );
 
         return this.rejectNull(results)[0];

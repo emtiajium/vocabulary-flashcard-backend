@@ -1,6 +1,7 @@
 import User from '@/user/domains/User';
 import { EntityRepository, In, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
+import { SortDirection } from '@/common/domains/Sort';
 
 @EntityRepository(User)
 export default class UserRepository extends Repository<User> {
@@ -22,15 +23,23 @@ export default class UserRepository extends Repository<User> {
         return plainToClass(User, { ...user, ...createdUser.generatedMaps[0] });
     }
 
-    async getUsers(ids: string[]): Promise<User[]> {
+    getUsers(ids: string[]): Promise<User[]> {
         return this.find({ id: In(ids) });
     }
 
-    async getUsersByUsernames(usernames: string[]): Promise<User[]> {
+    getUsersByUsernames(usernames: string[]): Promise<User[]> {
         return this.find({ username: In(usernames) });
     }
 
     async updateCohort(usernames: string[], cohortId: string): Promise<void> {
         await this.update({ username: In(usernames) }, { cohort: { id: cohortId } });
+    }
+
+    getAll(): Promise<User[]> {
+        return this.find({
+            relations: ['cohort'],
+            select: ['username', 'firstname', 'lastname'],
+            order: { createdAt: SortDirection.ASC },
+        });
     }
 }
