@@ -56,7 +56,7 @@ export class Bootstrap {
             .addServer(serviceApiPrefix)
             .setTitle(name)
             .setVersion(version)
-            .setContact(author.name, '', author.email)
+            .setContact(author.name, author.url, author.email)
             .addApiKey({ type: 'apiKey', name: 'Authorization', in: 'header' }, 'Authorization')
             .build();
 
