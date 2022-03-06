@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import User from '@/user/domains/User';
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
 import SupertestResponse from '@test/util/supertest-util';
@@ -27,7 +27,7 @@ describe('/v1/androids', () => {
     }
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
         requester = await createApiRequester();
     });
 

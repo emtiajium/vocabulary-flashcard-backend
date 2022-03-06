@@ -1,4 +1,4 @@
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
@@ -35,7 +35,7 @@ describe('/v1/cohorts/:name', () => {
         } as User);
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
         requester = await createApiRequester();
     });
 

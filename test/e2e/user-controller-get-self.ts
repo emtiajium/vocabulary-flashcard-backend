@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
 import { removeUserByUsername } from '@test/util/user-util';
@@ -18,7 +18,7 @@ describe('/v1/users', () => {
     let requester: User;
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
         await removeUserByUsername(username);
     });
 

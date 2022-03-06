@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
@@ -22,7 +22,7 @@ describe('/v1/users', () => {
         } as User);
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
     });
 
     afterAll(async () => {

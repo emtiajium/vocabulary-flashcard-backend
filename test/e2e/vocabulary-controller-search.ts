@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import SupertestResponse from '@test/util/supertest-util';
 import * as request from 'supertest';
@@ -30,7 +30,7 @@ describe('POST /v1/vocabularies/search', () => {
     let cohort: Cohort;
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
         requester = await createApiRequester();
         secondUser = await createUser({ username: `friend@firecracker.com`, firstname: 'Friend' } as User);
         const cohortName = 'Vocabulary Search Automated Test Cohort';

@@ -1,6 +1,6 @@
 import User from '@/user/domains/User';
 import { INestApplication } from '@nestjs/common';
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
 import Cohort from '@/user/domains/Cohort';
@@ -18,7 +18,7 @@ describe('Cohort Service', () => {
         } as User);
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
     });
 
     afterAll(async () => {

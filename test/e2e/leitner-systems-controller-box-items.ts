@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import User from '@/user/domains/User';
 import Cohort from '@/user/domains/Cohort';
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
 import { createCohort, removeCohortByName } from '@test/util/cohort-util';
@@ -41,7 +41,7 @@ describe('Leitner Systems Box Items', () => {
     }
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
         requester = await createApiRequester();
         const cohortName = 'Leitner Systems Automated Test';
         cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);

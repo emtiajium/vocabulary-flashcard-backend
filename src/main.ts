@@ -1,9 +1,9 @@
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import AutoRunScripts from '@/auto-run-scripts';
 import executeManualScript from '@/manual-scripts/index';
 
-bootstrap(AppModule)
+kickOff(AppModule)
     .then((app) => {
         // do not need to wait to be resolved/rejected
         new AutoRunScripts(app).runScripts().finally();

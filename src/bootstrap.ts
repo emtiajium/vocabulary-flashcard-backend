@@ -40,6 +40,7 @@ export class Bootstrap {
     initSwagger(): void {
         const { swaggerUsername, swaggerPassword, serviceApiPrefix } = this.serviceConfig;
         const swaggerEndpoint = `${serviceApiPrefix}/swagger`;
+
         if (swaggerPassword) {
             this.app.use(
                 swaggerEndpoint,
@@ -88,6 +89,6 @@ export class Bootstrap {
     }
 }
 
-export default async function bootstrap(module: AppModule): Promise<INestApplication> {
+export async function kickOff(module: AppModule): Promise<INestApplication> {
     return new Bootstrap(module).start();
 }

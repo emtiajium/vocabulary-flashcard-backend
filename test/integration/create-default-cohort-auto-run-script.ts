@@ -1,4 +1,4 @@
-import bootstrap from '@/bootstrap';
+import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { INestApplication } from '@nestjs/common';
 import AutoRunScripts from '@/auto-run-scripts';
@@ -11,7 +11,7 @@ describe('Create Default Cohort Autorun Script', () => {
     let mockGetScriptNames;
 
     beforeAll(async () => {
-        app = await bootstrap(AppModule);
+        app = await kickOff(AppModule);
     });
 
     afterAll(async () => {
