@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.10.0`: Swagger
 -   `0.9.1`: Refactored the API `/v1/users/all` to apply ordering and send total number of users
 -   `0.9.0`: HTTPS for the localhost
 -   `0.8.0`: Introduced health check endpoint
