@@ -4,8 +4,10 @@ import Cohort from '@/user/domains/Cohort';
 import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 import User from '@/user/domains/User';
+import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/cohorts')
+@ApiSecurity('Authorization')
 export default class CohortController {
     constructor(private readonly cohortService: CohortService) {}
 
@@ -23,7 +25,7 @@ export default class CohortController {
 
     @Get('/self')
     @UseGuards(AuthGuard)
-    async findCohortById(@AuthenticatedUser() user: User): Promise<Cohort> {
+    findCohortById(@AuthenticatedUser() user: User): Promise<Cohort> {
         return this.cohortService.findCohortById(user.cohortId);
     }
 }

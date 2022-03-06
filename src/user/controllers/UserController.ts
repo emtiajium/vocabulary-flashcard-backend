@@ -6,8 +6,10 @@ import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
+import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/users')
+@ApiSecurity('Authorization')
 export default class UserController {
     constructor(private readonly userService: UserService) {}
 

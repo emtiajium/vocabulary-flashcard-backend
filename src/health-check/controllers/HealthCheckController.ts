@@ -2,8 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Connection, QueryRunner } from 'typeorm';
 import Health from '@/health-check/domains/Health';
+import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/health')
+@ApiSecurity('Authorization')
 export default class HealthCheckController {
     constructor(
         @InjectConnection()

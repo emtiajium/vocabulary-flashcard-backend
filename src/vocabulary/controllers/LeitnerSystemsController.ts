@@ -7,8 +7,10 @@ import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import Pagination from '@/common/domains/Pagination';
 import SearchResult from '@/common/domains/SearchResult';
 import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
+import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/leitner-systems')
+@ApiSecurity('Authorization')
 export default class LeitnerSystemsController {
     constructor(private readonly leitnerSystemsService: LeitnerSystemsService) {}
 
@@ -36,7 +38,7 @@ export default class LeitnerSystemsController {
     @Post('/items/:box')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
-    async getBoxItems(
+    getBoxItems(
         @Param('box') box: LeitnerBoxType,
         @Body('pagination') pagination: Pagination,
         @AuthenticatedUser() user: User,
@@ -46,16 +48,13 @@ export default class LeitnerSystemsController {
 
     @Get('/exists/user/:vocabularyId')
     @UseGuards(AuthGuard)
-    async getLeitnerBoxItem(
-        @Param('vocabularyId') vocabularyId: string,
-        @AuthenticatedUser() user: User,
-    ): Promise<boolean> {
+    getLeitnerBoxItem(@Param('vocabularyId') vocabularyId: string, @AuthenticatedUser() user: User): Promise<boolean> {
         return this.leitnerSystemsService.isVocabularyExistForUser(user.id, vocabularyId);
     }
 
     @Get('/items/count/:box')
     @UseGuards(AuthGuard)
-    async countBoxItems(@Param('box') box: LeitnerBoxType, @AuthenticatedUser() user: User): Promise<number> {
+    countBoxItems(@Param('box') box: LeitnerBoxType, @AuthenticatedUser() user: User): Promise<number> {
         return this.leitnerSystemsService.countBoxItems(user.id, box);
     }
 }

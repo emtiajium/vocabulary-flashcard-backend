@@ -6,21 +6,23 @@ import SearchResult from '@/common/domains/SearchResult';
 import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 import User from '@/user/domains/User';
+import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/vocabularies')
+@ApiSecurity('Authorization')
 export default class VocabularyController {
     constructor(private readonly vocabularyService: VocabularyService) {}
 
     @Post()
     @UseGuards(AuthGuard)
-    async createVocabulary(@Body() vocabulary: Vocabulary, @AuthenticatedUser() user: User): Promise<Vocabulary> {
+    createVocabulary(@Body() vocabulary: Vocabulary, @AuthenticatedUser() user: User): Promise<Vocabulary> {
         return this.vocabularyService.createVocabulary(vocabulary, user.id, user.cohortId);
     }
 
     @Post('/search')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
-    async findVocabularies(
+    findVocabularies(
         @AuthenticatedUser() user: User,
         @Body() vocabularySearch: VocabularySearch,
     ): Promise<SearchResult<Vocabulary>> {
@@ -29,7 +31,7 @@ export default class VocabularyController {
 
     @Get('/:id')
     @UseGuards(AuthGuard)
-    async findVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<Vocabulary> {
+    findVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<Vocabulary> {
         return this.vocabularyService.findVocabularyById(id, user.id);
     }
 
@@ -41,7 +43,7 @@ export default class VocabularyController {
 
     @Post('/bootstrap')
     @UseGuards(AuthGuard)
-    async createInitialVocabularies(@AuthenticatedUser() user: User): Promise<SearchResult<Vocabulary>> {
+    createInitialVocabularies(@AuthenticatedUser() user: User): Promise<SearchResult<Vocabulary>> {
         return this.vocabularyService.createInitialVocabularies(user.cohortId);
     }
 }
