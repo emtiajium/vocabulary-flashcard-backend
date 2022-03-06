@@ -17,6 +17,7 @@ import { plainToClass, Transform, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
 import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntityWithMandatoryId {
@@ -56,16 +57,19 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Type(() => Definition)
     definitions?: Definition[];
 
+    @ApiHideProperty()
     @OneToMany(() => Cohort, (cohort) => cohort.id, { eager: false, cascade: false })
     @IsOptional()
     @Type(() => Cohort)
     cohort?: Cohort;
 
+    @ApiHideProperty()
     @Column({ type: 'uuid', nullable: false })
     @IsUUID()
     @IsOptional()
     cohortId?: string;
 
+    @ApiHideProperty()
     @IsOptional()
     isInLeitnerBox?: boolean;
 

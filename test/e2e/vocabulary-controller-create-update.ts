@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
-import SupertestResponse from '@test/util/supertest-util';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
@@ -52,7 +52,10 @@ describe('/v1/vocabularies', () => {
         };
     }
 
-    function getBaseDefinitionPayloadWithoutRelations(vocabularyId?: string, definitionId?: string): Definition {
+    function getBaseDefinitionPayloadWithoutRelations(
+        vocabularyId?: string,
+        definitionId: string = uuidV4(),
+    ): Definition {
         const definition = new Definition();
         definition.id = definitionId;
         definition.vocabularyId = vocabularyId;
@@ -187,6 +190,36 @@ describe('/v1/vocabularies', () => {
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].id', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id) };
+                delete definition.id;
+                payload.definitions = [definition as Definition];
+                const { status, body } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+                expect(
+                    (body as SupertestErrorResponse).message.includes(
+                        `definitions.0.id should not be null or undefined`,
+                    ),
+                ).toBe(true);
+            });
+
+            it('SHOULD return 400 BAD_REQUEST for payload with invalid definitions[X].id', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = false;
+                payload.word = 'Word1';
+                const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id) };
+                definition.id = 'NOT_A_UUID';
+                payload.definitions = [definition as Definition];
+                const { status, body } = await makeApiRequest(payload);
+                expect(status).toBe(400);
+                expect((body as SupertestErrorResponse).message.includes(`definitions.0.id must be a UUID`)).toBe(true);
             });
 
             it('SHOULD return 400 BAD_REQUEST for payload without definitions[X].meaning', async () => {

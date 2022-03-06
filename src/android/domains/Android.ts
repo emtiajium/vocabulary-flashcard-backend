@@ -1,9 +1,11 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty, IsOptional, IsPositive, IsString, IsUUID } from 'class-validator';
 import { v4 as uuidV4 } from 'uuid';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity('Android')
 export default class Android {
+    @ApiHideProperty()
     @PrimaryGeneratedColumn('uuid')
     @IsUUID()
     @IsOptional()

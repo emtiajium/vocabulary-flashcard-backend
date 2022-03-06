@@ -1,4 +1,3 @@
-import BaseEntity from '@/common/domains/BaseEntity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import {
     ArrayNotEmpty,
@@ -13,10 +12,11 @@ import {
 } from 'class-validator';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Type } from 'class-transformer';
-import { v4 as uuidV4 } from 'uuid';
+import { ApiHideProperty } from '@nestjs/swagger';
+import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
 
 @Entity('Definition')
-export default class Definition extends BaseEntity {
+export default class Definition extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar', default: '' })
     @IsNotEmpty()
     @IsString()
@@ -42,6 +42,7 @@ export default class Definition extends BaseEntity {
     @IsOptional()
     externalLinks?: string[];
 
+    @ApiHideProperty()
     @Type(() => Vocabulary)
     @ManyToOne(() => Vocabulary, (vocabulary) => vocabulary.definitions, {
         eager: false,
@@ -59,7 +60,7 @@ export default class Definition extends BaseEntity {
     // eslint-disable-next-line complexity
     static create(vocabularyId: string, definition?: Definition): Definition {
         const definitionInstance = new Definition();
-        definitionInstance.id = definition?.id || uuidV4();
+        definitionInstance.id = definition.id;
         definitionInstance.vocabularyId = vocabularyId;
         definitionInstance.meaning = definition?.meaning || '';
         definitionInstance.examples = definition?.examples || [];

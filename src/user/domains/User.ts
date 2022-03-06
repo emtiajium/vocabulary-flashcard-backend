@@ -3,6 +3,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { Expose } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 export const usernameSize = 36;
 export const firstnameSize = 36;
@@ -37,6 +38,7 @@ export default class User extends BaseEntity {
     @IsOptional()
     profilePictureUrl?: string;
 
+    @ApiHideProperty()
     @IsOptional()
     @ManyToOne(() => Cohort, (cohort) => cohort.id, { nullable: true, eager: true, cascade: true })
     cohort?: Cohort;
