@@ -58,7 +58,7 @@ export default class AuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         let isValidUser: boolean;
         try {
-            const user: User = await this.userService.getUserByUsername(await this.getUsernameFromToken(request));
+            const user: User = await this.userService.getUserByUsername(this.getUsernameFromToken(request));
             isValidUser = !!user;
             request.user = user;
         } catch {
