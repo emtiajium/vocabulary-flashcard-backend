@@ -9,12 +9,12 @@ export default class CohortService {
     constructor(private readonly cohortRepository: CohortRepository, private readonly userRepository: UserRepository) {}
 
     async createCohort(cohort: Cohort): Promise<void> {
-        const isEmptyUserIds = cohort.usernames?.length === 0;
-        if (!isEmptyUserIds) {
+        const isEmptyUsernames = cohort.usernames?.length === 0;
+        if (!isEmptyUsernames) {
             await this.validateUsers(cohort.usernames);
         }
         await this.cohortRepository.insertIfNotExists(cohort);
-        if (!isEmptyUserIds) {
+        if (!isEmptyUsernames) {
             await this.associateUsersWithCohort(
                 cohort.usernames,
                 await this.cohortRepository.getCohortByName(cohort.name),
