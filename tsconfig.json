@@ -18,5 +18,5 @@
             "@root/*": ["./*"]
         }
     },
-    "include": ["migrations", "src", "test", ".eslintrc.json", "package.json"]
+    "include": ["migrations", "src"]
 }
