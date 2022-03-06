@@ -34,6 +34,10 @@
 
 ➜ `npm run start:dev`
 
+###### API docs
+
+➜ <https://localhost:9006/rest/ielts-service/swagger/>
+
 ## Deploy to AWS Elastic Beanstalk
 
 ➜ Create an application at AWS Elastic Beanstalk
