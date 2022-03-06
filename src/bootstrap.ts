@@ -8,7 +8,7 @@ import ServiceConfig from '@/common/configs/ServiceConfig';
 import * as fs from 'fs';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-// import { version, name } from '@root/package.json';
+import { version, name, author } from '@root/package.json';
 
 export class Bootstrap {
     private readonly serviceConfig: ServiceConfig;
@@ -39,11 +39,14 @@ export class Bootstrap {
     initSwagger(): void {
         const config = new DocumentBuilder()
             .addServer(this.serviceConfig.serviceApiPrefix)
-            // .setTitle(name)
-            // .setVersion(version)
+            .setTitle(name)
+            .setVersion(version)
+            .setContact(author.name, '', author.email)
             .addApiKey({ type: 'apiKey', name: 'Authorization', in: 'header' }, 'Authorization')
             .build();
+
         const document = SwaggerModule.createDocument(this.app, config);
+
         SwaggerModule.setup(`${this.serviceConfig.serviceApiPrefix}/swagger`, this.app, document, {
             customSiteTitle: 'API Docs | Firecracker Vocab Practice',
             customfavIcon: `https://firecrackervocabulary.com/assets/icon/favicon/favicon-32x32.png`,

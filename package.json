@@ -1,7 +1,10 @@
 {
     "name": "ielts-gibberish",
     "version": "0.9.1",
-    "author": "271emtiaj@gmail.com",
+    "author": {
+        "name": "Emtiaj Hasan",
+        "email": "271emtiaj@gmail.com"
+    },
     "private": true,
     "license": "UNLICENSED",
     "engines": {
