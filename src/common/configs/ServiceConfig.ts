@@ -13,6 +13,10 @@ export default class ServiceConfig {
 
     payloadLimitSize: string;
 
+    swaggerUsername: string;
+
+    swaggerPassword: string;
+
     constructor() {
         this.configService = new ConfigService();
         this.port = this.configService.get<number>('PORT');
@@ -20,5 +24,7 @@ export default class ServiceConfig {
         this.serviceName = this.configService.get<string>('SERVICE_NAME');
         this.serviceApiPrefix = this.configService.get<string>('SERVICE_API_PREFIX');
         this.payloadLimitSize = this.configService.get<string>('PAYLOAD_LIMIT_SIZE');
+        this.swaggerUsername = this.configService.get<string>('SWAGGER_USERNAME');
+        this.swaggerPassword = this.configService.get<string>('SWAGGER_PASSWORD');
     }
 }

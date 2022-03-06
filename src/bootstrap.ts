@@ -3,9 +3,10 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import * as basicAuth from 'express-basic-auth';
+import * as fs from 'fs';
 import AppModule from '@/AppModule';
 import ServiceConfig from '@/common/configs/ServiceConfig';
-import * as fs from 'fs';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { version, name, author } from '@root/package.json';
@@ -37,8 +38,22 @@ export class Bootstrap {
     }
 
     initSwagger(): void {
+        const { swaggerUsername, swaggerPassword, serviceApiPrefix } = this.serviceConfig;
+        const swaggerEndpoint = `${serviceApiPrefix}/swagger`;
+        if (swaggerPassword) {
+            this.app.use(
+                swaggerEndpoint,
+                basicAuth({
+                    challenge: true,
+                    users: {
+                        [swaggerUsername]: swaggerPassword,
+                    },
+                }),
+            );
+        }
+
         const config = new DocumentBuilder()
-            .addServer(this.serviceConfig.serviceApiPrefix)
+            .addServer(serviceApiPrefix)
             .setTitle(name)
             .setVersion(version)
             .setContact(author.name, '', author.email)
@@ -47,7 +62,7 @@ export class Bootstrap {
 
         const document = SwaggerModule.createDocument(this.app, config);
 
-        SwaggerModule.setup(`${this.serviceConfig.serviceApiPrefix}/swagger`, this.app, document, {
+        SwaggerModule.setup(swaggerEndpoint, this.app, document, {
             customSiteTitle: 'API Docs | Firecracker Vocab Practice',
             customfavIcon: `https://firecrackervocabulary.com/assets/icon/favicon/favicon-32x32.png`,
         });
