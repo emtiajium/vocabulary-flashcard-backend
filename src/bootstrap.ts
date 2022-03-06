@@ -44,7 +44,10 @@ export class Bootstrap {
             .addApiKey({ type: 'apiKey', name: 'Authorization', in: 'header' }, 'Authorization')
             .build();
         const document = SwaggerModule.createDocument(this.app, config);
-        SwaggerModule.setup(`${this.serviceConfig.serviceApiPrefix}/swagger`, this.app, document);
+        SwaggerModule.setup(`${this.serviceConfig.serviceApiPrefix}/swagger`, this.app, document, {
+            customSiteTitle: 'API Docs | Firecracker Vocab Practice',
+            customfavIcon: `https://firecrackervocabulary.com/assets/icon/favicon/favicon-32x32.png`,
+        });
     }
 
     private getAppOptions(): NestApplicationOptions {
