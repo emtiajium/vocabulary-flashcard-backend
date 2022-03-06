@@ -98,7 +98,8 @@
         ],
         "moduleNameMapper": {
             "^@/(.*)": "<rootDir>/src/$1",
-            "^@test/(.*)": "<rootDir>/test/$1"
+            "^@test/(.*)": "<rootDir>/test/$1",
+            "^@root/(.*)": "<rootDir>/$1"
         },
         "reporters": [
             "default",
