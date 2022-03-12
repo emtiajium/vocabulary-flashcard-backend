@@ -3,7 +3,7 @@ import User from '@/user/domains/User';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
-import SupertestResponse from '@test/util/supertest-util';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
@@ -88,8 +88,9 @@ describe('Leitner Systems Entry', () => {
 
             await makeApiRequest(vocabulary.id);
 
-            const { status } = await makeApiRequest(vocabulary.id);
+            const { status, body } = await makeApiRequest(vocabulary.id);
             expect(status).toBe(409);
+            expect((body as SupertestErrorResponse).message).toBe(`You already made a flashcard with this vocabulary.`);
         });
     });
 
