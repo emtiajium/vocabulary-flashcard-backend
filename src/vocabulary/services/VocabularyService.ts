@@ -32,7 +32,7 @@ export default class VocabularyService {
         return newVocabulary;
     }
 
-    async findVocabularies(
+    findVocabularies(
         userId: string,
         cohortId: string,
         vocabularySearch: VocabularySearch,

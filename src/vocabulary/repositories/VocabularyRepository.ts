@@ -4,6 +4,7 @@ import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
 import { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
+import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
 
 @EntityRepository(Vocabulary)
 export default class VocabularyRepository extends Repository<Vocabulary> {
@@ -20,11 +21,14 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             pagination: { pageSize, pageNumber },
             sort,
             searchKeyword,
+            vocabularySearchCoverage,
         } = vocabularySearch;
 
         const fetchNotHavingDefinitionOnly = vocabularySearch?.fetchNotHavingDefinitionOnly ?? false;
 
         const currentPage = pageSize * (pageNumber - 1);
+
+        const searchKeywordParameterPosition = 5;
 
         let vocabularyQueryResult = await this.query(
             `
@@ -38,7 +42,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                    ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
                                       "leitnerSystems"."userId" = $1
                 WHERE vocabulary."cohortId" = $2
-                    ${searchKeyword ? `AND vocabulary.word ILIKE '%${searchKeyword}%'` : ''}
+                    ${this.getSearchQuery(searchKeyword, vocabularySearchCoverage, searchKeywordParameterPosition)}
                     ${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
                 GROUP BY vocabulary.id
                 ORDER BY vocabulary."${sort?.field || SupportedSortFields.updatedAt}" ${
@@ -46,7 +50,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             }
                 OFFSET $3 LIMIT $4;
             `,
-            [userId, cohortId, currentPage, pageSize],
+            searchKeyword
+                ? [userId, cohortId, currentPage, pageSize, `%${searchKeyword}%`]
+                : [userId, cohortId, currentPage, pageSize],
         );
 
         vocabularyQueryResult = this.rejectNull(vocabularyQueryResult);
@@ -56,7 +62,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return new SearchResult(vocabularyQueryResult, vocabularyQueryResult[0]?.totalNumberOfVocabularies || 0);
     }
 
-    rejectNull(results: Vocabulary[]): Vocabulary[] {
+    private rejectNull(results: Vocabulary[]): Vocabulary[] {
         // as LEFT join results[index].definitions can be [null]
         return _.map(results, (result) => ({
             ...result,
@@ -66,6 +72,33 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 ? []
                 : result.definitions,
         }));
+    }
+
+    private getSearchQuery(
+        searchKeyword: string,
+        vocabularySearchCoverage: VocabularySearchCoverage = { word: true } as VocabularySearchCoverage,
+        queryParameterPosition: number,
+    ): string {
+        if (!searchKeyword) {
+            return ``;
+        }
+
+        const searchBuilder = {
+            word: `vocabulary.word ILIKE $${queryParameterPosition}`,
+            linkerWords: `vocabulary."linkerWords"::TEXT ILIKE $${queryParameterPosition}`,
+            genericNotes: `vocabulary."genericNotes"::TEXT ILIKE $${queryParameterPosition}`,
+            meaning: `definition.meaning ILIKE $${queryParameterPosition}`,
+            examples: `definition.examples::TEXT ILIKE $${queryParameterPosition}`,
+            notes: `definition.notes::TEXT ILIKE $${queryParameterPosition}`,
+        };
+
+        Object.keys(searchBuilder).forEach((key) => {
+            if (!vocabularySearchCoverage[key]) {
+                delete searchBuilder[key];
+            }
+        });
+
+        return `AND (${Object.values(searchBuilder).join(' OR ')})`;
     }
 
     async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
@@ -125,7 +158,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return !!vocabulary[0];
     }
 
-    async findWords(ids: string[]): Promise<Pick<Vocabulary, 'id' | 'word'>[]> {
+    findWords(ids: string[]): Promise<Pick<Vocabulary, 'id' | 'word'>[]> {
         return this.query(
             `SELECT id, word
              FROM "Vocabulary"

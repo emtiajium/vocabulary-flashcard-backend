@@ -5,17 +5,21 @@ export default class VocabularySearchCoverage {
     word: boolean;
 
     @IsBoolean()
-    linkerWord: boolean;
+    linkerWords: boolean;
 
     @IsBoolean()
-    genericNote: boolean;
+    genericNotes: boolean;
 
     @IsBoolean()
     meaning: boolean;
 
     @IsBoolean()
-    example: boolean;
+    examples: boolean;
 
     @IsBoolean()
-    note: boolean;
+    notes: boolean;
+
+    setWord?(word: boolean): void {
+        this.word = word;
+    }
 }
