@@ -19,5 +19,5 @@
             "@root/*": ["./*"]
         }
     },
-    "include": ["migrations", "src", "package.json"]
+    "include": ["migrations", "src", "test", "package.json"]
 }
