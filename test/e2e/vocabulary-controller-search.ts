@@ -19,6 +19,8 @@ import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-ut
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
+import { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
+import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 
 describe('POST /v1/vocabularies/search', () => {
     let app: INestApplication;
@@ -46,11 +48,14 @@ describe('POST /v1/vocabularies/search', () => {
         await app.close();
     });
 
-    async function makeApiRequest(user: User = requester): Promise<SupertestResponse<SearchResult<Vocabulary>>> {
+    async function makeApiRequest(
+        user: User = requester,
+        payload: VocabularySearch = { pagination: { pageSize: 5, pageNumber: 1 } } as VocabularySearch,
+    ): Promise<SupertestResponse<SearchResult<Vocabulary>>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/search`)
             .set('Authorization', `Bearer ${generateJwToken(user)}`)
-            .send({ pagination: { pageSize: 5, pageNumber: 1 } });
+            .send(payload);
         return {
             status,
             body,
@@ -78,6 +83,79 @@ describe('POST /v1/vocabularies/search', () => {
             expect(foundVocabulary2.isInLeitnerBox).toBe(false);
 
             await removeLeitnerBoxItems(requester.id);
+        });
+    });
+
+    describe('Fetch Not Having Definition Only', () => {
+        it('SHOULD return 200 OK WITH only empty definition', async () => {
+            // Arrange
+            const word = `ROG_${Date.now()}`;
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word,
+                    definitions: [],
+                    isDraft: true,
+                },
+                cohort.id,
+            );
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: word,
+                fetchNotHavingDefinitionOnly: true,
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<Vocabulary>;
+            expect(results).toHaveLength(1);
+            expect(results[0].id).toBe(vocabulary.id);
+            expect(results[0].word).toBe(word);
+        });
+
+        it('SHOULD return 200 OK WITH vocabularies indifferent to the empty definition', async () => {
+            // Arrange
+            const vocabularyIds: string[] = [];
+            let vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                    definitions: [],
+                    isDraft: true,
+                },
+                cohort.id,
+            );
+            vocabularyIds.push(vocabulary.id);
+
+            vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                },
+                cohort.id,
+            );
+            vocabularyIds.push(vocabulary.id);
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: 'ROG',
+                fetchNotHavingDefinitionOnly: false,
+                sort: {
+                    direction: SortDirection.DESC,
+                    field: SupportedSortFields.createdAt,
+                },
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<Vocabulary>;
+            expect(results.length).toBeGreaterThan(2);
+            vocabularyIds.forEach((vocabularyId) => {
+                expect(results.some(({ id }) => vocabularyId === id)).toBe(true);
+            });
         });
     });
 });

@@ -22,6 +22,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             searchKeyword,
         } = vocabularySearch;
 
+        const fetchNotHavingDefinitionOnly = vocabularySearch?.fetchNotHavingDefinitionOnly ?? false;
+
         const currentPage = pageSize * (pageNumber - 1);
 
         let vocabularyQueryResult = await this.query(
@@ -36,7 +38,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                    ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
                                       "leitnerSystems"."userId" = $1
                 WHERE vocabulary."cohortId" = $2
-                    ${searchKeyword ? `AND vocabulary.word ILIKE '${searchKeyword}%'` : ''}
+                    ${searchKeyword ? `AND vocabulary.word ILIKE '%${searchKeyword}%'` : ''}
+                    ${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
                 GROUP BY vocabulary.id
                 ORDER BY vocabulary."${sort?.field || SupportedSortFields.updatedAt}" ${
                 sort?.direction || SortDirection.DESC

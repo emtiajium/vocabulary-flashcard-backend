@@ -38,7 +38,7 @@
         "unicorn/no-reduce": "off",
         "unicorn/no-array-for-each": "off",
         "class-methods-use-this": "off",
-        "complexity": ["error", 5],
+        "complexity": ["error", 7],
         "max-params": ["error", 4],
         "curly": "error",
         "no-console": "error",
