@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.11.1`: Capitalized all linker words
 -   `0.11.0`: Advanced searching/filtering
 -   `0.10.0`: Swagger
 -   `0.9.1`: Refactored the API `/v1/users/all` to apply ordering and send total number of users
