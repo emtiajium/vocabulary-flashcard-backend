@@ -41,6 +41,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     genericExternalLinks?: string[];
 
     @Column({ type: 'varchar', array: true, default: [] })
+    @Transform(({ value }) => _.map(value, (linkerWord) => _.capitalize(linkerWord)))
     @IsArray()
     @IsOptional()
     linkerWords?: string[];

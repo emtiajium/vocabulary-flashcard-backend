@@ -325,6 +325,23 @@ describe('/v1/vocabularies', () => {
                 expect(vocabulary.word).toBe(_.capitalize(payload.word));
             });
 
+            it('SHOULD return 201 CREATED with capitalized linker words', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = 'word';
+                payload.definitions = [];
+                payload.linkerWords = ['lower 1', 'lower 2'];
+
+                const { status, body } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+
+                const vocabulary = body as Vocabulary;
+                expect(vocabulary.linkerWords[0]).toBe(_.capitalize('Lower 1'));
+                expect(vocabulary.linkerWords[1]).toBe(_.capitalize('Lower 2'));
+            });
+
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
