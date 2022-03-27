@@ -10,27 +10,27 @@ type PartialUser = Pick<User, 'firstname' | 'lastname' | 'username' | 'profilePi
 export default class CreateTestUsers {
     private readonly users: PartialUser[] = [
         {
-            firstname: `Kateryna`,
-            lastname: `Shevchenko`,
-            username: `k.shevchenko@firecrackervocabulary.com`,
-            profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairCurvy&accessoriesType=Blank&hairColor=Blonde&facialHairType=Blank&clotheType=Overall&clotheColor=PastelGreen&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light`,
-        },
-        {
             firstname: `Joao da`,
             lastname: `Silva`,
-            username: `j.silva@firecrackervocabulary.com`,
+            username: `jsilva@firecrackervocabulary.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairDreads01&accessoriesType=Prescription01&hairColor=Brown&facialHairType=Blank&clotheType=Hoodie&clotheColor=Gray02&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
+        },
+        {
+            firstname: `Kateryna`,
+            lastname: `Lagno`,
+            username: `klagno@firecrackervocabulary.com`,
+            profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairCurvy&accessoriesType=Blank&hairColor=Blonde&facialHairType=Blank&clotheType=Overall&clotheColor=PastelGreen&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light`,
         },
         {
             firstname: `Shashwata`,
             lastname: `Noor`,
-            username: `s.noor@firecrackervocabulary.com`,
+            username: `snoor@firecrackervocabulary.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortFlat&accessoriesType=Blank&hairColor=Black&facialHairType=BeardLight&facialHairColor=Black&clotheType=BlazerSweater&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=DarkBrown`,
         },
         {
             firstname: `Shraban`,
             lastname: `Dhara`,
-            username: `s.dhara@firecrackervocabulary.com`,
+            username: `sdhara@firecrackervocabulary.com`,
             profilePictureUrl: `https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight2&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=CollarSweater&clotheColor=Blue03&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Brown`,
         },
     ];
