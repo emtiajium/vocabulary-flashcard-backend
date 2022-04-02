@@ -36,7 +36,12 @@ export default class UserService {
     async getAll(): Promise<SearchResult<UserReport>> {
         const users = await this.userRepository.getAll();
         return new SearchResult<UserReport>(
-            _.map(users, (user) => _.pick(user, ['username', 'name', 'cohortName'])),
+            _.map(users, (user) => ({
+                username: user.username,
+                name: user.name,
+                createdAt: user.createdAt,
+                cohort: { name: user.cohort.name },
+            })),
             users.length,
         );
     }

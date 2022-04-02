@@ -58,7 +58,8 @@ describe('/v1/users/all', () => {
             response.results.forEach((user) => {
                 expect(user.username).toBeDefined();
                 expect(user.name).toBeDefined();
-                expect(user.cohortName).toBeDefined();
+                expect(user.createdAt).toBeDefined();
+                expect(user.cohort.name).toBeDefined();
             });
         });
 
@@ -72,7 +73,9 @@ describe('/v1/users/all', () => {
             const mostRecentUser = response.results[response.total - 1];
             expect(mostRecentUser).toMatchObject({
                 username: anotherUser.username,
-                cohortName: anotherUser.username,
+                cohort: {
+                    name: anotherUser.username,
+                },
             });
         });
     });

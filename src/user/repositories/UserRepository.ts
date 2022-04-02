@@ -38,7 +38,7 @@ export default class UserRepository extends Repository<User> {
     getAll(): Promise<User[]> {
         return this.find({
             relations: ['cohort'],
-            select: ['username', 'firstname', 'lastname'],
+            select: ['username', 'firstname', 'lastname', 'createdAt'],
             order: { createdAt: SortDirection.ASC },
         });
     }
