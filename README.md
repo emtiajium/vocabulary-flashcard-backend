@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.12.0`: Interceptor to log the request headers
 -   `0.11.1`: Capitalized all linker words
 -   `0.11.0`: Advanced searching/filtering
 -   `0.10.0`: Swagger
