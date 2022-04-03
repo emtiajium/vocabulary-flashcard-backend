@@ -11,11 +11,11 @@ import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/leitner-systems')
 @ApiSecurity('Authorization')
+@UseGuards(AuthGuard)
 export default class LeitnerSystemsController {
     constructor(private readonly leitnerSystemsService: LeitnerSystemsService) {}
 
     @Post('/start/:vocabularyId')
-    @UseGuards(AuthGuard)
     async placeIntoFirstLeitnerBox(
         @Param('vocabularyId') vocabularyId: string,
         @AuthenticatedUser() user: User,
@@ -24,19 +24,16 @@ export default class LeitnerSystemsController {
     }
 
     @Put('/forward/:vocabularyId')
-    @UseGuards(AuthGuard)
     async moveForward(@Param('vocabularyId') vocabularyId: string, @AuthenticatedUser() user: User): Promise<void> {
         await this.leitnerSystemsService.moveForward(user.id, user.cohortId, vocabularyId);
     }
 
     @Put('/backward/:vocabularyId')
-    @UseGuards(AuthGuard)
     async moveBackward(@Param('vocabularyId') vocabularyId: string, @AuthenticatedUser() user: User): Promise<void> {
         await this.leitnerSystemsService.moveBackward(user.id, user.cohortId, vocabularyId);
     }
 
     @Post('/items/:box')
-    @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     getBoxItems(
         @Param('box') box: LeitnerBoxType,
@@ -47,13 +44,11 @@ export default class LeitnerSystemsController {
     }
 
     @Get('/exists/user/:vocabularyId')
-    @UseGuards(AuthGuard)
     getLeitnerBoxItem(@Param('vocabularyId') vocabularyId: string, @AuthenticatedUser() user: User): Promise<boolean> {
         return this.leitnerSystemsService.isVocabularyExistForUser(user.id, vocabularyId);
     }
 
     @Get('/items/count/:box')
-    @UseGuards(AuthGuard)
     countBoxItems(@Param('box') box: LeitnerBoxType, @AuthenticatedUser() user: User): Promise<number> {
         return this.leitnerSystemsService.countBoxItems(user.id, box);
     }

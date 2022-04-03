@@ -10,17 +10,16 @@ import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/vocabularies')
 @ApiSecurity('Authorization')
+@UseGuards(AuthGuard)
 export default class VocabularyController {
     constructor(private readonly vocabularyService: VocabularyService) {}
 
     @Post()
-    @UseGuards(AuthGuard)
     createVocabulary(@Body() vocabulary: Vocabulary, @AuthenticatedUser() user: User): Promise<Vocabulary> {
         return this.vocabularyService.createVocabulary(vocabulary, user.id, user.cohortId);
     }
 
     @Post('/search')
-    @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     findVocabularies(
         @AuthenticatedUser() user: User,
@@ -30,19 +29,16 @@ export default class VocabularyController {
     }
 
     @Get('/:id')
-    @UseGuards(AuthGuard)
     findVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<Vocabulary> {
         return this.vocabularyService.findVocabularyById(id, user.id);
     }
 
     @Delete('/:id')
-    @UseGuards(AuthGuard)
     async removeVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<void> {
         await this.vocabularyService.removeVocabularyById(id, user.id);
     }
 
     @Post('/bootstrap')
-    @UseGuards(AuthGuard)
     createInitialVocabularies(@AuthenticatedUser() user: User): Promise<SearchResult<Vocabulary>> {
         return this.vocabularyService.createInitialVocabularies(user.cohortId);
     }

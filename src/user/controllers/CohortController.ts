@@ -8,23 +8,21 @@ import { ApiSecurity } from '@nestjs/swagger';
 
 @Controller('/v1/cohorts')
 @ApiSecurity('Authorization')
+@UseGuards(AuthGuard)
 export default class CohortController {
     constructor(private readonly cohortService: CohortService) {}
 
     @Post()
-    @UseGuards(AuthGuard)
     async createCohort(@Body() cohort: Cohort): Promise<void> {
         await this.cohortService.createCohort(cohort);
     }
 
     @Put('/:name')
-    @UseGuards(AuthGuard)
     async addUsersToCohort(@Body() usernames: string[], @Param('name') name: string): Promise<void> {
         await this.cohortService.addUsersToCohort(name, usernames);
     }
 
     @Get('/self')
-    @UseGuards(AuthGuard)
     findCohortById(@AuthenticatedUser() user: User): Promise<Cohort> {
         return this.cohortService.findCohortById(user.cohortId);
     }
