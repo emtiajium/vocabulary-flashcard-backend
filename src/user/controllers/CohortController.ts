@@ -5,12 +5,10 @@ import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
 import User from '@/user/domains/User';
 import { ApiSecurity } from '@nestjs/swagger';
-import IntruderGuard from '@/common/guards/IntruderGuard';
 
 @Controller('/v1/cohorts')
 @ApiSecurity('Authorization')
 @UseGuards(AuthGuard)
-@UseGuards(IntruderGuard)
 export default class CohortController {
     constructor(private readonly cohortService: CohortService) {}
 

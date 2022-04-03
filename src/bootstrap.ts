@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as basicAuth from 'express-basic-auth';
@@ -10,6 +10,7 @@ import ServiceConfig from '@/common/configs/ServiceConfig';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { version, name, author } from '@root/package.json';
+import RequestLoggingInterceptor from '@/common/interceptors/RequestLoggingInterceptor';
 
 export class Bootstrap {
     private readonly serviceConfig: ServiceConfig;
@@ -33,6 +34,7 @@ export class Bootstrap {
         app.use(cookieParser());
         app.setGlobalPrefix(serviceApiPrefix);
         app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+        app.useGlobalInterceptors(new RequestLoggingInterceptor(app.get(Logger)));
         await app.listen(port);
         return app;
     }

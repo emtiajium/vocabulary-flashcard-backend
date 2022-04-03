@@ -1,20 +1,22 @@
-import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { Request } from 'express';
 import safeStringify from 'fast-safe-stringify';
+import { Observable } from 'rxjs';
 
 @Injectable()
-export default class IntruderGuard implements CanActivate {
+export default class RequestLoggingInterceptor implements NestInterceptor {
     constructor(private readonly logger: Logger) {
-        this.logger.setContext(IntruderGuard.name);
+        this.logger.setContext(RequestLoggingInterceptor.name);
     }
 
     private getHeaders = (request: Request): Record<string, unknown> => {
         return request.headers;
     };
 
-    canActivate(context: ExecutionContext): boolean {
+    intercept(context: ExecutionContext, next: CallHandler): Observable<CallHandler> {
         const request = context.switchToHttp().getRequest();
         const headers = this.getHeaders(request);
+
         this.logger.log(
             safeStringify({
                 host: headers.host,
@@ -25,8 +27,9 @@ export default class IntruderGuard implements CanActivate {
                 'x-requested-with': headers['x-requested-with'],
                 referer: headers.referer,
             }),
-            `[Request headers]`,
+            `Request headers`,
         );
-        return true;
+
+        return next.handle();
     }
 }

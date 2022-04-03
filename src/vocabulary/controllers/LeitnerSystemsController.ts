@@ -8,12 +8,10 @@ import Pagination from '@/common/domains/Pagination';
 import SearchResult from '@/common/domains/SearchResult';
 import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
 import { ApiSecurity } from '@nestjs/swagger';
-import IntruderGuard from '@/common/guards/IntruderGuard';
 
 @Controller('/v1/leitner-systems')
 @ApiSecurity('Authorization')
 @UseGuards(AuthGuard)
-@UseGuards(IntruderGuard)
 export default class LeitnerSystemsController {
     constructor(private readonly leitnerSystemsService: LeitnerSystemsService) {}
 
