@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import UserController from '@/user/controllers/UserController';
 import UserService from '@/user/services/UserService';
 import CohortService from '@/user/services/CohortService';
@@ -11,6 +11,6 @@ import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRe
 @Module({
     imports: [TypeOrmModule.forFeature([UserRepository, CohortRepository, LeitnerSystemsRepository])],
     controllers: [UserController, CohortController],
-    providers: [UserService, CohortService],
+    providers: [UserService, CohortService, Logger],
 })
 export default class UserModule {}

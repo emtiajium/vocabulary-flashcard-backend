@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import VocabularyService from '@/vocabulary/services/VocabularyService';
 import VocabularyController from '@/vocabulary/controllers/VocabularyController';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,7 +22,7 @@ import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRe
             LeitnerSystemsRepository,
         ]),
     ],
-    providers: [UserService, CohortService, VocabularyService, LeitnerSystemsService],
+    providers: [UserService, CohortService, VocabularyService, LeitnerSystemsService, Logger],
     controllers: [VocabularyController, LeitnerSystemsController],
 })
 export default class VocabularyModule {}

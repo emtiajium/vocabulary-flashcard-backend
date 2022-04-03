@@ -7,9 +7,11 @@ import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
 import { ApiSecurity } from '@nestjs/swagger';
+import IntruderGuard from '@/common/guards/IntruderGuard';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
+@UseGuards(IntruderGuard)
 export default class UserController {
     constructor(private readonly userService: UserService) {}
 
