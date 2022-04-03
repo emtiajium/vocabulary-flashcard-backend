@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.13.0`: Integrated `Terminus` (NestJS provided health checks)
 -   `0.12.0`: Interceptor to log the request headers
 -   `0.11.1`: Capitalized all linker words
 -   `0.11.0`: Advanced searching/filtering
@@ -67,7 +68,7 @@
 -   `0.7.0`: Added APIs for reporting purpose
 -   `0.6.3`: Auto setting of `isDraft` if a vocab has at least one definition
 -   `0.6.2`: Dynamic vocab ordering
--   `0.6.1`: Added script to remove an leitner item for a user
+-   `0.6.1`: Added script to remove a leitner item for a user
 -   `0.6.0`: Added functionality to remove definitions
 -   `0.5.5`: Fixed the (TypeORM) relationship between Vocabulary and Definition + Ordered definitions by their creation time
 -   `0.5.4`: Populated leitner box existence info
