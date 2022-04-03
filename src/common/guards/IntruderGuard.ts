@@ -14,7 +14,19 @@ export default class IntruderGuard implements CanActivate {
 
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
-        this.logger.log(safeStringify(this.getHeaders(request)), `[Request headers]`);
+        const headers = this.getHeaders(request);
+        this.logger.log(
+            safeStringify({
+                host: headers.host,
+                'x-real-ip': headers['x-real-ip'],
+                'x-forwarded-for': headers['x-forwarded-for'],
+                'user-agent': headers['user-agent'],
+                origin: headers.origin,
+                'x-requested-with': headers['x-requested-with'],
+                referer: headers.referer,
+            }),
+            `[Request headers]`,
+        );
         return true;
     }
 }
