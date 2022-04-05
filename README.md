@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.14.0`: CI pipeline with Github actions
 -   `0.13.0`: Integrated `Terminus` (NestJS provided health checks)
 -   `0.12.0`: Interceptor to log the request headers
 -   `0.11.1`: Capitalized all linker words
