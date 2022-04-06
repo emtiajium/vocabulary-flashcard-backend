@@ -40,9 +40,19 @@ export class Bootstrap {
     }
 
     initCors(): void {
-        if (this.serviceConfig.allowedOrigins.length > 0) {
+        const { allowedOrigins, isEnvironmentAutomatedTest } = this.serviceConfig;
+
+        if (!isEnvironmentAutomatedTest) {
             this.app.enableCors({
-                origin: this.serviceConfig.allowedOrigins,
+                origin(origin, callback) {
+                    if (allowedOrigins.includes(origin)) {
+                        /* eslint-disable node/callback-return */
+                        callback(null, true);
+                    } else {
+                        callback(new Error(`Don't mess this up`));
+                        /* eslint-enable node/callback-return */
+                    }
+                },
             });
         }
     }
