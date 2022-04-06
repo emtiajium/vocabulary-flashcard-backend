@@ -25,7 +25,7 @@ export class Bootstrap {
         const app: INestApplication = await NestFactory.create(this.appModule, this.getAppOptions());
         this.app = app;
         this.initSwagger();
-        app.enableCors();
+        this.initCors();
         app.enableShutdownHooks();
         app.useGlobalPipes(new ValidationPipe());
         const { payloadLimitSize, serviceApiPrefix, port } = this.serviceConfig;
@@ -37,6 +37,14 @@ export class Bootstrap {
         app.useGlobalInterceptors(new RequestLoggingInterceptor(app.get(Logger)));
         await app.listen(port);
         return app;
+    }
+
+    initCors(): void {
+        if (this.serviceConfig.allowedOrigins.length > 0) {
+            this.app.enableCors({
+                origin: this.serviceConfig.allowedOrigins,
+            });
+        }
     }
 
     initSwagger(): void {

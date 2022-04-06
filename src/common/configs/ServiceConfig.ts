@@ -1,4 +1,5 @@
 import { ConfigService } from '@nestjs/config';
+import { compact } from 'lodash';
 
 export default class ServiceConfig {
     private readonly configService: ConfigService;
@@ -13,6 +14,8 @@ export default class ServiceConfig {
 
     payloadLimitSize: string;
 
+    allowedOrigins: string[];
+
     swaggerUsername: string;
 
     swaggerPassword: string;
@@ -24,6 +27,7 @@ export default class ServiceConfig {
         this.serviceName = this.configService.get<string>('SERVICE_NAME');
         this.serviceApiPrefix = this.configService.get<string>('SERVICE_API_PREFIX');
         this.payloadLimitSize = this.configService.get<string>('PAYLOAD_LIMIT_SIZE');
+        this.allowedOrigins = compact(this.configService.get<string>('ALLOWED_ORIGIN').split(','));
         this.swaggerUsername = this.configService.get<string>('SWAGGER_USERNAME');
         this.swaggerPassword = this.configService.get<string>('SWAGGER_PASSWORD');
     }
