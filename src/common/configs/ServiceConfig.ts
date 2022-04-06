@@ -20,6 +20,10 @@ export default class ServiceConfig {
 
     swaggerPassword: string;
 
+    get isEnvironmentAutomatedTest(): boolean {
+        return this.environment === 'test';
+    }
+
     constructor() {
         this.configService = new ConfigService();
         this.port = this.configService.get<number>('PORT');
