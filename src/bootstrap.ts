@@ -44,11 +44,12 @@ export class Bootstrap {
 
         if (!isEnvironmentAutomatedTest) {
             this.app.enableCors({
-                origin(origin, callback) {
-                    if (allowedOrigins.includes(origin)) {
+                origin: (origin, callback) => {
+                    if (!origin || allowedOrigins.includes(origin)) {
                         /* eslint-disable node/callback-return */
                         callback(null, true);
                     } else {
+                        this.app.get(Logger).log(`origin ${origin}`, 'CORS');
                         callback(new Error(`Don't mess this up`));
                         /* eslint-enable node/callback-return */
                     }
