@@ -1,5 +1,4 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { lastnameSize, profilePictureUrlSize, usernameSize } from '@/user/domains/User';
 
 export default class CreateUserTable1622268797427 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -43,19 +42,16 @@ export default class CreateUserTable1622268797427 implements MigrationInterface 
                     {
                         name: 'firstname',
                         type: 'varchar',
-                        length: `${usernameSize}`,
                         isNullable: false,
                     },
                     {
                         name: 'lastname',
                         type: 'varchar',
-                        length: `${lastnameSize}`,
                         isNullable: true,
                     },
                     {
                         name: 'profilePictureUrl',
                         type: 'varchar',
-                        length: `${profilePictureUrlSize}`,
                         isNullable: true,
                     },
                 ],
