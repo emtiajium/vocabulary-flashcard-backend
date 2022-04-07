@@ -5,7 +5,7 @@ import { SortDirection } from '@/common/domains/Sort';
 
 @EntityRepository(User)
 export default class UserRepository extends Repository<User> {
-    async insertAndUpdateIfExist(user: User): Promise<User> {
+    async upsert(user: User): Promise<User> {
         // possible to get the column names by accessing "this.metadata.propertiesMap"
         const updateActionOnConflict = `SET firstname = EXCLUDED.firstname,
             lastname = EXCLUDED.lastname,
