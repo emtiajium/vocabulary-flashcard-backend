@@ -40,7 +40,7 @@ export default class VocabularyService {
         return this.vocabularyRepository.findVocabularies(userId, cohortId, vocabularySearch);
     }
 
-    async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
+    findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
         return this.vocabularyRepository.findVocabularyById(id, userId);
     }
 
@@ -58,6 +58,7 @@ export default class VocabularyService {
     }
 
     async assertExistenceIntoLeitnerSystems(id: string): Promise<void> {
+        // TODO introduce foreign key at the LeitnerSystems table ...
         const leitnerItem = await this.leitnerSystemsService.getLeitnerBoxItemByVocabularyId(id);
         if (leitnerItem) {
             throw new UnprocessableEntityException(

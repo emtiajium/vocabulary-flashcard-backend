@@ -65,7 +65,7 @@ export function getFormattedTomorrow(): string {
     return getFormattedDate(tomorrow);
 }
 
-export async function delay(second: number): Promise<void> {
+export function delay(second: number): Promise<void> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve();

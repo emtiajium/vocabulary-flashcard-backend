@@ -17,12 +17,14 @@ export default class LeitnerSystemsService {
     ) {}
 
     async placeIntoFirstLeitnerBox(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
+        // TODO introduce foreign key at the LeitnerSystems table and delegate below checking to the SQL itself
         if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
             throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
         }
 
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
+        // TODO introduce foreign key ...
         if (boxItem) {
             throw new ConflictException(
                 `You already made a flashcard with this vocabulary.`,
@@ -36,12 +38,14 @@ export default class LeitnerSystemsService {
     }
 
     async moveForward(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
+        // TODO introduce foreign key ...
         if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
             throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
         }
 
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
+        // TODO introduce foreign key ...
         if (!boxItem) {
             throw new NotFoundException(
                 `There is no such vocabulary with ID "${vocabularyId}" for the user "${userId}"`,
@@ -61,12 +65,14 @@ export default class LeitnerSystemsService {
     }
 
     async moveBackward(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
+        // TODO introduce foreign key ...
         if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
             throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
         }
 
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
+        // TODO introduce foreign key ...
         if (!boxItem) {
             throw new NotFoundException(
                 `There is no such vocabulary with ID "${vocabularyId}" for the user "${userId}"`,
@@ -85,11 +91,11 @@ export default class LeitnerSystemsService {
         );
     }
 
-    private async getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems> {
+    private getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems> {
         return this.leitnerSystemsRepository.findOne({ userId, vocabularyId });
     }
 
-    async getLeitnerBoxItemByVocabularyId(vocabularyId: string): Promise<LeitnerSystems> {
+    getLeitnerBoxItemByVocabularyId(vocabularyId: string): Promise<LeitnerSystems> {
         return this.leitnerSystemsRepository.findOne({ vocabularyId });
     }
 
@@ -121,7 +127,7 @@ export default class LeitnerSystemsService {
         return !!item;
     }
 
-    async countBoxItems(userId: string, box: LeitnerBoxType): Promise<number> {
+    countBoxItems(userId: string, box: LeitnerBoxType): Promise<number> {
         return this.leitnerSystemsRepository.countBoxItems(userId, box);
     }
 }

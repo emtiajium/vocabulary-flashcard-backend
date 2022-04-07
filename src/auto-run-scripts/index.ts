@@ -32,7 +32,7 @@ export default class AutoRunScripts {
         });
     }
 
-    async getScriptNames(): Promise<string[]> {
+    getScriptNames(): Promise<string[]> {
         return new Promise((resolve, reject) => {
             fs.readdir(__dirname, (error, files) => {
                 if (error) {

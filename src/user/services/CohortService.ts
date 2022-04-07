@@ -46,7 +46,7 @@ export default class CohortService {
         await this.userRepository.updateCohort(usernames, cohort.id);
     }
 
-    async findCohortById(id: string): Promise<Cohort> {
+    findCohortById(id: string): Promise<Cohort> {
         return this.cohortRepository.findCohortById(id);
     }
 }

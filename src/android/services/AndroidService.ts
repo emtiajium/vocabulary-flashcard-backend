@@ -15,7 +15,7 @@ export default class AndroidService {
         return this.androidRepository.save(Android.create(android, existingAndroid?.id));
     }
 
-    async fetch(): Promise<Android | undefined> {
+    fetch(): Promise<Android | undefined> {
         return this.androidRepository.findOne();
     }
 }
