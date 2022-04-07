@@ -108,6 +108,6 @@ export class Bootstrap {
     }
 }
 
-export async function kickOff(module: AppModule): Promise<INestApplication> {
+export function kickOff(module: AppModule): Promise<INestApplication> {
     return new Bootstrap(module).start();
 }
