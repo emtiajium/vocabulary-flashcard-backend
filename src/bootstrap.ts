@@ -40,22 +40,20 @@ export class Bootstrap {
     }
 
     initCors(): void {
-        const { allowedOrigins, isEnvironmentAutomatedTest } = this.serviceConfig;
+        const { allowedOrigins } = this.serviceConfig;
 
-        if (!isEnvironmentAutomatedTest) {
-            this.app.enableCors({
-                origin: (origin, callback) => {
-                    if (!origin || allowedOrigins.includes(origin)) {
-                        /* eslint-disable node/callback-return */
-                        callback(null, true);
-                    } else {
-                        this.app.get(Logger).log(`origin ${origin}`, 'CORS');
-                        callback(new Error(`Don't mess this up`));
-                        /* eslint-enable node/callback-return */
-                    }
-                },
-            });
-        }
+        this.app.enableCors({
+            origin: (origin, callback) => {
+                if (!origin || allowedOrigins.includes(origin)) {
+                    /* eslint-disable node/callback-return */
+                    callback(null, true);
+                } else {
+                    this.app.get(Logger).log(`origin ${origin}`, 'CORS');
+                    callback(new Error(`Don't mess this up`));
+                    /* eslint-enable node/callback-return */
+                }
+            },
+        });
     }
 
     initSwagger(): void {
