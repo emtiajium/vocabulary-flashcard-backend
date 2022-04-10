@@ -62,7 +62,7 @@ export default class VocabularyService {
         const leitnerItem = await this.leitnerSystemsService.getLeitnerBoxItemByVocabularyId(id);
         if (leitnerItem) {
             throw new UnprocessableEntityException(
-                `This vocabulary cannot be removed as one of the members of your cohort put this into a Leitner box.`,
+                `This vocabulary cannot be removed as one of the members of your cohort made it a flashcard.`,
             );
         }
     }
