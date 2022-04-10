@@ -30,6 +30,7 @@ export default class CohortService {
     }
 
     private async validateUsers(usernames: string[]): Promise<void> {
+        // TODO rely on SQL's referential integrity
         const users = await this.userRepository.getUsersByUsernames(usernames);
         if (users.length !== usernames.length) {
             const nonExistingUsers = _.difference(usernames, _.map(users, 'username'));

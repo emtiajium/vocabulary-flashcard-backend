@@ -49,6 +49,8 @@ export default class VocabularyService {
     };
 
     async assertExistenceAndRemoveVocabularyAndDefinitions(id: string, userId: string): Promise<void> {
+        // TODO Just remove and check the delete response to throw the error
+        // I mean, rely on the SQL provides feature
         const existingVocabulary = await this.findVocabularyById(id, userId);
         if (existingVocabulary) {
             await this.removeVocabularyAndDefinitions(existingVocabulary);
