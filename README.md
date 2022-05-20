@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.16.0`: Prevented deleting vocabulary by an intruder
 -   `0.15.0`: CORS with specific origins
 -   `0.14.0`: CI pipeline with Github actions
 -   `0.13.0`: Integrated `Terminus` (NestJS provided health checks)
