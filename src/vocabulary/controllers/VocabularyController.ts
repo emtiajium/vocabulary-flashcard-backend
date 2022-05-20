@@ -35,7 +35,7 @@ export default class VocabularyController {
 
     @Delete('/:id')
     async removeVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<void> {
-        await this.vocabularyService.removeVocabularyById(id, user.id);
+        await this.vocabularyService.removeVocabularyById(id, user);
     }
 
     @Post('/bootstrap')

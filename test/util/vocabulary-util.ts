@@ -10,8 +10,9 @@ export async function removeVocabularyAndRelationsByCohortId(cohortId: string): 
          WHERE "vocabularyId" IN (
              SELECT id
              FROM "Vocabulary"
-             WHERE "cohortId" = '${cohortId}'
+             WHERE "cohortId" = $1
          );`,
+        [cohortId],
     );
     await getRepository(Vocabulary).delete({ cohortId });
 }
@@ -20,8 +21,9 @@ export async function getDefinitionsByVocabularyId(vocabularyId: string): Promis
     return getRepository(Definition).query(
         `SELECT *
          FROM "Definition"
-         WHERE "vocabularyId" = '${vocabularyId}'
+         WHERE "vocabularyId" = $1
          ORDER BY "createdAt" ASC;`,
+        [vocabularyId],
     );
 }
 
@@ -34,6 +36,10 @@ export async function getSingleVocabularyByCohortId(cohortId: string): Promise<V
             [cohortId],
         )
     )[0];
+}
+
+export function getVocabularyById(id: string): Promise<Vocabulary> {
+    return getRepository(Vocabulary).findOne(id);
 }
 
 export async function createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {

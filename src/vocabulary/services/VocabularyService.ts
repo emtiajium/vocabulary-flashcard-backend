@@ -1,5 +1,11 @@
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import {
+    ConflictException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+    UnprocessableEntityException,
+} from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import * as _ from 'lodash';
@@ -9,6 +15,7 @@ import Definition from '@/vocabulary/domains/Definition';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
+import User from '@/user/domains/User';
 
 @Injectable()
 export default class VocabularyService {
@@ -48,12 +55,18 @@ export default class VocabularyService {
         return _.map(definitions, 'id');
     };
 
-    async assertExistenceAndRemoveVocabularyAndDefinitions(id: string, userId: string): Promise<void> {
+    async assertExistenceAndRemoveVocabularyAndDefinitions(
+        id: string,
+        userId: string,
+        cohortId: string,
+    ): Promise<void> {
         // TODO Just remove and check the delete response to throw the error
         // I mean, rely on the SQL provides feature
         const existingVocabulary = await this.findVocabularyById(id, userId);
-        if (existingVocabulary) {
+        if (existingVocabulary && existingVocabulary.cohortId === cohortId) {
             await this.removeVocabularyAndDefinitions(existingVocabulary);
+        } else if (existingVocabulary && existingVocabulary.cohortId !== cohortId) {
+            throw new ForbiddenException();
         } else {
             throw new NotFoundException(`Vocabulary with ID "${id}" does not exist`);
         }
@@ -79,15 +92,17 @@ export default class VocabularyService {
     }
 
     async removeVocabularyAndDefinitions(vocabulary: Vocabulary): Promise<void> {
+        // TODO apply CASCADE
         if (!_.isEmpty(vocabulary.definitions)) {
             await this.definitionRepository.removeDefinitionsByIds(this.extractDefinitionIds(vocabulary.definitions));
         }
         await this.vocabularyRepository.removeVocabularyById(vocabulary.id);
     }
 
-    async removeVocabularyById(id: string, userId: string): Promise<void> {
+    async removeVocabularyById(id: string, requestedUser: User): Promise<void> {
+        const { id: userId, cohortId } = requestedUser;
         await this.assertExistenceIntoLeitnerSystems(id);
-        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id, userId);
+        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id, userId, cohortId);
     }
 
     async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
