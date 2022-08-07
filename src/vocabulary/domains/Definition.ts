@@ -60,7 +60,7 @@ export default class Definition extends BaseEntityWithMandatoryId {
     // eslint-disable-next-line complexity
     static create(vocabularyId: string, definition?: Definition): Definition {
         const definitionInstance = new Definition();
-        definitionInstance.id = definition.id;
+        definitionInstance.id = definition?.id;
         definitionInstance.vocabularyId = vocabularyId;
         definitionInstance.meaning = definition?.meaning || '';
         definitionInstance.examples = definition?.examples || [];

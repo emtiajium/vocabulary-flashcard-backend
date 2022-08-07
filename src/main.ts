@@ -11,4 +11,4 @@ kickOff(AppModule)
         // TODO execute in a separate thread
         executeManualScript().finally();
     })
-    .catch((error) => console.log(`Error bootstrapping the App`, error));
+    .catch((error) => console.error(`Error bootstrapping the App`, error));
