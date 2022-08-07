@@ -32,7 +32,7 @@ export default class AuthGuard implements CanActivate {
     }
 
     private extractUsername = (extendedUser: ExtendedUser): string => {
-        // `email` is supposed to be come from the Google API
+        // `email` is supposed to come from the Google API
         if (!extendedUser?.username && !extendedUser?.email) {
             throw new ForbiddenException();
         }

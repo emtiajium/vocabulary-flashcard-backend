@@ -11,7 +11,7 @@ export default class RemoveDuplicateItemFromLeitnerBox {
             }
             await this.remove();
         } catch (error) {
-            console.log(`Error while removing item`, error);
+            console.error(`Error while removing item`, error);
         }
     }
 

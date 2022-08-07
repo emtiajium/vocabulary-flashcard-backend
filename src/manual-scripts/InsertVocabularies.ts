@@ -25,7 +25,7 @@ export default class InsertVocabularies {
             await this.remove();
             await this.persist();
         } catch (error) {
-            console.log(`Error while inserting vocabularies`, error);
+            console.error(`Error while inserting vocabularies`, error);
         }
     }
 

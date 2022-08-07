@@ -13,8 +13,8 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
         return request.headers;
     };
 
-    intercept(context: ExecutionContext, next: CallHandler): Observable<CallHandler> {
-        const request = context.switchToHttp().getRequest();
+    intercept(executionContext: ExecutionContext, next: CallHandler): Observable<CallHandler> {
+        const request = executionContext.switchToHttp().getRequest();
         const headers = this.getHeaders(request);
 
         this.logger.log(

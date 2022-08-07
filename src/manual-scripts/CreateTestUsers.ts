@@ -49,7 +49,7 @@ export default class CreateTestUsers {
             await Promise.all([this.createCohort(), this.createUsers()]);
             await this.associateUsersWithCohort();
         } catch (error) {
-            console.log(`Error`, error);
+            console.error(`Error`, error);
         }
     }
 
