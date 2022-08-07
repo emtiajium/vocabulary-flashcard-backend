@@ -12,7 +12,7 @@ import {
     removeVocabularyAndRelationsByCohortId,
 } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, createUser, removeUserByUsername, removeUsersByUsernames } from '@test/util/user-util';
+import { createApiRequester, createUser, removeUsersByUsernames } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
