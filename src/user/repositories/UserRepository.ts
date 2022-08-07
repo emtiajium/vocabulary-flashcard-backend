@@ -23,10 +23,6 @@ export default class UserRepository extends Repository<User> {
         return plainToClass(User, { ...user, ...createdUser.generatedMaps[0] });
     }
 
-    getUsers(ids: string[]): Promise<User[]> {
-        return this.find({ id: In(ids) });
-    }
-
     getUsersByUsernames(usernames: string[]): Promise<User[]> {
         return this.find({ username: In(usernames) });
     }
