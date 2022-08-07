@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
-import EntityNotFoundException from '@/exceptions/EntityNotFoundException';
+import EntityNotFoundException from '@/common/exceptions/EntityNotFoundException';
 
 @EntityRepository(Cohort)
 export default class CohortRepository extends Repository<Cohort> {

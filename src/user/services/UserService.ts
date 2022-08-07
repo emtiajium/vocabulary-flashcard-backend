@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import UserRepository from '@/user/repositories/UserRepository';
 import User from '@/user/domains/User';
 import CohortService from '@/user/services/CohortService';
-import EntityNotFoundException from '@/exceptions/EntityNotFoundException';
+import EntityNotFoundException from '@/common/exceptions/EntityNotFoundException';
 import * as _ from 'lodash';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import UserReport from '@/user/domains/UserReport';
