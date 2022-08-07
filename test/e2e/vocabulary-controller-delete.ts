@@ -65,7 +65,7 @@ describe('DELETE /v1/vocabularies', () => {
         expect(status).toBe(404);
     });
 
-    it('SHOULD return 412 UNPROCESSABLE ENTITY WHEN the vocabulary is a leitner item', async () => {
+    it('SHOULD return 422 UNPROCESSABLE ENTITY WHEN the vocabulary is a leitner item', async () => {
         const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
         await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 

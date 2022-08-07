@@ -22,7 +22,7 @@ describe('/v1/androids', () => {
         await getRepository(Android).delete({ versionName });
     }
 
-    async function getAndroid(): Promise<Android[]> {
+    function getAndroid(): Promise<Android[]> {
         return getRepository(Android).find({ versionName });
     }
 

@@ -8,7 +8,7 @@ import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';
-import { createCohort, removeCohortByName } from '@test/util/cohort-util';
+import { createCohort, removeCohortsByNames } from '@test/util/cohort-util';
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
 import {
@@ -45,7 +45,7 @@ describe('Leitner Systems Entry', () => {
             removeVocabularyAndRelationsByCohortId(fakeCohort.id),
         ]);
         await removeUserByUsername(requester.username);
-        await Promise.all([removeCohortByName(cohort.name), removeCohortByName(fakeCohort.name)]);
+        await removeCohortsByNames([cohort.name, fakeCohort.name]);
         await removeLeitnerBoxItems(requester.id);
         await app.close();
     });

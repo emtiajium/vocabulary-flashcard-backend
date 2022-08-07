@@ -12,7 +12,7 @@ import {
     removeVocabularyAndRelationsByCohortId,
 } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, createUser, removeUserByUsername } from '@test/util/user-util';
+import { createApiRequester, createUser, removeUserByUsername, removeUsersByUsernames } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
@@ -42,7 +42,7 @@ describe('POST /v1/vocabularies/search', () => {
 
     afterAll(async () => {
         await removeVocabularyAndRelationsByCohortId(cohort.id);
-        await Promise.all([removeUserByUsername(requester.username), removeUserByUsername(secondUser.username)]);
+        await removeUsersByUsernames([requester.username, secondUser.username]);
         await removeCohortByName(cohort.name);
         await Promise.all([removeLeitnerBoxItems(requester.id), removeLeitnerBoxItems(secondUser.id)]);
         await app.close();
