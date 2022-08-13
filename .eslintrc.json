@@ -38,6 +38,7 @@
         "unicorn/no-null": "off",
         "unicorn/no-reduce": "off",
         "unicorn/no-array-for-each": "off",
+        "unicorn/no-static-only-class": "off",
         "class-methods-use-this": "off",
         "complexity": ["error", 7],
         "max-params": ["error", 5],
