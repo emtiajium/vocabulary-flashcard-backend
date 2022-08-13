@@ -54,6 +54,9 @@ export default class VocabularyService {
     };
 
     async validateForRemoval(id: string, userId: string, cohortId: string): Promise<void> {
+        // TODO instead of joining with Definition table, create a new simple query
+        // here we need only the cohortId and isInLeitnerBox
+        // in fact we do not need isInLeitnerBox if we introduce foreign key at the LeitnerSystems table
         const existingVocabulary = await this.findVocabularyById(id, userId);
 
         if (!existingVocabulary) {
