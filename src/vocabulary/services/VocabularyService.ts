@@ -14,7 +14,6 @@ import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
-import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
 import User from '@/user/domains/User';
 
 @Injectable()
@@ -22,7 +21,6 @@ export default class VocabularyService {
     constructor(
         private readonly vocabularyRepository: VocabularyRepository,
         private readonly definitionRepository: DefinitionRepository,
-        private readonly leitnerSystemsService: LeitnerSystemsService,
     ) {}
 
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
