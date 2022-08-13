@@ -118,7 +118,7 @@
         ],
         "testEnvironment": "node",
         "testMatch": [
-            "<rootDir>/test/{e2e,integration}/**/*.ts"
+            "<rootDir>/test/{e2e,integration,unit}/**/*.ts"
         ],
         "testTimeout": 5000,
         "transform": {
