@@ -57,9 +57,10 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         vocabularyQueryResult = this.rejectNull(vocabularyQueryResult);
 
-        // TODO remove "totalNumberOfVocabularies" from the "vocabularyQueryResult"
-
-        return new SearchResult(vocabularyQueryResult, vocabularyQueryResult[0]?.totalNumberOfVocabularies || 0);
+        return SearchResult.omitTotal<Vocabulary, { totalNumberOfVocabularies: number }>(
+            vocabularyQueryResult,
+            'totalNumberOfVocabularies',
+        );
     }
 
     private rejectNull(results: Vocabulary[]): Vocabulary[] {
