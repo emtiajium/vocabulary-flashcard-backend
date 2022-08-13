@@ -1,6 +1,6 @@
 import SearchResult from '@/common/domains/SearchResult';
 
-describe('SearchResult: omit', () => {
+describe('SearchResult: omitTotal', () => {
     test('undefined', () => {
         // Arrange
         const rawResults = undefined;
