@@ -6,4 +6,8 @@ export default class DefinitionRepository extends Repository<Definition> {
     async removeDefinitionsByIds(ids: string[]): Promise<void> {
         await this.delete({ id: In(ids) });
     }
+
+    async removeDefinitionsByVocabularyId(vocabularyId: string): Promise<void> {
+        await this.delete({ vocabulary: { id: vocabularyId } });
+    }
 }

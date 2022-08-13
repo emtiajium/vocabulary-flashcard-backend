@@ -55,27 +55,18 @@ export default class VocabularyService {
         return _.map(definitions, 'id');
     };
 
-    async assertExistenceAndRemoveVocabularyAndDefinitions(
-        id: string,
-        userId: string,
-        cohortId: string,
-    ): Promise<void> {
-        // TODO Just remove and check the delete response to throw the error
-        // I mean, rely on the SQL provides feature
+    async validateForRemoval(id: string, userId: string, cohortId: string): Promise<void> {
         const existingVocabulary = await this.findVocabularyById(id, userId);
-        if (existingVocabulary && existingVocabulary.cohortId === cohortId) {
-            await this.removeVocabularyAndDefinitions(existingVocabulary);
-        } else if (existingVocabulary && existingVocabulary.cohortId !== cohortId) {
-            throw new ForbiddenException();
-        } else {
+
+        if (!existingVocabulary) {
             throw new NotFoundException(`Vocabulary with ID "${id}" does not exist`);
         }
-    }
 
-    async assertExistenceIntoLeitnerSystems(id: string): Promise<void> {
-        // TODO introduce foreign key at the LeitnerSystems table ...
-        const leitnerItem = await this.leitnerSystemsService.getLeitnerBoxItemByVocabularyId(id);
-        if (leitnerItem) {
+        if (existingVocabulary.cohortId !== cohortId) {
+            throw new ForbiddenException();
+        }
+
+        if (existingVocabulary.isInLeitnerBox) {
             throw new UnprocessableEntityException(
                 `This vocabulary cannot be removed as one of the members of your cohort made it a flashcard.`,
             );
@@ -91,18 +82,16 @@ export default class VocabularyService {
         );
     }
 
-    async removeVocabularyAndDefinitions(vocabulary: Vocabulary): Promise<void> {
+    async removeVocabularyAndDefinitions(vocabularyId: string): Promise<void> {
         // TODO apply CASCADE
-        if (!_.isEmpty(vocabulary.definitions)) {
-            await this.definitionRepository.removeDefinitionsByIds(this.extractDefinitionIds(vocabulary.definitions));
-        }
-        await this.vocabularyRepository.removeVocabularyById(vocabulary.id);
+        await this.definitionRepository.removeDefinitionsByVocabularyId(vocabularyId);
+        await this.vocabularyRepository.removeVocabularyById(vocabularyId);
     }
 
     async removeVocabularyById(id: string, requestedUser: User): Promise<void> {
         const { id: userId, cohortId } = requestedUser;
-        await this.assertExistenceIntoLeitnerSystems(id);
-        await this.assertExistenceAndRemoveVocabularyAndDefinitions(id, userId, cohortId);
+        await this.validateForRemoval(id, userId, cohortId);
+        await this.removeVocabularyAndDefinitions(id);
     }
 
     async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
