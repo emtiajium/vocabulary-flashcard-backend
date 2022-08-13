@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.19.0`: Refactored + Prevented updating a vocab by an intruder
 -   `0.18.0`: Removed pinging to instance using all ENIs
 -   `0.17.0`: Removed the environment variable `NPM_USE_PRODUCTION`
 -   `0.16.0`: Prevented deleting vocabulary by an intruder
