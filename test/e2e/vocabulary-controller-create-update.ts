@@ -7,12 +7,18 @@ import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortByName } from '@test/util/cohort-util';
+import { createCohort, removeCohortsByNames } from '@test/util/cohort-util';
 import Definition from '@/vocabulary/domains/Definition';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
-import { getDefinitionsByVocabularyId, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
+import {
+    createVocabulary,
+    getDefinitionsByVocabularyId,
+    getVocabularyById,
+    getVocabularyWithDefinitions,
+    removeVocabularyAndRelationsByCohortId,
+} from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
+import { createApiRequester, removeUsersByUsernames } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
@@ -24,27 +30,45 @@ describe('/v1/vocabularies', () => {
 
     let requester: User;
 
+    let secondUser: User;
+
     let cohort: Cohort;
+
+    let secondCohort: Cohort;
+
+    async function seed(): Promise<{ user: User; cohort: Cohort }> {
+        const user = await createApiRequester();
+        const createdCohort = await createCohort({ name: `Cohort _ ${uuidV4()}`, usernames: [] } as Cohort);
+        await app.get(CohortService).addUsersToCohort(createdCohort.name, [user.username]);
+        user.cohort = { id: createdCohort.id } as Cohort;
+        return {
+            user,
+            cohort: createdCohort,
+        };
+    }
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
-        requester = await createApiRequester();
-        const cohortName = 'Vocabulary Automated Test Cohort';
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
+
+        const response = await seed();
+        requester = response.user;
+        cohort = response.cohort;
     });
 
     afterAll(async () => {
         await removeVocabularyAndRelationsByCohortId(cohort.id);
-        await removeUserByUsername(requester.username);
-        await removeCohortByName(cohort.name);
+        await removeUsersByUsernames([requester.username, secondUser.username]);
+        await removeCohortsByNames([cohort.name, secondCohort.name]);
         await app.close();
     });
 
-    async function makeApiRequest(vocabulary?: Vocabulary): Promise<SupertestResponse<Vocabulary>> {
+    async function makeApiRequest(
+        vocabulary?: Vocabulary,
+        user: User = requester,
+    ): Promise<SupertestResponse<Vocabulary>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .set('Authorization', `Bearer ${generateJwToken(user)}`)
             .send(vocabulary);
         return {
             status,
@@ -309,7 +333,7 @@ describe('/v1/vocabularies', () => {
             });
         });
 
-        describe('Success', () => {
+        describe('Valid Payload', () => {
             it('SHOULD return 201 CREATED with capitalized word', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
@@ -617,6 +641,33 @@ describe('/v1/vocabularies', () => {
 
                 expect(status).toBe(201);
                 expect(vocabulary.definitions).toHaveLength(0);
+            });
+
+            it('SHOULD return 403 FORBIDDEN WHEN an intruder tries to update', async () => {
+                // Arrange
+                const response = await seed();
+                secondUser = response.user;
+                secondCohort = response.cohort;
+
+                let vocabulary = getVocabularyWithDefinitions();
+                vocabulary = await createVocabulary(vocabulary, cohort.id);
+
+                const payload = {
+                    ...vocabulary,
+                    word: 'New word',
+                    definitions: [{ ...vocabulary.definitions[0], meaning: 'New definition' }],
+                };
+
+                // Act
+                const { status } = await makeApiRequest(payload, secondUser);
+
+                // Assert
+                expect(status).toBe(403);
+                vocabulary = await getVocabularyById(vocabulary.id);
+                expect(vocabulary.version).toBe(1);
+                expect(vocabulary.definitions[0].version).toBe(1);
+                expect(vocabulary.word).not.toBe(payload.word);
+                expect(vocabulary.definitions[0].meaning).not.toBe(payload.definitions[0].meaning);
             });
         });
 

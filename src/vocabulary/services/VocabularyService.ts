@@ -26,6 +26,7 @@ export default class VocabularyService {
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
         const existingVocabulary = await this.findVocabularyById(vocabulary.id, userId);
         if (existingVocabulary) {
+            this.validateCohort(existingVocabulary.cohortId, cohortId);
             // why do I have to manually remove?
             // Instead of removing why TypeORM tries to set vocabularyId to null?
             await this.removeOrphanDefinitions(existingVocabulary, vocabulary);
@@ -53,7 +54,13 @@ export default class VocabularyService {
         return _.map(definitions, 'id');
     };
 
-    async validateForRemoval(id: string, userId: string, cohortId: string): Promise<void> {
+    private validateCohort(currentCohortId: string, requesterCohortId: string): void {
+        if (currentCohortId !== requesterCohortId) {
+            throw new ForbiddenException();
+        }
+    }
+
+    private async validateForRemoval(id: string, userId: string, cohortId: string): Promise<void> {
         // TODO instead of joining with Definition table, create a new simple query
         // here we need only the cohortId and isInLeitnerBox
         // in fact we do not need isInLeitnerBox if we introduce foreign key at the LeitnerSystems table
@@ -63,9 +70,7 @@ export default class VocabularyService {
             throw new NotFoundException(`Vocabulary with ID "${id}" does not exist`);
         }
 
-        if (existingVocabulary.cohortId !== cohortId) {
-            throw new ForbiddenException();
-        }
+        this.validateCohort(existingVocabulary.cohortId, cohortId);
 
         if (existingVocabulary.isInLeitnerBox) {
             throw new UnprocessableEntityException(
