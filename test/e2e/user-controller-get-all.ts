@@ -11,11 +11,12 @@ import { removeCohortsByNames } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
 import UserReport from '@/user/domains/UserReport';
 import SearchResult from '@/common/domains/SearchResult';
+import * as uuid from 'uuid';
 
 describe('/v1/users/all', () => {
     let app: INestApplication;
 
-    const usernames = ['example23@gibberish.com', 'example24@gibberish.com'];
+    const usernames = [`example_${uuid.v4()}@gibberish.com`, `example_${uuid.v4()}@gibberish.com`];
 
     let requester: User;
 

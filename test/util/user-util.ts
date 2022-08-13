@@ -1,5 +1,6 @@
 import User from '@/user/domains/User';
 import { getRepository, In } from 'typeorm';
+import * as uuid from 'uuid';
 
 export default function getUserByUsername(username: string): Promise<User> {
     return getRepository(User).findOne({ username });
@@ -23,5 +24,5 @@ export function createUser(user: User): Promise<User> {
 }
 
 export function createApiRequester(): Promise<User> {
-    return getRepository(User).save({ username: `requester@request.com`, firstname: 'Requester' });
+    return getRepository(User).save({ username: `requester+${uuid.v4()}@request.com`, firstname: 'Requester' });
 }

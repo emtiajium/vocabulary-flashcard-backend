@@ -33,7 +33,7 @@ describe('DELETE /v1/vocabularies', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
-        const cohortName = 'Vocabulary Delete Automated Test Cohort';
+        const cohortName = `Cohort _ ${uuidV4()}`;
         cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
         await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
     });
@@ -85,7 +85,7 @@ describe('DELETE /v1/vocabularies', () => {
         expect(status).toBe(403);
     });
 
-    it('SHOULD return 200 OK AND delete the vocabulary', async () => {
+    it('SHOULD return 200 OK AND delete the vocabulary and definitions', async () => {
         const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
 
         const { status } = await makeApiRequest(vocabulary.id);
