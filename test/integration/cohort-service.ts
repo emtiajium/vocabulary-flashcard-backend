@@ -5,7 +5,7 @@ import AppModule from '@/AppModule';
 import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
-import getCohortByName, { removeCohortByName } from '@test/util/cohort-util';
+import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
 
 describe('Cohort Service', () => {
     let app: INestApplication;
@@ -52,6 +52,6 @@ describe('Cohort Service', () => {
         });
 
         await removeUsersByUsernames([firstUser.username, secondUser.username]);
-        await removeCohortByName(cohortPayload.name);
+        await removeCohortsByNames([cohortPayload.name]);
     });
 });

@@ -11,10 +11,6 @@ export function getUsersByUsernames(usernames: string[]): Promise<User[]> {
     return getRepository(User).find({ where: { username: In(usernames) } });
 }
 
-export async function removeUserByUsername(username: string): Promise<void> {
-    await getRepository(User).delete({ username });
-}
-
 export async function removeUsersByUsernames(usernames: string[]): Promise<void> {
     await getRepository(User).delete({ username: In(usernames) });
 }

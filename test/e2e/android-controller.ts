@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import User from '@/user/domains/User';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
-import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
+import { createApiRequester, removeUsersByUsernames } from '@test/util/user-util';
 import SupertestResponse from '@test/util/supertest-util';
 import * as request from 'supertest';
 import getAppAPIPrefix from '@test/util/service-util';
@@ -32,7 +32,7 @@ describe('/v1/androids', () => {
     });
 
     afterAll(async () => {
-        await removeUserByUsername(requester.username);
+        await removeUsersByUsernames([requester.username]);
         await app.close();
     });
 

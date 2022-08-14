@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import UserRepository from '@/user/repositories/UserRepository';
-import getUserByUsername, { removeUserByUsername } from '@test/util/user-util';
+import getUserByUsername, { removeUsersByUsernames } from '@test/util/user-util';
 
 describe('Repository Injection', () => {
     let app: INestApplication;
@@ -28,6 +28,6 @@ describe('Repository Injection', () => {
         await expect(userRepository.upsert(user)).resolves.toBeDefined();
         await expect(getUserByUsername(user.username)).resolves.toBeDefined();
 
-        await removeUserByUsername(user.username);
+        await removeUsersByUsernames([user.username]);
     });
 });
