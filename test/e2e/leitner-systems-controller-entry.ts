@@ -2,21 +2,17 @@ import { INestApplication } from '@nestjs/common';
 import User from '@/user/domains/User';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
-import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
+import { createApiRequester } from '@test/util/user-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';
-import { createCohort, removeCohortsByNames } from '@test/util/cohort-util';
+import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
-import {
-    createVocabulary,
-    getVocabularyWithDefinitions,
-    removeVocabularyAndRelationsByCohortId,
-} from '@test/util/vocabulary-util';
-import { createItem, getLeitnerBoxItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
+import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
+import { createItem, getLeitnerBoxItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { momentDiff } from '@/common/utils/moment-util';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
@@ -33,20 +29,14 @@ describe('Leitner Systems Entry', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
-        const cohortName = 'Leitner Systems Automated Test';
+        const cohortName = `Cohort _ ${uuidV4()}`;
         cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
         await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
-        fakeCohort = await createCohort({ name: 'Fake Cohort', usernames: [] } as Cohort);
+        fakeCohort = await createCohort({ name: `Cohort _ ${uuidV4()}`, usernames: [] } as Cohort);
     });
 
     afterAll(async () => {
-        await Promise.all([
-            removeVocabularyAndRelationsByCohortId(cohort.id),
-            removeVocabularyAndRelationsByCohortId(fakeCohort.id),
-        ]);
-        await removeUserByUsername(requester.username);
-        await removeCohortsByNames([cohort.name, fakeCohort.name]);
-        await removeLeitnerBoxItems(requester.id);
+        await removeCohortsWithRelationsByIds([cohort.id, fakeCohort.id]);
         await app.close();
     });
 

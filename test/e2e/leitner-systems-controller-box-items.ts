@@ -3,17 +3,14 @@ import User from '@/user/domains/User';
 import Cohort from '@/user/domains/Cohort';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
-import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
-import { createCohort, removeCohortByName } from '@test/util/cohort-util';
+import { createApiRequester } from '@test/util/user-util';
+import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import CohortService from '@/user/services/CohortService';
-import {
-    createVocabulary,
-    getVocabularyWithDefinitions,
-    removeVocabularyAndRelationsByCohortId,
-} from '@test/util/vocabulary-util';
+import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import SupertestResponse from '@test/util/supertest-util';
 import * as request from 'supertest';
+import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
@@ -43,16 +40,13 @@ describe('Leitner Systems Box Items', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
-        const cohortName = 'Leitner Systems Automated Test';
+        const cohortName = `Cohort _ ${uuid.v4()}`;
         cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
         await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
     });
 
     afterAll(async () => {
-        await removeVocabularyAndRelationsByCohortId(cohort.id);
-        await removeUserByUsername(requester.username);
-        await removeCohortByName(cohort.name);
-        await removeLeitnerBoxItems(requester.id);
+        await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
     });
 

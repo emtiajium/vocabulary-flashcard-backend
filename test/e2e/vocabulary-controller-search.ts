@@ -3,16 +3,13 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import * as request from 'supertest';
+import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortByName } from '@test/util/cohort-util';
-import {
-    createVocabulary,
-    getVocabularyWithDefinitions,
-    removeVocabularyAndRelationsByCohortId,
-} from '@test/util/vocabulary-util';
+import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
+import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, createUser, removeUsersByUsernames } from '@test/util/user-util';
+import { createApiRequester, createUser } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
@@ -34,17 +31,13 @@ describe('POST /v1/vocabularies/search', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
-        secondUser = await createUser({ username: `friend@firecracker.com`, firstname: 'Friend' } as User);
-        const cohortName = 'Vocabulary Search Automated Test Cohort';
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username, secondUser.username]);
+        secondUser = await createUser({ username: `friend+${uuid.v4()}@firecracker.com`, firstname: 'Friend' } as User);
+        cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
+        await app.get(CohortService).addUsersToCohort(cohort.name, [requester.username, secondUser.username]);
     });
 
     afterAll(async () => {
-        await removeVocabularyAndRelationsByCohortId(cohort.id);
-        await removeUsersByUsernames([requester.username, secondUser.username]);
-        await removeCohortByName(cohort.name);
-        await Promise.all([removeLeitnerBoxItems(requester.id), removeLeitnerBoxItems(secondUser.id)]);
+        await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
     });
 
