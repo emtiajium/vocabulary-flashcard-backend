@@ -7,7 +7,7 @@ import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortsByNames } from '@test/util/cohort-util';
+import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import Definition from '@/vocabulary/domains/Definition';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import {
@@ -15,10 +15,9 @@ import {
     getDefinitionsByVocabularyId,
     getVocabularyById,
     getVocabularyWithDefinitions,
-    removeVocabularyAndRelationsByCohortId,
 } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, removeUsersByUsernames } from '@test/util/user-util';
+import { createApiRequester } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
@@ -56,9 +55,7 @@ describe('/v1/vocabularies', () => {
     });
 
     afterAll(async () => {
-        await removeVocabularyAndRelationsByCohortId(cohort.id);
-        await removeUsersByUsernames([requester.username, secondUser.username]);
-        await removeCohortsByNames([cohort.name, secondCohort.name]);
+        await removeCohortsWithRelationsByIds([cohort.id, secondCohort.id]);
         await app.close();
     });
 
