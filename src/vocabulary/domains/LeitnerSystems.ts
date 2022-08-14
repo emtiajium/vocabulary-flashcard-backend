@@ -71,7 +71,7 @@ export default class LeitnerSystems extends BaseEntity {
         return new Date();
     }
 
-    static create(box: LeitnerBoxType, userId: string, vocabularyId: string, isForward?: boolean): LeitnerSystems {
+    static create(box: LeitnerBoxType, userId: string, vocabularyId: string, isForward: boolean): LeitnerSystems {
         const leitnerSystems = new LeitnerSystems();
         leitnerSystems.user = { id: userId } as User;
         leitnerSystems.vocabulary = { id: vocabularyId } as Vocabulary;
