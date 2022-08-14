@@ -51,7 +51,7 @@ describe('/v1/androids', () => {
             await removeAndroid();
         });
 
-        it('SHOULD return 401 FORBIDDEN WHEN secret does not match', async () => {
+        it('SHOULD return 401 UNAUTHORIZED WHEN secret does not match', async () => {
             const { status } = await makeApiRequest({
                 versionCode: 1,
                 versionName,
