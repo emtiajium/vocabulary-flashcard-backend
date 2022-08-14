@@ -18,7 +18,7 @@
         "format": "prettier --write \"migrations/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\" \"*.md\" \"*.json\"",
         "format:check": "prettier --check \"migrations/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\" \"*.md\" \"*.json\"",
         "start:dev": "nest start --watch",
-        "start:prod": "npm run typeorm migration:run && npm run build && node dist/src/main.js",
+        "start:prod": "npm run build && npm run typeorm migration:run && node dist/src/main.js",
         "lint:config": "eslint --print-config src/main.ts",
         "lint": "eslint \"{migrations,src,test}/**/*.ts\" --fix",
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
