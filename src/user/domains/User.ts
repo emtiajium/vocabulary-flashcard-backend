@@ -1,9 +1,10 @@
 import BaseEntity from '@/common/domains/BaseEntity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 import { Expose } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import { ApiHideProperty } from '@nestjs/swagger';
+import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
 @Entity('User')
 export default class User extends BaseEntity {
@@ -31,8 +32,17 @@ export default class User extends BaseEntity {
 
     @ApiHideProperty()
     @IsOptional()
-    @ManyToOne(() => Cohort, (cohort) => cohort.id, { nullable: true, eager: true, cascade: true })
+    @ManyToOne(() => Cohort, (cohort) => cohort.users, { nullable: true, eager: true, cascade: true })
     cohort?: Cohort;
+
+    @ApiHideProperty()
+    @IsOptional()
+    @OneToMany(() => LeitnerSystems, (leitnerSystems) => leitnerSystems.user, {
+        nullable: true,
+        eager: false,
+        cascade: false,
+    })
+    flashcards?: LeitnerSystems[];
 
     @Expose()
     get name(): string {

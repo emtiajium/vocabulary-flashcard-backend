@@ -18,6 +18,7 @@ import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
 import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
 import { ApiHideProperty } from '@nestjs/swagger';
+import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
 @Entity('Vocabulary')
 export default class Vocabulary extends BaseEntityWithMandatoryId {
@@ -69,6 +70,15 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @IsUUID()
     @IsOptional()
     cohortId?: string;
+
+    @ApiHideProperty()
+    @IsOptional()
+    @OneToMany(() => LeitnerSystems, (leitnerSystems) => leitnerSystems.vocabulary, {
+        nullable: true,
+        eager: false,
+        cascade: false,
+    })
+    flashcards?: LeitnerSystems[];
 
     @ApiHideProperty()
     @IsOptional()

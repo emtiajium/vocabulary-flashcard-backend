@@ -1,25 +1,44 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, ManyToOne } from 'typeorm';
 import BaseEntity from '@/common/domains/BaseEntity';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { makeItNewer } from '@/common/utils/moment-util';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
-
-// Big NO to foreign key concept
+import User from '@/user/domains/User';
+import Vocabulary from '@/vocabulary/domains/Vocabulary';
+import { Expose } from 'class-transformer';
 
 @Entity('LeitnerSystems')
-@Index(['userId', 'vocabularyId'], { unique: true })
+@Index('unique_userId_vocabularyId', ['user', 'vocabulary'], { unique: true })
 export default class LeitnerSystems extends BaseEntity {
-    @Column({ type: 'uuid', nullable: false })
-    userId: string;
+    @ManyToOne(() => User, (user) => user.flashcards, {
+        nullable: false,
+        eager: false,
+        cascade: false,
+    })
+    user: User;
 
-    @Column({ type: 'uuid', nullable: false })
-    vocabularyId: string;
+    @ManyToOne(() => Vocabulary, (vocabulary) => vocabulary.flashcards, {
+        nullable: false,
+        eager: false,
+        cascade: false,
+    })
+    vocabulary: Vocabulary;
 
     @Column({ type: 'enum', enum: LeitnerBoxType, nullable: false })
     currentBox: LeitnerBoxType;
 
     @Column({ type: 'timestamp with time zone', nullable: false })
     boxAppearanceDate: Date;
+
+    @Expose()
+    get userId(): string {
+        return this.user.id;
+    }
+
+    @Expose()
+    get vocabularyId(): string {
+        return this.vocabulary.id;
+    }
 
     static calculateNextBoxAppearanceDate(box: LeitnerBoxType): Date {
         let boxAppearanceDate: Date;
@@ -54,8 +73,8 @@ export default class LeitnerSystems extends BaseEntity {
 
     static create(box: LeitnerBoxType, userId: string, vocabularyId: string, isForward?: boolean): LeitnerSystems {
         const leitnerSystems = new LeitnerSystems();
-        leitnerSystems.userId = userId;
-        leitnerSystems.vocabularyId = vocabularyId;
+        leitnerSystems.user = { id: userId } as User;
+        leitnerSystems.vocabulary = { id: vocabularyId } as Vocabulary;
         leitnerSystems.currentBox = box;
         leitnerSystems.boxAppearanceDate = isForward
             ? LeitnerSystems.calculateNextBoxAppearanceDate(box)

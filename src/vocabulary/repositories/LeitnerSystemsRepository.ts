@@ -1,10 +1,11 @@
-import { EntityRepository, Raw, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import Pagination from '@/common/domains/Pagination';
 import { getFormattedTomorrow } from '@/common/utils/moment-util';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
+import { SortDirection } from '@/common/domains/Sort';
 
 @EntityRepository(LeitnerSystems)
 export default class LeitnerSystemsRepository extends Repository<LeitnerSystems> {
@@ -21,17 +22,20 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         const { pageSize, pageNumber } = pagination;
         const toBeSkipped = pageSize * (pageNumber - 1);
 
-        const [items, total] = await this.findAndCount({
-            where: {
+        const [items, total] = await this.createQueryBuilder('leitnerSystems')
+            .innerJoin('leitnerSystems.user', 'user', 'user.id = :userId', {
                 userId,
-                currentBox: box,
-                boxAppearanceDate: Raw((alias) => `${alias} < '${this.getTomorrow()}'::DATE`),
-            },
-            select: ['vocabularyId', 'updatedAt'],
-            skip: toBeSkipped,
-            take: pageSize,
-            order: { createdAt: 'ASC' },
-        });
+            })
+            .innerJoin('leitnerSystems.vocabulary', 'vocabulary')
+            .where('user.id = :userId', { userId })
+            .andWhere('leitnerSystems.currentBox = :box', { box })
+            .andWhere(`leitnerSystems.boxAppearanceDate < '${this.getTomorrow()}'::DATE`)
+            .orderBy('leitnerSystems.createdAt', SortDirection.ASC)
+            .skip(toBeSkipped)
+            .take(pageSize)
+            .select(['leitnerSystems.id', 'leitnerSystems.createdAt', 'leitnerSystems.updatedAt'])
+            .addSelect(['vocabulary.id'])
+            .getManyAndCount();
 
         return new SearchResult<LeitnerSystems>(items, total);
     }
@@ -39,7 +43,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
     countBoxItems(userId: string, box: LeitnerBoxType): Promise<number> {
         return this.count({
             where: {
-                userId,
+                user: { id: userId },
                 currentBox: box,
             },
         });

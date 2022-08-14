@@ -92,7 +92,7 @@ export default class LeitnerSystemsService {
     }
 
     private getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems> {
-        return this.leitnerSystemsRepository.findOne({ userId, vocabularyId });
+        return this.leitnerSystemsRepository.findOne({ user: { id: userId }, vocabulary: { id: vocabularyId } });
     }
 
     async getBoxItems(
