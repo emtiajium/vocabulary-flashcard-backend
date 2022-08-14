@@ -1,30 +1,30 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import * as uuid from 'uuid';
 import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { removeUserByUsername } from '@test/util/user-util';
+import { removeUsersByUsernames } from '@test/util/user-util';
 import User from '@/user/domains/User';
 import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
-import { removeCohortByName } from '@test/util/cohort-util';
+import { removeCohortsByNames } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
 
 describe('/v1/users', () => {
     let app: INestApplication;
 
-    const username = 'example20@gibberish.com';
+    const username = `example+${uuid.v4()}@gibberish.com`;
 
     let requester: User;
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
-        await removeUserByUsername(username);
     });
 
     afterAll(async () => {
-        await removeUserByUsername(username);
-        await removeCohortByName(username);
+        await removeUsersByUsernames([username]);
+        await removeCohortsByNames([username]);
         await app.close();
     });
 
