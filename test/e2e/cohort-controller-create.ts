@@ -6,17 +6,16 @@ import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
-import { removeCohortByName } from '@test/util/cohort-util';
+import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import User from '@/user/domains/User';
 import {
     createApiRequester,
     createUser,
     getUsersByUsernames,
-    removeUserByUsername,
     removeUsersByUsernames,
+    resetCohortById,
 } from '@test/util/user-util';
-import { getRepository } from 'typeorm';
 import generateJwToken from '@test/util/auth-util';
 
 describe('/v1/cohorts', () => {
@@ -42,7 +41,7 @@ describe('/v1/cohorts', () => {
     });
 
     afterAll(async () => {
-        await removeUserByUsername(requester.username);
+        await removeUsersByUsernames([requester.username]);
         await app.close();
     });
 
@@ -120,7 +119,7 @@ describe('/v1/cohorts', () => {
 
         describe('Payload with empty usernames', () => {
             afterAll(async () => {
-                await removeCohortByName(getBasePayload().name);
+                await removeCohortsByNames([getBasePayload().name]);
             });
 
             it('SHOULD return 201 CREATED', async () => {
@@ -131,7 +130,7 @@ describe('/v1/cohorts', () => {
 
         describe('Multiple Request With Same Payload', () => {
             afterAll(async () => {
-                await removeCohortByName(getBasePayload().name);
+                await removeCohortsByNames([getBasePayload().name]);
             });
 
             it('SHOULD return 201 CREATED WHEN same payload is sent twice', async () => {
@@ -141,7 +140,7 @@ describe('/v1/cohorts', () => {
                 status = (await makeApiRequest(getBasePayload())).status;
                 expect(status).toBe(201);
 
-                await expect(getRepository(Cohort).find({ name: getBasePayload().name })).resolves.toHaveLength(1);
+                await expect(getCohortByName(getBasePayload().name)).resolves.toBeDefined();
             });
         });
 
@@ -159,7 +158,7 @@ describe('/v1/cohorts', () => {
 
             afterAll(async () => {
                 await removeUsersByUsernames([firstUser.username, secondUser.username]);
-                await removeCohortByName(getBasePayload().name);
+                await removeCohortsByNames([getBasePayload().name]);
             });
 
             it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
@@ -198,6 +197,9 @@ describe('/v1/cohorts', () => {
 
                 expect(firstUserWithCohort.cohort.name).toBe(getBasePayload().name);
                 expect(secondUserWithCohort.cohort.name).toBe(getBasePayload().name);
+
+                await resetCohortById(firstUser.id);
+                await resetCohortById(secondUser.id);
             });
         });
     });
