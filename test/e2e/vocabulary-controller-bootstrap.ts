@@ -3,13 +3,18 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import SupertestResponse from '@test/util/supertest-util';
 import * as request from 'supertest';
+import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortByName } from '@test/util/cohort-util';
-import { getSingleVocabularyByCohortId, removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
+import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
+import {
+    createVocabulary,
+    getSingleVocabularyByCohortId,
+    getVocabularyWithDefinitions,
+} from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, removeUserByUsername } from '@test/util/user-util';
+import { createApiRequester } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
@@ -25,14 +30,12 @@ describe('/v1/vocabularies/bootstrap', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
-        const cohortName = 'Bootstrap Cohort';
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
+        cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
+        await app.get(CohortService).addUsersToCohort(cohort.name, [requester.username]);
     });
 
     afterAll(async () => {
-        await removeUserByUsername(requester.username);
-        await removeCohortByName(cohort.name);
+        await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
     });
 
@@ -71,13 +74,13 @@ describe('/v1/vocabularies/bootstrap', () => {
         vocabularies.forEach(({ cohortId }) => {
             expect(cohortId).toBe(cohort.id);
         });
-        await removeVocabularyAndRelationsByCohortId(cohort.id);
     });
 
-    it('SHOULD return 409 Conflict WHEN /bootstrap is executed earlier', async () => {
-        await makeApiRequest();
+    it('SHOULD return 409 Conflict WHEN the user has vocabulary', async () => {
+        await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
         const { status } = await makeApiRequest();
+
         expect(status).toBe(409);
-        await removeVocabularyAndRelationsByCohortId(cohort.id);
     });
 });
