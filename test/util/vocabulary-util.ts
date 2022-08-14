@@ -2,18 +2,18 @@ import { getRepository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
 import { v4 as uuidV4 } from 'uuid';
+import { removeLeitnerBoxItemsByCohortId } from '@test/util/leitner-systems-util';
 
 export async function removeVocabularyAndRelationsByCohortId(cohortId: string): Promise<void> {
     await getRepository(Definition).query(
         `DELETE
          FROM "Definition"
-         WHERE "vocabularyId" IN (
-             SELECT id
-             FROM "Vocabulary"
-             WHERE "cohortId" = $1
-         );`,
+         WHERE "vocabularyId" IN (SELECT id
+                                  FROM "Vocabulary"
+                                  WHERE "cohortId" = $1);`,
         [cohortId],
     );
+    await removeLeitnerBoxItemsByCohortId(cohortId);
     await getRepository(Vocabulary).delete({ cohortId });
 }
 

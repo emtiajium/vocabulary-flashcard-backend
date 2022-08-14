@@ -19,6 +19,10 @@ export async function removeUsersByUsernames(usernames: string[]): Promise<void>
     await getRepository(User).delete({ username: In(usernames) });
 }
 
+export async function removeUsersByCohortIds(cohortIds: string[]): Promise<void> {
+    await getRepository(User).delete({ cohort: { id: In(cohortIds) } });
+}
+
 export function createUser(user: User): Promise<User> {
     return getRepository(User).save(user);
 }

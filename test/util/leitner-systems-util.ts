@@ -3,11 +3,24 @@ import { getRepository } from 'typeorm';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 
 export function getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems> {
-    return getRepository(LeitnerSystems).findOne({ userId, vocabularyId });
+    return getRepository(LeitnerSystems).findOne({ user: { id: userId }, vocabulary: { id: vocabularyId } });
 }
 
 export async function removeLeitnerBoxItems(userId: string): Promise<void> {
-    await getRepository(LeitnerSystems).delete({ userId });
+    await getRepository(LeitnerSystems).delete({ user: { id: userId } });
+}
+
+export async function removeLeitnerBoxItemsByCohortId(cohortId: string): Promise<void> {
+    await getRepository(LeitnerSystems).query(
+        `
+            DELETE
+            FROM "LeitnerSystems"
+            WHERE "userId" IN (SELECT id
+                               FROM "User"
+                               WHERE "User"."cohortId" = $1);
+        `,
+        [cohortId],
+    );
 }
 
 export function createItem(userId: string, vocabularyId: string, box: LeitnerBoxType): Promise<LeitnerSystems> {
