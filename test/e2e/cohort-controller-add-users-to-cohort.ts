@@ -12,8 +12,8 @@ import {
     createApiRequester,
     createUser,
     getUsersByUsernames,
-    removeUserByUsername,
     removeUsersByUsernames,
+    resetCohortById,
 } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 
@@ -29,9 +29,9 @@ describe('/v1/cohorts/:name', () => {
         usernames,
     });
 
-    const getUserCreationBasePayload = (username?: string): User =>
+    const getUserCreationBasePayload = (): User =>
         ({
-            username: username || `example+${uuidV4()}@gibberish.com`,
+            username: `example+${uuidV4()}@gibberish.com`,
             firstname: 'John',
             lastname: 'Doe',
         } as User);
@@ -42,7 +42,7 @@ describe('/v1/cohorts/:name', () => {
     });
 
     afterAll(async () => {
-        await removeUserByUsername(requester.username);
+        await removeUsersByUsernames([requester.username]);
         await app.close();
     });
 
@@ -67,10 +67,7 @@ describe('/v1/cohorts/:name', () => {
 
         beforeAll(async () => {
             firstUser = await createUser(getUserCreationBasePayload());
-            secondUser = await createUser({
-                ...getUserCreationBasePayload(),
-                username: `example+${uuidV4()}@gibberish.com`,
-            } as User);
+            secondUser = await createUser(getUserCreationBasePayload());
 
             cohort = await createCohort(getBasePayload());
             cohortIds.push(cohort.id);
@@ -94,21 +91,18 @@ describe('/v1/cohorts/:name', () => {
         });
 
         it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
-            const invalidUsernames = [uuidV4(), uuidV4(), uuidV4()];
+            const invalidUsername = uuidV4();
 
-            const { status, body } = await makeAuthorizedApiRequest(cohort.name, [
-                firstUser.username,
-                invalidUsernames[2],
-            ]);
+            const { status, body } = await makeAuthorizedApiRequest(cohort.name, [firstUser.username, invalidUsername]);
 
             expect(status).toBe(404);
             expect((body as SupertestErrorResponse).message).toBe(
-                `There is no such user having username ${invalidUsernames[2]}`,
+                `There is no such user having username ${invalidUsername}`,
             );
         });
 
         it('SHOULD return 404 NOT_FOUND WHEN users do not exist', async () => {
-            const invalidUsernames = [uuidV4(), uuidV4(), uuidV4()];
+            const invalidUsernames = [uuidV4(), uuidV4()];
             const { status, body } = await makeAuthorizedApiRequest(cohort.name, [
                 invalidUsernames[0],
                 invalidUsernames[1],
@@ -131,6 +125,9 @@ describe('/v1/cohorts/:name', () => {
 
             expect(firstUserWithCohort.cohort.name).toBe(cohort.name);
             expect(secondUserWithCohort.cohort.name).toBe(cohort.name);
+
+            await resetCohortById(firstUser.id);
+            await resetCohortById(secondUser.id);
         });
     });
 });

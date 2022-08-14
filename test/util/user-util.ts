@@ -23,10 +23,14 @@ export async function removeUsersByCohortIds(cohortIds: string[]): Promise<void>
     await getRepository(User).delete({ cohort: { id: In(cohortIds) } });
 }
 
+export async function resetCohortById(id: string): Promise<void> {
+    await getRepository(User).update({ id }, { cohort: { id: null } });
+}
+
 export function createUser(user: User): Promise<User> {
     return getRepository(User).save(user);
 }
 
 export function createApiRequester(): Promise<User> {
-    return getRepository(User).save({ username: `requester+${uuid.v4()}@request.com`, firstname: 'Requester' });
+    return createUser({ username: `requester+${uuid.v4()}@request.com`, firstname: 'Requester' } as User);
 }
