@@ -81,4 +81,9 @@ export default class LeitnerSystems extends BaseEntity {
             : LeitnerSystems.calculatePreviousBoxAppearanceDate();
         return leitnerSystems;
     }
+
+    setId?(id: string): LeitnerSystems {
+        this.id = id;
+        return this;
+    }
 }

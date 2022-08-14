@@ -17,35 +17,18 @@ export default class LeitnerSystemsService {
     ) {}
 
     async placeIntoFirstLeitnerBox(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
-        // TODO introduce foreign key at the LeitnerSystems table and delegate below checking to the SQL itself
-        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
-            throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
-        }
+        await this.validateVocabularyExistence(vocabularyId, cohortId);
 
-        const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
-
-        // TODO introduce foreign key ...
-        if (boxItem) {
-            throw new ConflictException(
-                `You already made a flashcard with this vocabulary.`,
-                `Vocabulary with ID "${vocabularyId}" for the user "${userId}" is already exist`,
-            );
-        }
-
-        await this.leitnerSystemsRepository.save(
+        await this.leitnerSystemsRepository.upsert(
             LeitnerSystems.create(LeitnerBoxType.BOX_1, userId, vocabularyId, true),
         );
     }
 
     async moveForward(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
-        // TODO introduce foreign key ...
-        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
-            throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
-        }
+        await this.validateVocabularyExistence(vocabularyId, cohortId);
 
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
-        // TODO introduce foreign key ...
         if (!boxItem) {
             throw new NotFoundException(
                 `There is no such vocabulary with ID "${vocabularyId}" for the user "${userId}"`,
@@ -58,21 +41,16 @@ export default class LeitnerSystemsService {
 
         const nextBox = LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`];
 
-        await this.leitnerSystemsRepository.update(
-            { id: boxItem.id },
-            LeitnerSystems.create(nextBox, userId, vocabularyId, true),
+        await this.leitnerSystemsRepository.upsert(
+            LeitnerSystems.create(nextBox, userId, vocabularyId, true).setId(boxItem.id),
         );
     }
 
     async moveBackward(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
-        // TODO introduce foreign key ...
-        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
-            throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
-        }
+        await this.validateVocabularyExistence(vocabularyId, cohortId);
 
         const boxItem = await this.getLeitnerBoxItem(userId, vocabularyId);
 
-        // TODO introduce foreign key ...
         if (!boxItem) {
             throw new NotFoundException(
                 `There is no such vocabulary with ID "${vocabularyId}" for the user "${userId}"`,
@@ -85,10 +63,15 @@ export default class LeitnerSystemsService {
 
         const previousBox = LeitnerBoxType[`BOX_${boxItem.currentBox - 1}`];
 
-        await this.leitnerSystemsRepository.update(
-            { id: boxItem.id },
-            LeitnerSystems.create(previousBox, userId, vocabularyId, false),
+        await this.leitnerSystemsRepository.upsert(
+            LeitnerSystems.create(previousBox, userId, vocabularyId, false).setId(boxItem.id),
         );
+    }
+
+    private async validateVocabularyExistence(vocabularyId: string, cohortId: string): Promise<void> {
+        if (!(await this.vocabularyRepository.isVocabularyExist(vocabularyId, cohortId))) {
+            throw new NotFoundException(`There is no such vocabulary with ID "${vocabularyId}"`);
+        }
     }
 
     private getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems> {

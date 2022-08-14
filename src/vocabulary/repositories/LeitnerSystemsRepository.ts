@@ -6,9 +6,24 @@ import Pagination from '@/common/domains/Pagination';
 import { getFormattedTomorrow } from '@/common/utils/moment-util';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import { SortDirection } from '@/common/domains/Sort';
+import { ConflictException } from '@nestjs/common';
 
 @EntityRepository(LeitnerSystems)
 export default class LeitnerSystemsRepository extends Repository<LeitnerSystems> {
+    async upsert(leitnerSystems: LeitnerSystems): Promise<LeitnerSystems> {
+        try {
+            return await this.save(leitnerSystems);
+        } catch (error) {
+            if (error.constraint === 'unique_userId_vocabularyId') {
+                throw new ConflictException(
+                    `You already made a flashcard with this vocabulary.`,
+                    `Vocabulary with ID "${leitnerSystems.vocabularyId}" for the user "${leitnerSystems.userId}" is already exist`,
+                );
+            }
+            throw error;
+        }
+    }
+
     // shitty code just for the easiness of jest.spyOn()
     getTomorrow(): string {
         return getFormattedTomorrow();
