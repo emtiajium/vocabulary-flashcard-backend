@@ -6,27 +6,24 @@ import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortsByNames } from '@test/util/cohort-util';
+import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import {
     createVocabulary,
     getDefinitionsByVocabularyId,
     getVocabularyById,
     getVocabularyWithDefinitions,
-    removeVocabularyAndRelationsByCohortId,
 } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester, createUser, removeUsersByUsernames } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
-import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
+import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 
 describe('DELETE /v1/vocabularies', () => {
     let app: INestApplication;
 
     let requester: User;
-
-    let secondUser: User;
 
     let cohort: Cohort;
 
@@ -39,10 +36,7 @@ describe('DELETE /v1/vocabularies', () => {
     });
 
     afterAll(async () => {
-        await removeVocabularyAndRelationsByCohortId(cohort.id);
-        await removeUsersByUsernames([requester.username, secondUser.username]);
-        await removeCohortsByNames([cohort.name, secondUser.username]);
-        await removeLeitnerBoxItems(requester.id);
+        await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
     });
 
@@ -74,15 +68,17 @@ describe('DELETE /v1/vocabularies', () => {
     });
 
     it('SHOULD return 403 FORBIDDEN EXCEPTION WHEN outsider wants to delete a vocabulary', async () => {
-        secondUser = await createUser({
+        const secondUser = await createUser({
             username: `intruder_${uuidV4()}@firecracker.com`,
-            firstname: 'Friend',
+            firstname: 'Intruder',
         } as User);
 
         const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
 
         const { status } = await makeApiRequest(vocabulary.id, secondUser);
         expect(status).toBe(403);
+
+        await removeUsersByUsernames([secondUser.username]);
     });
 
     it('SHOULD return 200 OK AND delete the vocabulary and definitions', async () => {
