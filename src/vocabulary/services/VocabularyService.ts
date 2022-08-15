@@ -24,7 +24,7 @@ export default class VocabularyService {
     ) {}
 
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
-        const existingVocabulary = await this.findVocabularyById(vocabulary.id, userId);
+        const existingVocabulary = await this.vocabularyRepository.findVocabularyById(vocabulary.id, userId);
         if (existingVocabulary) {
             this.validateCohort(existingVocabulary.cohortId, cohortId);
             // why do I have to manually remove?
@@ -46,8 +46,16 @@ export default class VocabularyService {
         return this.vocabularyRepository.findVocabularies(userId, cohortId, vocabularySearch);
     }
 
-    findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
-        return this.vocabularyRepository.findVocabularyById(id, userId);
+    async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
+        const vocabulary = await this.vocabularyRepository.findVocabularyById(id, userId);
+        this.handleNotFound(id, vocabulary);
+        return vocabulary;
+    }
+
+    private handleNotFound(id: string, vocabulary?: Vocabulary | Partial<Vocabulary>): void {
+        if (!vocabulary) {
+            throw new NotFoundException(`Vocabulary with ID "${id}" does not exist`);
+        }
     }
 
     private extractDefinitionIds = (definitions: Definition[]): string[] => {
@@ -63,12 +71,8 @@ export default class VocabularyService {
     private async validateForRemoval(id: string, cohortId: string): Promise<void> {
         const existingVocabulary = await this.vocabularyRepository.getPartialForRemoval(id);
 
-        if (!existingVocabulary) {
-            throw new NotFoundException(`Vocabulary with ID "${id}" does not exist`);
-        }
-
+        this.handleNotFound(id, existingVocabulary);
         this.validateCohort(existingVocabulary.cohortId, cohortId);
-
         if (existingVocabulary.isInLeitnerBox) {
             throw new UnprocessableEntityException(
                 `This vocabulary cannot be removed as one of the members of your cohort made it a flashcard.`,
