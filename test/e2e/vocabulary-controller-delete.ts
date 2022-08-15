@@ -14,10 +14,10 @@ import {
     getVocabularyWithDefinitions,
 } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, createUser, removeUsersByUsernames } from '@test/util/user-util';
+import { createApiRequester, createUser, removeUsersByUsernames, resetCohortById } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
-import { createItem } from '@test/util/leitner-systems-util';
+import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 
 describe('DELETE /v1/vocabularies', () => {
@@ -56,18 +56,38 @@ describe('DELETE /v1/vocabularies', () => {
 
     it('SHOULD return 404 NOT FOUND WHEN the vocabulary does not exist', async () => {
         const { status } = await makeApiRequest(uuidV4());
+
         expect(status).toBe(404);
     });
 
-    it('SHOULD return 422 UNPROCESSABLE ENTITY WHEN the vocabulary is a leitner item', async () => {
+    it('SHOULD return 422 UNPROCESSABLE ENTITY WHEN the vocabulary is a leitner item made by the requester', async () => {
         const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
         await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
         const { status } = await makeApiRequest(vocabulary.id);
+
         expect(status).toBe(422);
     });
 
-    it('SHOULD return 403 FORBIDDEN EXCEPTION WHEN outsider wants to delete a vocabulary', async () => {
+    it('SHOULD return 422 UNPROCESSABLE ENTITY WHEN the vocabulary is a leitner item made by another member of the cohort', async () => {
+        const secondUser = await createUser({
+            username: `friend_${uuidV4()}@firecracker.com`,
+            firstname: 'Friend',
+        } as User);
+        await app.get(CohortService).addUsersToCohort(cohort.name, [secondUser.username]);
+        const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+        await createItem(secondUser.id, vocabulary.id, LeitnerBoxType.BOX_1);
+
+        const { status } = await makeApiRequest(vocabulary.id);
+
+        expect(status).toBe(422);
+
+        await resetCohortById(secondUser.id);
+        await removeLeitnerBoxItems(secondUser.id);
+        await removeUsersByUsernames([secondUser.username]);
+    });
+
+    it('SHOULD return 403 FORBIDDEN WHEN outsider wants to delete a vocabulary', async () => {
         const secondUser = await createUser({
             username: `intruder_${uuidV4()}@firecracker.com`,
             firstname: 'Intruder',
@@ -76,6 +96,7 @@ describe('DELETE /v1/vocabularies', () => {
         const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
 
         const { status } = await makeApiRequest(vocabulary.id, secondUser);
+
         expect(status).toBe(403);
 
         await removeUsersByUsernames([secondUser.username]);
@@ -85,6 +106,7 @@ describe('DELETE /v1/vocabularies', () => {
         const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
 
         const { status } = await makeApiRequest(vocabulary.id);
+
         expect(status).toBe(200);
         expect(await getVocabularyById(vocabulary.id)).toBeUndefined();
         expect(await getDefinitionsByVocabularyId(vocabulary.id)).toHaveLength(0);
