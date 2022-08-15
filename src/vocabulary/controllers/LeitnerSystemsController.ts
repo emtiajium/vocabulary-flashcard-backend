@@ -43,11 +43,6 @@ export default class LeitnerSystemsController {
         return this.leitnerSystemsService.getBoxItems(user.id, box, pagination);
     }
 
-    @Get('/exists/user/:vocabularyId')
-    getLeitnerBoxItem(@Param('vocabularyId') vocabularyId: string, @AuthenticatedUser() user: User): Promise<boolean> {
-        return this.leitnerSystemsService.isVocabularyExistForUser(user.id, vocabularyId);
-    }
-
     @Get('/items/count/:box')
     countBoxItems(@Param('box') box: LeitnerBoxType, @AuthenticatedUser() user: User): Promise<number> {
         return this.leitnerSystemsService.countBoxItems(user.id, box);
