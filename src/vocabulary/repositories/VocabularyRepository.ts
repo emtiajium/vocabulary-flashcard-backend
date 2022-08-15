@@ -138,6 +138,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     }
 
     async getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {
+        // TODO add LIMIT 1
         const queryResult = await this.query(
             `SELECT *
              FROM "Vocabulary"
