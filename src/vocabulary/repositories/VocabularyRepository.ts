@@ -138,11 +138,10 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     }
 
     async getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {
-        // TODO add LIMIT 1
         const queryResult = await this.query(
             `SELECT *
              FROM "Vocabulary"
-             WHERE "cohortId" = $1;`,
+             WHERE "cohortId" = $1 LIMIT 1;`,
             [cohortId],
         );
         return queryResult[0];
