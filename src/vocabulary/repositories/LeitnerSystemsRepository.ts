@@ -46,7 +46,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
             .skip(toBeSkipped)
             .take(pageSize)
             .select(['leitnerSystems.id', 'leitnerSystems.createdAt', 'leitnerSystems.updatedAt'])
-            .addSelect(['vocabulary.id'])
+            .addSelect(['vocabulary.id', 'vocabulary.word'])
             .getManyAndCount();
 
         return new SearchResult<LeitnerSystems>(items, total);

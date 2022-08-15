@@ -7,7 +7,6 @@ import Pagination from '@/common/domains/Pagination';
 import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
 import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
-import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 @Injectable()
 export default class LeitnerSystemsService {
@@ -84,17 +83,10 @@ export default class LeitnerSystemsService {
         pagination: Pagination,
     ): Promise<SearchResult<LeitnerBoxItem>> {
         const { results, total } = await this.leitnerSystemsRepository.getBoxItems(userId, box, pagination);
-        if (!total) {
-            return new SearchResult<LeitnerBoxItem>([], 0);
-        }
-        const vocabularies: Record<string, Pick<Vocabulary, 'id' | 'word'>[]> = _.groupBy(
-            await this.vocabularyRepository.findWords(_.map(results, 'vocabularyId')),
-            ({ id }) => id,
-        );
         const items = _.map(results, (result) => {
             return {
                 vocabularyId: result.vocabularyId,
-                word: vocabularies[result.vocabularyId][0].word,
+                word: result.vocabulary.word,
                 updatedAt: result.updatedAt,
             };
         });

@@ -66,7 +66,7 @@ describe('Leitner Systems Box Items', () => {
 
         it('SHOULD return 200 OK', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+            const { updatedAt } = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
             const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_1);
 
@@ -75,9 +75,10 @@ describe('Leitner Systems Box Items', () => {
             expect(response.total).toBeGreaterThanOrEqual(1);
             expect(response.results.length).toBeGreaterThanOrEqual(1);
             response.results.forEach((item) => {
+                expect(Object.keys(item).sort()).toStrictEqual(['word', 'vocabularyId', 'updatedAt'].sort());
                 expect(item.word).toBe(vocabulary.word);
                 expect(item.vocabularyId).toBe(vocabulary.id);
-                expect(item.updatedAt).toBeDefined();
+                expect(item.updatedAt).toBe(updatedAt.toISOString());
             });
         });
 
@@ -131,7 +132,7 @@ describe('Leitner Systems Box Items', () => {
                 .mockImplementation(() => getFormattedDate(future));
 
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
-            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
+            const { updatedAt } = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
 
             const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_2);
 
@@ -140,9 +141,11 @@ describe('Leitner Systems Box Items', () => {
             expect(response.total).toBe(1);
             expect(response.results.length).toBe(1);
             response.results.forEach((item) => {
-                expect(item.word).toBe(vocabulary.word);
-                expect(item.vocabularyId).toBe(vocabulary.id);
-                expect(item.updatedAt).toBeDefined();
+                expect(item).toStrictEqual({
+                    word: vocabulary.word,
+                    vocabularyId: vocabulary.id,
+                    updatedAt: updatedAt.toISOString(),
+                });
             });
 
             getTomorrowMock.mockRestore();

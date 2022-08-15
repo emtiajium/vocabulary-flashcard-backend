@@ -158,12 +158,4 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         );
         return !!vocabulary[0];
     }
-
-    findWords(ids: string[]): Promise<Pick<Vocabulary, 'id' | 'word'>[]> {
-        return this.query(
-            `SELECT id, word
-             FROM "Vocabulary"
-             WHERE id = ANY (ARRAY [${ids.map((id) => `'${id}'`)}]::UUID[]);`,
-        );
-    }
 }
