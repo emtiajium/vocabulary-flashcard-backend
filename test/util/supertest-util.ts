@@ -6,5 +6,6 @@ export interface SupertestErrorResponse {
 
 export default interface SupertestResponse<T> {
     status: number;
-    body: T | SupertestErrorResponse;
+    body?: T | SupertestErrorResponse;
+    text?: string;
 }
