@@ -56,6 +56,7 @@
 
 ## Change Log
 
+-   `0.22.0`: Fixed the bug: `cohortId` is now the foreign key in the `Vocabulary` table
 -   `0.21.0`: Removed `@Get(/v1/leitner-systems/exists/user/:vocabularyId)` + Wrote missing test cases for 3 APIs
 -   `0.20.0`: Introduced foreign keys at the `LeitnerSystems` table
 -   `0.19.0`: Refactored + Prevented updating a vocab by an intruder
