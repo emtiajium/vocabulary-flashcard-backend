@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import {
     ArrayNotEmpty,
     IsArray,
@@ -60,7 +60,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     definitions?: Definition[];
 
     @ApiHideProperty()
-    @OneToMany(() => Cohort, (cohort) => cohort.id, { eager: false, cascade: false })
+    @ManyToOne(() => Cohort, (cohort) => cohort.vocabularies, { eager: false, cascade: false })
     @IsOptional()
     @Type(() => Cohort)
     cohort?: Cohort;
