@@ -38,11 +38,8 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         const toBeSkipped = pageSize * (pageNumber - 1);
 
         const [items, total] = await this.createQueryBuilder('leitnerSystems')
-            .innerJoin('leitnerSystems.user', 'user', 'user.id = :userId', {
-                userId,
-            })
             .innerJoin('leitnerSystems.vocabulary', 'vocabulary')
-            .where('user.id = :userId', { userId })
+            .where('leitnerSystems.userId = :userId', { userId })
             .andWhere('leitnerSystems.currentBox = :box', { box })
             .andWhere(`leitnerSystems.boxAppearanceDate < '${this.getTomorrow()}'::DATE`)
             .orderBy('leitnerSystems.createdAt', SortDirection.ASC)
