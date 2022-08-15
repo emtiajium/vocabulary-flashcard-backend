@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export default class CohortIdAsForeignKeyAtValocabularyTable1660575503380 implements MigrationInterface {
+export default class CohortIdAsForeignKeyAtVocabularyTable1660575503380 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
             `ALTER TABLE "Vocabulary"
