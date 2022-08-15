@@ -56,7 +56,7 @@
 
 ## Change Log
 
--   `0.21.0`: Removed `@Get(/v1/leitner-systems/exists/user/:vocabularyId)` + Wrote test cases for 3 missing APIs
+-   `0.21.0`: Removed `@Get(/v1/leitner-systems/exists/user/:vocabularyId)` + Wrote missing test cases for 3 APIs
 -   `0.20.0`: Introduced foreign keys at the `LeitnerSystems` table
 -   `0.19.0`: Refactored + Prevented updating a vocab by an intruder
 -   `0.18.0`: Removed pinging to instance using all ENIs
