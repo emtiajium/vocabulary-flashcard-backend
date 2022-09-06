@@ -33,7 +33,7 @@ export default class VocabularyService {
         }
         const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
         vocabularyInstance.cohortId = cohortId;
-        const newVocabulary = await this.vocabularyRepository.save(vocabularyInstance);
+        const newVocabulary = await this.vocabularyRepository.upsert(vocabularyInstance);
         newVocabulary.isInLeitnerBox = !!existingVocabulary?.isInLeitnerBox;
         return newVocabulary;
     }

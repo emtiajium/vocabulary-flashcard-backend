@@ -52,12 +52,12 @@ export function getVocabularyWithDefinitions(): Vocabulary {
     definition.meaning = 'Meaning 1';
     definition.examples = ['Example 1'];
     definition.notes = ['Notes 1'];
-    definition.externalLinks = ['https://gibberish.com/public/static/blah.html'];
+    definition.externalLinks = ['https://firecrackervocabulary.com/privacy-policy'];
 
     const vocabulary = new Vocabulary();
     vocabulary.id = uuidV4();
     vocabulary.isDraft = false;
-    vocabulary.word = 'Word 1';
+    vocabulary.word = `Word_${uuidV4()}`;
     definition.vocabularyId = vocabulary.id;
     vocabulary.definitions = [definition];
 

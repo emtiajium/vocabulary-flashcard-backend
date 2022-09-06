@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, Unique } from 'typeorm';
 import {
     ArrayNotEmpty,
     IsArray,
@@ -21,6 +21,7 @@ import { ApiHideProperty } from '@nestjs/swagger';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
 @Entity('Vocabulary')
+@Unique('unique_word_cohortId', ['word', 'cohortId'])
 export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar' })
     @Transform(({ value }) => _.capitalize(value))
