@@ -38,7 +38,7 @@
 
 ➜ <https://localhost:9006/rest/ielts-service/swagger/>
 
-## Deploy to AWS Elastic Beanstalk
+## Deploy to AWS
 
 ➜ Create an application at AWS Elastic Beanstalk
 
@@ -46,13 +46,13 @@
 
 > Set the environment variables (under `Software` section)
 
-➜ Create a deployment pipeline at AWS CodePipeline
-
 ➜ Create the database at AWS RDS
 
 > Carefully set VPC/Security groups
 
 > Follow [this](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/rds-external-defaultvpc.html) to connect to the Amazon RDS instance in a VPC
+
+➜ Create a deployment pipeline at AWS CodePipeline
 
 ➜ Deploy!
 
