@@ -592,7 +592,7 @@ describe('/v1/vocabularies', () => {
                 });
             });
 
-            it('SHOULD return 201 CREATED with modified number of definitions', async () => {
+            it('SHOULD return 201 CREATED with modified number of definitions | without one of the previously added definitions', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();
                 payload.isDraft = false;
