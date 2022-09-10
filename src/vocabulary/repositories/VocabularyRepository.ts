@@ -190,4 +190,12 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         return queryResult[0];
     }
+
+    getPartialByWord(word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
+        return this.createQueryBuilder('vocabulary')
+            .where(`LOWER(vocabulary.word) = :word`, { word: word.toLowerCase() })
+            .andWhere(`vocabulary.cohortId = :cohortId`, { cohortId })
+            .select(['vocabulary.id', 'vocabulary.word'])
+            .getOne();
+    }
 }

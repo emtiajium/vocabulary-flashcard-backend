@@ -109,4 +109,8 @@ export default class VocabularyService {
         const vocabularies = await this.vocabularyRepository.save(payload);
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
+
+    assertExistenceByWord(word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
+        return this.vocabularyRepository.getPartialByWord(word.trim(), cohortId);
+    }
 }
