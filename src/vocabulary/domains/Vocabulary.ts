@@ -24,7 +24,7 @@ import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 @Unique('unique_word_cohortId', ['word', 'cohortId'])
 export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar' })
-    @Transform(({ value }) => _.capitalize(value))
+    @Transform(({ value }) => _.capitalize(value).trim())
     @IsNotEmpty()
     @IsString()
     @IsDefined()
