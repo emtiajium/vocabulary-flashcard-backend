@@ -16,7 +16,7 @@ import generateJwToken from '@test/util/auth-util';
 import { capitalize } from 'lodash';
 import { plainToClass } from 'class-transformer';
 
-describe('/v1/vocabularies/assert-existence/words/:word', () => {
+describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
     let app: INestApplication;
 
     let requester: User;
