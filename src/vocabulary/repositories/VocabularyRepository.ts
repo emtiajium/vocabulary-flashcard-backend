@@ -191,10 +191,11 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return queryResult[0];
     }
 
-    getPartialByWord(word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
+    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
         return this.createQueryBuilder('vocabulary')
-            .where(`LOWER(vocabulary.word) = :word`, { word: word.toLowerCase() })
+            .where(`LOWER(vocabulary.word) = :word`, { word: word.toLowerCase().trim() })
             .andWhere(`vocabulary.cohortId = :cohortId`, { cohortId })
+            .andWhere(`vocabulary.id != :id`, { id })
             .select(['vocabulary.id', 'vocabulary.word'])
             .getOne();
     }

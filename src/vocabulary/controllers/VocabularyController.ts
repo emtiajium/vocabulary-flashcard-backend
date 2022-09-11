@@ -43,8 +43,12 @@ export default class VocabularyController {
         return this.vocabularyService.createInitialVocabularies(user.cohortId);
     }
 
-    @Get('/assert-existence/words/:word')
-    assertExistenceByWord(@Param('word') word: string, @AuthenticatedUser() user: User): Promise<Partial<Vocabulary>> {
-        return this.vocabularyService.assertExistenceByWord(word, user.cohortId);
+    @Get('/:id/assert-existence/words/:word')
+    assertExistenceByWord(
+        @Param('id') id: string,
+        @Param('word') word: string,
+        @AuthenticatedUser() user: User,
+    ): Promise<Partial<Vocabulary>> {
+        return this.vocabularyService.assertExistenceByWord(id, word, user.cohortId);
     }
 }

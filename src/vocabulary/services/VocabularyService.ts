@@ -110,7 +110,7 @@ export default class VocabularyService {
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
 
-    assertExistenceByWord(word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
-        return this.vocabularyRepository.getPartialByWord(word.trim(), cohortId);
+    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
+        return this.vocabularyRepository.assertExistenceByWord(id, word, cohortId);
     }
 }
