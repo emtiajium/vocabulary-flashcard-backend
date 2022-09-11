@@ -36,7 +36,7 @@
 
 ###### API docs
 
-➜ <https://localhost:9006/rest/ielts-service/swagger/>
+➜ <https://localhost:9006/rest/ielts-service/swagger>
 
 ## Deploy to AWS
 
@@ -58,6 +58,7 @@
 
 ## Change Log
 
+-   `0.23.1`: Added API to check if a vocabulary already exists
 -   `0.23.0`: Prevented adding same vocabulary multiple times (within the same cohort)
 -   `0.22.0`: Fixed the bug: `cohortId` is now the foreign key in the `Vocabulary` table
 -   `0.21.0`: Removed `@Get(/v1/leitner-systems/exists/user/:vocabularyId)` + Wrote missing test cases for 3 APIs
