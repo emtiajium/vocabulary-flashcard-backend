@@ -56,7 +56,7 @@ describe('/v1/vocabularies/assert-existence/words/:word', () => {
     }
 
     it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
-        // Arrange
+        // Act
         const { status } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/vocabularies/assert-existence/words/${uuid.v4()}`)
             .send();
@@ -65,7 +65,7 @@ describe('/v1/vocabularies/assert-existence/words/:word', () => {
         expect(status).toBe(403);
     });
 
-    it('SHOULD return 200 OK WITH vocabulary WHEN the vocabulary with requested word exists I', async () => {
+    it('SHOULD return 200 OK WITH vocabulary WHEN the vocabulary with requested word exists: Case Insensitive I', async () => {
         // Arrange
         const word = 'Hello, hello';
         const vocabulary = await createVocabulary({ ...getVocabularyWithDefinitions(), word }, requester.cohortId);
@@ -81,7 +81,7 @@ describe('/v1/vocabularies/assert-existence/words/:word', () => {
         });
     });
 
-    it('SHOULD return 200 OK WITH vocabulary WHEN the vocabulary with requested word exists II', async () => {
+    it('SHOULD return 200 OK WITH vocabulary WHEN the vocabulary with requested word exists: Case Insensitive II', async () => {
         // Arrange
         const word = 'blah, Blah';
         const vocabulary = await createVocabulary({ ...getVocabularyWithDefinitions(), word }, requester.cohortId);
@@ -95,6 +95,19 @@ describe('/v1/vocabularies/assert-existence/words/:word', () => {
             id: vocabulary.id,
             word: capitalize(vocabulary.word),
         });
+    });
+
+    it('SHOULD return 200 OK WITHOUT vocabulary WHEN the exact word does not exist', async () => {
+        // Arrange
+        const word = 'Dhaka, Bangladesh';
+        await createVocabulary({ ...getVocabularyWithDefinitions(), word }, requester.cohortId);
+
+        // Act
+        const { status, body } = await makeApiRequest('Bangladesh');
+
+        // Assert
+        expect(status).toBe(200);
+        expect(body as ApiResponse).toStrictEqual({});
     });
 
     it('SHOULD return 200 OK WITHOUT vocabulary WHEN the vocabulary with requested word does not exist to the same cohort', async () => {
