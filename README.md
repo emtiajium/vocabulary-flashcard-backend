@@ -14,15 +14,15 @@
 
 ➜ `npm install`
 
-###### Create your configuration running the command below and edit the .env
-
-➜ `npm run create:env`
-
 ###### Run the backing services
 
 ➜ `docker-compose up -d`
 
-###### Run the migration
+###### Create the configuration
+
+➜ `npm run create:env`
+
+###### Synchronize model changes into the database
 
 ➜ `npm run typeorm migration:run`
 
