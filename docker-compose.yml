@@ -6,12 +6,19 @@ services:
         restart: always
         ports:
             - '5431:5432'
+        deploy:
+            resources:
+                limits:
+                    memory: 512M
+                reservations:
+                    memory: 512M
         environment:
             POSTGRES_PASSWORD: 123
             POSTGRES_USER: postgres
             POSTGRES_DB: ielts-gibberish
         volumes:
             - ielts-gibberish-postgres-data:/var/lib/postgresql/data
+
 volumes:
     ielts-gibberish-postgres-data:
         driver: local
