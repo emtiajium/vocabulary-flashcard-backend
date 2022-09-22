@@ -10,18 +10,14 @@ import { ConflictException } from '@nestjs/common';
 @EntityRepository(Vocabulary)
 export default class VocabularyRepository extends Repository<Vocabulary> {
     async upsert(vocabulary: Vocabulary): Promise<Vocabulary> {
-        let savedVocabulary: Vocabulary;
-
         try {
-            savedVocabulary = await this.save(vocabulary);
+            return await this.save(vocabulary);
         } catch (error) {
             if (error.constraint === 'unique_word_cohortId') {
                 throw new ConflictException(`"${vocabulary.word}" already exists. Please update it.`);
             }
             throw error;
         }
-
-        return savedVocabulary;
     }
 
     async removeVocabularyById(id: string): Promise<void> {
