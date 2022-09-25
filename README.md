@@ -38,7 +38,7 @@
 
 ➜ <https://localhost:9006/rest/ielts-service/swagger>
 
-## DB Keys naming convention
+## DB Keys Naming Convention
 
 ###### Primary Key
 
@@ -77,7 +77,7 @@
 
 ➜ Deploy!
 
-## Change Log
+## Change Logs
 
 -   `0.25.0`: Standardized the DB (primary, foreign, unique) keys
 -   `0.24.0`: Extended the Elastic Beanstalk default nginx configuration
