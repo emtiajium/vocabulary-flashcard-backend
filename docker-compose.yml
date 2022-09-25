@@ -17,7 +17,7 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_DB: ielts-gibberish
         volumes:
-            - ielts-gibberish-postgres-data:/var/lib/postgresql/data
+            - 'ielts-gibberish-postgres-data:/var/lib/postgresql/data'
 
 volumes:
     ielts-gibberish-postgres-data:
