@@ -79,6 +79,7 @@
 
 ## Change Log
 
+-   `0.25.0`: Standardized the DB (primary, foreign, unique) keys
 -   `0.24.0`: Extended the Elastic Beanstalk default nginx configuration
 -   `0.23.1`: Added API to check if a vocabulary already exists
 -   `0.23.0`: Prevented adding same vocabulary multiple times (within the same cohort)
