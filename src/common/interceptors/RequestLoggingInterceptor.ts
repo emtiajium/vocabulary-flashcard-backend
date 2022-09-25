@@ -20,6 +20,8 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
         this.logger.log(
             safeStringify({
                 host: headers.host,
+                url: request.url,
+                method: request.method,
                 'x-real-ip': headers['x-real-ip'],
                 'x-forwarded-for': headers['x-forwarded-for'],
                 'user-agent': headers['user-agent'],
