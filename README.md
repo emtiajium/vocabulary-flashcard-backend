@@ -38,6 +38,26 @@
 
 ➜ <https://localhost:9006/rest/ielts-service/swagger>
 
+## DB Keys naming convention
+
+###### Primary Key
+
+➜ `PK_<table-name>_<column-name>`
+
+> e.g., `PK_Android_id`
+
+###### Foreign Key
+
+➜ `FK_<table-name>_<column-name>_<reference-table-name>_<reference-column-name>`
+
+> e.g., `FK_Definition_vocabularyId_Vocabulary_id`
+
+###### Unique Key
+
+➜ `UQ_<table-name>_<column-name>_<second-column-name>_<third-column-name>`
+
+> e.g., `UQ_User_username`, `UQ_LeitnerSystems_userId_vocabularyId`
+
 ## Deploy to AWS
 
 ➜ Create an application at AWS Elastic Beanstalk
@@ -59,6 +79,7 @@
 
 ## Change Log
 
+-   `0.25.0`: Standardized the DB (primary, foreign, unique) keys
 -   `0.24.0`: Extended the Elastic Beanstalk default nginx configuration
 -   `0.23.1`: Added API to check if a vocabulary already exists
 -   `0.23.0`: Prevented adding same vocabulary multiple times (within the same cohort)
