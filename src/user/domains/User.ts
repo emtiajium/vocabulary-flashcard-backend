@@ -1,5 +1,5 @@
 import BaseEntity from '@/common/domains/BaseEntity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 import { Expose } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
@@ -7,8 +7,9 @@ import { ApiHideProperty } from '@nestjs/swagger';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
 @Entity('User')
+@Unique('UQ_User_username', ['username'])
 export default class User extends BaseEntity {
-    @Column({ type: 'varchar', unique: true })
+    @Column({ type: 'varchar' })
     @IsEmail()
     @IsString()
     @IsNotEmpty()

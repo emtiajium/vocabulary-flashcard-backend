@@ -14,7 +14,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         try {
             return await this.save(leitnerSystems);
         } catch (error) {
-            if (error.constraint === 'unique_userId_vocabularyId') {
+            if (error.constraint === 'UQ_LeitnerSystems_userId_vocabularyId') {
                 throw new ConflictException(
                     `You already made a flashcard with this vocabulary.`,
                     `Vocabulary with ID "${leitnerSystems.vocabularyId}" for the user "${leitnerSystems.userId}" is already exist`,

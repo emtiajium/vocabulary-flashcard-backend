@@ -1,5 +1,5 @@
 import BaseEntity from '@/common/domains/BaseEntity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import User from '@/user/domains/User';
 import { Type } from 'class-transformer';
 import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
@@ -10,11 +10,12 @@ export const cohortNameSize = 36;
 export const defaultName = 'Wolverine';
 
 @Entity('Cohort')
+@Unique('UQ_Cohort_name', ['name'])
 export default class Cohort extends BaseEntity {
     @MaxLength(cohortNameSize)
     @IsNotEmpty()
     @IsString()
-    @Column({ type: 'varchar', unique: true })
+    @Column({ type: 'varchar' })
     name: string;
 
     @IsEmail(undefined, { each: true })

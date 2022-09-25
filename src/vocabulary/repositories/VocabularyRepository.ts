@@ -13,7 +13,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         try {
             return await this.save(vocabulary);
         } catch (error) {
-            if (error.constraint === 'unique_word_cohortId') {
+            if (error.constraint === 'UQ_Vocabulary_word_cohortId') {
                 throw new ConflictException(`"${vocabulary.word}" already exists. Please update it.`);
             }
             throw error;
