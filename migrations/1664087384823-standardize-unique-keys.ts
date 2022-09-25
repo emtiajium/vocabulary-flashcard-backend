@@ -31,14 +31,12 @@ export default class StandardizeUniqueKeys1664087384823 implements MigrationInte
 
         Object.keys(this.dbKeys).forEach((table) => {
             Object.keys(this.dbKeys[table]).forEach((key) => {
-                if (key.search(`unique_`) !== -1 || key.search(`UQ_`) !== -1) {
-                    uniqueKeys.push({
-                        table,
-                        existingKey: key,
-                        newKey: this.dbKeys[table][key],
-                        columns: this.dbKeys[table][key].split(`UQ_${table}_`)[1].split('_'),
-                    });
-                }
+                uniqueKeys.push({
+                    table,
+                    existingKey: key,
+                    newKey: this.dbKeys[table][key],
+                    columns: this.dbKeys[table][key].split(`UQ_${table}_`)[1].split('_'),
+                });
             });
         });
 

@@ -31,13 +31,11 @@ export default class StandardizeForeignKeys1664085716276 implements MigrationInt
 
         Object.keys(this.dbKeys).forEach((table) => {
             Object.keys(this.dbKeys[table]).forEach((key) => {
-                if (key.search(`FK_`) !== -1) {
-                    foreignKeys.push({
-                        table,
-                        existingKey: key,
-                        newKey: this.dbKeys[table][key],
-                    });
-                }
+                foreignKeys.push({
+                    table,
+                    existingKey: key,
+                    newKey: this.dbKeys[table][key],
+                });
             });
         });
 

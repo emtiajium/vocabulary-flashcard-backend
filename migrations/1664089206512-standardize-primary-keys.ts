@@ -37,14 +37,12 @@ export default class StandardizePrimaryKeys1664089206512 implements MigrationInt
 
         Object.keys(this.dbKeys).forEach((table) => {
             Object.keys(this.dbKeys[table]).forEach((key) => {
-                if (key.search(`PK_`) !== -1) {
-                    primaryKeys.push({
-                        table,
-                        existingKey: key,
-                        newKey: this.dbKeys[table][key],
-                        column: this.dbKeys[table][key].split(`PK_${table}_`)[1],
-                    });
-                }
+                primaryKeys.push({
+                    table,
+                    existingKey: key,
+                    newKey: this.dbKeys[table][key],
+                    column: this.dbKeys[table][key].split(`PK_${table}_`)[1],
+                });
             });
         });
 
