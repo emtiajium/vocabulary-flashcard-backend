@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, Unique } from 'typeorm';
 import BaseEntity from '@/common/domains/BaseEntity';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { makeItNewer } from '@/common/utils/moment-util';
@@ -8,7 +8,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Expose } from 'class-transformer';
 
 @Entity('LeitnerSystems')
-@Index('unique_userId_vocabularyId', ['user', 'vocabulary'], { unique: true })
+@Unique('unique_userId_vocabularyId', ['user', 'vocabulary'])
 export default class LeitnerSystems extends BaseEntity {
     @ManyToOne(() => User, (user) => user.flashcards, {
         nullable: false,
