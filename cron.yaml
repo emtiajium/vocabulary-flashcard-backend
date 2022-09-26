@@ -1,0 +1,5 @@
+version: 1
+cron: 
+  - name: "cron-health-check-endpoint"
+    url: "https://api.firecrackervocabulary.com/rest/ielts-service/v1/health"
+    schedule: "*/1 * * * *"
