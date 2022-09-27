@@ -7,7 +7,6 @@ type UniqueKey = {
     table: string;
     existingKey: string;
     newKey: string;
-    columns: string[];
 };
 
 export default class StandardizeUniqueKeys1664087384823 implements MigrationInterface {
@@ -35,7 +34,6 @@ export default class StandardizeUniqueKeys1664087384823 implements MigrationInte
                     table,
                     existingKey: key,
                     newKey: this.dbKeys[table][key],
-                    columns: this.dbKeys[table][key].split(`UQ_${table}_`)[1].split('_'),
                 });
             });
         });

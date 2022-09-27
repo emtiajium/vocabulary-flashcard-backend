@@ -7,7 +7,6 @@ type PrimaryKey = {
     table: string;
     existingKey: string;
     newKey: string;
-    column: string;
 };
 
 export default class StandardizePrimaryKeys1664089206512 implements MigrationInterface {
@@ -41,7 +40,6 @@ export default class StandardizePrimaryKeys1664089206512 implements MigrationInt
                     table,
                     existingKey: key,
                     newKey: this.dbKeys[table][key],
-                    column: this.dbKeys[table][key].split(`PK_${table}_`)[1],
                 });
             });
         });
