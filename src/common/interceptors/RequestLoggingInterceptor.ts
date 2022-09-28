@@ -28,6 +28,7 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
                 origin: headers.origin,
                 'x-requested-with': headers['x-requested-with'],
                 referer: headers.referer,
+                client: headers['x-client-id'],
             }),
             `Request headers`,
         );
