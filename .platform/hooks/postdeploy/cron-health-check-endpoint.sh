@@ -3,7 +3,8 @@
 # write permission to the ec2-user
 sudo chown ec2-user /etc/crontab
 
-endpoint=https://api.firecrackervocabulary.com/rest/ielts-service/v1/health
+# I don't want to hit the health-check endpoint using the ec2/eb/https
+endpoint=http://localhost:9006/rest/ielts-service/v1/health
 clientId=Health-Monitoring-Cron-Job
 
 isExist=false
