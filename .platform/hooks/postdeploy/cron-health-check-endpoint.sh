@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# write permission to the ec2-user
 sudo chown ec2-user /etc/crontab
 
 endpoint=https://api.firecrackervocabulary.com/rest/ielts-service/v1/health
@@ -18,9 +19,9 @@ if [[ $isExist == false ]]; then
     echo "*/1 * * * * root curl -X 'GET' '$endpoint' -H 'X-Client-Id: $clientId' -H 'accept: application/json'" | sudo tee -a /etc/crontab > /dev/null
 fi
 
-# below command to resolve the error
+# below command is to resolve the error
 # crond[5976]: (root) WRONG FILE OWNER (/etc/crontab)
 sudo chown root /etc/crontab
 
-# restart the crond
+# restart the cron daemon
 sudo service crond restart
