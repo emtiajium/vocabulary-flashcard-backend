@@ -4,8 +4,9 @@
 sudo chown ec2-user /etc/crontab
 
 servicePort=$(/opt/elasticbeanstalk/bin/get-config environment -k PORT)
+serviceApiPrefix=$(/opt/elasticbeanstalk/bin/get-config environment -k SERVICE_API_PREFIX)
 # I don't want to hit the health-check endpoint using the ec2/eb/https
-endpoint=http://localhost:$servicePort/rest/ielts-service/v1/health
+endpoint=http://localhost:$servicePort$serviceApiPrefix/v1/health
 clientId=Health-Monitoring-Cron-Job
 
 isExist=false
