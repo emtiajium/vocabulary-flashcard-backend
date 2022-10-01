@@ -77,6 +77,10 @@
 
 ➜ Deploy!
 
+###### HTTPS
+
+➜ Read about enabling HTTPS with Let's Encrypt from [here](./https-with-lets-encrypt.md)
+
 ## Change Logs
 
 -   `0.26.0`: Cron job to ping the health-check endpoint using the EB post-hook
