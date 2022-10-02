@@ -4,7 +4,7 @@ Read about [Let's Encrypt](https://letsencrypt.org/getting-started/).
 
 Connect with your EC2 instance using SSH and perform the instructions mentioned in [Certbot](https://certbot.eff.org/instructions?ws=nginx&os=pip). Certbot will update the `/etc/nginx.conf` file for you if you execute the command `sudo certbot --nginx -d <your-domain>`.
 
-To make sure the cron job is created, please check the `/etc/crontab` file.
+To make sure the cron job is created (to renew the expired certificate), please check the `/etc/crontab` file.
 
 To check the status of the cron daemon, execute the command `sudo service crond status`.
 
