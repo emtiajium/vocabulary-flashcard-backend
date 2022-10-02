@@ -48,7 +48,7 @@ export class Bootstrap {
                     /* eslint-disable node/callback-return */
                     callback(null, true);
                 } else {
-                    this.app.get(Logger).log(`origin ${origin}`, 'CORS');
+                    this.app.get(Logger).warn(`origin ${origin}`, 'CORS');
                     callback(new Error(`Don't mess this up`));
                     /* eslint-enable node/callback-return */
                 }
