@@ -17,9 +17,9 @@ Apart from the status, it might return a few logs. If you see any errors, resolv
 example, `crond[5976]: (root) WRONG FILE OWNER (/etc/crontab)` will be resolved if we give the root user the correct
 ownership by executing the command `sudo chown root /etc/crontab`.
 
-All cron jobs logs are available in `/var/log/cron`. This file should have one or multiple entries depending on the
+All cron jobs' logs are available in `/var/log/cron`. This file should have one or multiple entries depending on the
 execution schedule. For example, if the execution schedule is `0 0,12 * * *`, it is supposed to run the job every day
-at `00:00:00` and `12:00:00`.
+at `00:00:00` and `12:00:00` and create two entries in the file.
 
 After each deployment, AWS Elastic Beanstalk will replace the `/etc/nginx.conf`, which will disable HTTPS. To avoid
 this, you need
