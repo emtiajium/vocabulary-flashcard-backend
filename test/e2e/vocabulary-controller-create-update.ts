@@ -84,7 +84,7 @@ describe('/v1/vocabularies', () => {
         definition.meaning = 'Meaning 1';
         definition.examples = ['Example1'];
         definition.notes = ['Notes1'];
-        definition.externalLinks = ['https://gibberish.com/public/static/blah.html'];
+        definition.externalLinks = ['https://firecrackervocabulary.com/public/static/blah.html'];
         return definition;
     }
 

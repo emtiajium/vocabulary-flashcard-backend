@@ -31,7 +31,10 @@ describe('POST /v1/vocabularies/search', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
-        secondUser = await createUser({ username: `friend+${uuid.v4()}@firecracker.com`, firstname: 'Friend' } as User);
+        secondUser = await createUser({
+            username: `friend+${uuid.v4()}@firecrackervocabulary.com`,
+            firstname: 'Friend',
+        } as User);
         cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
         await app.get(CohortService).addUsersToCohort(cohort.name, [requester.username, secondUser.username]);
     });

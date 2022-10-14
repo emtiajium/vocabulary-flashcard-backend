@@ -14,7 +14,7 @@ import generateJwToken from '@test/util/auth-util';
 describe('/v1/users', () => {
     let app: INestApplication;
 
-    const username = `example+${uuid.v4()}@gibberish.com`;
+    const username = `example+${uuid.v4()}@firecrackervocabulary.com`;
 
     let requester: User;
 

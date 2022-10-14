@@ -24,7 +24,7 @@ describe('GET /v1/cohorts/self', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         secondUser = await createUser({
-            username: `friend_${uuidV4()}@firecracker.com`,
+            username: `friend_${uuidV4()}@firecrackervocabulary.com`,
             firstname: 'Friend',
         } as User);
         const cohortName = `Cohort _ ${uuidV4()}`;

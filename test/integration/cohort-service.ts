@@ -10,7 +10,7 @@ import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
 describe('Cohort Service', () => {
     let app: INestApplication;
 
-    const getUserPayload = (username = 'example404@gibberish.com'): User =>
+    const getUserPayload = (username = 'example404@firecrackervocabulary.com'): User =>
         ({
             username,
             firstname: 'John',
@@ -31,7 +31,7 @@ describe('Cohort Service', () => {
         const firstUserPayload = getUserPayload();
         const firstUser = await createUser(firstUserPayload);
 
-        const secondUserPayload = getUserPayload('example405@gibberish.com');
+        const secondUserPayload = getUserPayload('example405@firecrackervocabulary.com');
         const secondUser = await createUser(secondUserPayload);
 
         const cohortPayload: Cohort = { name: 'The best cohort ever exist', usernames: [] } as Cohort;

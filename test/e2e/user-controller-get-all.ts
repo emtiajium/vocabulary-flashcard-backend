@@ -16,7 +16,10 @@ import * as uuid from 'uuid';
 describe('/v1/users/all', () => {
     let app: INestApplication;
 
-    const usernames = [`example_${uuid.v4()}@gibberish.com`, `example_${uuid.v4()}@gibberish.com`];
+    const usernames = [
+        `example_${uuid.v4()}@firecrackervocabulary.com`,
+        `example_${uuid.v4()}@firecrackervocabulary.com`,
+    ];
 
     let requester: User;
 

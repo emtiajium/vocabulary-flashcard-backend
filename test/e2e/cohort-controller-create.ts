@@ -30,7 +30,7 @@ describe('/v1/cohorts', () => {
 
     const getUserCreationBasePayload = (username?: string): User =>
         ({
-            username: username || 'example601@gibberish.com',
+            username: username || 'example601@firecrackervocabulary.com',
             firstname: 'John',
             lastname: 'Doe',
         } as User);
@@ -152,7 +152,7 @@ describe('/v1/cohorts', () => {
                 firstUser = await createUser(getUserCreationBasePayload());
                 secondUser = await createUser({
                     ...getUserCreationBasePayload(),
-                    username: 'example602@gibberish.com',
+                    username: 'example602@firecrackervocabulary.com',
                 } as User);
             });
 
@@ -162,7 +162,7 @@ describe('/v1/cohorts', () => {
             });
 
             it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
-                const invalidUsername = `${uuidV4()}@firecracker.com`;
+                const invalidUsername = `${uuidV4()}@firecrackervocabulary.com`;
                 const { status: status1, body: body1 } = await makeApiRequest(getBasePayload([invalidUsername]));
                 expect(status1).toBe(404);
                 expect((body1 as SupertestErrorResponse).message).toBe(

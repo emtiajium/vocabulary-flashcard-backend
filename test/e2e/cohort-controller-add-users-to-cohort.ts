@@ -31,7 +31,7 @@ describe('/v1/cohorts/:name', () => {
 
     const getUserCreationBasePayload = (): User =>
         ({
-            username: `example+${uuidV4()}@gibberish.com`,
+            username: `example+${uuidV4()}@firecrackervocabulary.com`,
             firstname: 'John',
             lastname: 'Doe',
         } as User);

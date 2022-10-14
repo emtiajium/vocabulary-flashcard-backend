@@ -71,7 +71,7 @@ describe('GET /v1/vocabularies/:id', () => {
 
     it('SHOULD return 200 OK WITH isInLeitnerBox as false WHEN the vocabulary is a leitner item made by another member of the cohort', async () => {
         const secondUser = await createUser({
-            username: `friend_${uuidV4()}@firecracker.com`,
+            username: `friend_${uuidV4()}@firecrackervocabulary.com`,
             firstname: 'Friend',
         } as User);
         await app.get(CohortService).addUsersToCohort(cohort.name, [secondUser.username]);

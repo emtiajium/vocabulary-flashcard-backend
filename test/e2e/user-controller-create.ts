@@ -15,10 +15,10 @@ describe('/v1/users', () => {
 
     const getBasePayload = (): User =>
         ({
-            username: 'example30@gibberish.com',
+            username: 'example30@firecrackervocabulary.com',
             firstname: 'John',
             lastname: 'Doe',
-            profilePictureUrl: 'https://gibberish.com/files/images/blah.png',
+            profilePictureUrl: 'https://firecrackervocabulary.com/files/images/blah.png',
         } as User);
 
     beforeAll(async () => {

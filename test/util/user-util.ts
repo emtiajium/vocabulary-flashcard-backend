@@ -28,5 +28,5 @@ export function createUser(user: User): Promise<User> {
 }
 
 export function createApiRequester(): Promise<User> {
-    return createUser({ username: `requester+${uuid.v4()}@request.com`, firstname: 'Requester' } as User);
+    return createUser({ username: `requester+${uuid.v4()}@firecrackervocabulary.com`, firstname: 'Requester' } as User);
 }

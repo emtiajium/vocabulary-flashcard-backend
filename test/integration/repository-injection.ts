@@ -18,7 +18,7 @@ describe('Repository Injection', () => {
 
     it('SHOULD insert a user', async () => {
         const user: User = {
-            username: 'example40@gibberish.com',
+            username: 'example40@firecrackervocabulary.com',
             firstname: 'John',
             lastname: 'Doe',
         } as User;

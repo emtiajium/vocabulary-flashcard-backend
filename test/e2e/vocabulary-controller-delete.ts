@@ -71,7 +71,7 @@ describe('DELETE /v1/vocabularies', () => {
 
     it('SHOULD return 422 UNPROCESSABLE ENTITY WHEN the vocabulary is a leitner item made by another member of the cohort', async () => {
         const secondUser = await createUser({
-            username: `friend_${uuidV4()}@firecracker.com`,
+            username: `friend_${uuidV4()}@firecrackervocabulary.com`,
             firstname: 'Friend',
         } as User);
         await app.get(CohortService).addUsersToCohort(cohort.name, [secondUser.username]);
@@ -89,7 +89,7 @@ describe('DELETE /v1/vocabularies', () => {
 
     it('SHOULD return 403 FORBIDDEN WHEN outsider wants to delete a vocabulary', async () => {
         const secondUser = await createUser({
-            username: `intruder_${uuidV4()}@firecracker.com`,
+            username: `intruder_${uuidV4()}@firecrackervocabulary.com`,
             firstname: 'Intruder',
         } as User);
 
