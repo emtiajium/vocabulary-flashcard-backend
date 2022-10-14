@@ -21,7 +21,6 @@ import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy'
                     username,
                     password,
                     database,
-                    synchronize,
                     connection,
                     entities,
                     migrations,
@@ -38,7 +37,7 @@ import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy'
                     password,
                     database,
                     entities,
-                    synchronize,
+                    synchronize: false,
                     migrations,
                     cli: {
                         migrationsDir: migrationDirectory,
