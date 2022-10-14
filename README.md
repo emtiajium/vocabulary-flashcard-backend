@@ -1,3 +1,5 @@
+[![CI](https://github.com/emtiajium/ielts-gibberish/actions/workflows/ci.yml/badge.svg)](https://github.com/emtiajium/ielts-gibberish/actions/workflows/ci.yml)
+
 # How to Run
 
 ###### Prerequisites
