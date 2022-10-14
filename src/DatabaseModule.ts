@@ -2,6 +2,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import DatabaseConfig from '@/common/configs/DatabaseConfig';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy';
 
 @Module({
     imports: [
@@ -42,6 +43,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                         migrationsDir: migrationDirectory,
                     },
                     logging,
+                    namingStrategy: new DatabaseNamingStrategy(),
                 } as TypeOrmModuleOptions;
             },
             inject: [ConfigService],
