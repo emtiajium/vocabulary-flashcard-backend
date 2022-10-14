@@ -9,7 +9,7 @@ import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, createUser } from '@test/util/user-util';
+import { createApiRequester, createUser, generateUsername } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
@@ -32,7 +32,7 @@ describe('POST /v1/vocabularies/search', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         secondUser = await createUser({
-            username: `friend+${uuid.v4()}@firecrackervocabulary.com`,
+            username: generateUsername(),
             firstname: 'Friend',
         } as User);
         cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);

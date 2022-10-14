@@ -11,6 +11,7 @@ import User from '@/user/domains/User';
 import {
     createApiRequester,
     createUser,
+    generateUsername,
     getUsersByUsernames,
     removeUsersByUsernames,
     resetCohortById,
@@ -31,7 +32,7 @@ describe('/v1/cohorts/:name', () => {
 
     const getUserCreationBasePayload = (): User =>
         ({
-            username: `example+${uuidV4()}@firecrackervocabulary.com`,
+            username: generateUsername(),
             firstname: 'John',
             lastname: 'Doe',
         } as User);

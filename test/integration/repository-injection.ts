@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import UserRepository from '@/user/repositories/UserRepository';
-import getUserByUsername, { removeUsersByUsernames } from '@test/util/user-util';
+import getUserByUsername, { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
 
 describe('Repository Injection', () => {
     let app: INestApplication;
@@ -18,7 +18,7 @@ describe('Repository Injection', () => {
 
     it('SHOULD insert a user', async () => {
         const user: User = {
-            username: 'example40@firecrackervocabulary.com',
+            username: generateUsername(),
             firstname: 'John',
             lastname: 'Doe',
         } as User;

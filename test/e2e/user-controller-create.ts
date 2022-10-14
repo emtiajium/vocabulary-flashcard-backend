@@ -5,7 +5,7 @@ import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
-import getUserByUsername, { removeUsersByUsernames } from '@test/util/user-util';
+import getUserByUsername, { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
 import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
 import User from '@/user/domains/User';
 import SupertestResponse from '@test/util/supertest-util';
@@ -15,7 +15,7 @@ describe('/v1/users', () => {
 
     const getBasePayload = (): User =>
         ({
-            username: 'example30@firecrackervocabulary.com',
+            username: generateUsername(),
             firstname: 'John',
             lastname: 'Doe',
             profilePictureUrl: 'https://firecrackervocabulary.com/files/images/blah.png',

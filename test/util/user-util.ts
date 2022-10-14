@@ -6,6 +6,10 @@ export default function getUserByUsername(username: string): Promise<User> {
     return getRepository(User).findOne({ username });
 }
 
+export function generateUsername(): string {
+    return `example+${uuid.v4()}@firecrackervocabulary.com`;
+}
+
 export function getUsersByUsernames(usernames: string[]): Promise<User[]> {
     // as eager is true, no need to pass { relations: ['cohort'] }
     return getRepository(User).find({ where: { username: In(usernames) } });
@@ -28,5 +32,5 @@ export function createUser(user: User): Promise<User> {
 }
 
 export function createApiRequester(): Promise<User> {
-    return createUser({ username: `requester+${uuid.v4()}@firecrackervocabulary.com`, firstname: 'Requester' } as User);
+    return createUser({ username: generateUsername(), firstname: 'Requester' } as User);
 }

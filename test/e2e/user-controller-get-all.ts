@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { removeUsersByUsernames } from '@test/util/user-util';
+import { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
 import User from '@/user/domains/User';
 import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
@@ -11,15 +11,11 @@ import { removeCohortsByNames } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
 import UserReport from '@/user/domains/UserReport';
 import SearchResult from '@/common/domains/SearchResult';
-import * as uuid from 'uuid';
 
 describe('/v1/users/all', () => {
     let app: INestApplication;
 
-    const usernames = [
-        `example_${uuid.v4()}@firecrackervocabulary.com`,
-        `example_${uuid.v4()}@firecrackervocabulary.com`,
-    ];
+    const usernames = [generateUsername(), generateUsername()];
 
     let requester: User;
 

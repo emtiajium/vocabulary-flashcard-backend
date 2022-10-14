@@ -2,7 +2,7 @@ import User from '@/user/domains/User';
 import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
-import { createUser, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
+import { createUser, generateUsername, getUsersByUsernames, removeUsersByUsernames } from '@test/util/user-util';
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
 import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
@@ -10,7 +10,7 @@ import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
 describe('Cohort Service', () => {
     let app: INestApplication;
 
-    const getUserPayload = (username = 'example404@firecrackervocabulary.com'): User =>
+    const getUserPayload = (username = generateUsername()): User =>
         ({
             username,
             firstname: 'John',
@@ -31,7 +31,7 @@ describe('Cohort Service', () => {
         const firstUserPayload = getUserPayload();
         const firstUser = await createUser(firstUserPayload);
 
-        const secondUserPayload = getUserPayload('example405@firecrackervocabulary.com');
+        const secondUserPayload = getUserPayload(generateUsername());
         const secondUser = await createUser(secondUserPayload);
 
         const cohortPayload: Cohort = { name: 'The best cohort ever exist', usernames: [] } as Cohort;

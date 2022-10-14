@@ -9,7 +9,13 @@ import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
-import { createApiRequester, createUser, removeUsersByUsernames, resetCohortById } from '@test/util/user-util';
+import {
+    createApiRequester,
+    createUser,
+    generateUsername,
+    removeUsersByUsernames,
+    resetCohortById,
+} from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
@@ -71,7 +77,7 @@ describe('GET /v1/vocabularies/:id', () => {
 
     it('SHOULD return 200 OK WITH isInLeitnerBox as false WHEN the vocabulary is a leitner item made by another member of the cohort', async () => {
         const secondUser = await createUser({
-            username: `friend_${uuidV4()}@firecrackervocabulary.com`,
+            username: generateUsername(),
             firstname: 'Friend',
         } as User);
         await app.get(CohortService).addUsersToCohort(cohort.name, [secondUser.username]);

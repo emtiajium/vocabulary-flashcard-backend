@@ -8,7 +8,7 @@ import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import User from '@/user/domains/User';
-import { createApiRequester, createUser } from '@test/util/user-util';
+import { createApiRequester, createUser, generateUsername } from '@test/util/user-util';
 import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 
@@ -24,7 +24,7 @@ describe('GET /v1/cohorts/self', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         secondUser = await createUser({
-            username: `friend_${uuidV4()}@firecrackervocabulary.com`,
+            username: generateUsername(),
             firstname: 'Friend',
         } as User);
         const cohortName = `Cohort _ ${uuidV4()}`;

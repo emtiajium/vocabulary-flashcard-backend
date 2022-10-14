@@ -3,7 +3,6 @@ import AppModule from '@/AppModule';
 import { INestApplication } from '@nestjs/common';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import * as request from 'supertest';
-import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
 import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
@@ -12,6 +11,7 @@ import User from '@/user/domains/User';
 import {
     createApiRequester,
     createUser,
+    generateUsername,
     getUsersByUsernames,
     removeUsersByUsernames,
     resetCohortById,
@@ -30,7 +30,7 @@ describe('/v1/cohorts', () => {
 
     const getUserCreationBasePayload = (username?: string): User =>
         ({
-            username: username || 'example601@firecrackervocabulary.com',
+            username: username || generateUsername(),
             firstname: 'John',
             lastname: 'Doe',
         } as User);
@@ -152,7 +152,7 @@ describe('/v1/cohorts', () => {
                 firstUser = await createUser(getUserCreationBasePayload());
                 secondUser = await createUser({
                     ...getUserCreationBasePayload(),
-                    username: 'example602@firecrackervocabulary.com',
+                    username: generateUsername(),
                 } as User);
             });
 
@@ -162,7 +162,7 @@ describe('/v1/cohorts', () => {
             });
 
             it('SHOULD return 404 NOT_FOUND WHEN user does not exist', async () => {
-                const invalidUsername = `${uuidV4()}@firecrackervocabulary.com`;
+                const invalidUsername = generateUsername();
                 const { status: status1, body: body1 } = await makeApiRequest(getBasePayload([invalidUsername]));
                 expect(status1).toBe(404);
                 expect((body1 as SupertestErrorResponse).message).toBe(

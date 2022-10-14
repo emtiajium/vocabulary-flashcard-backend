@@ -1,10 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import * as uuid from 'uuid';
 import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { removeUsersByUsernames } from '@test/util/user-util';
+import { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
 import User from '@/user/domains/User';
 import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
@@ -14,7 +13,7 @@ import generateJwToken from '@test/util/auth-util';
 describe('/v1/users', () => {
     let app: INestApplication;
 
-    const username = `example+${uuid.v4()}@firecrackervocabulary.com`;
+    const username = generateUsername();
 
     let requester: User;
 
