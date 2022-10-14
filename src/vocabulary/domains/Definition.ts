@@ -13,7 +13,7 @@ import {
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Type } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
-import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
+import BaseEntityWithMandatoryId from '@/common/persistence/BaseEntityWithMandatoryId';
 
 @Entity('Definition')
 export default class Definition extends BaseEntityWithMandatoryId {

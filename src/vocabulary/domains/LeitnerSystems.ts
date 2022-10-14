@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, Unique } from 'typeorm';
-import BaseEntity from '@/common/domains/BaseEntity';
+import BaseEntity from '@/common/persistence/BaseEntity';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { makeItNewer } from '@/common/utils/moment-util';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';

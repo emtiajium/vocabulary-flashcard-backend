@@ -28,6 +28,7 @@ import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy'
                     migrationDirectory,
                     logging,
                 } = databaseConfig;
+
                 return {
                     retryAttempts: 1,
                     type: connection,

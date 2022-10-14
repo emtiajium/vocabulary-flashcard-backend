@@ -1,4 +1,4 @@
-import BaseEntity from '@/common/domains/BaseEntity';
+import BaseEntity from '@/common/persistence/BaseEntity';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import User from '@/user/domains/User';
 import { Type } from 'class-transformer';

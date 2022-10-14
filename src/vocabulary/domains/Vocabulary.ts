@@ -16,7 +16,7 @@ import Definition from '@/vocabulary/domains/Definition';
 import { plainToClass, Transform, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
-import BaseEntityWithMandatoryId from '@/common/domains/BaseEntityWithMandatoryId';
+import BaseEntityWithMandatoryId from '@/common/persistence/BaseEntityWithMandatoryId';
 import { ApiHideProperty } from '@nestjs/swagger';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
