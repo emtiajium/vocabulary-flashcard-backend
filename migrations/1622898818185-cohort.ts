@@ -34,7 +34,6 @@ export default class Cohort1622898818185 implements MigrationInterface {
                     {
                         name: 'name',
                         type: 'varchar',
-                        length: '36',
                         isNullable: false,
                         isUnique: true,
                     },

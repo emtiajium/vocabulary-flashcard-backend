@@ -43,16 +43,19 @@ export default class CreateVocabularyTable1623576754172 implements MigrationInte
                         name: 'genericNotes',
                         type: 'varchar',
                         isArray: true,
+                        default: `'{}'::character varying[]`,
                     },
                     {
                         name: 'genericExternalLinks',
                         type: 'varchar',
                         isArray: true,
+                        default: `'{}'::character varying[]`,
                     },
                     {
                         name: 'linkerWords',
                         type: 'varchar',
                         isArray: true,
+                        default: `'{}'::character varying[]`,
                     },
                     {
                         name: 'isDraft',

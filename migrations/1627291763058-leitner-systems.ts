@@ -44,8 +44,8 @@ export default class LeitnerSystems1627291763058 implements MigrationInterface {
                     {
                         name: 'currentBox',
                         type: 'enum',
-                        enum: ['BOX_1', 'BOX_2', 'BOX_3', 'BOX_4', 'BOX_5'],
-                        enumName: 'currentBox',
+                        enum: ['1', '2', '3', '4', '5'],
+                        enumName: 'LeitnerSystems_currentbox_enum',
                         isNullable: false,
                     },
                     {
