@@ -9,6 +9,7 @@ export default class ChangeTypeOfCurrentBoxFromEnum1665810939153 implements Migr
         await queryRunner.query(`DROP TYPE IF EXISTS "public"."LeitnerSystems_currentBox_enum";`);
         await queryRunner.query(`DROP TYPE IF EXISTS "public"."LeitnerSystems_currentbox_enum";`);
         await queryRunner.query(`DROP TYPE IF EXISTS "public"."currentbox";`);
+        await queryRunner.query(`DROP TYPE IF EXISTS "public"."currentBox";`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
