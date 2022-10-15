@@ -85,6 +85,7 @@
 
 ## Change Logs
 
+-   `0.27.0`: Changed the type of the column `currentBox` from the enum to the smallint
 -   `0.26.0`: Cron job to ping the health-check endpoint using the EB post-deployment hook
 -   `0.25.0`: Standardized the DB (primary, foreign, unique) keys
 -   `0.24.0`: Extended the Elastic Beanstalk default nginx configuration
