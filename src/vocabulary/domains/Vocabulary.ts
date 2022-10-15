@@ -48,7 +48,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @IsOptional()
     linkerWords?: string[];
 
-    @Column({ type: 'boolean' })
+    @Column({ type: 'boolean', default: true })
     @IsBoolean()
     isDraft: boolean;
 

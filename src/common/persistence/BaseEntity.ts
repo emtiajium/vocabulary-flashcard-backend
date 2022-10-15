@@ -25,7 +25,7 @@ export default abstract class BaseEntity {
     updatedAt?: Date;
 
     @ApiHideProperty()
-    @VersionColumn()
+    @VersionColumn({ default: 1 })
     @IsNumber()
     @IsOptional()
     version?: number;

@@ -17,25 +17,25 @@ import BaseEntityWithMandatoryId from '@/common/persistence/BaseEntityWithMandat
 
 @Entity('Definition')
 export default class Definition extends BaseEntityWithMandatoryId {
-    @Column({ type: 'varchar', default: '' })
+    @Column({ type: 'varchar', nullable: false })
     @IsNotEmpty()
     @IsString()
     @IsDefined()
     meaning: string;
 
-    @Column({ type: 'varchar', array: true, default: [] })
+    @Column({ type: 'varchar', array: true, nullable: false })
     @IsNotEmpty({ each: true })
     @ArrayNotEmpty()
     @IsArray()
     @IsDefined()
     examples?: string[];
 
-    @Column({ type: 'varchar', array: true, default: [] })
+    @Column({ type: 'varchar', array: true })
     @IsArray()
     @IsOptional()
     notes?: string[];
 
-    @Column({ type: 'varchar', array: true, default: [] })
+    @Column({ type: 'varchar', array: true })
     @ValidateIf((definition) => !!definition.externalLinks)
     @IsUrl(undefined, { each: true })
     @IsArray()
