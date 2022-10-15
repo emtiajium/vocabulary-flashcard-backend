@@ -24,7 +24,7 @@ export default class LeitnerSystems extends BaseEntity {
     })
     vocabulary: Vocabulary;
 
-    @Column({ type: 'enum', enum: LeitnerBoxType, nullable: false })
+    @Column({ type: 'varchar', nullable: false })
     currentBox: LeitnerBoxType;
 
     @Column({ type: 'timestamp with time zone', nullable: false })
