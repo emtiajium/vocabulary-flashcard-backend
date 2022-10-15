@@ -24,7 +24,7 @@ export default class LeitnerSystems extends BaseEntity {
     })
     vocabulary: Vocabulary;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column({ type: 'smallint', nullable: false })
     currentBox: LeitnerBoxType;
 
     @Column({ type: 'timestamp with time zone', nullable: false })

@@ -4,7 +4,7 @@ export default class ChangeTypeOfCurrentBoxFromEnum1665810939153 implements Migr
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             ALTER TABLE "LeitnerSystems"
-                ALTER COLUMN "currentBox" TYPE VARCHAR USING "currentBox"::VARCHAR;
+                ALTER COLUMN "currentBox" TYPE SMALLINT USING "currentBox"::VARCHAR::SMALLINT;
         `);
         await queryRunner.query(`DROP TYPE "public"."LeitnerSystems_currentBox_enum";`);
     }
