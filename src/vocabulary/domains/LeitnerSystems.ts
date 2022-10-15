@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, Unique } from 'typeorm';
-import BaseEntity from '@/common/persistence/BaseEntity';
+import BaseEntityWithoutMandatoryId from '@/common/persistence/BaseEntityWithoutMandatoryId';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { makeItNewer } from '@/common/utils/moment-util';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
@@ -9,7 +9,7 @@ import { Expose } from 'class-transformer';
 
 @Entity('LeitnerSystems')
 @Unique('UQ_LeitnerSystems_userId_vocabularyId', ['user', 'vocabulary'])
-export default class LeitnerSystems extends BaseEntity {
+export default class LeitnerSystems extends BaseEntityWithoutMandatoryId {
     @ManyToOne(() => User, (user) => user.flashcards, {
         nullable: false,
         eager: false,

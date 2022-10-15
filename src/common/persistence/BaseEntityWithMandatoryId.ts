@@ -1,32 +1,11 @@
-import { IsDate, IsDefined, IsNotEmpty, IsNumber, IsOptional, IsUUID } from 'class-validator';
-import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from 'typeorm';
-import { ApiHideProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { IsDefined, IsNotEmpty, IsUUID } from 'class-validator';
+import { PrimaryGeneratedColumn } from 'typeorm';
+import BaseEntity from '@/common/persistence/BaseEntity';
 
-export default abstract class BaseEntityWithMandatoryId {
+export default abstract class BaseEntityWithMandatoryId extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     @IsUUID()
     @IsNotEmpty()
     @IsDefined()
     id: string;
-
-    @Type(() => Date)
-    @ApiHideProperty()
-    @CreateDateColumn({ type: 'timestamp with time zone' })
-    @IsDate()
-    @IsOptional()
-    createdAt?: Date;
-
-    @Type(() => Date)
-    @ApiHideProperty()
-    @UpdateDateColumn({ type: 'timestamp with time zone' })
-    @IsDate()
-    @IsOptional()
-    updatedAt?: Date;
-
-    @ApiHideProperty()
-    @VersionColumn({ default: 1 })
-    @IsNumber()
-    @IsOptional()
-    version?: number;
 }

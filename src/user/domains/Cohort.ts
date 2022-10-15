@@ -1,4 +1,4 @@
-import BaseEntity from '@/common/persistence/BaseEntity';
+import BaseEntityWithoutMandatoryId from '@/common/persistence/BaseEntityWithoutMandatoryId';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import User from '@/user/domains/User';
 import { Type } from 'class-transformer';
@@ -11,7 +11,7 @@ export const defaultName = 'Wolverine';
 
 @Entity('Cohort')
 @Unique('UQ_Cohort_name', ['name'])
-export default class Cohort extends BaseEntity {
+export default class Cohort extends BaseEntityWithoutMandatoryId {
     @MaxLength(cohortNameSize)
     @IsNotEmpty()
     @IsString()

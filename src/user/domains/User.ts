@@ -1,4 +1,4 @@
-import BaseEntity from '@/common/persistence/BaseEntity';
+import BaseEntityWithoutMandatoryId from '@/common/persistence/BaseEntityWithoutMandatoryId';
 import { Column, Entity, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 import { Expose } from 'class-transformer';
@@ -8,7 +8,7 @@ import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
 @Entity('User')
 @Unique('UQ_User_username', ['username'])
-export default class User extends BaseEntity {
+export default class User extends BaseEntityWithoutMandatoryId {
     @Column({ type: 'varchar' })
     @IsEmail()
     @IsString()
