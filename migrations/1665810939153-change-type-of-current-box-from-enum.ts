@@ -6,7 +6,9 @@ export default class ChangeTypeOfCurrentBoxFromEnum1665810939153 implements Migr
             ALTER TABLE "LeitnerSystems"
                 ALTER COLUMN "currentBox" TYPE SMALLINT USING "currentBox"::VARCHAR::SMALLINT;
         `);
-        await queryRunner.query(`DROP TYPE "public"."LeitnerSystems_currentBox_enum";`);
+        await queryRunner.query(`DROP TYPE IF EXISTS "public"."LeitnerSystems_currentBox_enum";`);
+        await queryRunner.query(`DROP TYPE IF EXISTS "public"."LeitnerSystems_currentbox_enum";`);
+        await queryRunner.query(`DROP TYPE IF EXISTS "public"."currentbox";`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
@@ -15,7 +17,7 @@ export default class ChangeTypeOfCurrentBoxFromEnum1665810939153 implements Migr
         );
         await queryRunner.query(`
             ALTER TABLE "LeitnerSystems"
-                ALTER COLUMN "currentBox" TYPE "LeitnerSystems_currentBox_enum" USING "currentBox"::"LeitnerSystems_currentBox_enum";
+                ALTER COLUMN "currentBox" TYPE "LeitnerSystems_currentBox_enum" USING "currentBox"::VARCHAR::"LeitnerSystems_currentBox_enum";
         `);
     }
 }
