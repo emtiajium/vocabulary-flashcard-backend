@@ -45,11 +45,13 @@ describe('Database Keys', () => {
             );
 
             queryResult.forEach((currentQueryResult) => {
+                // Act
                 const primaryKeyName = new DatabaseNamingStrategy().primaryKeyName(
                     tableName,
                     primaryColumns.map((primaryColumn) => primaryColumn.databaseName),
                 );
 
+                // Assert
                 expect(primaryKeyName).toBe(currentQueryResult.constraintName);
             });
         }
@@ -60,6 +62,7 @@ describe('Database Keys', () => {
             const { foreignKeys } = dbConnection.entityMetadatas.find((metadata) => metadata.tableName === tableName);
 
             foreignKeys.forEach((foreignKey) => {
+                // Act
                 const foreignKeyName = new DatabaseNamingStrategy().foreignKeyName(
                     tableName,
                     foreignKey.columnNames,
@@ -67,6 +70,7 @@ describe('Database Keys', () => {
                     foreignKey.referencedColumnNames,
                 );
 
+                // Assert
                 expect(foreignKeyName).toBe(foreignKey.name);
             });
         }
@@ -77,11 +81,13 @@ describe('Database Keys', () => {
             const { indices } = dbConnection.entityMetadatas.find((metadata) => metadata.tableName === tableName);
 
             indices.forEach((index) => {
+                // Act
                 const indexName = new DatabaseNamingStrategy().indexName(
                     tableName,
                     index.columns.map((column) => column.databaseName),
                 );
 
+                // Assert
                 expect(indexName).toBe(index.name);
             });
         }
@@ -94,11 +100,13 @@ describe('Database Keys', () => {
             );
 
             uniqueKeys.forEach((uniqueKey) => {
+                // Act
                 const uniqueKeyName = new DatabaseNamingStrategy().uniqueConstraintName(
                     tableName,
                     uniqueKey.columns.map((column) => column.databaseName),
                 );
 
+                // Assert
                 expect(uniqueKeyName).toBe(uniqueKey.name);
             });
         }
