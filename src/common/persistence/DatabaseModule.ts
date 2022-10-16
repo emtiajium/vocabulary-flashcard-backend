@@ -9,6 +9,12 @@ import Definition from '@/vocabulary/domains/Definition';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import User from '@/user/domains/User';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
+import AndroidRepository from '@/android/repositories/AndroidRepository';
+import CohortRepository from '@/user/repositories/CohortRepository';
+import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
+import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
+import UserRepository from '@/user/repositories/UserRepository';
+import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
 
 @Module({
     imports: [
@@ -42,6 +48,14 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
             },
             inject: [ConfigService],
         }),
+        TypeOrmModule.forFeature([
+            AndroidRepository,
+            CohortRepository,
+            DefinitionRepository,
+            LeitnerSystemsRepository,
+            UserRepository,
+            VocabularyRepository,
+        ]),
     ],
     exports: [TypeOrmModule],
 })
