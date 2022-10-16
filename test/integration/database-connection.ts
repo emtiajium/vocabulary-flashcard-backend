@@ -1,5 +1,4 @@
-import { getRepository } from 'typeorm';
-import User from '@/user/domains/User';
+import { getConnection } from 'typeorm';
 import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
@@ -16,6 +15,6 @@ describe('Database Connection', () => {
     });
 
     it('SHOULD be connected with the Database', async () => {
-        await expect(getRepository(User).findOne()).resolves.not.toBeNull();
+        await expect(getConnection().query(`SELECT 1 + 1 AS two;`)).resolves.toStrictEqual([{ two: 2 }]);
     });
 });
