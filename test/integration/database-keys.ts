@@ -63,6 +63,18 @@ describe('Database Keys', () => {
         }
     });
 
+    test(`Index Keys`, () => {
+        for (const tableName of tableNames) {
+            const { indices } = dbConnection.entityMetadatas.find((metadata) => metadata.tableName === tableName);
+
+            indices.forEach((index) => {
+                expect(index.name).toBe(
+                    `IDX_${tableName}_${index.columns.map((column) => column.databaseName).join('_')}`,
+                );
+            });
+        }
+    });
+
     test(`Unique Keys`, () => {
         for (const tableName of tableNames) {
             const { uniques: uniqueKeys } = dbConnection.entityMetadatas.find(
