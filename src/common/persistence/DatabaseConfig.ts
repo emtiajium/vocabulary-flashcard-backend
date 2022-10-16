@@ -18,12 +18,6 @@ export default class DatabaseConfig {
 
     database: string;
 
-    entities: string[];
-
-    migrations: string[];
-
-    migrationDirectory: string;
-
     logging: string[];
 
     constructor() {
@@ -34,9 +28,6 @@ export default class DatabaseConfig {
         this.username = this.configService.get<string>('TYPEORM_USERNAME');
         this.password = this.configService.get<string>('TYPEORM_PASSWORD');
         this.database = this.configService.get<string>('TYPEORM_DATABASE');
-        this.entities = [`${process.cwd()}/${this.configService.get<string>('TYPEORM_ENTITIES')}`];
-        this.migrations = [`${process.cwd()}/${this.configService.get<string>('TYPEORM_MIGRATIONS')}`];
         this.logging = this.configService.get<string>('TYPEORM_LOGGING').split(',');
-        this.migrationDirectory = this.configService.get<string>('TYPEORM_MIGRATIONS_DIR');
     }
 }

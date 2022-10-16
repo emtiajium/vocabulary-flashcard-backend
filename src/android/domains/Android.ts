@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty, IsOptional, IsPositive, IsString, IsUUID } from 'class-validator';
 import { v4 as uuidV4 } from 'uuid';
 import { ApiHideProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 @Entity('Android')
 export default class Android {
@@ -21,6 +22,7 @@ export default class Android {
     @IsString()
     versionName: string;
 
+    @Exclude()
     @IsNotEmpty()
     @IsString()
     secret: string;

@@ -147,13 +147,6 @@
             }
         },
         {
-            "files": ["src/common/configs/DatabaseConfig.ts"],
-            "rules": {
-                "unicorn/prefer-node-protocol": "off",
-                "unicorn/import-style": "off"
-            }
-        },
-        {
             "files": ["src/manual-scripts/*.ts"],
             "rules": {
                 "unicorn/no-process-exit": "off",

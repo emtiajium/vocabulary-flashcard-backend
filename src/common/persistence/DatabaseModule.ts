@@ -1,8 +1,14 @@
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import DatabaseConfig from '@/common/configs/DatabaseConfig';
+import DatabaseConfig from '@/common/persistence/DatabaseConfig';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy';
+import Android from '@/android/domains/Android';
+import Cohort from '@/user/domains/Cohort';
+import Definition from '@/vocabulary/domains/Definition';
+import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
+import User from '@/user/domains/User';
+import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 @Module({
     imports: [
@@ -15,18 +21,7 @@ import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy'
                 // From the environment variables. Typeorm will attempt to load the .env file using dotEnv if it exists.
                 // ...
                 const databaseConfig = new DatabaseConfig();
-                const {
-                    host,
-                    port,
-                    username,
-                    password,
-                    database,
-                    connection,
-                    entities,
-                    migrations,
-                    migrationDirectory,
-                    logging,
-                } = databaseConfig;
+                const { host, port, username, password, database, connection, logging } = databaseConfig;
 
                 return {
                     retryAttempts: 1,
@@ -36,12 +31,11 @@ import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy'
                     username,
                     password,
                     database,
-                    entities,
+                    // do not use the environment variable TYPEORM_ENTITIES
+                    // as it won't work with npm run start:prod
+                    // as directory is ***/dist/***
+                    entities: [Android, Cohort, Definition, LeitnerSystems, User, Vocabulary],
                     synchronize: false,
-                    migrations,
-                    cli: {
-                        migrationsDir: migrationDirectory,
-                    },
                     logging,
                     namingStrategy: new DatabaseNamingStrategy(),
                 } as TypeOrmModuleOptions;
