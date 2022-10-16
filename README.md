@@ -50,7 +50,7 @@
 
 ###### Foreign Key
 
-➜ `FK_<table-name>_<column-name>_<reference-table-name>_<reference-column-name>`
+➜ `FK_<referencing-table-name>_<referencing-column-name>_<referenced-table-name>_<referenced-column-name>`
 
 > e.g., `FK_Definition_vocabularyId_Vocabulary_id`
 
@@ -85,6 +85,7 @@
 
 ## Change Logs
 
+-   `0.28.0`: Added test cases to validate the naming convention of the database keys (cont. `0.25.0`)
 -   `0.27.0`: Changed the type of the column `currentBox` from the enum to the smallint
 -   `0.26.0`: Cron job to ping the health-check endpoint using the EB post-deployment hook
 -   `0.25.0`: Standardized the DB (primary, foreign, unique) keys
