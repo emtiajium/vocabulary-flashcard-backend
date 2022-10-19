@@ -43,6 +43,19 @@ describe('Database Keys', () => {
         );
     }
 
+    function getIndexName(tableName: string): Promise<{ indexName: string }[]> {
+        return getManager().query(
+            `
+                SELECT indexname AS "indexName"
+                FROM pg_catalog.pg_indexes
+                WHERE indexdef ILIKE '%CREATE INDEX%'
+                  AND indexdef NOT ILIKE '%CREATE UNIQUE INDEX%'
+                  AND tablename = $1;
+            `,
+            [tableName],
+        );
+    }
+
     test(`Primary Keys`, async () => {
         for (const tableName of tableNames) {
             const queryResult = await getConstraints(tableName, 'PRIMARY KEY');
@@ -85,8 +98,10 @@ describe('Database Keys', () => {
         }
     });
 
-    test(`Index Keys`, () => {
+    test(`Index Keys`, async () => {
         for (const tableName of tableNames) {
+            const queryResult = await getIndexName(tableName);
+
             const { indices } = dbConnection.entityMetadatas.find((metadata) => metadata.tableName === tableName);
 
             indices.forEach((index) => {
@@ -97,7 +112,9 @@ describe('Database Keys', () => {
                 );
 
                 // Assert
-                expect(indexName).toBe(index.name);
+                expect(queryResult).toContainEqual({
+                    indexName,
+                });
             });
         }
     });
