@@ -24,41 +24,48 @@ describe('Database Keys', () => {
         await app.close();
     });
 
+    function getConstraints(
+        tableName: string,
+        constraintType: 'PRIMARY KEY' | 'FOREIGN KEY' | 'UNIQUE',
+    ): Promise<{ constraintName: string }[]> {
+        return getManager().query(
+            `
+                SELECT DISTINCT (tc.constraint_name) AS "constraintName"
+                FROM information_schema.key_column_usage kcu
+                         INNER JOIN information_schema.table_constraints tc
+                                    ON kcu.table_name = tc.table_name
+                                        AND kcu.table_name = $1
+                                        AND tc.table_name = $1
+                                        AND kcu.constraint_name = tc.constraint_name
+                                        AND tc.constraint_type = $2;
+            `,
+            [tableName, constraintType],
+        );
+    }
+
     test(`Primary Keys`, async () => {
         for (const tableName of tableNames) {
-            const queryResult: { constraintName: string }[] = await getManager().query(
-                `
-                    SELECT tc.constraint_name AS "constraintName"
-                    FROM information_schema.key_column_usage kcu
-                             INNER JOIN information_schema.table_constraints tc
-                                        ON kcu.table_name = tc.table_name
-                                            AND kcu.table_name = $1
-                                            AND tc.table_name = $1
-                                            AND kcu.constraint_name = tc.constraint_name
-                                            AND tc.constraint_type = 'PRIMARY KEY';
-                `,
-                [tableName],
-            );
+            const queryResult = await getConstraints(tableName, 'PRIMARY KEY');
 
             const { primaryColumns } = dbConnection.entityMetadatas.find(
                 (metadata) => metadata.tableName === tableName,
             );
 
-            queryResult.forEach((currentQueryResult) => {
-                // Act
-                const primaryKeyName = new DatabaseNamingStrategy().primaryKeyName(
-                    tableName,
-                    primaryColumns.map((primaryColumn) => primaryColumn.databaseName),
-                );
+            // Act
+            const primaryKeyName = new DatabaseNamingStrategy().primaryKeyName(
+                tableName,
+                primaryColumns.map((primaryColumn) => primaryColumn.databaseName),
+            );
 
-                // Assert
-                expect(primaryKeyName).toBe(currentQueryResult.constraintName);
-            });
+            // Assert
+            expect(primaryKeyName).toBe(queryResult[0].constraintName);
         }
     });
 
-    test(`Foreign Keys`, () => {
+    test(`Foreign Keys`, async () => {
         for (const tableName of tableNames) {
+            const queryResult = await getConstraints(tableName, 'FOREIGN KEY');
+
             const { foreignKeys } = dbConnection.entityMetadatas.find((metadata) => metadata.tableName === tableName);
 
             foreignKeys.forEach((foreignKey) => {
@@ -71,7 +78,9 @@ describe('Database Keys', () => {
                 );
 
                 // Assert
-                expect(foreignKeyName).toBe(foreignKey.name);
+                expect(queryResult).toContainEqual({
+                    constraintName: foreignKeyName,
+                });
             });
         }
     });
@@ -93,8 +102,10 @@ describe('Database Keys', () => {
         }
     });
 
-    test(`Unique Keys`, () => {
+    test(`Unique Keys`, async () => {
         for (const tableName of tableNames) {
+            const queryResult = await getConstraints(tableName, 'UNIQUE');
+
             const { uniques: uniqueKeys } = dbConnection.entityMetadatas.find(
                 (metadata) => metadata.tableName === tableName,
             );
@@ -107,7 +118,9 @@ describe('Database Keys', () => {
                 );
 
                 // Assert
-                expect(uniqueKeyName).toBe(uniqueKey.name);
+                expect(queryResult).toContainEqual({
+                    constraintName: uniqueKeyName,
+                });
             });
         }
     });
