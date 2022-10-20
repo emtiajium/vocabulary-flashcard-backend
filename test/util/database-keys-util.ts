@@ -39,8 +39,8 @@ export async function getIndexKeys(tableName: string): Promise<string[]> {
         `
             SELECT indexname AS "indexName"
             FROM pg_catalog.pg_indexes
-            WHERE indexdef ILIKE '%CREATE INDEX%'
-              AND indexdef NOT ILIKE '%CREATE UNIQUE INDEX%'
+            WHERE (indexdef ILIKE '%CREATE INDEX%'
+                OR indexdef ILIKE '%CREATE UNIQUE INDEX%')
               AND tablename = $1;
         `,
         [tableName],
