@@ -15,6 +15,8 @@ import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import UserRepository from '@/user/repositories/UserRepository';
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
+import { ConnectionOptions, LoggerOptions } from 'typeorm';
+import { DatabaseType } from 'typeorm/driver/types/DatabaseType';
 
 @Module({
     imports: [
@@ -27,24 +29,30 @@ import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository
                 // From the environment variables. Typeorm will attempt to load the .env file using dotEnv if it exists.
                 // ...
                 const databaseConfig = new DatabaseConfig();
-                const { host, port, username, password, database, connection, logging } = databaseConfig;
 
-                return {
-                    retryAttempts: 1,
-                    type: connection,
-                    host,
-                    port,
-                    username,
-                    password,
-                    database,
+                const connectionOptions: ConnectionOptions = {
+                    type: databaseConfig.type as DatabaseType,
+                    host: databaseConfig.host,
+                    port: databaseConfig.port,
+                    username: databaseConfig.username,
+                    password: databaseConfig.password,
+                    database: databaseConfig.database,
+                    logging: databaseConfig.logging as LoggerOptions,
                     // do not use the environment variable TYPEORM_ENTITIES
                     // as it won't work with npm run start:prod
                     // as directory is ***/dist/***
                     entities: [Android, Cohort, Definition, LeitnerSystems, User, Vocabulary],
-                    synchronize: false,
-                    logging,
                     namingStrategy: new DatabaseNamingStrategy(),
-                } as TypeOrmModuleOptions;
+                } as ConnectionOptions;
+
+                return {
+                    retryAttempts: 1,
+                    synchronize: false,
+                    autoLoadEntities: false,
+                    ...{
+                        ...connectionOptions,
+                    },
+                };
             },
             inject: [ConfigService],
         }),
