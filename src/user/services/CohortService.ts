@@ -29,16 +29,18 @@ export default class CohortService {
         // TODO move all vocabularies to the cohort
     }
 
+    private getUsersNotFoundExceptionMessage = (nonExistingUsers: string[]): string => {
+        const isSingular = nonExistingUsers.length === 1;
+        return `There ${isSingular ? 'is' : 'are'} no such ${isSingular ? 'user' : 'users'} having ${
+            isSingular ? 'username' : 'usernames'
+        } ${nonExistingUsers.join(', ')}`;
+    };
+
     private async validateUsers(usernames: string[]): Promise<void> {
         const users = await this.userRepository.getUsersByUsernames(usernames);
         if (users.length !== usernames.length) {
             const nonExistingUsers = _.difference(usernames, _.map(users, 'username'));
-            const isSingular = nonExistingUsers.length === 1;
-            throw new NotFoundException(
-                `There ${isSingular ? 'is' : 'are'} no such ${isSingular ? 'user' : 'users'} having ${
-                    isSingular ? 'username' : 'usernames'
-                } ${nonExistingUsers.join(', ')}`,
-            );
+            throw new NotFoundException(this.getUsersNotFoundExceptionMessage(nonExistingUsers));
         }
     }
 

@@ -41,30 +41,15 @@ export default class LeitnerSystems extends BaseEntityWithoutMandatoryId {
     }
 
     static calculateNextBoxAppearanceDate(box: LeitnerBoxType): Date {
-        let boxAppearanceDate: Date;
-        switch (box) {
-            case LeitnerBoxType.BOX_1: {
-                boxAppearanceDate = new Date();
-                break;
-            }
-            case LeitnerBoxType.BOX_2: {
-                boxAppearanceDate = makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_2);
-                break;
-            }
-            case LeitnerBoxType.BOX_3: {
-                boxAppearanceDate = makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_3);
-                break;
-            }
-            case LeitnerBoxType.BOX_4: {
-                boxAppearanceDate = makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_4);
-                break;
-            }
-            default: {
-                // LeitnerBoxType.BOX_5
-                boxAppearanceDate = new Date();
-            }
-        }
-        return boxAppearanceDate;
+        const boxAppearanceDateMap = {
+            [LeitnerBoxType.BOX_1]: new Date(),
+            [LeitnerBoxType.BOX_2]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_2),
+            [LeitnerBoxType.BOX_3]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_3),
+            [LeitnerBoxType.BOX_4]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_4),
+            [LeitnerBoxType.BOX_5]: new Date(),
+        };
+
+        return boxAppearanceDateMap[box];
     }
 
     static calculatePreviousBoxAppearanceDate(): Date {
