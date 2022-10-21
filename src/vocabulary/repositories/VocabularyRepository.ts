@@ -57,9 +57,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                     ${this.getSearchQuery(searchKeyword, vocabularySearchCoverage, searchKeywordParameterPosition)}
                     ${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
                 GROUP BY vocabulary.id
-                ORDER BY vocabulary."${Sort.getField(sort, SupportedSortFields.updatedAt)}" ${Sort.getDirection(
-                sort,
+                ORDER BY vocabulary."${Sort.getField(SupportedSortFields.updatedAt, sort)}" ${Sort.getDirection(
                 SortDirection.DESC,
+                sort,
             )}
                 OFFSET $3 LIMIT $4;
             `,

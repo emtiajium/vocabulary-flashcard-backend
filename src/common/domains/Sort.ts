@@ -20,11 +20,11 @@ export default class Sort {
     @IsEnum(SortDirection)
     direction: SortDirection;
 
-    static getField(sort?: Sort, defaultSortField?: SupportedSortFields): SupportedSortFields {
+    static getField(defaultSortField: SupportedSortFields, sort?: Sort): SupportedSortFields {
         return sort?.field || defaultSortField;
     }
 
-    static getDirection(sort?: Sort, defaultSortDirection?: SortDirection): SortDirection {
+    static getDirection(defaultSortDirection: SortDirection, sort?: Sort): SortDirection {
         return sort?.direction || defaultSortDirection;
     }
 }
