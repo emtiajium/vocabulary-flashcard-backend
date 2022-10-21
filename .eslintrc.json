@@ -41,7 +41,7 @@
         "unicorn/no-static-only-class": "off",
         "class-methods-use-this": "off",
         "complexity": ["error", 4],
-        "max-params": ["error", 5],
+        "max-params": ["error", 4],
         "curly": "error",
         "no-console": "error",
         "no-floating-decimal": "error",
