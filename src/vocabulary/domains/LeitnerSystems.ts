@@ -41,7 +41,7 @@ export default class LeitnerSystems extends BaseEntityWithoutMandatoryId {
     }
 
     static calculateNextBoxAppearanceDate(box: LeitnerBoxType): Date {
-        const boxAppearanceDateMap = {
+        const boxAppearanceDateMap: Record<LeitnerBoxType, Date> = {
             [LeitnerBoxType.BOX_1]: new Date(),
             [LeitnerBoxType.BOX_2]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_2),
             [LeitnerBoxType.BOX_3]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_3),
