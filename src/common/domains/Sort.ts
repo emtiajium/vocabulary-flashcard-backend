@@ -14,14 +14,17 @@ export enum SupportedSortFields {
 export default class Sort {
     @IsString()
     @IsEnum(SupportedSortFields)
-    field: string;
+    field: SupportedSortFields;
 
     @IsString()
     @IsEnum(SortDirection)
     direction: SortDirection;
 
-    constructor(field?: string, direction?: SortDirection) {
-        this.field = field || SupportedSortFields.createdAt;
-        this.direction = direction || SortDirection.DESC;
+    static getField(sort?: Sort, defaultSortField?: SupportedSortFields): SupportedSortFields {
+        return sort?.field || defaultSortField;
+    }
+
+    static getDirection(sort?: Sort, defaultSortDirection?: SortDirection): SortDirection {
+        return sort?.direction || defaultSortDirection;
     }
 }

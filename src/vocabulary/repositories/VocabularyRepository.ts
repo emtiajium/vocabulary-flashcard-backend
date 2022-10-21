@@ -3,7 +3,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
-import { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
+import Sort, { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
 import { ConflictException } from '@nestjs/common';
 
@@ -36,7 +36,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             vocabularySearchCoverage,
         } = vocabularySearch;
 
-        const fetchNotHavingDefinitionOnly = vocabularySearch?.fetchNotHavingDefinitionOnly ?? false;
+        const fetchNotHavingDefinitionOnly = !!vocabularySearch?.fetchNotHavingDefinitionOnly;
 
         const currentPage = pageSize * (pageNumber - 1);
 
@@ -57,9 +57,10 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                     ${this.getSearchQuery(searchKeyword, vocabularySearchCoverage, searchKeywordParameterPosition)}
                     ${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
                 GROUP BY vocabulary.id
-                ORDER BY vocabulary."${sort?.field || SupportedSortFields.updatedAt}" ${
-                sort?.direction || SortDirection.DESC
-            }
+                ORDER BY vocabulary."${Sort.getField(sort, SupportedSortFields.updatedAt)}" ${Sort.getDirection(
+                sort,
+                SortDirection.DESC,
+            )}
                 OFFSET $3 LIMIT $4;
             `,
             searchKeyword
