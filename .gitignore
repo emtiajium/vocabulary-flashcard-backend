@@ -37,6 +37,7 @@ lerna-debug.log*
 
 # Configuration
 .env
+MigrationConfig.ts
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

@@ -24,6 +24,8 @@
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
         "test": "jest --detectOpenHandles --forceExit",
         "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/.bin/typeorm",
+        "migration:generate": "node -r ts-node/register -r tsconfig-paths/register MigrationGenerationHandler.ts",
+        "migration:run": "npm run typeorm migration:run",
         "seed-script:insert-vocabularies": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/seed-script.ts",
         "seed-script:insert-test-users": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/CreateTestUsers.ts"
     },

@@ -15,19 +15,13 @@ import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import UserRepository from '@/user/repositories/UserRepository';
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import { ConnectionOptions, LoggerOptions } from 'typeorm';
-import { DatabaseType } from 'typeorm/driver/types/DatabaseType';
+import { ConnectionOptions, LoggerOptions, DatabaseType } from 'typeorm';
 
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             useFactory: (): TypeOrmModuleOptions => {
-                // do we need it?
-                // https://typeorm.io/#/using-ormconfig/which-configuration-file-is-used-by-typeorm
-                // Which configuration file is used by Typeorm?
-                // From the environment variables. Typeorm will attempt to load the .env file using dotEnv if it exists.
-                // ...
                 const databaseConfig = new DatabaseConfig();
 
                 const connectionOptions: ConnectionOptions = {
@@ -49,9 +43,7 @@ import { DatabaseType } from 'typeorm/driver/types/DatabaseType';
                     retryAttempts: 1,
                     synchronize: false,
                     autoLoadEntities: false,
-                    ...{
-                        ...connectionOptions,
-                    },
+                    ...connectionOptions,
                 };
             },
             inject: [ConfigService],

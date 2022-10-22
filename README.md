@@ -26,7 +26,7 @@
 
 ###### Synchronize model changes into the database
 
-➜ `npm run typeorm migration:run`
+➜ `npm run migration:run`
 
 ###### Run the tests
 
@@ -59,6 +59,10 @@
 ➜ `UQ_<table-name>_<column-name>_<second-column-name>_<third-column-name>`
 
 > e.g., `UQ_User_username`, `UQ_LeitnerSystems_userId_vocabularyId`
+
+## Generate new migration script after changing the entity class(es)
+
+➜ `npm run migration:generate -n <file-name>`
 
 ## Deploy to AWS
 
