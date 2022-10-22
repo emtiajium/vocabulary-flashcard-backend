@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.29.0`: Automated the migration scripts generation following the naming strategy
 -   `0.28.0`: Added test cases to validate the naming convention of the database keys (cont. `0.25.0`)
 -   `0.27.0`: Changed the type of the column `currentBox` from the enum to the smallint
 -   `0.26.0`: Cron job to ping the health-check endpoint using the EB post-deployment hook
