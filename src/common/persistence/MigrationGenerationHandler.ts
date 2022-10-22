@@ -17,6 +17,8 @@ class MigrationGenerationHandler {
 
     private isEnvironmentVariableFileRemoved = false;
 
+    private isMigrationConfigFileCreated = false;
+
     constructor(private readonly environmentVariableFileName: string) {
         this.isEnvironmentVariableFileExist = existsSync(this.environmentVariableFileName);
 
@@ -31,13 +33,11 @@ class MigrationGenerationHandler {
             this.removeEnvironmentVariableFile();
             this.createMigrationConfigFile();
             this.generateMigrationQueries();
-            this.removeMigrationConfigFile();
         } catch (error) {
             console.error(error);
         } finally {
-            if (this.isEnvironmentVariableFileRemoved) {
-                this.createEnvironmentVariableFile();
-            }
+            this.removeMigrationConfigFile();
+            this.createEnvironmentVariableFile();
         }
     }
 
@@ -60,9 +60,11 @@ class MigrationGenerationHandler {
     }
 
     private createEnvironmentVariableFile(): void {
-        writeFileSync(this.environmentVariableFileName, this.originalEnvironmentVariableFileContents, {
-            encoding: 'utf-8',
-        });
+        if (this.isEnvironmentVariableFileRemoved) {
+            writeFileSync(this.environmentVariableFileName, this.originalEnvironmentVariableFileContents, {
+                encoding: 'utf-8',
+            });
+        }
     }
 
     private getEnvironmentVariableValue(key: string): string {
@@ -101,10 +103,14 @@ class MigrationGenerationHandler {
                 namingStrategy: new DatabaseNamingStrategy(),
             };`,
         );
+
+        this.isMigrationConfigFileCreated = true;
     }
 
     private removeMigrationConfigFile(): void {
-        unlinkSync(this.migrationConfigFileName);
+        if (this.isMigrationConfigFileCreated) {
+            unlinkSync(this.migrationConfigFileName);
+        }
     }
 
     private generateMigrationQueries(): void {
