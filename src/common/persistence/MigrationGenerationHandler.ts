@@ -11,9 +11,7 @@ class MigrationGenerationHandler {
 
     private readonly migrationConfigFileName = 'MigrationConfig.ts';
 
-    private readonly isEnvironmentVariableFileExist: boolean = false;
-
-    private readonly migrationFileName: string;
+    private isEnvironmentVariableFileExist = false;
 
     private originalEnvironmentVariableFileContents: string;
 
@@ -21,17 +19,13 @@ class MigrationGenerationHandler {
 
     private isMigrationConfigFileCreated = false;
 
-    constructor(private readonly environmentVariableFileName: string) {
-        this.isEnvironmentVariableFileExist = existsSync(this.environmentVariableFileName);
-
-        const { 2: migrationFileName } = process.argv;
-        this.migrationFileName = migrationFileName;
-    }
+    constructor(private readonly environmentVariableFileName: string) {}
 
     execute(): void {
         try {
+            this.assertEnvironmentVariableFileExistence();
             this.validateExecution();
-            this.saveOriginalEnvironmentVariableFileContents();
+            this.getEnvironmentVariableFileContents();
             this.removeEnvironmentVariableFile();
             this.createMigrationConfigFile();
             this.generateMigrationQueries();
@@ -43,6 +37,15 @@ class MigrationGenerationHandler {
         }
     }
 
+    private assertEnvironmentVariableFileExistence(): void {
+        this.isEnvironmentVariableFileExist = existsSync(this.environmentVariableFileName);
+    }
+
+    private getMigrationFileName(): string {
+        const { 2: migrationFileName } = process.argv;
+        return migrationFileName;
+    }
+
     private validateExecution(): void {
         if (!this.isEnvironmentVariableFileExist) {
             console.error(`Please create the .env file`);
@@ -50,7 +53,7 @@ class MigrationGenerationHandler {
         }
     }
 
-    private saveOriginalEnvironmentVariableFileContents(): void {
+    private getEnvironmentVariableFileContents(): void {
         this.originalEnvironmentVariableFileContents = readFileSync(this.environmentVariableFileName, {
             encoding: this.encoding,
         });
@@ -117,7 +120,9 @@ class MigrationGenerationHandler {
 
     private generateMigrationQueries(): void {
         const output = execSync(
-            `npm run typeorm migration:generate -- --pretty --config ${this.migrationConfigFileName} --name ${this.migrationFileName}`,
+            `npm run typeorm migration:generate -- --pretty --config ${
+                this.migrationConfigFileName
+            } --name ${this.getMigrationFileName()}`,
             { encoding: this.encoding },
         );
 
