@@ -53,6 +53,18 @@ class MigrationGenerationHandler {
         });
     }
 
+    private getEnvironmentVariableValue(key: string): string {
+        let value: string;
+
+        this.originalEnvironmentVariableFileContents.split('\n').forEach((pair) => {
+            if (pair.search(`${key}=`) !== -1) {
+                [, value] = pair.split(`${key}=`);
+            }
+        });
+
+        return value;
+    }
+
     private createMigrationConfigFile(): void {
         writeFileSync(
             this.migrationConfigFileName,
@@ -63,16 +75,16 @@ class MigrationGenerationHandler {
                 retryAttempts: 1,
                 synchronize: false,
                 autoLoadEntities: false,
-                type: 'postgres',
-                host: 'localhost',
-                port: 5431,
-                username: 'postgres',
-                password: '123',
-                database: 'ielts-gibberish',
-                entities: ['src/**/domains/*.ts'],
-                migrations: ['migrations/*.ts'],
+                type: '${this.getEnvironmentVariableValue('TYPEORM_CONNECTION')}',
+                host: '${this.getEnvironmentVariableValue('TYPEORM_HOST')}',
+                port: ${Number.parseInt(this.getEnvironmentVariableValue('TYPEORM_PORT'), 10)},
+                username: '${this.getEnvironmentVariableValue('TYPEORM_USERNAME')}',
+                password: '${this.getEnvironmentVariableValue('TYPEORM_PASSWORD')}',
+                database: '${this.getEnvironmentVariableValue('TYPEORM_DATABASE')}',
+                entities: ['${this.getEnvironmentVariableValue('TYPEORM_ENTITIES')}'],
+                migrations: ['${this.getEnvironmentVariableValue('TYPEORM_MIGRATIONS')}'],
                 cli: {
-                    migrationsDir: 'migrations',
+                    migrationsDir: '${this.getEnvironmentVariableValue('TYPEORM_MIGRATIONS_DIR')}',
                 },
                 namingStrategy: new DatabaseNamingStrategy(),
             };`,
