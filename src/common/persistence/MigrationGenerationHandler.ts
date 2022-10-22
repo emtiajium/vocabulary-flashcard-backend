@@ -7,6 +7,8 @@ import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 
 class MigrationGenerationHandler {
+    private readonly encoding = 'utf-8';
+
     private readonly migrationConfigFileName = 'MigrationConfig.ts';
 
     private readonly isEnvironmentVariableFileExist: boolean = false;
@@ -50,7 +52,7 @@ class MigrationGenerationHandler {
 
     private saveOriginalEnvironmentVariableFileContents(): void {
         this.originalEnvironmentVariableFileContents = readFileSync(this.environmentVariableFileName, {
-            encoding: 'utf-8',
+            encoding: this.encoding,
         });
     }
 
@@ -62,7 +64,7 @@ class MigrationGenerationHandler {
     private createEnvironmentVariableFile(): void {
         if (this.isEnvironmentVariableFileRemoved) {
             writeFileSync(this.environmentVariableFileName, this.originalEnvironmentVariableFileContents, {
-                encoding: 'utf-8',
+                encoding: this.encoding,
             });
         }
     }
@@ -116,7 +118,7 @@ class MigrationGenerationHandler {
     private generateMigrationQueries(): void {
         const output = execSync(
             `npm run typeorm migration:generate -- --pretty --config ${this.migrationConfigFileName} --name ${this.migrationFileName}`,
-            { encoding: 'utf8' },
+            { encoding: this.encoding },
         );
 
         console.info(output);
