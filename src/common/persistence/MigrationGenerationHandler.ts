@@ -101,8 +101,6 @@ class MigrationGenerationHandler {
                 namingStrategy: new DatabaseNamingStrategy(),
             };`,
         );
-
-        execSync(`prettier --write ${this.migrationConfigFileName}`);
     }
 
     private removeMigrationConfigFile(): void {
