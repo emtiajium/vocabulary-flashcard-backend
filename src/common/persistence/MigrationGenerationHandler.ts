@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable unicorn/prefer-node-protocol */
 /* eslint-disable node/no-sync */
+/* eslint-disable unicorn/no-process-exit */
 
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
@@ -25,15 +26,13 @@ class MigrationGenerationHandler {
         if (this.isEnvironmentVariableFileExist) {
             this.saveOriginalEnvironmentVariableFileContents();
             this.removeEnvironmentVariableFile();
-        }
-
-        this.createMigrationConfigFile();
-        this.generateMigrationQueries();
-
-        this.removeMigrationConfigFile();
-
-        if (this.isEnvironmentVariableFileExist) {
+            this.createMigrationConfigFile();
+            this.generateMigrationQueries();
+            this.removeMigrationConfigFile();
             this.createEnvironmentVariableFile();
+        } else {
+            console.error(`Please create the .env file`);
+            process.exit(1);
         }
     }
 
