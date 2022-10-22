@@ -41,11 +41,6 @@ class MigrationGenerationHandler {
         this.isEnvironmentVariableFileExist = existsSync(this.environmentVariableFileName);
     }
 
-    private getMigrationFileName(): string {
-        const { 2: migrationFileName } = process.argv;
-        return migrationFileName;
-    }
-
     private validateExecution(): void {
         if (!this.isEnvironmentVariableFileExist) {
             console.error(`Please create the .env file`);
@@ -116,6 +111,11 @@ class MigrationGenerationHandler {
         if (this.isMigrationConfigFileCreated) {
             unlinkSync(this.migrationConfigFileName);
         }
+    }
+
+    private getMigrationFileName(): string {
+        const { 2: migrationFileName } = process.argv;
+        return migrationFileName;
     }
 
     private generateMigrationQueries(): void {
