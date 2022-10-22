@@ -15,6 +15,8 @@ class MigrationGenerationHandler {
 
     private originalEnvironmentVariableFileContents: string;
 
+    private isEnvironmentVariableFileRemoved = false;
+
     constructor(private readonly environmentVariableFileName: string) {
         this.isEnvironmentVariableFileExist = existsSync(this.environmentVariableFileName);
 
@@ -23,14 +25,24 @@ class MigrationGenerationHandler {
     }
 
     execute(): void {
-        if (this.isEnvironmentVariableFileExist) {
+        try {
+            this.validateExecution();
             this.saveOriginalEnvironmentVariableFileContents();
             this.removeEnvironmentVariableFile();
             this.createMigrationConfigFile();
             this.generateMigrationQueries();
             this.removeMigrationConfigFile();
-            this.createEnvironmentVariableFile();
-        } else {
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (this.isEnvironmentVariableFileRemoved) {
+                this.createEnvironmentVariableFile();
+            }
+        }
+    }
+
+    private validateExecution(): void {
+        if (!this.isEnvironmentVariableFileExist) {
             console.error(`Please create the .env file`);
             process.exit(1);
         }
@@ -44,6 +56,7 @@ class MigrationGenerationHandler {
 
     private removeEnvironmentVariableFile(): void {
         unlinkSync(this.environmentVariableFileName);
+        this.isEnvironmentVariableFileRemoved = true;
     }
 
     private createEnvironmentVariableFile(): void {
