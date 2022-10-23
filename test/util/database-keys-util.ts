@@ -47,22 +47,22 @@ function getConstraints(
     );
 }
 
-export async function getPrimaryKey(tableName: string): Promise<string> {
+export async function getPrimaryKeyWithinTable(tableName: string): Promise<string> {
     const queryResult = await getConstraints(tableName, 'PRIMARY KEY');
     return queryResult.map(({ constraintName }) => constraintName)[0];
 }
 
-export async function getForeignKeys(tableName: string): Promise<string[]> {
+export async function getForeignKeysWithinTable(tableName: string): Promise<string[]> {
     const queryResult = await getConstraints(tableName, 'FOREIGN KEY');
     return queryResult.map(({ constraintName }) => constraintName);
 }
 
-export async function getUniqueKeys(tableName: string): Promise<string[]> {
+export async function getUniqueKeysWithinTable(tableName: string): Promise<string[]> {
     const queryResult = await getConstraints(tableName, 'UNIQUE');
     return queryResult.map(({ constraintName }) => constraintName);
 }
 
-export async function getIndexKeys(tableName: string): Promise<string[]> {
+export async function getIndexKeysWithinTable(tableName: string): Promise<string[]> {
     const queryResult: { indexName: string }[] = await getManager().query(
         `
             SELECT indexname AS "indexName"

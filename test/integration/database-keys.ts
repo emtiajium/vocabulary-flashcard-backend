@@ -6,14 +6,14 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy';
 import {
-    getForeignKeys,
+    getForeignKeysWithinTable,
     getForeignKeysMetadata,
-    getIndexKeys,
+    getIndexKeysWithinTable,
     getIndexMetadata,
     getPrimaryColumnsMetadata,
-    getPrimaryKey,
+    getPrimaryKeyWithinTable,
     getTableNames,
-    getUniqueKeys,
+    getUniqueKeysWithinTable,
     getUniqueMetadata,
 } from '@test/util/database-keys-util';
 
@@ -35,7 +35,7 @@ describe('Database Keys', () => {
     test(`Primary Keys`, async () => {
         // Arrange
         for (const tableName of tableNames) {
-            const primaryKey = await getPrimaryKey(tableName);
+            const primaryKey = await getPrimaryKeyWithinTable(tableName);
             const primaryColumnsMetadata = getPrimaryColumnsMetadata(tableName);
 
             // Act
@@ -52,7 +52,7 @@ describe('Database Keys', () => {
     test(`Foreign Keys`, async () => {
         // Arrange
         for (const tableName of tableNames) {
-            const foreignKeysNames = await getForeignKeys(tableName);
+            const foreignKeysNames = await getForeignKeysWithinTable(tableName);
             const foreignKeysMetadata = getForeignKeysMetadata(tableName);
 
             foreignKeysMetadata.forEach((foreignKeyMetadata) => {
@@ -73,7 +73,7 @@ describe('Database Keys', () => {
     test(`Index Keys`, async () => {
         // Arrange
         for (const tableName of tableNames) {
-            const indexKeysNames = await getIndexKeys(tableName);
+            const indexKeysNames = await getIndexKeysWithinTable(tableName);
             const indicesMetadata = getIndexMetadata(tableName);
 
             indicesMetadata.forEach((indexMetadata) => {
@@ -92,7 +92,7 @@ describe('Database Keys', () => {
     test(`Unique Keys`, async () => {
         // Arrange
         for (const tableName of tableNames) {
-            const uniqueKeysNames = await getUniqueKeys(tableName);
+            const uniqueKeysNames = await getUniqueKeysWithinTable(tableName);
             const uniqueMetadata = getUniqueMetadata(tableName);
 
             uniqueMetadata.forEach(({ columns }) => {
