@@ -20,11 +20,21 @@ describe('Database Keys', () => {
     let app: INestApplication;
 
     let tableNames: string[] = [];
+    let allPrimaryKeys: Record<string, string> = {};
+    let allForeignKeys: Record<string, string[]> = {};
+    let allIndexKeys: Record<string, string[]> = {};
+    let allUniqueKeys: Record<string, string[]> = {};
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
 
         tableNames = getTableNames();
+        [allPrimaryKeys, allForeignKeys, allIndexKeys, allUniqueKeys] = await Promise.all([
+            getAllPrimaryKeys(tableNames),
+            getAllForeignKeys(tableNames),
+            getAllIndexKeys(tableNames),
+            getAllUniqueKeys(tableNames),
+        ]);
     });
 
     afterAll(async () => {
@@ -33,8 +43,6 @@ describe('Database Keys', () => {
 
     test(`Primary Keys`, async () => {
         // Arrange
-        const allPrimaryKeys = await getAllPrimaryKeys(tableNames);
-
         for (const tableName of tableNames) {
             const primaryKey = allPrimaryKeys[tableName];
             const primaryColumnsMetadata = getPrimaryColumnsMetadata(tableName);
@@ -52,7 +60,6 @@ describe('Database Keys', () => {
 
     test(`Foreign Keys`, async () => {
         // Arrange
-        const allForeignKeys = await getAllForeignKeys(tableNames);
 
         for (const tableName of tableNames) {
             const foreignKeysNames = allForeignKeys[tableName];
@@ -75,7 +82,6 @@ describe('Database Keys', () => {
 
     test(`Index Keys`, async () => {
         // Arrange
-        const allIndexKeys = await getAllIndexKeys(tableNames);
 
         for (const tableName of tableNames) {
             const indexKeysNames = allIndexKeys[tableName];
@@ -96,7 +102,6 @@ describe('Database Keys', () => {
 
     test(`Unique Keys`, async () => {
         // Arrange
-        const allUniqueKeys = await getAllUniqueKeys(tableNames);
 
         for (const tableName of tableNames) {
             const uniqueKeysNames = allUniqueKeys[tableName];
