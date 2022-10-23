@@ -41,14 +41,14 @@ jobs:
       - name: Create environment variables
         run: npm run create:env
 
-      - name: Build
-        run: npm run build
-
       - name: Database Tables' modification
-        run: npm run typeorm migration:run
+        run: npm run migration:run
 
       - name: Automated Test
         run: npm run test
+
+      - name: Build
+        run: npm run build
 
       - name: Clean Docker containers
         run: docker-compose stop && docker-compose rm -f && docker-compose down --volumes
