@@ -41,7 +41,7 @@ describe('Database Keys', () => {
         await app.close();
     });
 
-    test(`Primary Keys`, async () => {
+    test(`Primary Keys`, () => {
         // Arrange
         for (const tableName of tableNames) {
             const primaryKey = allPrimaryKeys[tableName];
@@ -58,9 +58,8 @@ describe('Database Keys', () => {
         }
     });
 
-    test(`Foreign Keys`, async () => {
+    test(`Foreign Keys`, () => {
         // Arrange
-
         for (const tableName of tableNames) {
             const foreignKeysNames = allForeignKeys[tableName];
             const foreignKeysMetadata = getForeignKeysMetadata(tableName);
@@ -80,9 +79,8 @@ describe('Database Keys', () => {
         }
     });
 
-    test(`Index Keys`, async () => {
+    test(`Index Keys`, () => {
         // Arrange
-
         for (const tableName of tableNames) {
             const indexKeysNames = allIndexKeys[tableName];
             const indicesMetadata = getIndexMetadata(tableName);
@@ -100,9 +98,8 @@ describe('Database Keys', () => {
         }
     });
 
-    test(`Unique Keys`, async () => {
+    test(`Unique Keys`, () => {
         // Arrange
-
         for (const tableName of tableNames) {
             const uniqueKeysNames = allUniqueKeys[tableName];
             const uniqueMetadata = getUniqueMetadata(tableName);
