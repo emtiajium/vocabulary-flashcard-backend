@@ -11,9 +11,9 @@ class MigrationGenerationHandler {
 
     private readonly migrationConfigFileName = 'MigrationConfig.ts';
 
-    private isEnvironmentVariableFileExist = false;
+    private environmentVariableFileContents: string;
 
-    private originalEnvironmentVariableFileContents: string;
+    private isEnvironmentVariableFileExist = false;
 
     private isEnvironmentVariableFileRemoved = false;
 
@@ -49,7 +49,7 @@ class MigrationGenerationHandler {
     }
 
     private getEnvironmentVariableFileContents(): void {
-        this.originalEnvironmentVariableFileContents = readFileSync(this.environmentVariableFileName, {
+        this.environmentVariableFileContents = readFileSync(this.environmentVariableFileName, {
             encoding: this.encoding,
         });
     }
@@ -61,7 +61,7 @@ class MigrationGenerationHandler {
 
     private createEnvironmentVariableFile(): void {
         if (this.isEnvironmentVariableFileRemoved) {
-            writeFileSync(this.environmentVariableFileName, this.originalEnvironmentVariableFileContents, {
+            writeFileSync(this.environmentVariableFileName, this.environmentVariableFileContents, {
                 encoding: this.encoding,
             });
         }
@@ -70,7 +70,7 @@ class MigrationGenerationHandler {
     private getEnvironmentVariableValue(key: string): string {
         let value: string;
 
-        this.originalEnvironmentVariableFileContents.split('\n').forEach((pair) => {
+        this.environmentVariableFileContents.split('\n').forEach((pair) => {
             if (pair.search(`${key}=`) !== -1) {
                 [, value] = pair.split(`${key}=`);
             }
