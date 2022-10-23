@@ -21,7 +21,7 @@ import { ApiHideProperty } from '@nestjs/swagger';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
 @Entity('Vocabulary')
-@Unique('UQ_Vocabulary_word_cohortId', ['word', 'cohortId'])
+@Unique(['word', 'cohortId'])
 export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar' })
     @Transform(({ value }) => _.capitalize(value).trim())

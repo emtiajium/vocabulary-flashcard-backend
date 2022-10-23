@@ -7,7 +7,7 @@ import { ApiHideProperty } from '@nestjs/swagger';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 
 @Entity('User')
-@Unique('UQ_User_username', ['username'])
+@Unique(['username'])
 export default class User extends BaseEntityWithoutMandatoryId {
     @Column({ type: 'varchar' })
     @IsEmail()

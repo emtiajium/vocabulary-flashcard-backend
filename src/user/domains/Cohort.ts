@@ -10,7 +10,7 @@ export const cohortNameSize = 36;
 export const defaultName = 'Wolverine';
 
 @Entity('Cohort')
-@Unique('UQ_Cohort_name', ['name'])
+@Unique(['name'])
 export default class Cohort extends BaseEntityWithoutMandatoryId {
     @MaxLength(cohortNameSize)
     @IsNotEmpty()

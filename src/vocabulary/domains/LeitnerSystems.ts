@@ -8,7 +8,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { Expose } from 'class-transformer';
 
 @Entity('LeitnerSystems')
-@Unique('UQ_LeitnerSystems_userId_vocabularyId', ['user', 'vocabulary'])
+@Unique(['user', 'vocabulary'])
 export default class LeitnerSystems extends BaseEntityWithoutMandatoryId {
     @ManyToOne(() => User, (user) => user.flashcards, {
         nullable: false,
