@@ -11,7 +11,7 @@ import {
     getIndexKeys,
     getIndexMetadata,
     getPrimaryColumnsMetadata,
-    getPrimaryKeys,
+    getPrimaryKey,
     getTableNames,
     getUniqueKeys,
     getUniqueMetadata,
@@ -35,7 +35,7 @@ describe('Database Keys', () => {
     test(`Primary Keys`, async () => {
         // Arrange
         for (const tableName of tableNames) {
-            const [primaryKey] = await getPrimaryKeys(tableName);
+            const primaryKey = await getPrimaryKey(tableName);
             const primaryColumnsMetadata = getPrimaryColumnsMetadata(tableName);
 
             // Act

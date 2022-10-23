@@ -47,9 +47,9 @@ function getConstraints(
     );
 }
 
-export async function getPrimaryKeys(tableName: string): Promise<string[]> {
+export async function getPrimaryKey(tableName: string): Promise<string> {
     const queryResult = await getConstraints(tableName, 'PRIMARY KEY');
-    return queryResult.map(({ constraintName }) => constraintName);
+    return queryResult.map(({ constraintName }) => constraintName)[0];
 }
 
 export async function getForeignKeys(tableName: string): Promise<string[]> {
