@@ -1,20 +1,19 @@
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
 
 import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy';
 import {
-    getForeignKeysWithinTable,
     getForeignKeysMetadata,
-    getIndexKeysWithinTable,
     getIndexMetadata,
     getPrimaryColumnsMetadata,
-    getPrimaryKeyWithinTable,
     getTableNames,
-    getUniqueKeysWithinTable,
     getUniqueMetadata,
+    getAllPrimaryKeys,
+    getAllForeignKeys,
+    getAllUniqueKeys,
+    getAllIndexKeys,
 } from '@test/util/database-keys-util';
 
 describe('Database Keys', () => {
@@ -34,8 +33,10 @@ describe('Database Keys', () => {
 
     test(`Primary Keys`, async () => {
         // Arrange
+        const allPrimaryKeys = await getAllPrimaryKeys(tableNames);
+
         for (const tableName of tableNames) {
-            const primaryKey = await getPrimaryKeyWithinTable(tableName);
+            const primaryKey = allPrimaryKeys[tableName];
             const primaryColumnsMetadata = getPrimaryColumnsMetadata(tableName);
 
             // Act
@@ -51,8 +52,10 @@ describe('Database Keys', () => {
 
     test(`Foreign Keys`, async () => {
         // Arrange
+        const allForeignKeys = await getAllForeignKeys(tableNames);
+
         for (const tableName of tableNames) {
-            const foreignKeysNames = await getForeignKeysWithinTable(tableName);
+            const foreignKeysNames = allForeignKeys[tableName];
             const foreignKeysMetadata = getForeignKeysMetadata(tableName);
 
             foreignKeysMetadata.forEach((foreignKeyMetadata) => {
@@ -72,8 +75,10 @@ describe('Database Keys', () => {
 
     test(`Index Keys`, async () => {
         // Arrange
+        const allIndexKeys = await getAllIndexKeys(tableNames);
+
         for (const tableName of tableNames) {
-            const indexKeysNames = await getIndexKeysWithinTable(tableName);
+            const indexKeysNames = allIndexKeys[tableName];
             const indicesMetadata = getIndexMetadata(tableName);
 
             indicesMetadata.forEach((indexMetadata) => {
@@ -91,8 +96,10 @@ describe('Database Keys', () => {
 
     test(`Unique Keys`, async () => {
         // Arrange
+        const allUniqueKeys = await getAllUniqueKeys(tableNames);
+
         for (const tableName of tableNames) {
-            const uniqueKeysNames = await getUniqueKeysWithinTable(tableName);
+            const uniqueKeysNames = allUniqueKeys[tableName];
             const uniqueMetadata = getUniqueMetadata(tableName);
 
             uniqueMetadata.forEach(({ columns }) => {

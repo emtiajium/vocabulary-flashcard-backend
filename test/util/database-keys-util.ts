@@ -52,14 +52,50 @@ export async function getPrimaryKeyWithinTable(tableName: string): Promise<strin
     return queryResult.map(({ constraintName }) => constraintName)[0];
 }
 
+export async function getAllPrimaryKeys(tableNames: string[]): Promise<Record<string, string>> {
+    const responseMap: Record<string, string> = {};
+
+    await Promise.all(
+        tableNames.map(async (tableName) => {
+            responseMap[tableName] = await getPrimaryKeyWithinTable(tableName);
+        }),
+    );
+
+    return responseMap;
+}
+
 export async function getForeignKeysWithinTable(tableName: string): Promise<string[]> {
     const queryResult = await getConstraints(tableName, 'FOREIGN KEY');
     return queryResult.map(({ constraintName }) => constraintName);
 }
 
+export async function getAllForeignKeys(tableNames: string[]): Promise<Record<string, string[]>> {
+    const responseMap: Record<string, string[]> = {};
+
+    await Promise.all(
+        tableNames.map(async (tableName) => {
+            responseMap[tableName] = await getForeignKeysWithinTable(tableName);
+        }),
+    );
+
+    return responseMap;
+}
+
 export async function getUniqueKeysWithinTable(tableName: string): Promise<string[]> {
     const queryResult = await getConstraints(tableName, 'UNIQUE');
     return queryResult.map(({ constraintName }) => constraintName);
+}
+
+export async function getAllUniqueKeys(tableNames: string[]): Promise<Record<string, string[]>> {
+    const responseMap: Record<string, string[]> = {};
+
+    await Promise.all(
+        tableNames.map(async (tableName) => {
+            responseMap[tableName] = await getUniqueKeysWithinTable(tableName);
+        }),
+    );
+
+    return responseMap;
 }
 
 export async function getIndexKeysWithinTable(tableName: string): Promise<string[]> {
@@ -75,4 +111,16 @@ export async function getIndexKeysWithinTable(tableName: string): Promise<string
     );
 
     return queryResult.map(({ indexName }) => indexName);
+}
+
+export async function getAllIndexKeys(tableNames: string[]): Promise<Record<string, string[]>> {
+    const responseMap: Record<string, string[]> = {};
+
+    await Promise.all(
+        tableNames.map(async (tableName) => {
+            responseMap[tableName] = await getIndexKeysWithinTable(tableName);
+        }),
+    );
+
+    return responseMap;
 }
