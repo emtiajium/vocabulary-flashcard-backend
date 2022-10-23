@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, Unique } from 'typeorm';
 import BaseEntityWithoutMandatoryId from '@/common/persistence/BaseEntityWithoutMandatoryId';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
-import MomentUnit, { makeItNewer } from '@/common/utils/moment-util';
+import MomentUnit, { DateFn, makeItNewer } from '@/common/utils/moment-util';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
 import User from '@/user/domains/User';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
@@ -41,15 +41,18 @@ export default class LeitnerSystems extends BaseEntityWithoutMandatoryId {
     }
 
     static calculateNextBoxAppearanceDate(box: LeitnerBoxType): Date {
-        const boxAppearanceDateMap: Record<LeitnerBoxType, Date> = {
-            [LeitnerBoxType.BOX_1]: new Date(),
-            [LeitnerBoxType.BOX_2]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_2),
-            [LeitnerBoxType.BOX_3]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_3),
-            [LeitnerBoxType.BOX_4]: makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_4),
-            [LeitnerBoxType.BOX_5]: new Date(),
+        const boxAppearanceDateMap: Record<LeitnerBoxType, DateFn> = {
+            [LeitnerBoxType.BOX_1]: () => new Date(),
+            [LeitnerBoxType.BOX_2]: () =>
+                makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_2),
+            [LeitnerBoxType.BOX_3]: () =>
+                makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_3),
+            [LeitnerBoxType.BOX_4]: () =>
+                makeItNewer(new Date(), MomentUnit.DAYS, LeitnerBoxAppearanceDifference.BOX_4),
+            [LeitnerBoxType.BOX_5]: () => new Date(),
         };
 
-        return boxAppearanceDateMap[box];
+        return boxAppearanceDateMap[box]();
     }
 
     static calculatePreviousBoxAppearanceDate(): Date {
