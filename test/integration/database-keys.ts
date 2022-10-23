@@ -1,24 +1,31 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 
-import { Connection, getConnection } from 'typeorm';
 import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy';
-import { getForeignKeys, getIndexKeys, getPrimaryKeys, getUniqueKeys } from '@test/util/database-keys-util';
+import {
+    getForeignKeys,
+    getForeignKeysMetadata,
+    getIndexKeys,
+    getIndexMetadata,
+    getPrimaryColumnsMetadata,
+    getPrimaryKeys,
+    getTableNames,
+    getUniqueKeys,
+    getUniqueMetadata,
+} from '@test/util/database-keys-util';
 
 describe('Database Keys', () => {
     let app: INestApplication;
 
-    let dbConnection: Connection;
     let tableNames: string[] = [];
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
 
-        dbConnection = await getConnection();
-        tableNames = dbConnection.entityMetadatas.map((metadata) => metadata.tableName);
+        tableNames = getTableNames();
     });
 
     afterAll(async () => {
@@ -26,17 +33,15 @@ describe('Database Keys', () => {
     });
 
     test(`Primary Keys`, async () => {
+        // Arrange
         for (const tableName of tableNames) {
             const [primaryKey] = await getPrimaryKeys(tableName);
-
-            const { primaryColumns } = dbConnection.entityMetadatas.find(
-                (metadata) => metadata.tableName === tableName,
-            );
+            const primaryColumnsMetadata = getPrimaryColumnsMetadata(tableName);
 
             // Act
             const primaryKeyName = new DatabaseNamingStrategy().primaryKeyName(
                 tableName,
-                primaryColumns.map((primaryColumn) => primaryColumn.databaseName),
+                primaryColumnsMetadata.map((primaryColumnMetadata) => primaryColumnMetadata.databaseName),
             );
 
             // Assert
@@ -45,18 +50,18 @@ describe('Database Keys', () => {
     });
 
     test(`Foreign Keys`, async () => {
+        // Arrange
         for (const tableName of tableNames) {
             const foreignKeysNames = await getForeignKeys(tableName);
+            const foreignKeysMetadata = getForeignKeysMetadata(tableName);
 
-            const { foreignKeys } = dbConnection.entityMetadatas.find((metadata) => metadata.tableName === tableName);
-
-            foreignKeys.forEach((foreignKey) => {
+            foreignKeysMetadata.forEach((foreignKeyMetadata) => {
                 // Act
                 const foreignKeyName = new DatabaseNamingStrategy().foreignKeyName(
                     tableName,
-                    foreignKey.columnNames,
-                    foreignKey.referencedTablePath,
-                    foreignKey.referencedColumnNames,
+                    foreignKeyMetadata.columnNames,
+                    foreignKeyMetadata.referencedTablePath,
+                    foreignKeyMetadata.referencedColumnNames,
                 );
 
                 // Assert
@@ -66,16 +71,16 @@ describe('Database Keys', () => {
     });
 
     test(`Index Keys`, async () => {
+        // Arrange
         for (const tableName of tableNames) {
             const indexKeysNames = await getIndexKeys(tableName);
+            const indicesMetadata = getIndexMetadata(tableName);
 
-            const { indices } = dbConnection.entityMetadatas.find((metadata) => metadata.tableName === tableName);
-
-            indices.forEach((index) => {
+            indicesMetadata.forEach((indexMetadata) => {
                 // Act
                 const indexName = new DatabaseNamingStrategy().indexName(
                     tableName,
-                    index.columns.map((column) => column.databaseName),
+                    indexMetadata.columns.map((column) => column.databaseName),
                 );
 
                 // Assert
@@ -85,18 +90,16 @@ describe('Database Keys', () => {
     });
 
     test(`Unique Keys`, async () => {
+        // Arrange
         for (const tableName of tableNames) {
             const uniqueKeysNames = await getUniqueKeys(tableName);
+            const uniqueMetadata = getUniqueMetadata(tableName);
 
-            const { uniques: uniqueKeys } = dbConnection.entityMetadatas.find(
-                (metadata) => metadata.tableName === tableName,
-            );
-
-            uniqueKeys.forEach((uniqueKey) => {
+            uniqueMetadata.forEach(({ columns }) => {
                 // Act
                 const uniqueKeyName = new DatabaseNamingStrategy().uniqueConstraintName(
                     tableName,
-                    uniqueKey.columns.map((column) => column.databaseName),
+                    columns.map((column) => column.databaseName),
                 );
 
                 // Assert
