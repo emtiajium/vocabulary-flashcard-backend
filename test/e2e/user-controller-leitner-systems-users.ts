@@ -8,13 +8,15 @@ import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort
 import CohortService from '@/user/services/CohortService';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import { createItem } from '@test/util/leitner-systems-util';
-import SupertestResponse from '@test/util/supertest-util';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import * as request from 'supertest';
 import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
+import ReportRequest from '@/common/domains/ReportRequest';
+import { ConfigService } from '@nestjs/config';
 
 describe('GET /v1/users/using-leitner-systems', () => {
     let app: INestApplication;
@@ -23,11 +25,17 @@ describe('GET /v1/users/using-leitner-systems', () => {
 
     let cohort: Cohort;
 
-    async function makeApiRequest(): Promise<SupertestResponse<LeitnerSystemsLoverUsersReport[]>> {
+    function getRequestPayload(secret?: string): ReportRequest {
+        return {
+            secret: secret || new ConfigService().get<string>('GENERATING_REPORT_SECRET'),
+        };
+    }
+
+    async function makeApiRequest(secret?: string): Promise<SupertestResponse<LeitnerSystemsLoverUsersReport[]>> {
         const { status, body } = await request(app.getHttpServer())
-            .get(`${getAppAPIPrefix()}/v1/users/using-leitner-systems`)
+            .post(`${getAppAPIPrefix()}/v1/users/using-leitner-systems`)
             .set('Authorization', `Bearer ${generateJwToken(requester)}`)
-            .send();
+            .send(getRequestPayload(secret));
         return {
             status,
             body,
@@ -47,6 +55,13 @@ describe('GET /v1/users/using-leitner-systems', () => {
     });
 
     describe('API request', () => {
+        it('SHOULD return 403 FORBIDDEN WHEN secret is invalid', async () => {
+            const { status, body } = await makeApiRequest(`Invalid_Secret_${uuid.v4()}`);
+
+            expect(status).toBe(403);
+            expect((body as SupertestErrorResponse).message).toBe(`Forbidden`);
+        });
+
         it('SHOULD return 200 OK', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);

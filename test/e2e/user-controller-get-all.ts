@@ -6,11 +6,14 @@ import AppModule from '@/AppModule';
 import { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
 import User from '@/user/domains/User';
 import UserService from '@/user/services/UserService';
-import SupertestResponse from '@test/util/supertest-util';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import { removeCohortsByNames } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
 import UserReport from '@/user/domains/UserReport';
 import SearchResult from '@/common/domains/SearchResult';
+import ReportRequest from '@/common/domains/ReportRequest';
+import { ConfigService } from '@nestjs/config';
+import * as uuid from 'uuid';
 
 describe('/v1/users/all', () => {
     let app: INestApplication;
@@ -34,10 +37,17 @@ describe('/v1/users/all', () => {
         await app.close();
     });
 
-    const makeApiRequest = async (): Promise<SupertestResponse<SearchResult<UserReport>>> => {
+    function getRequestPayload(secret?: string): ReportRequest {
+        return {
+            secret: secret || new ConfigService().get<string>('GENERATING_REPORT_SECRET'),
+        };
+    }
+
+    const makeApiRequest = async (secret?: string): Promise<SupertestResponse<SearchResult<UserReport>>> => {
         const { status, body } = await request(app.getHttpServer())
-            .get(`${getAppAPIPrefix()}/v1/users/all`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`);
+            .post(`${getAppAPIPrefix()}/v1/users/all`)
+            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .send(getRequestPayload(secret));
         return {
             status,
             body,
@@ -46,12 +56,22 @@ describe('/v1/users/all', () => {
 
     describe('Request', () => {
         it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
-            const { status } = await request(app.getHttpServer()).get(`${getAppAPIPrefix()}/v1/users/all`);
+            const { status } = await request(app.getHttpServer())
+                .post(`${getAppAPIPrefix()}/v1/users/all`)
+                .send(getRequestPayload());
             expect(status).toBe(403);
         });
 
+        it('SHOULD return 403 FORBIDDEN WHEN secret is invalid', async () => {
+            const { status, body } = await makeApiRequest(`Invalid_Secret_${uuid.v4()}`);
+
+            expect(status).toBe(403);
+            expect((body as SupertestErrorResponse).message).toBe(`Forbidden`);
+        });
+
         it('SHOULD return 200 OK with users', async () => {
-            const { body } = await makeApiRequest();
+            const { status, body } = await makeApiRequest();
+            expect(status).toBe(200);
             const response = body as SearchResult<UserReport>;
             expect(response.results).not.toHaveLength(0);
             expect(response.total).not.toBe(0);
@@ -68,7 +88,8 @@ describe('/v1/users/all', () => {
                 username: usernames[1],
                 firstname: 'John',
             } as User);
-            const { body } = await makeApiRequest();
+            const { body, status } = await makeApiRequest();
+            expect(status).toBe(200);
             const response = body as SearchResult<UserReport>;
             const mostRecentUser = response.results[response.total - 1];
             expect(mostRecentUser).toMatchObject({

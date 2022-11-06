@@ -6,10 +6,11 @@ import CohortService from '@/user/services/CohortService';
 import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
 import LeitnerSystemsController from '@/vocabulary/controllers/LeitnerSystemsController';
 import DatabaseModule from '@/common/persistence/DatabaseModule';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [DatabaseModule],
-    providers: [UserService, CohortService, VocabularyService, LeitnerSystemsService, Logger],
+    providers: [UserService, CohortService, VocabularyService, LeitnerSystemsService, Logger, ConfigService],
     controllers: [VocabularyController, LeitnerSystemsController],
 })
 export default class VocabularyModule {}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import UserRepository from '@/user/repositories/UserRepository';
 import User from '@/user/domains/User';
 import CohortService from '@/user/services/CohortService';
@@ -8,6 +8,7 @@ import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRe
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export default class UserService {
@@ -15,6 +16,7 @@ export default class UserService {
         private readonly userRepository: UserRepository,
         private readonly cohortService: CohortService,
         private readonly leitnerSystemsRepository: LeitnerSystemsRepository,
+        private readonly configService: ConfigService,
     ) {}
 
     async createUser(user: User): Promise<User> {
@@ -33,7 +35,14 @@ export default class UserService {
         return user;
     }
 
-    async getAll(): Promise<SearchResult<UserReport>> {
+    private validateReportGeneration(secret: string): void {
+        if (secret !== this.configService.get('GENERATING_REPORT_SECRET')) {
+            throw new ForbiddenException();
+        }
+    }
+
+    async getAll(secret: string): Promise<SearchResult<UserReport>> {
+        this.validateReportGeneration(secret);
         const users = await this.userRepository.getAll();
         return new SearchResult<UserReport>(
             _.map(users, (user) => ({
@@ -46,7 +55,9 @@ export default class UserService {
         );
     }
 
-    getLeitnerLoverUsers(): Promise<LeitnerSystemsLoverUsersReport[]> {
+    getLeitnerLoverUsers(secret: string): Promise<LeitnerSystemsLoverUsersReport[]> {
+        this.validateReportGeneration(secret);
+
         return this.leitnerSystemsRepository.getLeitnerLoverUsers();
     }
 }

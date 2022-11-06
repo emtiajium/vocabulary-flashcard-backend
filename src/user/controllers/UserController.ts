@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import AuthGuard from '@/common/guards/AuthGuard';
@@ -7,6 +7,7 @@ import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
 import { ApiSecurity } from '@nestjs/swagger';
+import ReportRequest from '@/common/domains/ReportRequest';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
@@ -24,15 +25,17 @@ export default class UserController {
         return this.userService.getUserByUsername(user.username);
     }
 
-    @Get('/all')
+    @Post('/all')
     @UseGuards(AuthGuard)
-    getUsers(): Promise<SearchResult<UserReport>> {
-        return this.userService.getAll();
+    @HttpCode(HttpStatus.OK)
+    getUsers(@Body() reportRequest: ReportRequest): Promise<SearchResult<UserReport>> {
+        return this.userService.getAll(reportRequest.secret);
     }
 
-    @Get('/using-leitner-systems')
+    @Post('/using-leitner-systems')
     @UseGuards(AuthGuard)
-    getLeitnerLoverUsers(): Promise<LeitnerSystemsLoverUsersReport[]> {
-        return this.userService.getLeitnerLoverUsers();
+    @HttpCode(HttpStatus.OK)
+    getLeitnerLoverUsers(@Body() reportRequest: ReportRequest): Promise<LeitnerSystemsLoverUsersReport[]> {
+        return this.userService.getLeitnerLoverUsers(reportRequest.secret);
     }
 }
