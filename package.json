@@ -1,6 +1,6 @@
 {
     "name": "ielts-gibberish",
-    "version": "0.30.0",
+    "version": "0.31.0",
     "author": {
         "name": "Emtiaj Hasan",
         "email": "271emtiaj@gmail.com",
@@ -45,6 +45,7 @@
         "express": "^4.17.1",
         "express-basic-auth": "^1.2.1",
         "fast-safe-stringify": "^2.0.7",
+        "google-auth-library": "^8.6.0",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.21",
         "pg": "^8.6.0",
