@@ -7,7 +7,7 @@ import { classToPlain } from 'class-transformer';
 // to generate a private key: https://dinochiesa.github.io/jwt/
 
 export default function generateJwToken(user: User): string {
-    const plainUser = classToPlain(user);
+    const plainUser = classToPlain({ ...user, email: user.username });
     const algorithm: Algorithm = 'RS256';
     const privateKey = fs.readFileSync(`${process.cwd()}/test/private.key`);
     return sign(plainUser, privateKey, { algorithm, expiresIn: '5m' });

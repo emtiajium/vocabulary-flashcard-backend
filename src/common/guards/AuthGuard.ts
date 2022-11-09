@@ -2,13 +2,25 @@ import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { decode, JwtPayload } from 'jsonwebtoken';
+import { OAuth2Client, TokenPayload } from 'google-auth-library';
+import { ConfigService } from '@nestjs/config';
+import { decode } from 'jsonwebtoken';
 
-type ExtendedUser = JwtPayload & User;
+type DecodedToken = TokenPayload | (Partial<User> & { email: string });
 
 @Injectable()
 export default class AuthGuard implements CanActivate {
-    constructor(private readonly userService: UserService) {}
+    private readonly oAuth2Client: OAuth2Client;
+
+    private readonly oAuth2ClientId: string;
+
+    private readonly isAutomatedTestingEnvironment: boolean;
+
+    constructor(private readonly userService: UserService, private readonly configService: ConfigService) {
+        this.isAutomatedTestingEnvironment = this.configService.get('SERVICE_ENV') === 'test';
+        this.oAuth2ClientId = this.configService.get('GOOGLE_AUTH_CLIENT_ID');
+        this.oAuth2Client = new OAuth2Client(this.oAuth2ClientId);
+    }
 
     private getHeaders = (request: Request): Record<string, unknown> => {
         return request.headers;
@@ -31,34 +43,42 @@ export default class AuthGuard implements CanActivate {
         return authorizationParts[1];
     }
 
-    private extractUsername = (extendedUser: ExtendedUser): string => {
-        // `email` is supposed to come from the Google API
-        if (!extendedUser?.username && !extendedUser?.email) {
+    private extractUsername = (decodedToken: DecodedToken): string => {
+        if (!decodedToken?.email) {
             throw new ForbiddenException();
         }
-        return extendedUser.username || extendedUser.email;
+        return decodedToken.email;
     };
 
-    private decodeJwToken(token: string): ExtendedUser {
-        let extendedUser: ExtendedUser;
+    private async decodeJwToken(request: Request): Promise<DecodedToken> {
+        const token = this.getJwToken(request);
+
+        let decodedToken: DecodedToken;
+
         try {
-            extendedUser = decode(token, { json: true }) as ExtendedUser;
-            extendedUser.username = this.extractUsername(extendedUser);
+            if (this.isAutomatedTestingEnvironment) {
+                decodedToken = decode(token, { json: true }) as DecodedToken;
+            } else {
+                const loginTicket = await this.oAuth2Client.verifyIdToken({
+                    idToken: token,
+                    audience: this.oAuth2ClientId,
+                });
+                decodedToken = loginTicket.getPayload();
+            }
         } catch {
             throw new ForbiddenException();
         }
-        return extendedUser;
-    }
 
-    private getUsernameFromToken(request: Request): string {
-        return this.decodeJwToken(this.getJwToken(request))?.username;
+        return decodedToken;
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         let isValidUser: boolean;
         try {
-            const user: User = await this.userService.getUserByUsername(this.getUsernameFromToken(request));
+            const decodedToken = await this.decodeJwToken(request);
+            const username = this.extractUsername(decodedToken);
+            const user: User = await this.userService.getUserByUsername(username);
             isValidUser = !!user;
             request.user = user;
         } catch {
