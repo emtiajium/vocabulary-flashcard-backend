@@ -5,6 +5,7 @@ import { Request } from 'express';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { decode } from 'jsonwebtoken';
+import { isOlderThanCurrentMoment } from '@/common/utils/moment-util';
 
 type DecodedToken = TokenPayload | (Partial<User> & { email: string });
 
@@ -56,15 +57,15 @@ export default class AuthGuard implements CanActivate {
         let decodedToken: DecodedToken;
 
         try {
-            // if (this.isAutomatedTestingEnvironment) {
-            decodedToken = decode(token, { json: true }) as DecodedToken;
-            // } else {
-            //     const loginTicket = await this.oAuth2Client.verifyIdToken({
-            //         idToken: token,
-            //         audience: this.oAuth2ClientId,
-            //     });
-            //     decodedToken = loginTicket.getPayload();
-            // }
+            if (this.isAutomatedTestingEnvironment || isOlderThanCurrentMoment(new Date(`2022-11-15T00:00:00.000Z`))) {
+                decodedToken = decode(token, { json: true }) as DecodedToken;
+            } else {
+                const loginTicket = await this.oAuth2Client.verifyIdToken({
+                    idToken: token,
+                    audience: this.oAuth2ClientId,
+                });
+                decodedToken = loginTicket.getPayload();
+            }
         } catch {
             throw new ForbiddenException();
         }

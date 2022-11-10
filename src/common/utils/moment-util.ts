@@ -65,6 +65,10 @@ export function getFormattedTomorrow(): string {
     return getFormattedDate(tomorrow);
 }
 
+export function isOlderThanCurrentMoment(moment: Date): boolean {
+    return Date.now() < moment.getTime();
+}
+
 export function delay(second: number): Promise<void> {
     return new Promise((resolve) => {
         setTimeout(() => {
