@@ -31,6 +31,12 @@ export default class AuthGuard implements CanActivate {
         return this.getHeaders(request)['Authorization'.toLowerCase()] as string;
     }
 
+    private isAndroid(request: Request): boolean {
+        return (
+            this.getHeaders(request)['x-requested-with'] === 'com.emtiajium.firecracker.collaborative.vocab.practice'
+        );
+    }
+
     private getJwToken(request: Request): string {
         const authorizationHeader = this.getAuthorization(request);
         if (!authorizationHeader) {
@@ -51,13 +57,20 @@ export default class AuthGuard implements CanActivate {
         return decodedToken.email;
     };
 
+    private isEligibleToLegacyTokenVerification(request: Request): boolean {
+        return (
+            this.isAutomatedTestingEnvironment ||
+            (this.isAndroid(request) && isOlderThanCurrentMoment(new Date(`2022-11-15T00:00:00.000Z`)))
+        );
+    }
+
     private async decodeJwToken(request: Request): Promise<DecodedToken> {
         const token = this.getJwToken(request);
 
         let decodedToken: DecodedToken;
 
         try {
-            if (this.isAutomatedTestingEnvironment || isOlderThanCurrentMoment(new Date(`2022-11-15T00:00:00.000Z`))) {
+            if (this.isEligibleToLegacyTokenVerification(request)) {
                 decodedToken = decode(token, { json: true }) as DecodedToken;
             } else {
                 const loginTicket = await this.oAuth2Client.verifyIdToken({
