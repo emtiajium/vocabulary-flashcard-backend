@@ -57,11 +57,12 @@ export default class AuthGuard implements CanActivate {
         return decodedToken.email;
     };
 
-    private isEligibleToLegacyTokenVerification(request: Request): boolean {
-        return (
-            this.isAutomatedTestingEnvironment ||
-            (this.isAndroid(request) && isOlderThanCurrentMoment(new Date(`2022-11-15T00:00:00.000Z`)))
-        );
+    private isEligibleToLegacyTokenVerification(): boolean {
+        return true;
+        // return (
+        //     this.isAutomatedTestingEnvironment ||
+        //     (this.isAndroid(request) && isOlderThanCurrentMoment(new Date(`2022-11-15T00:00:00.000Z`)))
+        // );
     }
 
     private async decodeJwToken(request: Request): Promise<DecodedToken> {
@@ -70,7 +71,7 @@ export default class AuthGuard implements CanActivate {
         let decodedToken: DecodedToken;
 
         try {
-            if (this.isEligibleToLegacyTokenVerification(request)) {
+            if (this.isEligibleToLegacyTokenVerification()) {
                 decodedToken = decode(token, { json: true }) as DecodedToken;
             } else {
                 const loginTicket = await this.oAuth2Client.verifyIdToken({
