@@ -5,7 +5,6 @@ import { Request } from 'express';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { decode } from 'jsonwebtoken';
-import { isOlderThanCurrentMoment } from '@/common/utils/moment-util';
 
 type DecodedToken = TokenPayload | (Partial<User> & { email: string });
 
