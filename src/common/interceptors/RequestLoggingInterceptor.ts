@@ -29,6 +29,8 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
                 'x-requested-with': headers['x-requested-with'],
                 referer: headers.referer,
                 client: headers['x-client-id'],
+                version: headers['x-version'],
+                versionCode: headers['x-version-code'],
             }),
             'REST Request Log',
         );
