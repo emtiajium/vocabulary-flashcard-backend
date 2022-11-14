@@ -23,7 +23,8 @@ export default class TokenManager {
     }
 
     private isEligibleToLegacyTokenVerification(): boolean {
-        return this.isAutomatedTestingEnvironment;
+        return true;
+        // return this.isAutomatedTestingEnvironment;
     }
 
     async decodeJwTokenV2(token: string): Promise<DecodedToken> {
