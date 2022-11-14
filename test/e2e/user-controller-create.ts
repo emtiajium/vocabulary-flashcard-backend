@@ -93,6 +93,28 @@ describe('/v1/users', () => {
         });
 
         describe('Success | Without token', () => {
+            it('SHOULD return 403 FORBIDDEN WHEN the token is not present AND the client is WebApp', async () => {
+                // Arrange
+                const user = getBasePayload();
+
+                // Act
+                const { status } = await makeApiRequest(user, true, ClientType.WEB);
+
+                // Assert
+                expect(status).toBe(403);
+            });
+
+            it('SHOULD return 403 FORBIDDEN WHEN the token is not present AND the client is AndroidNativeApp AND version code is 69 or above', async () => {
+                // Arrange
+                const user = getBasePayload();
+
+                // Act
+                const { status } = await makeApiRequest(user, true, ClientType.ANDROID_NATIVE, 69);
+
+                // Assert
+                expect(status).toBe(403);
+            });
+
             it('SHOULD return 201 CREATED for payload without lastname', async () => {
                 const user = { ...getBasePayload() };
                 delete user.lastname;
