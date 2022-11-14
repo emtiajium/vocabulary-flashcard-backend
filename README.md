@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.32.0`: Authenticated `@Post(/v1/users)`
 -   `0.31.0`: Verified token using the Google provided API
 -   `0.30.0`: Allowed executing reporting related APIs only if the provided secret is matched
 -   `0.29.0`: Automated the migration scripts generation following the naming strategy
