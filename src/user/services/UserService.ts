@@ -9,17 +9,25 @@ import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
 import { ConfigService } from '@nestjs/config';
+import TokenManager from '@/common/services/TokenManager';
 
 @Injectable()
 export default class UserService {
+    // eslint-disable-next-line max-params
     constructor(
         private readonly userRepository: UserRepository,
         private readonly cohortService: CohortService,
         private readonly leitnerSystemsRepository: LeitnerSystemsRepository,
         private readonly configService: ConfigService,
+        private readonly tokenManager: TokenManager,
     ) {}
 
-    async createUser(user: User): Promise<User> {
+    async createUser(userPayload: User, token: string): Promise<User> {
+        let user = userPayload;
+        if (token) {
+            const decodedToken = await this.tokenManager.decodeJwTokenV2(token);
+            user = this.tokenManager.getUser(decodedToken);
+        }
         const persistedUser = await this.userRepository.upsert(user);
         if (persistedUser.version === 1) {
             await this.cohortService.createCohort({ name: user.username, usernames: [persistedUser.username] });

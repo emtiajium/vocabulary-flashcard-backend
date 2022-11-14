@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/comm
 import CohortService from '@/user/services/CohortService';
 import Cohort from '@/user/domains/Cohort';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
+import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import User from '@/user/domains/User';
 import { ApiSecurity } from '@nestjs/swagger';
 

@@ -2,12 +2,13 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@n
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
+import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
 import { ApiSecurity } from '@nestjs/swagger';
 import ReportRequest from '@/common/domains/ReportRequest';
+import AuthToken from '@/common/http/AuthToken';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
@@ -15,8 +16,8 @@ export default class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Post()
-    createUser(@Body() user: User): Promise<User> {
-        return this.userService.createUser(user);
+    createUser(@Body() user: User, @AuthToken() token: string): Promise<User> {
+        return this.userService.createUser(user, token);
     }
 
     @Get('/self')

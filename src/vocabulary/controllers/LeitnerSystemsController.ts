@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import LeitnerSystemsService from '@/vocabulary/services/LeitnerSystemsService';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
+import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import User from '@/user/domains/User';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import Pagination from '@/common/domains/Pagination';

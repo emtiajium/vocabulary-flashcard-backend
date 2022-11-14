@@ -5,10 +5,11 @@ import CohortService from '@/user/services/CohortService';
 import CohortController from '@/user/controllers/CohortController';
 import DatabaseModule from '@/common/persistence/DatabaseModule';
 import { ConfigService } from '@nestjs/config';
+import TokenManager from '@/common/services/TokenManager';
 
 @Module({
     imports: [DatabaseModule],
     controllers: [UserController, CohortController],
-    providers: [UserService, CohortService, Logger, ConfigService],
+    providers: [UserService, CohortService, Logger, ConfigService, TokenManager],
 })
 export default class UserModule {}

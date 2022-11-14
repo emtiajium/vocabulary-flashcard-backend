@@ -4,7 +4,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
 import SearchResult from '@/common/domains/SearchResult';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthenticatedUser from '@/common/http-decorators/AuthenticatedUser';
+import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import User from '@/user/domains/User';
 import { ApiSecurity } from '@nestjs/swagger';
 

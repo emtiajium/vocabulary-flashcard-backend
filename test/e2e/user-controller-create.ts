@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { ForbiddenException, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import { kickOff } from '@/bootstrap';
@@ -9,30 +9,41 @@ import getUserByUsername, { generateUsername, removeUsersByUsernames } from '@te
 import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
 import User from '@/user/domains/User';
 import SupertestResponse from '@test/util/supertest-util';
+import generateJwToken from '@test/util/auth-util';
+import TokenManager, { DecodedToken } from '@/common/services/TokenManager';
+import { decode } from 'jsonwebtoken';
 
 describe('/v1/users', () => {
     let app: INestApplication;
 
-    const getBasePayload = (): User =>
-        ({
-            username: generateUsername(),
+    const generatedUsernames: string[] = [];
+
+    const getBasePayload = (): User => {
+        const generatedUsername = generateUsername();
+        generatedUsernames.push(generatedUsername);
+        return {
+            username: generatedUsername,
             firstname: 'John',
             lastname: 'Doe',
             profilePictureUrl: 'https://firecrackervocabulary.com/files/images/blah.png',
-        } as User);
+        } as User;
+    };
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
     });
 
     afterAll(async () => {
-        await removeUsersByUsernames([getBasePayload().username]);
-        await removeCohortsByNames([getBasePayload().username]);
+        await removeUsersByUsernames(generatedUsernames);
+        await removeCohortsByNames(generatedUsernames);
         await app.close();
     });
 
-    const makeApiRequest = async (user?: User): Promise<SupertestResponse<User>> => {
-        const { status, body } = await request(app.getHttpServer()).post(`${getAppAPIPrefix()}/v1/users`).send(user);
+    const makeApiRequest = async (user?: User, isPublic = true): Promise<SupertestResponse<User>> => {
+        const { status, body } = await request(app.getHttpServer())
+            .post(`${getAppAPIPrefix()}/v1/users`)
+            .set('Authorization', isPublic ? '' : `Bearer ${generateJwToken(user)}`)
+            .send(user);
         return {
             status,
             body,
@@ -73,11 +84,7 @@ describe('/v1/users', () => {
             });
         });
 
-        describe('Success', () => {
-            beforeEach(() => async () => {
-                await removeUsersByUsernames([getBasePayload().username]);
-            });
-
+        describe('Success | Without token', () => {
             it('SHOULD return 201 CREATED for payload without lastname', async () => {
                 const user = { ...getBasePayload() };
                 delete user.lastname;
@@ -153,6 +160,50 @@ describe('/v1/users', () => {
                 const createdUser = body as User;
                 expect(createdUser.cohortId).toBeDefined();
                 await expect(getCohortByName(user.username)).resolves.toMatchObject({ id: createdUser.cohortId });
+            });
+        });
+
+        describe('Success | With token', () => {
+            it('SHOULD return 201 CREATED WHEN there is token', async () => {
+                // Arrange
+                const decodeJwTokenV2Mock = jest
+                    .spyOn(TokenManager.prototype, 'decodeJwTokenV2')
+                    .mockImplementation(async (token: string) => {
+                        return decode(token) as DecodedToken;
+                    });
+
+                const user = getBasePayload();
+
+                // Act
+                const { status } = await makeApiRequest(user as User, false);
+
+                // Assert
+                expect(status).toBe(201);
+                expect(decodeJwTokenV2Mock).toHaveBeenCalled();
+
+                // Post Assert
+                decodeJwTokenV2Mock.mockRestore();
+            });
+
+            it('SHOULD return 403 FORBIDDEN WHEN the token is invalid', async () => {
+                // Arrange
+                const decodeJwTokenV2Mock = jest
+                    .spyOn(TokenManager.prototype, 'decodeJwTokenV2')
+                    .mockImplementation(() => {
+                        throw new ForbiddenException();
+                    });
+
+                const user = getBasePayload();
+
+                // Act
+                const { status } = await makeApiRequest(user as User, false);
+
+                // Assert
+                expect(status).toBe(403);
+                expect(decodeJwTokenV2Mock).toHaveBeenCalled();
+
+                // Post Assert
+                decodeJwTokenV2Mock.mockRestore();
             });
         });
     });
