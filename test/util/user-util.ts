@@ -31,6 +31,6 @@ export function createUser(user: User): Promise<User> {
     return getRepository(User).save(user);
 }
 
-export function createApiRequester(): Promise<User> {
-    return createUser({ username: generateUsername(), firstname: 'Requester' } as User);
+export function createApiRequester(username?: string): Promise<User> {
+    return createUser({ username: username || generateUsername(), firstname: 'Requester' } as User);
 }

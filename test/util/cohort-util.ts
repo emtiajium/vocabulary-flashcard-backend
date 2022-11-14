@@ -2,6 +2,7 @@ import { getRepository, In } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import { removeVocabularyAndRelationsByCohortId } from '@test/util/vocabulary-util';
 import { removeUsersByCohortIds } from '@test/util/user-util';
+import User from '@/user/domains/User';
 
 export default function getCohortByName(name: string): Promise<Cohort> {
     return getRepository(Cohort).findOne({ name });
@@ -21,6 +22,10 @@ export async function removeCohortsWithRelationsByIds(ids: string[]): Promise<vo
     await removeCohortsByIds(ids);
 }
 
-export function createCohort(cohort: Cohort): Promise<Cohort> {
-    return getRepository(Cohort).save(cohort);
+export async function createCohort(cohort: Cohort): Promise<Cohort> {
+    const savedCohort = await getRepository(Cohort).save(cohort);
+    if (cohort.usernames?.length) {
+        await getRepository(User).update({ username: In(cohort.usernames) }, { cohort: { id: savedCohort.id } });
+    }
+    return savedCohort;
 }
