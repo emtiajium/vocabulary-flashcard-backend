@@ -2,6 +2,7 @@ import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } fr
 import { Request } from 'express';
 import safeStringify from 'fast-safe-stringify';
 import { Observable } from 'rxjs';
+import { getHeaders } from '@/common/http/util';
 
 @Injectable()
 export default class RequestLoggingInterceptor implements NestInterceptor {
@@ -9,12 +10,8 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
         this.logger.setContext(RequestLoggingInterceptor.name);
     }
 
-    private getHeaders = (request: Request): Record<string, unknown> => {
-        return request.headers;
-    };
-
     private logRequest(request: Request): void {
-        const headers = this.getHeaders(request);
+        const headers = getHeaders(request);
         const { url, method } = request;
 
         this.logger.log(

@@ -3,17 +3,16 @@ import * as request from 'supertest';
 import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
+import { createApiRequester, removeUsersByUsernames } from '@test/util/user-util';
 import User from '@/user/domains/User';
-import UserService from '@/user/services/UserService';
 import SupertestResponse from '@test/util/supertest-util';
-import { removeCohortsByNames } from '@test/util/cohort-util';
+import { createCohort, removeCohortsByNames } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
 
 describe('/v1/users', () => {
     let app: INestApplication;
 
-    const username = generateUsername();
+    let username: string;
 
     let requester: User;
 
@@ -39,10 +38,9 @@ describe('/v1/users', () => {
 
     describe('GET /self', () => {
         beforeAll(async () => {
-            requester = await app.get(UserService).createUser({
-                username,
-                firstname: 'John',
-            } as User);
+            requester = await createApiRequester();
+            username = requester.username;
+            await createCohort({ name: username, usernames: [username] });
         });
 
         it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {

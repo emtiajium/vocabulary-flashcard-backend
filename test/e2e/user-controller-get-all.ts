@@ -3,11 +3,10 @@ import * as request from 'supertest';
 import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
-import { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
+import { createApiRequester, generateUsername, removeUsersByUsernames } from '@test/util/user-util';
 import User from '@/user/domains/User';
-import UserService from '@/user/services/UserService';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
-import { removeCohortsByNames } from '@test/util/cohort-util';
+import { createCohort, removeCohortsByNames } from '@test/util/cohort-util';
 import generateJwToken from '@test/util/auth-util';
 import UserReport from '@/user/domains/UserReport';
 import SearchResult from '@/common/domains/SearchResult';
@@ -25,10 +24,8 @@ describe('/v1/users/all', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
 
-        requester = await app.get(UserService).createUser({
-            username: usernames[0],
-            firstname: 'John',
-        } as User);
+        requester = await createApiRequester(usernames[0]);
+        await createCohort({ name: usernames[0], usernames: [usernames[0]] });
     });
 
     afterAll(async () => {
@@ -71,6 +68,7 @@ describe('/v1/users/all', () => {
 
         it('SHOULD return 200 OK with users', async () => {
             const { status, body } = await makeApiRequest();
+
             expect(status).toBe(200);
             const response = body as SearchResult<UserReport>;
             expect(response.results).not.toHaveLength(0);
@@ -84,11 +82,11 @@ describe('/v1/users/all', () => {
         });
 
         it('SHOULD return 200 OK with users ordered by creation time', async () => {
-            const anotherUser = await app.get(UserService).createUser({
-                username: usernames[1],
-                firstname: 'John',
-            } as User);
+            const anotherUser = await createApiRequester(usernames[1]);
+            await createCohort({ name: usernames[1], usernames: [usernames[1]] });
+
             const { body, status } = await makeApiRequest();
+
             expect(status).toBe(200);
             const response = body as SearchResult<UserReport>;
             const mostRecentUser = response.results[response.total - 1];

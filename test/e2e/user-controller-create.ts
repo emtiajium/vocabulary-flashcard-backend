@@ -12,6 +12,7 @@ import SupertestResponse from '@test/util/supertest-util';
 import generateJwToken from '@test/util/auth-util';
 import TokenManager, { DecodedToken } from '@/common/services/TokenManager';
 import { decode } from 'jsonwebtoken';
+import ClientType from '@/common/domains/ClientType';
 
 describe('/v1/users', () => {
     let app: INestApplication;
@@ -39,9 +40,16 @@ describe('/v1/users', () => {
         await app.close();
     });
 
-    const makeApiRequest = async (user?: User, isPublic = true): Promise<SupertestResponse<User>> => {
+    const makeApiRequest = async (
+        user?: User,
+        isPublic = true,
+        client = ClientType.ANDROID_NATIVE,
+        versionCode = 68,
+    ): Promise<SupertestResponse<User>> => {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/users`)
+            .set('X-Client-Id', client)
+            .set('X-Version-Code', `${versionCode}`)
             .set('Authorization', isPublic ? '' : `Bearer ${generateJwToken(user)}`)
             .send(user);
         return {
@@ -175,7 +183,7 @@ describe('/v1/users', () => {
                 const user = getBasePayload();
 
                 // Act
-                const { status } = await makeApiRequest(user as User, false);
+                const { status } = await makeApiRequest(user, false, ClientType.ANDROID_NATIVE, 69);
 
                 // Assert
                 expect(status).toBe(201);
@@ -196,7 +204,7 @@ describe('/v1/users', () => {
                 const user = getBasePayload();
 
                 // Act
-                const { status } = await makeApiRequest(user as User, false);
+                const { status } = await makeApiRequest(user, false, ClientType.ANDROID_NATIVE, 69);
 
                 // Assert
                 expect(status).toBe(403);
