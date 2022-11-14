@@ -10,6 +10,7 @@ import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUs
 import SearchResult from '@/common/domains/SearchResult';
 import { ConfigService } from '@nestjs/config';
 import TokenManager from '@/common/services/TokenManager';
+import ClientType from '@/common/domains/ClientType';
 
 @Injectable()
 export default class UserService {
@@ -22,17 +23,41 @@ export default class UserService {
         private readonly tokenManager: TokenManager,
     ) {}
 
-    async createUser(userPayload: User, token: string): Promise<User> {
-        let user = userPayload;
-        if (token) {
-            const decodedToken = await this.tokenManager.decodeJwTokenV2(token);
-            user = this.tokenManager.getUser(decodedToken);
-        }
+    async createUser(userPayload: User, token: string, client: ClientType, versionCode: number): Promise<User> {
+        const user = await this.assertUserCreationPayload(userPayload, token, client, versionCode);
         const persistedUser = await this.userRepository.upsert(user);
         if (persistedUser.version === 1) {
             await this.cohortService.createCohort({ name: user.username, usernames: [persistedUser.username] });
         }
         return this.getUserByUsername(user.username);
+    }
+
+    private validateUserCreationToken(token: string, client: ClientType, versionCode: number): void {
+        if (!token) {
+            if (client === ClientType.WEB) {
+                throw new ForbiddenException();
+            }
+            const androidVersion = 69;
+            // client = ClientType.ANDROID_NATIVE
+            if (versionCode >= androidVersion) {
+                throw new ForbiddenException();
+            }
+        }
+    }
+
+    private async assertUserCreationPayload(
+        userPayload: User,
+        token: string,
+        client: ClientType,
+        versionCode: number,
+    ): Promise<User> {
+        this.validateUserCreationToken(token, client, versionCode);
+        let user = userPayload;
+        if (token) {
+            const decodedToken = await this.tokenManager.decodeJwTokenV2(token);
+            user = this.tokenManager.getUser(decodedToken);
+        }
+        return user;
     }
 
     async getUserByUsername(username: string): Promise<User> {

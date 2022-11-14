@@ -9,6 +9,9 @@ import SearchResult from '@/common/domains/SearchResult';
 import { ApiSecurity } from '@nestjs/swagger';
 import ReportRequest from '@/common/domains/ReportRequest';
 import AuthToken from '@/common/http/AuthToken';
+import Client from '@/common/http/Client';
+import ClientType from '@/common/domains/ClientType';
+import VersionCode from '@/common/http/VersionCode';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
@@ -16,8 +19,13 @@ export default class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Post()
-    createUser(@Body() user: User, @AuthToken() token: string): Promise<User> {
-        return this.userService.createUser(user, token);
+    createUser(
+        @Body() user: User,
+        @AuthToken() token: string,
+        @Client() client: ClientType,
+        @VersionCode() versionCode: number,
+    ): Promise<User> {
+        return this.userService.createUser(user, token, client, versionCode);
     }
 
     @Get('/self')
