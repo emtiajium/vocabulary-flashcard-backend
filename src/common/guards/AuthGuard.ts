@@ -1,10 +1,11 @@
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { Request } from 'express';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { decode } from 'jsonwebtoken';
+import safeStringify from 'fast-safe-stringify';
 
 type DecodedToken = TokenPayload | (Partial<User> & { email: string });
 
@@ -16,7 +17,12 @@ export default class AuthGuard implements CanActivate {
 
     private readonly isAutomatedTestingEnvironment: boolean;
 
-    constructor(private readonly userService: UserService, private readonly configService: ConfigService) {
+    constructor(
+        private readonly userService: UserService,
+        private readonly configService: ConfigService,
+        private readonly logger: Logger,
+    ) {
+        this.logger.setContext(AuthGuard.name);
         this.isAutomatedTestingEnvironment = this.configService.get('SERVICE_ENV') === 'test';
         this.oAuth2ClientId = this.configService.get('GOOGLE_AUTH_CLIENT_ID');
         this.oAuth2Client = new OAuth2Client(this.oAuth2ClientId);
@@ -79,7 +85,8 @@ export default class AuthGuard implements CanActivate {
                 });
                 decodedToken = loginTicket.getPayload();
             }
-        } catch {
+        } catch (error) {
+            this.logger.error(`Error while verifying the token`, safeStringify(error));
             throw new ForbiddenException();
         }
 
