@@ -23,13 +23,22 @@ export default class UserService {
         private readonly tokenManager: TokenManager,
     ) {}
 
-    async createUser(userPayload: User, token: string, client: ClientType, versionCode: number): Promise<User> {
+    async createUser(
+        userPayload: User,
+        token: string,
+        client: ClientType,
+        versionCode: number,
+    ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         const user = await this.assertUserCreationPayload(userPayload, token, client, versionCode);
         const persistedUser = await this.userRepository.upsert(user);
         if (persistedUser.version === 1) {
             await this.cohortService.createCohort({ name: user.username, usernames: [persistedUser.username] });
         }
-        return this.getUserByUsername(user.username);
+        return {
+            username: persistedUser.username,
+            name: persistedUser.name,
+            profilePictureUrl: persistedUser.profilePictureUrl,
+        };
     }
 
     private validateUserCreationToken(token: string, client: ClientType, versionCode: number): void {

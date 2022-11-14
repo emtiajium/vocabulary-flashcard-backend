@@ -6,7 +6,7 @@ import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import getUserByUsername, { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
-import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
+import { removeCohortsByNames } from '@test/util/cohort-util';
 import User from '@/user/domains/User';
 import SupertestResponse from '@test/util/supertest-util';
 import generateJwToken from '@test/util/auth-util';
@@ -115,6 +115,19 @@ describe('/v1/users', () => {
                 expect(status).toBe(403);
             });
 
+            it('SHOULD return 201 CREATED for a valid payload WITH minimal response', async () => {
+                const user = getBasePayload();
+
+                const { status, body: createdUser } = await makeApiRequest(user as User);
+
+                expect(status).toBe(201);
+                expect(createdUser).toStrictEqual({
+                    username: user.username,
+                    name: `${user.firstname} ${user.lastname}`,
+                    profilePictureUrl: user.profilePictureUrl,
+                });
+            });
+
             it('SHOULD return 201 CREATED for payload without lastname', async () => {
                 const user = { ...getBasePayload() };
                 delete user.lastname;
@@ -136,17 +149,16 @@ describe('/v1/users', () => {
                 expect(status).toBe(201);
                 const createdUser = body as User;
                 expect(createdUser.username).toBe(user.username);
-                expect(createdUser.id).toBeDefined();
             });
 
             it('SHOULD return 201 CREATED for payload with id and the passed ID will be ignored', async () => {
                 const user = { ...getBasePayload(), id: uuidV4 } as ObjectLiteral;
-                const { status, body } = await makeApiRequest(user as User);
+                const { status } = await makeApiRequest(user as User);
                 expect(status).toBe(201);
 
                 const createdUser = await getUserByUsername(user.username);
                 expect(createdUser.username).toBe(user.username);
-                expect(createdUser.id).toBe((body as User).id);
+                expect(createdUser.id).toBe((await getUserByUsername(user.username)).id);
                 expect(createdUser.id).not.toBe(user.id);
             });
 
@@ -164,32 +176,22 @@ describe('/v1/users', () => {
 
             it('SHOULD update the user', async () => {
                 const user = { ...getBasePayload() } as User;
-                const { status: status1, body } = await makeApiRequest(user);
-                expect(status1).toBe(201);
-                const createdUserFirstTime = body as User;
-                expect(createdUserFirstTime.username).toBe(user.username);
+                await makeApiRequest(user);
+                const createdUserFirstTime = await getUserByUsername(user.username);
 
-                const { status: status2, body: body2 } = await makeApiRequest({
+                const { status: status2 } = await makeApiRequest({
                     ...user,
                     firstname: 'Modified',
                 } as User);
+
                 expect(status2).toBe(201);
-                const createdUserSecondTime = body2 as User;
+                const createdUserSecondTime = await getUserByUsername(user.username);
                 expect(createdUserFirstTime.id).toBe(createdUserSecondTime.id);
-                expect(createdUserSecondTime.firstname).toBe('Modified');
+                expect(createdUserSecondTime.name).toBe(`Modified ${user.lastname}`);
                 expect(new Date(createdUserSecondTime.updatedAt).getTime()).not.toBe(
                     new Date(createdUserFirstTime.updatedAt).getTime(),
                 );
                 expect(createdUserSecondTime.version).toBe(createdUserFirstTime.version + 1);
-            });
-
-            it('SHOULD return 201 CREATED with cohortId', async () => {
-                const user = { ...getBasePayload() } as User;
-                const { status, body } = await makeApiRequest(user);
-                expect(status).toBe(201);
-                const createdUser = body as User;
-                expect(createdUser.cohortId).toBeDefined();
-                await expect(getCohortByName(user.username)).resolves.toMatchObject({ id: createdUser.cohortId });
             });
         });
 

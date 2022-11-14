@@ -24,7 +24,7 @@ export default class UserController {
         @AuthToken() token: string,
         @Client() client: ClientType,
         @VersionCode() versionCode: number,
-    ): Promise<User> {
+    ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         return this.userService.createUser(user, token, client, versionCode);
     }
 
