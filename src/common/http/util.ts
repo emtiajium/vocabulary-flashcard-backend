@@ -19,7 +19,7 @@ export function getClient(request: Request): ClientType {
 export function getVersionCode(request: Request): number {
     const isAndroid = getClient(request) === ClientType.ANDROID_NATIVE;
     if (isAndroid) {
-        return Number.parseInt(getHeaders(request)['X-Version-Code'.toLowerCase()] as string, 10);
+        return Number.parseInt((getHeaders(request)['X-Version-Code'.toLowerCase()] as string) || '0', 10);
     }
     return 0;
 }
