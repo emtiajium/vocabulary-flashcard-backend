@@ -37,14 +37,16 @@ export default class UserController {
     @Post('/all')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getUsers(@Body() reportRequest: ReportRequest): Promise<SearchResult<UserReport>> {
-        return this.userService.getAll(reportRequest.secret);
+        return this.userService.getAll();
     }
 
     @Post('/using-leitner-systems')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getLeitnerLoverUsers(@Body() reportRequest: ReportRequest): Promise<LeitnerSystemsLoverUsersReport[]> {
-        return this.userService.getLeitnerLoverUsers(reportRequest.secret);
+        return this.userService.getLeitnerLoverUsers();
     }
 }

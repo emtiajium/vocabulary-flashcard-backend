@@ -59,11 +59,11 @@ describe('/v1/users/all', () => {
             expect(status).toBe(403);
         });
 
-        it('SHOULD return 403 FORBIDDEN WHEN secret is invalid', async () => {
+        it('SHOULD return 400 BAD REQUEST WHEN secret is invalid', async () => {
             const { status, body } = await makeApiRequest(`Invalid_Secret_${uuid.v4()}`);
 
-            expect(status).toBe(403);
-            expect((body as SupertestErrorResponse).message).toBe(`Forbidden`);
+            expect(status).toBe(400);
+            expect((body as SupertestErrorResponse).message).toContain(`secret must be matched`);
         });
 
         it('SHOULD return 200 OK with users', async () => {

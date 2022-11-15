@@ -77,14 +77,7 @@ export default class UserService {
         return user;
     }
 
-    private validateReportGeneration(secret: string): void {
-        if (secret !== this.configService.get('GENERATING_REPORT_SECRET')) {
-            throw new ForbiddenException();
-        }
-    }
-
-    async getAll(secret: string): Promise<SearchResult<UserReport>> {
-        this.validateReportGeneration(secret);
+    async getAll(): Promise<SearchResult<UserReport>> {
         const users = await this.userRepository.getAll();
         return new SearchResult<UserReport>(
             _.map(users, (user) => ({
@@ -97,9 +90,7 @@ export default class UserService {
         );
     }
 
-    getLeitnerLoverUsers(secret: string): Promise<LeitnerSystemsLoverUsersReport[]> {
-        this.validateReportGeneration(secret);
-
+    getLeitnerLoverUsers(): Promise<LeitnerSystemsLoverUsersReport[]> {
         return this.leitnerSystemsRepository.getLeitnerLoverUsers();
     }
 }

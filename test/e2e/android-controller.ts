@@ -3,7 +3,7 @@ import User from '@/user/domains/User';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester, removeUsersByUsernames } from '@test/util/user-util';
-import SupertestResponse from '@test/util/supertest-util';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import * as request from 'supertest';
 import getAppAPIPrefix from '@test/util/service-util';
 import Android from '@/android/domains/Android';
@@ -51,13 +51,15 @@ describe('/v1/androids', () => {
             await removeAndroid();
         });
 
-        it('SHOULD return 401 UNAUTHORIZED WHEN secret does not match', async () => {
-            const { status } = await makeApiRequest({
+        it('SHOULD return 400 BAD REQUEST WHEN secret does not match', async () => {
+            const { status, body } = await makeApiRequest({
                 versionCode: 1,
                 versionName,
                 secret: uuidV4(),
             });
-            expect(status).toBe(401);
+
+            expect(status).toBe(400);
+            expect((body as SupertestErrorResponse).message).toContain(`secret must be matched`);
         });
 
         it('SHOULD return 201 CREATED for a brand new request', async () => {
