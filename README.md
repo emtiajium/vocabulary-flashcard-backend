@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.34.0`: Added validator `@IsEqualToByConfig()`
 -   `0.33.0`: Refactored `@Post(/v1/users)` to send minimal data
 -   `0.32.0`: Authenticated `@Post(/v1/users)`
 -   `0.31.0`: Verified token using the Google provided API
