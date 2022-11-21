@@ -4,9 +4,10 @@ import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
 import Pagination from '@/common/domains/Pagination';
-import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
-import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
+import LeitnerBoxItemSearchResult, {
+    SingleLeitnerItemEarlierToBoxAppearanceDate,
+} from '@/vocabulary/domains/LeitnerBoxItemSearchResult';
 
 @Injectable()
 export default class LeitnerSystemsService {
@@ -81,7 +82,7 @@ export default class LeitnerSystemsService {
         userId: string,
         box: LeitnerBoxType,
         pagination: Pagination,
-    ): Promise<SearchResult<LeitnerBoxItem>> {
+    ): Promise<LeitnerBoxItemSearchResult> {
         const { results, total } = await this.leitnerSystemsRepository.getBoxItems(userId, box, pagination);
         const items = _.map(results, (result) => {
             return {
@@ -90,7 +91,29 @@ export default class LeitnerSystemsService {
                 updatedAt: result.updatedAt,
             };
         });
-        return new SearchResult<LeitnerBoxItem>(items, total);
+        let singleLeitnerItemEarlierToBoxAppearanceDate: SingleLeitnerItemEarlierToBoxAppearanceDate;
+        if (!total) {
+            singleLeitnerItemEarlierToBoxAppearanceDate = await this.getSingleLeitnerItemEarlierToBoxAppearanceDate(
+                userId,
+                box,
+            );
+        }
+        return new LeitnerBoxItemSearchResult(items, total, singleLeitnerItemEarlierToBoxAppearanceDate);
+    }
+
+    private async getSingleLeitnerItemEarlierToBoxAppearanceDate(
+        userId: string,
+        box: LeitnerBoxType,
+    ): Promise<SingleLeitnerItemEarlierToBoxAppearanceDate> {
+        const item = await this.leitnerSystemsRepository.getSingleBoxItem(userId, box);
+        let singleLeitnerItemEarlierToBoxAppearanceDate: SingleLeitnerItemEarlierToBoxAppearanceDate;
+        if (item) {
+            singleLeitnerItemEarlierToBoxAppearanceDate = {
+                boxAppearanceDate: item.boxAppearanceDate,
+                vocabulary: { word: item.vocabulary.word },
+            };
+        }
+        return singleLeitnerItemEarlierToBoxAppearanceDate;
     }
 
     countBoxItems(userId: string, box: LeitnerBoxType): Promise<number> {

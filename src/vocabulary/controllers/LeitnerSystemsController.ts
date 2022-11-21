@@ -5,9 +5,8 @@ import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import User from '@/user/domains/User';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import Pagination from '@/common/domains/Pagination';
-import SearchResult from '@/common/domains/SearchResult';
-import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
 import { ApiSecurity } from '@nestjs/swagger';
+import LeitnerBoxItemSearchResult from '@/vocabulary/domains/LeitnerBoxItemSearchResult';
 
 @Controller('/v1/leitner-systems')
 @ApiSecurity('Authorization')
@@ -39,7 +38,7 @@ export default class LeitnerSystemsController {
         @Param('box') box: LeitnerBoxType,
         @Body('pagination') pagination: Pagination,
         @AuthenticatedUser('id') userId: string,
-    ): Promise<SearchResult<LeitnerBoxItem>> {
+    ): Promise<LeitnerBoxItemSearchResult> {
         return this.leitnerSystemsService.getBoxItems(userId, box, pagination);
     }
 
