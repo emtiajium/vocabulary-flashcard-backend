@@ -38,13 +38,13 @@ export default class LeitnerSystemsController {
     getBoxItems(
         @Param('box') box: LeitnerBoxType,
         @Body('pagination') pagination: Pagination,
-        @AuthenticatedUser() user: User,
+        @AuthenticatedUser('id') userId: string,
     ): Promise<SearchResult<LeitnerBoxItem>> {
-        return this.leitnerSystemsService.getBoxItems(user.id, box, pagination);
+        return this.leitnerSystemsService.getBoxItems(userId, box, pagination);
     }
 
     @Get('/items/count/:box')
-    countBoxItems(@Param('box') box: LeitnerBoxType, @AuthenticatedUser() user: User): Promise<number> {
-        return this.leitnerSystemsService.countBoxItems(user.id, box);
+    countBoxItems(@Param('box') box: LeitnerBoxType, @AuthenticatedUser('id') userId: string): Promise<number> {
+        return this.leitnerSystemsService.countBoxItems(userId, box);
     }
 }
