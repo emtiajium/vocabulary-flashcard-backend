@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.35.0`: Refactored `@Post(/v1/leitner-systems/items/:box)` to send an item that is not ready to appear to the user
 -   `0.34.0`: Added validator `@IsEqualToByConfig()`
 -   `0.33.0`: Refactored `@Post(/v1/users)` to send minimal data
 -   `0.32.0`: Authenticated `@Post(/v1/users)`
