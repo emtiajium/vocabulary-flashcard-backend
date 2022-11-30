@@ -33,6 +33,11 @@ export default class VocabularyController {
         return this.vocabularyService.findVocabularyById(id, user.id);
     }
 
+    @Get('/words/:word')
+    findVocabularyByWord(@Param('word') word: string, @AuthenticatedUser() user: User): Promise<Vocabulary> {
+        return this.vocabularyService.findVocabularyByWord(word, user.id, user.cohortId);
+    }
+
     @Delete('/:id')
     async removeVocabularyById(@Param('id') id: string, @AuthenticatedUser() user: User): Promise<void> {
         await this.vocabularyService.removeVocabularyById(id, user);
@@ -47,8 +52,8 @@ export default class VocabularyController {
     assertExistenceByWord(
         @Param('id') id: string,
         @Param('word') word: string,
-        @AuthenticatedUser() user: User,
+        @AuthenticatedUser('cohortId') cohortId: string,
     ): Promise<Partial<Vocabulary>> {
-        return this.vocabularyService.assertExistenceByWord(id, word, user.cohortId);
+        return this.vocabularyService.assertExistenceByWord(id, word, cohortId);
     }
 }

@@ -52,9 +52,22 @@ export default class VocabularyService {
         return vocabulary;
     }
 
+    async findVocabularyByWord(word: string, userId: string, cohortId: string): Promise<Vocabulary> {
+        const id = await this.vocabularyRepository.getIdByWord(word, cohortId);
+        const vocabulary = await this.vocabularyRepository.findVocabularyById(id, userId);
+        this.handleNotFoundUsingWord(word, vocabulary);
+        return vocabulary;
+    }
+
     private handleNotFound(id: string, vocabulary?: Vocabulary | Partial<Vocabulary>): void {
         if (!vocabulary) {
             throw new NotFoundException(`Vocabulary with ID "${id}" does not exist`);
+        }
+    }
+
+    private handleNotFoundUsingWord(word: string, vocabulary?: Vocabulary | Partial<Vocabulary>): void {
+        if (!vocabulary) {
+            throw new NotFoundException(`Vocabulary with word "${word}" does not exist`);
         }
     }
 

@@ -196,4 +196,13 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             .select(['vocabulary.id', 'vocabulary.word'])
             .getOne();
     }
+
+    async getIdByWord(word: string, cohortId: string): Promise<string | undefined> {
+        const vocabulary = await this.createQueryBuilder('vocabulary')
+            .where(`LOWER(vocabulary.word) = :word`, { word: word.toLowerCase().trim() })
+            .andWhere(`vocabulary.cohortId = :cohortId`, { cohortId })
+            .select(['vocabulary.id'])
+            .getOne();
+        return vocabulary?.id;
+    }
 }
