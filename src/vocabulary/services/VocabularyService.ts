@@ -54,9 +54,10 @@ export default class VocabularyService {
 
     async findVocabularyByWord(word: string, userId: string, cohortId: string): Promise<Vocabulary> {
         const id = await this.vocabularyRepository.getIdByWord(word, cohortId);
-        const vocabulary = await this.vocabularyRepository.findVocabularyById(id, userId);
-        this.handleNotFoundUsingWord(word, vocabulary);
-        return vocabulary;
+        if (!id) {
+            this.handleNotFoundUsingWord(word);
+        }
+        return this.vocabularyRepository.findVocabularyById(id, userId);
     }
 
     private handleNotFound(id: string, vocabulary?: Vocabulary | Partial<Vocabulary>): void {
