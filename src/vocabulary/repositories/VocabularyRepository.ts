@@ -168,14 +168,14 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     async isVocabularyExist(id: string, cohortId: string): Promise<boolean> {
         const vocabulary = await this.query(
-            `SELECT id
-             FROM "Vocabulary"
-             WHERE id = $1
-               AND "cohortId" = $2
-             LIMIT 1;`,
+            `SELECT EXISTS(SELECT id
+                           FROM "Vocabulary"
+                           WHERE id = $1
+                             AND "cohortId" = $2
+                        ) AS existence;`,
             [id, cohortId],
         );
-        return !!vocabulary[0];
+        return vocabulary[0].existence;
     }
 
     async getPartialForRemoval(id: string): Promise<Pick<Vocabulary, 'cohortId' | 'isInLeitnerBox'>> {
