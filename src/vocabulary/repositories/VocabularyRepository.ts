@@ -131,16 +131,21 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                                   'examples', definition.examples,
                                                   'notes', definition.notes,
                                                   'externalLinks', definition."externalLinks")) AS definitions,
-                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN                       AS "isInLeitnerBox"
+                       CASE
+                           WHEN
+                               EXISTS(SELECT "leitnerSystems".id
+                                      FROM "LeitnerSystems" AS "leitnerSystems"
+                                      WHERE "leitnerSystems"."vocabularyId" = $1
+                                        AND "leitnerSystems"."userId" = $2)
+                               THEN true
+                           ELSE false
+                           END                                                                  AS "isInLeitnerBox"
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN (SELECT *
                                     FROM "Definition"
                                     WHERE "vocabularyId" = $1
-                                    ORDER BY "createdAt" ASC
-                ) AS definition ON vocabulary.id = definition."vocabularyId"
-                         LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
-                                   ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
-                                      "leitnerSystems"."userId" = $2
+                                    ORDER BY "createdAt" ASC) AS definition
+                                   ON vocabulary.id = definition."vocabularyId"
                 WHERE vocabulary.id = $1
                 GROUP BY vocabulary.id;
             `,
@@ -154,7 +159,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         const queryResult = await this.query(
             `SELECT *
              FROM "Vocabulary"
-             WHERE "cohortId" = $1 LIMIT 1;`,
+             WHERE "cohortId" = $1
+             LIMIT 1;`,
             [cohortId],
         );
         return queryResult[0];
@@ -175,7 +181,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     async getPartialForRemoval(id: string): Promise<Pick<Vocabulary, 'cohortId' | 'isInLeitnerBox'>> {
         const queryResult = await this.query(
             `SELECT vocabulary."cohortId",
-                    COUNT("leitnerSystems".id) ::INTEGER::BOOLEAN                       AS "isInLeitnerBox"
+                    COUNT("leitnerSystems".id) ::INTEGER::BOOLEAN AS "isInLeitnerBox"
              FROM "Vocabulary" AS vocabulary
                       LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
                                 ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
