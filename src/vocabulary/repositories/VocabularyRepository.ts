@@ -181,13 +181,16 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     async getPartialForRemoval(id: string): Promise<Pick<Vocabulary, 'cohortId' | 'isInLeitnerBox'>> {
         const queryResult = await this.query(
             `SELECT vocabulary."cohortId",
-                    COUNT("leitnerSystems".id) ::INTEGER::BOOLEAN AS "isInLeitnerBox"
+                    CASE
+                        WHEN
+                            EXISTS(SELECT "leitnerSystems".id
+                                   FROM "LeitnerSystems" AS "leitnerSystems"
+                                   WHERE "leitnerSystems"."vocabularyId" = $1)
+                            THEN true
+                        ELSE false
+                        END AS "isInLeitnerBox"
              FROM "Vocabulary" AS vocabulary
-                      LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
-                                ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
-                                   "leitnerSystems"."vocabularyId" = $1
-             WHERE vocabulary.id = $1
-             GROUP BY vocabulary."cohortId";`,
+             WHERE vocabulary.id = $1;`,
             [id],
         );
 
