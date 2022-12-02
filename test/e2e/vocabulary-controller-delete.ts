@@ -26,7 +26,7 @@ import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 
-describe('DELETE /v1/vocabularies', () => {
+describe('DELETE /v1/vocabularies/:id', () => {
     let app: INestApplication;
 
     let requester: User;
@@ -37,8 +37,7 @@ describe('DELETE /v1/vocabularies', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuidV4()}`;
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
+        cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
     });
 
     afterAll(async () => {
