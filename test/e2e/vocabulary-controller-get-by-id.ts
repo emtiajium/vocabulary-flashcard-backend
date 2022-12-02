@@ -33,8 +33,7 @@ describe('GET /v1/vocabularies/:id', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuidV4()}`;
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
+        cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
     });
 
     afterAll(async () => {
