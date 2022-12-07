@@ -1,11 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
-import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
+import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
 import Sort, { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
 import { ConflictException } from '@nestjs/common';
+import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 
 @EntityRepository(Vocabulary)
 export default class VocabularyRepository extends Repository<Vocabulary> {
@@ -27,16 +28,16 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
     async findVocabularies(
         userId: string,
         cohortId: string,
-        vocabularySearch: VocabularySearch,
-    ): Promise<SearchResult<Vocabulary>> {
+        vocabularySearchRequest: VocabularySearchRequest,
+    ): Promise<SearchResult<VocabularySearchResponse>> {
         const {
             pagination: { pageSize, pageNumber },
             sort,
             searchKeyword,
             vocabularySearchCoverage,
-        } = vocabularySearch;
+        } = vocabularySearchRequest;
 
-        const fetchNotHavingDefinitionOnly = !!vocabularySearch?.fetchNotHavingDefinitionOnly;
+        const fetchNotHavingDefinitionOnly = !!vocabularySearchRequest?.fetchNotHavingDefinitionOnly;
 
         const currentPage = pageSize * (pageNumber - 1);
 
@@ -44,10 +45,11 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         let vocabularyQueryResult = await this.query(
             `
-                SELECT vocabulary.*,
-                       json_agg(definition.*)                             AS definitions,
-                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN AS "isInLeitnerBox",
-                       (COUNT(*) OVER ())::INTEGER                        AS "totalNumberOfVocabularies"
+                SELECT vocabulary.id,
+                       vocabulary.word,
+                       json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning)) AS definitions,
+                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN                              AS "isInLeitnerBox",
+                       (COUNT(*) OVER ())::INTEGER                                                     AS "totalNumberOfVocabularies"
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
                          LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
@@ -70,7 +72,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         vocabularyQueryResult = this.rejectNull(vocabularyQueryResult);
 
-        return SearchResult.omitTotal<Vocabulary, { totalNumberOfVocabularies: number }>(
+        return SearchResult.omitTotal<VocabularySearchResponse, { totalNumberOfVocabularies: number }>(
             vocabularyQueryResult,
             'totalNumberOfVocabularies',
         );

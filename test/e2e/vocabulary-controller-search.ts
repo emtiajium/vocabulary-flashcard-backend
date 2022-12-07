@@ -14,9 +14,10 @@ import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
-import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
-import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
+import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
+import Definition from '@/vocabulary/domains/Definition';
+import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 
 describe('POST /v1/vocabularies/search', () => {
     let app: INestApplication;
@@ -47,8 +48,8 @@ describe('POST /v1/vocabularies/search', () => {
 
     async function makeApiRequest(
         user: User = requester,
-        payload: VocabularySearch = { pagination: { pageSize: 5, pageNumber: 1 } } as VocabularySearch,
-    ): Promise<SupertestResponse<SearchResult<Vocabulary>>> {
+        payload: VocabularySearchRequest = { pagination: { pageSize: 5, pageNumber: 1 } } as VocabularySearchRequest,
+    ): Promise<SupertestResponse<SearchResult<VocabularySearchResponse>>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/search`)
             .set('Authorization', `Bearer ${generateJwToken(user)}`)
@@ -59,6 +60,30 @@ describe('POST /v1/vocabularies/search', () => {
         };
     }
 
+    describe('Projection', () => {
+        it('SHOULD return 200 OK WITH particular columns only', async () => {
+            // Act
+            const { status, body } = await makeApiRequest();
+
+            // Assert
+            expect(status).toBe(200);
+            (body as SearchResult<VocabularySearchResponse>).results.forEach((vocabulary) => {
+                expect(vocabulary).toStrictEqual({
+                    id: expect.any(String),
+                    word: expect.any(String),
+                    isInLeitnerBox: expect.any(Boolean),
+                    definitions: expect.any(Definition),
+                });
+                vocabulary.definitions.forEach((definition) => {
+                    expect(definition).toStrictEqual({
+                        id: expect.any(String),
+                        meaning: expect.any(String),
+                    });
+                });
+            });
+        });
+    });
+
     describe('Leitner Box', () => {
         it('SHOULD return 200 OK with "isInLeitnerBox"', async () => {
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
@@ -68,14 +93,14 @@ describe('POST /v1/vocabularies/search', () => {
             // request for the first user
             const { status, body } = await makeApiRequest();
             expect(status).toBe(200);
-            const { results } = body as SearchResult<Vocabulary>;
+            const { results } = body as SearchResult<VocabularySearchResponse>;
             const foundVocabulary = results.find((result) => result.id === vocabulary.id);
             expect(foundVocabulary.isInLeitnerBox).toBe(true);
 
             // request for the second user
             const { status: status2, body: body2 } = await makeApiRequest(secondUser);
             expect(status2).toBe(200);
-            const { results: results2 } = body2 as SearchResult<Vocabulary>;
+            const { results: results2 } = body2 as SearchResult<VocabularySearchResponse>;
             const foundVocabulary2 = results2.find((result) => result.id === vocabulary.id);
             expect(foundVocabulary2.isInLeitnerBox).toBe(false);
 
@@ -106,7 +131,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const { results } = body as SearchResult<Vocabulary>;
+            const { results } = body as SearchResult<VocabularySearchResponse>;
             expect(results).toHaveLength(1);
             expect(results[0].id).toBe(vocabulary.id);
             expect(results[0].word).toBe(word);
@@ -148,7 +173,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const { results } = body as SearchResult<Vocabulary>;
+            const { results } = body as SearchResult<VocabularySearchResponse>;
             expect(results.length).toBeGreaterThanOrEqual(2);
             vocabularyIds.forEach((vocabularyId) => {
                 expect(results.some(({ id }) => vocabularyId === id)).toBe(true);
@@ -159,7 +184,7 @@ describe('POST /v1/vocabularies/search', () => {
     describe('Searching', () => {
         it('SHOULD return 400 BAD REQUEST WHEN vocabularySearchCoverage.word is not defined', async () => {
             // Arrange
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
                     word: undefined,
@@ -187,7 +212,7 @@ describe('POST /v1/vocabularies/search', () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 searchKeyword,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
@@ -213,7 +238,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const response = body as SearchResult<Vocabulary>;
+            const response = body as SearchResult<VocabularySearchResponse>;
             expect(response.results).toHaveLength(1);
             expect(response.results[0].id).toBe(vocabulary.id);
         });
@@ -222,7 +247,7 @@ describe('POST /v1/vocabularies/search', () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 searchKeyword,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
@@ -248,7 +273,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const response = body as SearchResult<Vocabulary>;
+            const response = body as SearchResult<VocabularySearchResponse>;
             expect(response.results).toHaveLength(1);
             expect(response.results[0].id).toBe(vocabulary.id);
         });
@@ -257,7 +282,7 @@ describe('POST /v1/vocabularies/search', () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 searchKeyword,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
@@ -283,7 +308,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const response = body as SearchResult<Vocabulary>;
+            const response = body as SearchResult<VocabularySearchResponse>;
             expect(response.results).toHaveLength(1);
             expect(response.results[0].id).toBe(vocabulary.id);
         });
@@ -292,7 +317,7 @@ describe('POST /v1/vocabularies/search', () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 searchKeyword,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
@@ -324,7 +349,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const response = body as SearchResult<Vocabulary>;
+            const response = body as SearchResult<VocabularySearchResponse>;
             expect(response.results).toHaveLength(1);
             expect(response.results[0].id).toBe(vocabulary.id);
         });
@@ -333,7 +358,7 @@ describe('POST /v1/vocabularies/search', () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 searchKeyword,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
@@ -365,7 +390,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const response = body as SearchResult<Vocabulary>;
+            const response = body as SearchResult<VocabularySearchResponse>;
             expect(response.results).toHaveLength(1);
             expect(response.results[0].id).toBe(vocabulary.id);
         });
@@ -374,7 +399,7 @@ describe('POST /v1/vocabularies/search', () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 searchKeyword,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
@@ -406,7 +431,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const response = body as SearchResult<Vocabulary>;
+            const response = body as SearchResult<VocabularySearchResponse>;
             expect(response.results).toHaveLength(1);
             expect(response.results[0].id).toBe(vocabulary.id);
         });
@@ -415,7 +440,7 @@ describe('POST /v1/vocabularies/search', () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
-            const payload: VocabularySearch = {
+            const payload: VocabularySearchRequest = {
                 searchKeyword,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
@@ -441,7 +466,7 @@ describe('POST /v1/vocabularies/search', () => {
 
             // Assert
             expect(status).toBe(200);
-            const response = body as SearchResult<Vocabulary>;
+            const response = body as SearchResult<VocabularySearchResponse>;
             expect(response.results).toHaveLength(1);
             expect(response.results[0].id).toBe(vocabulary.id);
         });

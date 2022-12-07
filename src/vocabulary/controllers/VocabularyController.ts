@@ -1,12 +1,13 @@
 import VocabularyService from '@/vocabulary/services/VocabularyService';
 import { Body, Controller, HttpCode, Post, HttpStatus, Get, Param, Delete, UseGuards } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
-import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
+import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
 import AuthGuard from '@/common/guards/AuthGuard';
 import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import User from '@/user/domains/User';
 import { ApiSecurity } from '@nestjs/swagger';
+import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 
 @Controller('/v1/vocabularies')
 @ApiSecurity('Authorization')
@@ -23,9 +24,9 @@ export default class VocabularyController {
     @HttpCode(HttpStatus.OK)
     findVocabularies(
         @AuthenticatedUser() user: User,
-        @Body() vocabularySearch: VocabularySearch,
-    ): Promise<SearchResult<Vocabulary>> {
-        return this.vocabularyService.findVocabularies(user.id, user.cohortId, vocabularySearch);
+        @Body() vocabularySearchRequest: VocabularySearchRequest,
+    ): Promise<SearchResult<VocabularySearchResponse>> {
+        return this.vocabularyService.findVocabularies(user.id, user.cohortId, vocabularySearchRequest);
     }
 
     @Get('/:id')

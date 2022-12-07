@@ -4,7 +4,7 @@ import { plainToClass, Transform, Type } from 'class-transformer';
 import Sort from '@/common/domains/Sort';
 import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
 
-export default class VocabularySearch {
+export default class VocabularySearchRequest {
     @IsOptional()
     @IsString()
     searchKeyword?: string;

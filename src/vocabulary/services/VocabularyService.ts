@@ -9,12 +9,13 @@ import {
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import * as _ from 'lodash';
-import VocabularySearch from '@/vocabulary/domains/VocabularySearch';
+import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 import User from '@/user/domains/User';
+import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 
 @Injectable()
 export default class VocabularyService {
@@ -41,9 +42,9 @@ export default class VocabularyService {
     findVocabularies(
         userId: string,
         cohortId: string,
-        vocabularySearch: VocabularySearch,
-    ): Promise<SearchResult<Vocabulary>> {
-        return this.vocabularyRepository.findVocabularies(userId, cohortId, vocabularySearch);
+        vocabularySearchRequest: VocabularySearchRequest,
+    ): Promise<SearchResult<VocabularySearchResponse>> {
+        return this.vocabularyRepository.findVocabularies(userId, cohortId, vocabularySearchRequest);
     }
 
     async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {

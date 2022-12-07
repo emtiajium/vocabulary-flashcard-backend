@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.38.0`: Refactored `@Post(/v1/vocabularies/search)` to send only the required props
 -   `0.37.0`: Replaced `COUNT()` with `EXISTS()` where applicable
 -   `0.36.0`: Added `@Get(/v1/vocabularies/words/:word)`
 -   `0.35.0`: Refactored `@Post(/v1/leitner-systems/items/:box)` to send an item that is not ready to appear to the user
