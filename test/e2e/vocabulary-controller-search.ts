@@ -208,12 +208,72 @@ describe('POST /v1/vocabularies/search', () => {
             ).toBe(true);
         });
 
+        it('SHOULD return 200 OK WHEN searchKeyword is not defined', async () => {
+            // Arrange
+            const payload: VocabularySearchRequest = {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                vocabularySearchCoverage: {
+                    word: true,
+                    linkerWords: false,
+                    genericNotes: false,
+                    meaning: false,
+                    examples: false,
+                    notes: false,
+                },
+            };
+
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, payload);
+
+            // Assert
+            expect(status).toBe(200);
+            const response = body as SearchResult<VocabularySearchResponse>;
+            expect(response.results).not.toHaveLength(0);
+        });
+
         it('SHOULD return 200 OK WHEN vocabularySearchCoverage.word is true AND a word exist matching the search keyword', async () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
 
             const payload: VocabularySearchRequest = {
                 searchKeyword,
+                pagination: { pageSize: 5, pageNumber: 1 },
+                vocabularySearchCoverage: {
+                    word: true,
+                    linkerWords: false,
+                    genericNotes: false,
+                    meaning: false,
+                    examples: false,
+                    notes: false,
+                },
+            };
+
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: searchKeyword,
+                },
+                cohort.id,
+            );
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, payload);
+
+            // Assert
+            expect(status).toBe(200);
+            const response = body as SearchResult<VocabularySearchResponse>;
+            expect(response.results).toHaveLength(1);
+            expect(response.results[0].id).toBe(vocabulary.id);
+        });
+
+        it('SHOULD return 200 OK WHEN vocabularySearchCoverage.word is true AND a word exist matching the search keyword ignoring the trailing space', async () => {
+            // Arrange
+            const searchKeyword = `ROG_${Date.now()}`;
+
+            const payload: VocabularySearchRequest = {
+                searchKeyword: `${searchKeyword} `,
                 pagination: { pageSize: 5, pageNumber: 1 },
                 vocabularySearchCoverage: {
                     word: true,

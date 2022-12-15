@@ -56,7 +56,11 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                    ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
                                       "leitnerSystems"."userId" = $1
                 WHERE vocabulary."cohortId" = $2
-                    ${this.getSearchQuery(searchKeyword, vocabularySearchCoverage, searchKeywordParameterPosition)}
+                    ${this.getSearchQuery(
+                        searchKeyword || '',
+                        vocabularySearchCoverage,
+                        searchKeywordParameterPosition,
+                    )}
                     ${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
                 GROUP BY vocabulary.id
                 ORDER BY vocabulary."${Sort.getField(SupportedSortFields.updatedAt, sort)}" ${Sort.getDirection(
@@ -66,7 +70,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 OFFSET $3 LIMIT $4;
             `,
             searchKeyword
-                ? [userId, cohortId, currentPage, pageSize, `%${searchKeyword}%`]
+                ? [userId, cohortId, currentPage, pageSize, `%${searchKeyword.trim()}%`]
                 : [userId, cohortId, currentPage, pageSize],
         );
 
@@ -95,7 +99,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         vocabularySearchCoverage: VocabularySearchCoverage = { word: true } as VocabularySearchCoverage,
         queryParameterPosition: number,
     ): string {
-        if (!searchKeyword) {
+        if (searchKeyword.trim().length === 0) {
             return ``;
         }
 
