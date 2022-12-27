@@ -187,8 +187,16 @@ describe('/v1/cohorts', () => {
             });
 
             it('SHOULD return 201 CREATED', async () => {
-                const { status } = await makeApiRequest(getBasePayload([firstUser.username, secondUser.username]));
+                const { status, body } = await makeApiRequest(
+                    getBasePayload([firstUser.username, secondUser.username]),
+                );
+
                 expect(status).toBe(201);
+                expect(body).toStrictEqual({
+                    message: `Please use @Put(/v1/cohorts/:name) API to move all users' vocabularies to the cohort "${
+                        getBasePayload().name
+                    }"`,
+                });
 
                 const [firstUserWithCohort, secondUserWithCohort] = await getUsersByUsernames([
                     firstUser.username,
