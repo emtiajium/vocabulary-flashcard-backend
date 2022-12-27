@@ -18,7 +18,6 @@ import {
 } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
-import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
@@ -37,9 +36,11 @@ describe('/v1/vocabularies', () => {
 
     async function seed(): Promise<{ user: User; cohort: Cohort }> {
         const user = await createApiRequester();
-        const createdCohort = await createCohort({ name: `Cohort _ ${uuidV4()}`, usernames: [] } as Cohort);
+        const createdCohort = await createCohort({
+            name: `Cohort _ ${uuidV4()}`,
+            usernames: [user.username],
+        } as Cohort);
         cohortIds.push(createdCohort.id);
-        await app.get(CohortService).addUsersToCohort(createdCohort.name, [user.username]);
         user.cohort = { id: createdCohort.id } as Cohort;
         return {
             user,

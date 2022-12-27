@@ -5,7 +5,6 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester } from '@test/util/user-util';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
-import CohortService from '@/user/services/CohortService';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import SupertestResponse from '@test/util/supertest-util';
@@ -40,8 +39,7 @@ describe('Leitner Systems Box Items', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuid.v4()}`;
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
+        cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
     });
 
     afterAll(async () => {

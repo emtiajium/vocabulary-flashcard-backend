@@ -5,7 +5,6 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester } from '@test/util/user-util';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
-import CohortService from '@/user/services/CohortService';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
@@ -45,8 +44,7 @@ describe('GET /v1/users/using-leitner-systems', () => {
     beforeAll(async () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
-        cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohort.name, [requester.username]);
+        cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [requester.username] } as Cohort);
     });
 
     afterAll(async () => {

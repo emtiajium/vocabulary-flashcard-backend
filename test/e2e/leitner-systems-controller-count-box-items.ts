@@ -10,7 +10,6 @@ import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
-import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
@@ -26,8 +25,7 @@ describe('GET /v1/leitner-systems/items/count/:box', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuidV4()}`;
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username]);
+        cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
     });
 
     afterAll(async () => {

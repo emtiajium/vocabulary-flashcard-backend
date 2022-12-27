@@ -11,7 +11,6 @@ import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
-import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { capitalize } from 'lodash';
 import { plainToClass } from 'class-transformer';
@@ -27,9 +26,8 @@ describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
 
     async function seed(): Promise<{ user: User; cohort: Cohort }> {
         let user = await createApiRequester();
-        const cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
+        const cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [user.username] } as Cohort);
         cohortIds.push(cohort.id);
-        await app.get(CohortService).addUsersToCohort(cohort.name, [user.username]);
         user.cohort = cohort;
         user = plainToClass(User, user);
         return {

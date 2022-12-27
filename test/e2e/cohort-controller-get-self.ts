@@ -9,7 +9,6 @@ import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import User from '@/user/domains/User';
 import { createApiRequester, createUser, generateUsername } from '@test/util/user-util';
-import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 
 describe('GET /v1/cohorts/self', () => {
@@ -28,8 +27,10 @@ describe('GET /v1/cohorts/self', () => {
             firstname: 'Friend',
         } as User);
         const cohortName = `Cohort _ ${uuidV4()}`;
-        cohort = await createCohort({ name: cohortName, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohortName, [requester.username, secondUser.username]);
+        cohort = await createCohort({
+            name: cohortName,
+            usernames: [requester.username, secondUser.username],
+        } as Cohort);
     });
 
     afterAll(async () => {
