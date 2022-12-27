@@ -32,23 +32,7 @@ export default class CohortService {
         const cohort: Cohort = await this.cohortRepository.getCohortByName(name);
         const users = await this.assertUsers(usernames);
         await this.associateUsersWithCohort(usernames, cohort);
-
-        let cohortIds: string[] = [];
-        users.forEach((user) => {
-            if (user.cohortId) {
-                cohortIds.push(user.cohortId);
-            }
-        });
-        cohortIds = _.uniq(cohortIds);
-
-        if (!_.isEmpty(cohortIds)) {
-            // I want to make sure they execute synchronously
-            // eslint-disable-next-line no-restricted-syntax
-            for (const cohortId of cohortIds) {
-                // eslint-disable-next-line no-await-in-loop
-                await this.vocabularyService.updateCohort(cohortId, cohort.id);
-            }
-        }
+        await this.associateVocabsWithCohort(users, cohort.id);
     }
 
     private getUsersNotFoundExceptionMessage = (nonExistingUsers: string[]): string => {
@@ -69,6 +53,26 @@ export default class CohortService {
 
     private async associateUsersWithCohort(usernames: string[], cohort): Promise<void> {
         await this.userRepository.updateCohort(usernames, cohort.id);
+    }
+
+    private async associateVocabsWithCohort(users: User[], cohortId: string): Promise<void> {
+        let currentCohortIds: string[] = [];
+
+        users.forEach((user) => {
+            if (user.cohortId) {
+                currentCohortIds.push(user.cohortId);
+            }
+        });
+        currentCohortIds = _.uniq(currentCohortIds);
+
+        if (!_.isEmpty(currentCohortIds)) {
+            // eslint-disable-next-line no-restricted-syntax
+            for (const currentCohortId of currentCohortIds) {
+                // I want to make sure they execute synchronously
+                // eslint-disable-next-line no-await-in-loop
+                await this.vocabularyService.updateCohort(currentCohortId, cohortId);
+            }
+        }
     }
 
     findCohortById(id: string): Promise<Cohort> {
