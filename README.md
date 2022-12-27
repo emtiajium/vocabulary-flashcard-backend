@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.39.0`: Refactored `@Put(/v1/cohorts/:name)` to move all users' vocab to the requested cohort
 -   `0.38.1`: Refactored `@Post(/v1/vocabularies/search)`: Trimmed the search keyword before starting searching
 -   `0.38.0`: Refactored `@Post(/v1/vocabularies/search)` to send only the required props
 -   `0.37.0`: Replaced `COUNT()` with `EXISTS()` where applicable
