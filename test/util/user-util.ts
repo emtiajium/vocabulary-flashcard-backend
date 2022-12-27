@@ -27,6 +27,10 @@ export async function resetCohortById(id: string): Promise<void> {
     await getRepository(User).update({ id }, { cohort: { id: null } });
 }
 
+export async function updateCohortById(id: string, cohortId: string): Promise<void> {
+    await getRepository(User).update(id, { cohort: { id: cohortId } });
+}
+
 export function createUser(user: User): Promise<User> {
     return getRepository(User).save(user);
 }

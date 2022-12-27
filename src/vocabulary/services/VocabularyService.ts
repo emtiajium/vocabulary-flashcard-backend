@@ -16,6 +16,7 @@ import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 import User from '@/user/domains/User';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
+import * as uuid from 'uuid';
 
 @Injectable()
 export default class VocabularyService {
@@ -127,5 +128,29 @@ export default class VocabularyService {
 
     assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
         return this.vocabularyRepository.assertExistenceByWord(id, word, cohortId);
+    }
+
+    async updateCohort(currentCohortId: string, newCohortId: string): Promise<void> {
+        const vocabularyIds = await this.vocabularyRepository.getIdsByCohortId(currentCohortId);
+
+        await Promise.all(
+            vocabularyIds.map(async (vocabularyId) => {
+                try {
+                    await this.vocabularyRepository.updateCohortId(vocabularyId, newCohortId);
+                } catch (error) {
+                    if (error.response?.name === 'WordConflict') {
+                        await this.vocabularyRepository.updateWord(
+                            vocabularyId,
+                            `${
+                                error.response.word
+                            }---SUFFIX_ADDED_BY_SYSTEM_AS_IT_IS_DUPLICATED_WHICH_WAS_ADDED_BY_ANOTHER_MEMBER_OF_THE_COHORT---${uuid.v4()}`,
+                        );
+                        await this.vocabularyRepository.updateCohortId(vocabularyId, newCohortId);
+                    } else {
+                        throw error;
+                    }
+                }
+            }),
+        );
     }
 }

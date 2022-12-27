@@ -26,6 +26,7 @@ describe('Cohort Service', () => {
     });
 
     it('SHOULD be tagged users to a cohort', async () => {
+        // Arrange
         const cohortService = app.get(CohortService);
 
         const firstUserPayload = getUserPayload();
@@ -36,14 +37,16 @@ describe('Cohort Service', () => {
 
         const cohortPayload: Cohort = { name: 'The best cohort ever exist', usernames: [] } as Cohort;
         await cohortService.createCohort(cohortPayload);
-        const cohort: Cohort = await getCohortByName(cohortPayload.name);
 
+        // Act
         await cohortService.addUsersToCohort(cohortPayload.name, [firstUser.username, secondUser.username]);
 
+        // Assert
         const updatedCohort: Cohort = await getCohortByName(cohortPayload.name);
 
         expect(updatedCohort.updatedAt.toISOString()).toBe(updatedCohort.createdAt.toISOString());
 
+        const cohort: Cohort = await getCohortByName(cohortPayload.name);
         const usersWithCohort: User[] = await getUsersByUsernames([firstUser.username, secondUser.username]);
 
         usersWithCohort.forEach((user) => {

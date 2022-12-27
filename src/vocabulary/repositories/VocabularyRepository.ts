@@ -220,4 +220,31 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             .getOne();
         return vocabulary?.id;
     }
+
+    async getIdsByCohortId(cohortId: string): Promise<string[]> {
+        const vocabularies = await this.createQueryBuilder('vocabulary')
+            .where(`vocabulary.cohortId = :cohortId`, { cohortId })
+            .select(['vocabulary.id'])
+            .getMany();
+
+        return vocabularies.map((vocabulary) => vocabulary.id);
+    }
+
+    async updateCohortId(id: string, cohortId: string): Promise<void> {
+        await this.update(id, { cohortId }).catch((error) => {
+            if (error.constraint === 'UQ_Vocabulary_word_cohortId') {
+                const word = error.detail.split(`, ${cohortId}`)[0].split(`Key (word, "cohortId")=(`)[1];
+                throw new ConflictException({
+                    word,
+                    name: `WordConflict`,
+                    message: `"${word}" already exists.`,
+                });
+            }
+            throw error;
+        });
+    }
+
+    async updateWord(id: string, word: string): Promise<void> {
+        await this.update(id, { word });
+    }
 }
