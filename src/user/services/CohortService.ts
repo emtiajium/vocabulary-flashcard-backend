@@ -22,18 +22,15 @@ export default class CohortService {
         }
         const { id: cohortId } = await this.cohortRepository.insertIfNotExists(cohort);
         if (!isEmptyUsernames) {
-            await this.associateUsersWithCohort(
-                cohort.usernames,
-                await this.cohortRepository.getCohortByName(cohort.name),
-            );
+            await this.associateUsersWithCohort(cohort.usernames, cohortId);
             await this.associateVocabsWithCohort(users, cohortId);
         }
     }
 
     async addUsersToCohort(name: string, usernames: string[]): Promise<void> {
-        const cohort: Cohort = await this.cohortRepository.getCohortByName(name);
+        const cohort = await this.cohortRepository.getCohortByName(name);
         const users = await this.assertUsers(usernames);
-        await this.associateUsersWithCohort(usernames, cohort);
+        await this.associateUsersWithCohort(usernames, cohort.id);
         await this.associateVocabsWithCohort(users, cohort.id);
     }
 
@@ -53,8 +50,8 @@ export default class CohortService {
         return users;
     }
 
-    private async associateUsersWithCohort(usernames: string[], cohort): Promise<void> {
-        await this.userRepository.updateCohort(usernames, cohort.id);
+    private async associateUsersWithCohort(usernames: string[], cohortId: string): Promise<void> {
+        await this.userRepository.updateCohort(usernames, cohortId);
     }
 
     private async associateVocabsWithCohort(users: User[], cohortId: string): Promise<void> {
