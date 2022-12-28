@@ -5,7 +5,7 @@ import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import * as request from 'supertest';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
-import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
+import { removeCohortsByNames } from '@test/util/cohort-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import User from '@/user/domains/User';
 import {
@@ -133,14 +133,15 @@ describe('/v1/cohorts', () => {
                 await removeCohortsByNames([getBasePayload().name]);
             });
 
-            it('SHOULD return 201 CREATED WHEN same payload is sent twice', async () => {
-                let { status } = await makeApiRequest(getBasePayload());
+            it('SHOULD return 409 CONFLICT WHEN same payload is sent twice', async () => {
+                const { status } = await makeApiRequest(getBasePayload());
                 expect(status).toBe(201);
 
-                status = (await makeApiRequest(getBasePayload())).status;
-                expect(status).toBe(201);
-
-                await expect(getCohortByName(getBasePayload().name)).resolves.toBeDefined();
+                const { status: status2, body } = await makeApiRequest(getBasePayload());
+                expect(status2).toBe(409);
+                expect((body as SupertestErrorResponse).message).toBe(
+                    `Cohort with name "${getBasePayload().name}" already exists`,
+                );
             });
         });
 

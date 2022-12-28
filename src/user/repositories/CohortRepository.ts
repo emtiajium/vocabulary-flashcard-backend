@@ -1,16 +1,23 @@
 import { EntityRepository, Repository } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import EntityNotFoundException from '@/common/exceptions/EntityNotFoundException';
+import { ConflictException } from '@nestjs/common';
 
 @EntityRepository(Cohort)
 export default class CohortRepository extends Repository<Cohort> {
     async insertIfNotExists(cohort: Cohort): Promise<void> {
-        await this.createQueryBuilder()
-            .insert()
-            .into(Cohort)
-            .values({ name: () => `'${cohort.name}'::VARCHAR` })
-            .onConflict(`("name") DO NOTHING`)
-            .execute();
+        try {
+            await this.createQueryBuilder()
+                .insert()
+                .into(Cohort)
+                .values({ name: () => `'${cohort.name}'::VARCHAR` })
+                .execute();
+        } catch (error) {
+            if (error.constraint === 'UQ_Cohort_name') {
+                throw new ConflictException(`Cohort with name "${cohort.name}" already exists`);
+            }
+            throw error;
+        }
     }
 
     async getCohortByName(name: string): Promise<Cohort> {
