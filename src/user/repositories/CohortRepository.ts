@@ -5,19 +5,23 @@ import { ConflictException } from '@nestjs/common';
 
 @EntityRepository(Cohort)
 export default class CohortRepository extends Repository<Cohort> {
-    async insertIfNotExists(cohort: Cohort): Promise<void> {
+    async insertIfNotExists(cohort: Cohort): Promise<Cohort> {
+        let savedCohort: Cohort;
         try {
-            await this.createQueryBuilder()
+            const insertResult = await this.createQueryBuilder()
                 .insert()
                 .into(Cohort)
                 .values({ name: () => `'${cohort.name}'::VARCHAR` })
                 .execute();
+
+            savedCohort = insertResult.generatedMaps[0] as Cohort;
         } catch (error) {
             if (error.constraint === 'UQ_Cohort_name') {
                 throw new ConflictException(`Cohort with name "${cohort.name}" already exists`);
             }
             throw error;
         }
+        return savedCohort;
     }
 
     async getCohortByName(name: string): Promise<Cohort> {

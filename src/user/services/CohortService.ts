@@ -16,15 +16,17 @@ export default class CohortService {
 
     async createCohort(cohort: Cohort): Promise<void> {
         const isEmptyUsernames = cohort.usernames?.length === 0;
+        let users: User[] = [];
         if (!isEmptyUsernames) {
-            await this.assertUsers(cohort.usernames);
+            users = await this.assertUsers(cohort.usernames);
         }
-        await this.cohortRepository.insertIfNotExists(cohort);
+        const { id: cohortId } = await this.cohortRepository.insertIfNotExists(cohort);
         if (!isEmptyUsernames) {
             await this.associateUsersWithCohort(
                 cohort.usernames,
                 await this.cohortRepository.getCohortByName(cohort.name),
             );
+            await this.associateVocabsWithCohort(users, cohortId);
         }
     }
 

@@ -13,11 +13,8 @@ export default class CohortController {
     constructor(private readonly cohortService: CohortService) {}
 
     @Post()
-    async createCohort(@Body() cohort: Cohort): Promise<{ message: string }> {
+    async createCohort(@Body() cohort: Cohort): Promise<void> {
         await this.cohortService.createCohort(cohort);
-        return {
-            message: `Please use @Put(/v1/cohorts/:name) API to move all users' vocabularies to the cohort "${cohort.name}"`,
-        };
     }
 
     @Put('/:name')
