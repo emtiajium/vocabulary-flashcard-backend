@@ -29,3 +29,8 @@ export async function createCohort(cohort: Cohort): Promise<Cohort> {
     }
     return savedCohort;
 }
+
+export async function addUsersToCohort(name: string, usernames: string[]): Promise<void> {
+    const cohort = await getCohortByName(name);
+    await getRepository(User).update({ username: In(usernames) }, { cohort: { id: cohort.id } });
+}

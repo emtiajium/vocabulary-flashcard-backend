@@ -7,7 +7,7 @@ import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
+import { addUsersToCohort, createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import {
     createVocabulary,
     getSingleVocabularyByCohortId,
@@ -15,7 +15,6 @@ import {
 } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
-import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 import SearchResult from '@/common/domains/SearchResult';
@@ -31,7 +30,7 @@ describe('/v1/vocabularies/bootstrap', () => {
         app = await kickOff(AppModule);
         requester = await createApiRequester();
         cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
-        await app.get(CohortService).addUsersToCohort(cohort.name, [requester.username]);
+        await addUsersToCohort(cohort.name, [requester.username]);
     });
 
     afterAll(async () => {

@@ -7,11 +7,10 @@ import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
+import { addUsersToCohort, createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
-import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { plainToClass } from 'class-transformer';
 
@@ -28,7 +27,7 @@ describe('/v1/vocabularies/words/:word', () => {
         let user = await createApiRequester();
         const cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
         cohortIds.push(cohort.id);
-        await app.get(CohortService).addUsersToCohort(cohort.name, [user.username]);
+        await addUsersToCohort(cohort.name, [user.username]);
         user.cohort = cohort;
         user = plainToClass(User, user);
         return {

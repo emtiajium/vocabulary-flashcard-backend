@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';
-import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
+import { addUsersToCohort, createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import {
     createVocabulary,
     getDefinitionsByVocabularyId,
@@ -21,7 +21,6 @@ import {
     removeUsersByUsernames,
     resetCohortById,
 } from '@test/util/user-util';
-import CohortService from '@/user/services/CohortService';
 import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
@@ -79,7 +78,7 @@ describe('DELETE /v1/vocabularies/:id', () => {
             username: generateUsername(),
             firstname: 'Friend',
         } as User);
-        await app.get(CohortService).addUsersToCohort(cohort.name, [secondUser.username]);
+        await addUsersToCohort(cohort.name, [secondUser.username]);
         const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
         await createItem(secondUser.id, vocabulary.id, LeitnerBoxType.BOX_1);
 
