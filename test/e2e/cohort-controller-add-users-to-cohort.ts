@@ -158,6 +158,35 @@ describe('/v1/cohorts/:name', () => {
             await updateCohortById(thirdUser.id, currentCohortIds[2]);
         });
 
+        it('SHOULD return 200 OK AND add a new user', async () => {
+            // Arrange
+            const currentCohortIds = [firstUser.cohort.id, secondUser.cohort.id, thirdUser.cohort.id];
+
+            const anotherCohort = await createCohort(getBasePayload([firstUser.username, secondUser.username]));
+            cohortIds.push(anotherCohort.id);
+
+            // Act
+            const { status } = await makeAuthorizedApiRequest(anotherCohort.name, [thirdUser.username]);
+
+            // Assert
+            expect(status).toBe(200);
+
+            const [firstUserWithCohort, secondUserWithCohort, thirdUserWithCohort] = await getUsersByUsernames([
+                firstUser.username,
+                secondUser.username,
+                thirdUser.username,
+            ]);
+
+            expect(firstUserWithCohort.cohort.name).toBe(anotherCohort.name);
+            expect(secondUserWithCohort.cohort.name).toBe(anotherCohort.name);
+            expect(thirdUserWithCohort.cohort.name).toBe(anotherCohort.name);
+
+            // Post Assert
+            await updateCohortById(firstUser.id, currentCohortIds[0]);
+            await updateCohortById(secondUser.id, currentCohortIds[1]);
+            await updateCohortById(thirdUser.id, currentCohortIds[2]);
+        });
+
         it('SHOULD return 200 OK AND move all vocabs to the new cohort', async () => {
             // Arrange
             const currentCohortIds = [firstUser.cohort.id, secondUser.cohort.id, thirdUser.cohort.id];
