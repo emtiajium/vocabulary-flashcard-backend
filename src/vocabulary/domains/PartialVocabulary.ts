@@ -2,6 +2,7 @@ import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
 import * as _ from 'lodash';
 import { v4 as uuidV4 } from 'uuid';
+import { plainToClass } from 'class-transformer';
 
 type PartialDefinition = Required<Pick<Definition, 'meaning' | 'examples' | 'notes' | 'externalLinks'>>;
 type VocabularyWithoutDefinitions = Required<
@@ -14,7 +15,8 @@ export default PartialVocabulary;
 export function createVocabularies(cohortId: string, vocabularies: PartialVocabulary[]): Vocabulary[] {
     return _.map(_.cloneDeep(vocabularies), (vocabulary) => {
         const vocabularyId = uuidV4();
-        return {
+        // plainToClass() to make @Transform() works
+        return plainToClass(Vocabulary, {
             ...vocabulary,
             id: vocabularyId,
             cohortId,
@@ -26,6 +28,6 @@ export function createVocabularies(cohortId: string, vocabularies: PartialVocabu
                 } as Definition;
             }),
             isDraft: false,
-        } as Vocabulary;
+        });
     });
 }
