@@ -3,6 +3,7 @@ import { Request } from 'express';
 import safeStringify from 'fast-safe-stringify';
 import { Observable } from 'rxjs';
 import { getHeaders } from '@/common/http/util';
+import User from '@/user/domains/User';
 
 @Injectable()
 export default class RequestLoggingInterceptor implements NestInterceptor {
@@ -10,9 +11,9 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
         this.logger.setContext(RequestLoggingInterceptor.name);
     }
 
-    private logRequest(request: Request): void {
+    private logRequest(request: Request & { user?: User }): void {
         const headers = getHeaders(request);
-        const { url, method } = request;
+        const { url, method, user } = request;
 
         this.logger.log(
             safeStringify({
@@ -25,6 +26,7 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
                 origin: headers.origin,
                 'x-requested-with': headers['x-requested-with'],
                 referer: headers.referer,
+                username: user?.username,
                 client: headers['x-client-id'],
                 version: headers['x-version'],
                 versionCode: headers['x-version-code'],
