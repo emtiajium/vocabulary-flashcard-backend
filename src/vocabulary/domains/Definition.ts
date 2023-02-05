@@ -27,8 +27,7 @@ export default class Definition extends BaseEntityWithMandatoryId {
     @IsNotEmpty({ each: true })
     @ArrayNotEmpty()
     @IsArray()
-    @IsDefined()
-    examples?: string[];
+    examples: string[];
 
     @Column({ type: 'varchar', array: true })
     @IsArray()
@@ -57,13 +56,12 @@ export default class Definition extends BaseEntityWithMandatoryId {
     @IsNotEmpty()
     vocabularyId: string;
 
-    // eslint-disable-next-line complexity
     static create(vocabularyId: string, definition?: Definition): Definition {
         const definitionInstance = new Definition();
         definitionInstance.id = definition?.id;
         definitionInstance.vocabularyId = vocabularyId;
-        definitionInstance.meaning = definition?.meaning || '';
-        definitionInstance.examples = definition?.examples || [];
+        definitionInstance.meaning = definition.meaning;
+        definitionInstance.examples = definition.examples;
         definitionInstance.notes = definition?.notes || [];
         definitionInstance.externalLinks = definition?.externalLinks || [];
         return definitionInstance;
