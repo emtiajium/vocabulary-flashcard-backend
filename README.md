@@ -1,4 +1,4 @@
-[![CI](https://github.com/emtiajium/ielts-gibberish/actions/workflows/ci.yml/badge.svg)](https://github.com/emtiajium/ielts-gibberish/actions/workflows/ci.yml)
+[![CI](https://github.com/emtiajium/vocabulary-flashcard-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/emtiajium/vocabulary-flashcard-backend/actions/workflows/ci.yml)
 
 # How to Run
 
@@ -10,9 +10,9 @@
 
 ###### Clone the repo and install all dependencies
 
-➜ `git clone git@github.com:emtiajium/ielts-gibberish.git`
+➜ `git clone git@github.com:emtiajium/vocabulary-flashcard-backend.git`
 
-➜ `cd ielts-gibberish`
+➜ `cd vocabulary-flashcard-backend`
 
 ➜ `npm install`
 
