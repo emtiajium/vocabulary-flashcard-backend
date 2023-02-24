@@ -119,7 +119,10 @@ export default class VocabularyService {
 
     async createInitialVocabularies(cohortId: string): Promise<SearchResult<Vocabulary>> {
         if (await this.vocabularyRepository.getSingleVocabularyByCohortId(cohortId)) {
-            throw new ConflictException(`Cohort with ID: "${cohortId}" has at least one vocabulary`);
+            throw new ConflictException({
+                name: 'ExistingVocabConflict',
+                message: `Cohort with ID: "${cohortId}" has at least one vocabulary`,
+            });
         }
         const payload = createVocabularies(cohortId, newJoinerVocabularyList);
         const vocabularies = await this.vocabularyRepository.save(payload);

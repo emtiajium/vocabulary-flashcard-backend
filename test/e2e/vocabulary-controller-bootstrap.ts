@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
-import SupertestResponse from '@test/util/supertest-util';
+import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
 import * as request from 'supertest';
 import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
@@ -78,8 +78,9 @@ describe('/v1/vocabularies/bootstrap', () => {
     it('SHOULD return 409 Conflict WHEN the user has vocabulary', async () => {
         await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
 
-        const { status } = await makeApiRequest();
+        const { status, body } = await makeApiRequest();
 
         expect(status).toBe(409);
+        expect((body as SupertestErrorResponse).name).toBe('ExistingVocabConflict');
     });
 });
