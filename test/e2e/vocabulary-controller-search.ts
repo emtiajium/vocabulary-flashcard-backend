@@ -109,7 +109,7 @@ describe('POST /v1/vocabularies/search', () => {
     });
 
     describe('Fetch Not Having Definition Only', () => {
-        it('SHOULD return 200 OK WITH only empty definition', async () => {
+        it('SHOULD return 200 OK WITH only empty definition WHEN fetchNotHavingDefinitionOnly is true', async () => {
             // Arrange
             const word = `ROG_${Date.now()}`;
             const vocabulary = await createVocabulary(
@@ -137,7 +137,7 @@ describe('POST /v1/vocabularies/search', () => {
             expect(results[0].word).toBe(word);
         });
 
-        it('SHOULD return 200 OK WITH vocabularies indifferent to the empty definition', async () => {
+        it('SHOULD return 200 OK WITH vocabularies indifferent to the empty definition WHEN fetchNotHavingDefinitionOnly is false', async () => {
             // Arrange
             const vocabularyIds: string[] = [];
             let vocabulary = await createVocabulary(
@@ -165,6 +165,48 @@ describe('POST /v1/vocabularies/search', () => {
                 pagination: { pageSize: 5, pageNumber: 1 },
                 searchKeyword: 'ROG',
                 fetchNotHavingDefinitionOnly: false,
+                sort: {
+                    direction: SortDirection.DESC,
+                    field: SupportedSortFields.createdAt,
+                },
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results.length).toBeGreaterThanOrEqual(2);
+            vocabularyIds.forEach((vocabularyId) => {
+                expect(results.some(({ id }) => vocabularyId === id)).toBe(true);
+            });
+        });
+
+        it('SHOULD return 200 OK WITH vocabularies indifferent to the empty definition WHEN fetchNotHavingDefinitionOnly is undefined', async () => {
+            // Arrange
+            const vocabularyIds: string[] = [];
+            let vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                    definitions: [],
+                    isDraft: true,
+                },
+                cohort.id,
+            );
+            vocabularyIds.push(vocabulary.id);
+
+            vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                },
+                cohort.id,
+            );
+            vocabularyIds.push(vocabulary.id);
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: 'ROG',
                 sort: {
                     direction: SortDirection.DESC,
                     field: SupportedSortFields.createdAt,
