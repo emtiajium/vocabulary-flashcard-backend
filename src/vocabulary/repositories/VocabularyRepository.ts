@@ -35,9 +35,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             sort,
             searchKeyword,
             vocabularySearchCoverage,
+            fetchNotHavingDefinitionOnly,
+            fetchNonFlashcardOnly,
         } = vocabularySearchRequest;
-
-        const fetchNotHavingDefinitionOnly = !!vocabularySearchRequest?.fetchNotHavingDefinitionOnly;
 
         const currentPage = pageSize * (pageNumber - 1);
 
@@ -61,7 +61,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                         vocabularySearchCoverage,
                         searchKeywordParameterPosition,
                     )}
-                    ${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
+                    ${this.getFilteringQuery(fetchNotHavingDefinitionOnly, fetchNonFlashcardOnly)}
                 GROUP BY vocabulary.id
                 ORDER BY vocabulary."${Sort.getField(SupportedSortFields.updatedAt, sort)}" ${Sort.getDirection(
                 SortDirection.DESC,
@@ -119,6 +119,11 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         });
 
         return `AND (${Object.values(searchBuilder).join(' OR ')})`;
+    }
+
+    private getFilteringQuery(fetchNotHavingDefinitionOnly: boolean, fetchNonFlashcardOnly: boolean): string {
+        return `${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
+        ${fetchNonFlashcardOnly ? `AND "leitnerSystems"."userId" IS NULL` : ''}`;
     }
 
     async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {

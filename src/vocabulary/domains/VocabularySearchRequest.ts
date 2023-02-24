@@ -27,6 +27,10 @@ export default class VocabularySearchRequest {
     @IsBoolean()
     fetchNotHavingDefinitionOnly?: boolean;
 
+    @IsOptional()
+    @IsBoolean()
+    fetchNonFlashcardOnly?: boolean;
+
     @Type(() => Pagination)
     @IsNotEmptyObject()
     @ValidateNested()

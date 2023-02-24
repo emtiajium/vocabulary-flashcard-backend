@@ -181,6 +181,134 @@ describe('POST /v1/vocabularies/search', () => {
         });
     });
 
+    describe('Fetch Non Flashcard Only', () => {
+        it('SHOULD return 200 OK WITHOUT flashcards WHEN fetchNonFlashcardOnly is true', async () => {
+            // Arrange
+            const suffix = `${Date.now()}`;
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${suffix}`,
+                },
+                cohort.id,
+            );
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+            const secondVocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ASUS_${suffix}`,
+                },
+                cohort.id,
+            );
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: suffix,
+                fetchNonFlashcardOnly: true,
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results).toHaveLength(1);
+            expect(results[0].id).toBe(secondVocabulary.id);
+            expect(results[0].word).toBe(secondVocabulary.word);
+
+            // Post Assert
+            await removeLeitnerBoxItems(requester.id);
+        });
+
+        it('SHOULD return 200 OK WITH vocabularies indifferent to the flashcard WHEN fetchNonFlashcardOnly is false', async () => {
+            // Arrange
+            const vocabularyIds: string[] = [];
+            let vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                },
+                cohort.id,
+            );
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+            vocabularyIds.push(vocabulary.id);
+
+            vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                },
+                cohort.id,
+            );
+            vocabularyIds.push(vocabulary.id);
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: 'ROG',
+                fetchNonFlashcardOnly: false,
+                sort: {
+                    direction: SortDirection.DESC,
+                    field: SupportedSortFields.createdAt,
+                },
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results.length).toBeGreaterThanOrEqual(2);
+            vocabularyIds.forEach((vocabularyId) => {
+                expect(results.some(({ id }) => vocabularyId === id)).toBe(true);
+            });
+
+            // Post Assert
+            await removeLeitnerBoxItems(requester.id);
+        });
+
+        it('SHOULD return 200 OK WITH vocabularies indifferent to the flashcard WHEN fetchNonFlashcardOnly is undefined', async () => {
+            // Arrange
+            const vocabularyIds: string[] = [];
+            let vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                },
+                cohort.id,
+            );
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+            vocabularyIds.push(vocabulary.id);
+
+            vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `ROG_${Date.now()}`,
+                },
+                cohort.id,
+            );
+            vocabularyIds.push(vocabulary.id);
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: 'ROG',
+                sort: {
+                    direction: SortDirection.DESC,
+                    field: SupportedSortFields.createdAt,
+                },
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results.length).toBeGreaterThanOrEqual(2);
+            vocabularyIds.forEach((vocabularyId) => {
+                expect(results.some(({ id }) => vocabularyId === id)).toBe(true);
+            });
+
+            // Post Assert
+            await removeLeitnerBoxItems(requester.id);
+        });
+    });
+
     describe('Searching', () => {
         it('SHOULD return 400 BAD REQUEST WHEN vocabularySearchCoverage.word is not defined', async () => {
             // Arrange
