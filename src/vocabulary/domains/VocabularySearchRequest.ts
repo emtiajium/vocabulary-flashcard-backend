@@ -29,7 +29,7 @@ export default class VocabularySearchRequest {
 
     @IsOptional()
     @IsBoolean()
-    fetchNonFlashcardOnly?: boolean;
+    fetchFlashcard?: boolean;
 
     @Type(() => Pagination)
     @IsNotEmptyObject()
