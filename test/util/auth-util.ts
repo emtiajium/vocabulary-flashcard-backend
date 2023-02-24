@@ -20,6 +20,7 @@ export default function generateJwToken(user: User): string {
     });
     const algorithm: Algorithm = 'RS256';
     const privateKey = fs.readFileSync(`${process.cwd()}/test/private.key`);
+    // https://github.com/nodejs/node/issues/43132#issuecomment-1131856552
     return sign(plainUser, privateKey, {
         algorithm,
         expiresIn: '5m',
