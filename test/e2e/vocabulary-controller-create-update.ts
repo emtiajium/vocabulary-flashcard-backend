@@ -101,7 +101,7 @@ describe('/v1/vocabularies', () => {
 
         describe('Bad Payload', () => {
             it('SHOULD return 400 BAD_REQUEST for empty payload', async () => {
-                const { status } = await makeApiRequest();
+                const { status } = await makeApiRequest(new Vocabulary());
                 expect(status).toBe(400);
             });
 
