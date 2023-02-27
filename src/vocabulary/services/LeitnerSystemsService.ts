@@ -92,7 +92,7 @@ export default class LeitnerSystemsService {
             };
         });
         let singleLeitnerItemEarlierToBoxAppearanceDate: SingleLeitnerItemEarlierToBoxAppearanceDate;
-        if (total < pagination.pageSize) {
+        if (results.length < pagination.pageSize) {
             singleLeitnerItemEarlierToBoxAppearanceDate = await this.getSingleLeitnerItemEarlierToBoxAppearanceDate(
                 userId,
                 box,
