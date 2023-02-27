@@ -26,3 +26,7 @@ export async function removeLeitnerBoxItemsByCohortId(cohortId: string): Promise
 export function createItem(userId: string, vocabularyId: string, box: LeitnerBoxType): Promise<LeitnerSystems> {
     return getRepository(LeitnerSystems).save(LeitnerSystems.create(box, userId, vocabularyId, true));
 }
+
+export async function updateItem(id: string, leitnerSystems: Partial<LeitnerSystems>): Promise<void> {
+    await getRepository(LeitnerSystems).update(id, leitnerSystems);
+}
