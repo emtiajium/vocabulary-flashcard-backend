@@ -92,7 +92,7 @@ export default class LeitnerSystemsService {
             };
         });
         let singleLeitnerItemEarlierToBoxAppearanceDate: SingleLeitnerItemEarlierToBoxAppearanceDate;
-        if (!total) {
+        if (total < pagination.pageSize) {
             singleLeitnerItemEarlierToBoxAppearanceDate = await this.getSingleLeitnerItemEarlierToBoxAppearanceDate(
                 userId,
                 box,
@@ -105,7 +105,7 @@ export default class LeitnerSystemsService {
         userId: string,
         box: LeitnerBoxType,
     ): Promise<SingleLeitnerItemEarlierToBoxAppearanceDate> {
-        const item = await this.leitnerSystemsRepository.getSingleBoxItem(userId, box);
+        const item = await this.leitnerSystemsRepository.getSingleBoxItemEarlierToBoxAppearanceDate(userId, box);
         let singleLeitnerItemEarlierToBoxAppearanceDate: SingleLeitnerItemEarlierToBoxAppearanceDate;
         if (item) {
             singleLeitnerItemEarlierToBoxAppearanceDate = {

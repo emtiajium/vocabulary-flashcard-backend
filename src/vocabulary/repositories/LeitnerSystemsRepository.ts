@@ -52,11 +52,12 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         return new SearchResult<LeitnerSystems>(items, total);
     }
 
-    getSingleBoxItem(userId: string, box: LeitnerBoxType): Promise<LeitnerSystems> {
+    getSingleBoxItemEarlierToBoxAppearanceDate(userId: string, box: LeitnerBoxType): Promise<LeitnerSystems> {
         return this.createQueryBuilder('leitnerSystems')
             .innerJoin('leitnerSystems.vocabulary', 'vocabulary')
             .where('leitnerSystems.userId = :userId', { userId })
             .andWhere('leitnerSystems.currentBox = :box', { box })
+            .andWhere(`leitnerSystems.boxAppearanceDate > '${this.getTomorrow()}'::DATE`)
             .select(['leitnerSystems.boxAppearanceDate'])
             .addSelect(['vocabulary.word'])
             .getOne();

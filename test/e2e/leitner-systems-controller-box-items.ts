@@ -6,7 +6,7 @@ import AppModule from '@/AppModule';
 import { createApiRequester } from '@test/util/user-util';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
-import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
+import { createItem, removeLeitnerBoxItems, updateItem } from '@test/util/leitner-systems-util';
 import SupertestResponse from '@test/util/supertest-util';
 import * as request from 'supertest';
 import * as uuid from 'uuid';
@@ -106,7 +106,7 @@ describe('Leitner Systems Box Items', () => {
             await removeLeitnerBoxItems(requester.id);
         });
 
-        it('SHOULD return 200 OK with empty results for an early request WITH a single item', async () => {
+        it('SHOULD return 200 OK with empty results for an early request WITH a single item WHEN all items are supposed to have appeared in future', async () => {
             const past = makeItOlder(new Date(), MomentUnit.DAYS, 1);
             const getTomorrowMock = jest
                 .spyOn(app.get(LeitnerSystemsRepository), 'getTomorrow')
@@ -127,6 +127,33 @@ describe('Leitner Systems Box Items', () => {
             });
 
             getTomorrowMock.mockRestore();
+        });
+
+        it('SHOULD return 200 OK WITH non-empty results along with a single item outside the time frame WHEN there are items within and outside the time frame', async () => {
+            let vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            const item = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
+            const past = makeItOlder(new Date(), MomentUnit.DAYS, 2);
+            await updateItem(item.id, {
+                boxAppearanceDate: past,
+            });
+
+            vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            const anotherItem = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
+            const future = makeItNewer(new Date(), MomentUnit.DAYS, 5);
+            await updateItem(anotherItem.id, {
+                boxAppearanceDate: future,
+            });
+
+            const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_2);
+
+            expect(status).toBe(200);
+            const response = body as LeitnerBoxItemSearchResult;
+            expect(response.total).toBe(1);
+            expect(response.results).toHaveLength(1);
+            expect(response.singleLeitnerItemEarlierToBoxAppearanceDate).toStrictEqual({
+                vocabulary: { word: vocabulary.word },
+                boxAppearanceDate: future.toISOString(),
+            });
         });
 
         it('SHOULD return 200 OK', async () => {
