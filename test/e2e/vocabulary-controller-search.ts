@@ -352,6 +352,122 @@ describe('POST /v1/vocabularies/search', () => {
         });
     });
 
+    describe('fetchNotHavingDefinitionOnly + fetchFlashcard', () => {
+        test('WHEN fetchNotHavingDefinitionOnly is false AND fetchFlashcard is false', async () => {
+            // Arrange
+            const suffix = `${Date.now()}`;
+            const word = `ROG_${suffix}`;
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word,
+                },
+                cohort.id,
+            );
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: suffix,
+                fetchNotHavingDefinitionOnly: false,
+                fetchFlashcard: false,
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results).toHaveLength(1);
+            expect(results[0].id).toBe(vocabulary.id);
+        });
+
+        test('WHEN fetchNotHavingDefinitionOnly is false AND fetchFlashcard is true', async () => {
+            // Arrange
+            const suffix = `${Date.now()}`;
+            const word = `ROG_${suffix}`;
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word,
+                },
+                cohort.id,
+            );
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: suffix,
+                fetchNotHavingDefinitionOnly: false,
+                fetchFlashcard: true,
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results).toHaveLength(1);
+            expect(results[0].id).toBe(vocabulary.id);
+        });
+
+        test('WHEN fetchNotHavingDefinitionOnly is true AND fetchFlashcard is false', async () => {
+            // Arrange
+            const suffix = `${Date.now()}`;
+            const word = `ROG_${suffix}`;
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word,
+                    definitions: [],
+                    isDraft: true,
+                },
+                cohort.id,
+            );
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: suffix,
+                fetchNotHavingDefinitionOnly: true,
+                fetchFlashcard: false,
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results).toHaveLength(1);
+            expect(results[0].id).toBe(vocabulary.id);
+        });
+
+        test('WHEN fetchNotHavingDefinitionOnly is true AND fetchFlashcard is true', async () => {
+            // Arrange
+            const suffix = `${Date.now()}`;
+            const word = `ROG_${suffix}`;
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word,
+                    definitions: [],
+                    isDraft: true,
+                },
+                cohort.id,
+            );
+            await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, {
+                pagination: { pageSize: 5, pageNumber: 1 },
+                searchKeyword: suffix,
+                fetchNotHavingDefinitionOnly: true,
+                fetchFlashcard: true,
+            });
+
+            // Assert
+            expect(status).toBe(200);
+            const { results } = body as SearchResult<VocabularySearchResponse>;
+            expect(results).toHaveLength(1);
+            expect(results[0].id).toBe(vocabulary.id);
+        });
+    });
+
     describe('Searching', () => {
         it('SHOULD return 400 BAD REQUEST WHEN vocabularySearchCoverage.word is not defined', async () => {
             // Arrange
