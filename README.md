@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.42.0`: Automated the linker words' relationship
 -   `0.41.0`: Refactored `@Post(/v1/leitner-systems/items/:box)` to filter return a single item when there are items that are supposed to have appeared in future
 -   `0.40.0`: Refactored `@Post(/v1/vocabularies/search)` to filter flashcard
 -   `0.39.1`: Refactored `@Post(/v1/cohorts)` to move all users' vocab to the requested cohort
