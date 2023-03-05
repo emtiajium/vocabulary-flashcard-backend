@@ -226,6 +226,14 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return vocabulary?.id;
     }
 
+    getLinkerWordsByWords(words: string[], cohortId: string): Promise<Pick<Vocabulary, 'id' | 'linkerWords'>[]> {
+        return this.createQueryBuilder('vocabulary')
+            .where(`LOWER(vocabulary.word) IN (:...words)`, { words: words.map((word) => word.toLowerCase().trim()) })
+            .andWhere(`vocabulary.cohortId = :cohortId`, { cohortId })
+            .select(['vocabulary.id', 'vocabulary.linkerWords'])
+            .getMany();
+    }
+
     async getIdsByCohortId(cohortId: string): Promise<string[]> {
         const vocabularies = await this.createQueryBuilder('vocabulary')
             .where(`vocabulary.cohortId = :cohortId`, { cohortId })
@@ -251,5 +259,9 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     async updateWord(id: string, word: string): Promise<void> {
         await this.update(id, { word });
+    }
+
+    async updateLinkerWords(id: string, linkerWords: string[]): Promise<void> {
+        await this.update(id, { linkerWords });
     }
 }
