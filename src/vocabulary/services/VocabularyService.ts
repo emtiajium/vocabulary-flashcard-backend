@@ -43,18 +43,20 @@ export default class VocabularyService {
 
     private async relateLinkerWords(vocabulary: Vocabulary): Promise<void> {
         const { word, linkerWords, cohortId } = vocabulary;
-        const vocabularies = await this.vocabularyRepository.getLinkerWordsByWords(linkerWords, cohortId);
-        await Promise.all(
-            vocabularies.map((currentVocabulary) => {
-                if (!currentVocabulary.linkerWords.includes(word)) {
-                    return this.vocabularyRepository.updateLinkerWords(currentVocabulary.id, [
-                        ...currentVocabulary.linkerWords,
-                        word,
-                    ]);
-                }
-                return Promise.resolve();
-            }),
-        );
+        if (linkerWords?.length > 0) {
+            const vocabularies = await this.vocabularyRepository.getLinkerWordsByWords(linkerWords, cohortId);
+            await Promise.all(
+                vocabularies.map((currentVocabulary) => {
+                    if (!currentVocabulary.linkerWords.includes(word)) {
+                        return this.vocabularyRepository.updateLinkerWords(currentVocabulary.id, [
+                            ...currentVocabulary.linkerWords,
+                            word,
+                        ]);
+                    }
+                    return Promise.resolve();
+                }),
+            );
+        }
     }
 
     findVocabularies(
