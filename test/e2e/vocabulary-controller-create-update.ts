@@ -22,6 +22,7 @@ import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import * as _ from 'lodash';
+import { delay } from '@/common/utils/moment-util';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -761,6 +762,57 @@ describe('/v1/vocabularies', () => {
 
                 expect(status).toBe(201);
                 expect(vocabulary.isInLeitnerBox).toBe(true);
+            });
+        });
+
+        describe('Automate linker words relationship', () => {
+            it("SHOULD append a newly added word as the linker word in the existing vocab WHEN the going-to-be-created vocabulary's linker word exists as a word", async () => {
+                // Arrange
+                const vocabulary = await createVocabulary({ ...getVocabularyWithDefinitions() }, cohort.id);
+
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = `Word_${uuidV4()}`;
+                payload.definitions = [];
+                payload.linkerWords = [vocabulary.word];
+
+                // Act
+                await makeApiRequest(payload);
+                await delay(1);
+
+                // Assert
+                const { linkerWords, version, updatedAt } = await getVocabularyById(vocabulary.id);
+                expect(linkerWords).toHaveLength(1);
+                expect(linkerWords).toContain(payload.word);
+                expect(version).toBe(vocabulary.version + 1);
+                expect(updatedAt.toISOString()).not.toBe(vocabulary.updatedAt.toISOString());
+            });
+
+            it("SHOULD ignore appending a newly added word as the linker word in the existing vocab WHEN the going-to-be-created vocabulary's word exists as a linker word", async () => {
+                // Arrange
+                const word = `Word_${uuidV4()}`;
+                const vocabulary = await createVocabulary(
+                    { ...getVocabularyWithDefinitions(), linkerWords: [`LinkerWord_${uuidV4()}`, word] },
+                    cohort.id,
+                );
+
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = word;
+                payload.definitions = [];
+                payload.linkerWords = [vocabulary.word];
+
+                // Act
+                await makeApiRequest(payload);
+                await delay(1);
+
+                // Assert
+                const { linkerWords, version, updatedAt } = await getVocabularyById(vocabulary.id);
+                expect(linkerWords).toHaveLength(2);
+                expect(version).toBe(vocabulary.version);
+                expect(updatedAt.toISOString()).toBe(vocabulary.updatedAt.toISOString());
             });
         });
     });
