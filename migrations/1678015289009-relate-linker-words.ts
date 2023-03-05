@@ -36,7 +36,7 @@ export default class RelateLinkerWords1678015289009 implements MigrationInterfac
                         .includes(vocabulary.word.toLowerCase()),
             );
 
-            if (!vocabulary?.linkerWords.includes(vocab.word)) {
+            if (vocab && !vocabulary?.linkerWords.includes(vocab.word)) {
                 await queryRunner.query(
                     `
                         UPDATE "Vocabulary"
