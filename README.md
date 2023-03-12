@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.43.0`: Removed cohort ID from the API response
 -   `0.42.0`: Automated the linker words' relationship
 -   `0.41.0`: Refactored `@Post(/v1/leitner-systems/items/:box)` to filter return a single item when there are items that are supposed to have appeared in future
 -   `0.40.0`: Refactored `@Post(/v1/vocabularies/search)` to filter flashcard
