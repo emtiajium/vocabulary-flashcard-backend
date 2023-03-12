@@ -49,27 +49,31 @@ describe('GET /v1/cohorts/self', () => {
         };
     }
 
-    it('SHOULD return 200 OK WITH cohort and members', async () => {
+    it('SHOULD return 200 OK WITH cohort and members, WITHOUT cohort ID', async () => {
         const { status, body } = await makeApiRequest();
 
         expect(status).toBe(200);
         expect(body as Cohort).toStrictEqual({
             name: cohort.name,
             users: [
-                expect.objectContaining({
+                {
+                    cohortId: '',
+                    cohortName: '',
                     firstname: secondUser.firstname,
                     lastname: secondUser.lastname,
                     name: secondUser.firstname,
                     profilePictureUrl: secondUser.profilePictureUrl,
                     username: secondUser.username,
-                }),
-                expect.objectContaining({
+                },
+                {
+                    cohortId: '',
+                    cohortName: '',
                     firstname: requester.firstname,
                     lastname: requester.lastname,
                     name: requester.firstname,
                     profilePictureUrl: requester.profilePictureUrl,
                     username: requester.username,
-                }),
+                },
             ],
         });
     });
