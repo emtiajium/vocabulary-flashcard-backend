@@ -38,7 +38,7 @@ export default class VocabularyService {
         const newVocabulary = await this.vocabularyRepository.upsert(vocabularyInstance);
         newVocabulary.isInLeitnerBox = !!existingVocabulary?.isInLeitnerBox;
         this.relateLinkerWords(newVocabulary).finally();
-        return newVocabulary;
+        return Vocabulary.omitCohortId(newVocabulary);
     }
 
     private async relateLinkerWords(vocabulary: Vocabulary): Promise<void> {
@@ -70,7 +70,7 @@ export default class VocabularyService {
     async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
         const vocabulary = await this.vocabularyRepository.findVocabularyById(id, userId);
         this.handleNotFound(id, vocabulary);
-        return vocabulary;
+        return Vocabulary.omitCohortId(vocabulary);
     }
 
     async findVocabularyByWord(word: string, userId: string, cohortId: string): Promise<Vocabulary> {
@@ -78,7 +78,8 @@ export default class VocabularyService {
         if (!id) {
             this.handleNotFoundUsingWord(word);
         }
-        return this.vocabularyRepository.findVocabularyById(id, userId);
+        const vocabulary = await this.vocabularyRepository.findVocabularyById(id, userId);
+        return Vocabulary.omitCohortId(vocabulary);
     }
 
     private handleNotFound(id: string, vocabulary?: Vocabulary | Partial<Vocabulary>): void {
@@ -144,7 +145,8 @@ export default class VocabularyService {
             });
         }
         const payload = createVocabularies(cohortId, newJoinerVocabularyList);
-        const vocabularies = await this.vocabularyRepository.save(payload);
+        let vocabularies = await this.vocabularyRepository.save(payload);
+        vocabularies = vocabularies.map((vocabulary) => Vocabulary.omitCohortId(vocabulary));
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
 

@@ -32,7 +32,8 @@ export async function getSingleVocabularyByCohortId(cohortId: string): Promise<V
         await getRepository(Vocabulary).query(
             `SELECT *
              FROM "Vocabulary"
-             WHERE "cohortId" = $1;`,
+             WHERE "cohortId" = $1
+             LIMIT 1;`,
             [cohortId],
         )
     )[0];
