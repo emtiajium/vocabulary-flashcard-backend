@@ -1,8 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import AuthGuard from '@/common/guards/AuthGuard';
-import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
@@ -26,12 +25,6 @@ export default class UserController {
         @VersionCode() versionCode: number,
     ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         return this.userService.createUser(user, token, client, versionCode);
-    }
-
-    @Get('/self')
-    @UseGuards(AuthGuard)
-    getSelfDetails(@AuthenticatedUser() user: User): Promise<User> {
-        return this.userService.getUserByUsername(user.username);
     }
 
     @Post('/all')

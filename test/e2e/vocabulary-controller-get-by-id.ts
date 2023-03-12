@@ -100,7 +100,6 @@ describe('GET /v1/vocabularies/:id', () => {
         expect(status).toBe(200);
         expect(body as Vocabulary).toStrictEqual({
             id: vocabulary.id,
-            cohortId: vocabulary.cohortId,
             word: vocabulary.word,
             genericNotes: vocabulary.genericNotes,
             genericExternalLinks: vocabulary.genericExternalLinks,

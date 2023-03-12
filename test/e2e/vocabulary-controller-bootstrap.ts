@@ -56,7 +56,7 @@ describe('/v1/vocabularies/bootstrap', () => {
         expect(status).toBe(403);
     });
 
-    it('SHOULD return 201 CREATED for the brand new user', async () => {
+    it('SHOULD return 201 CREATED for the brand new user WITHOUT cohort ID as the API response', async () => {
         const { status, body } = await makeApiRequest();
 
         expect(status).toBe(201);
@@ -70,8 +70,9 @@ describe('/v1/vocabularies/bootstrap', () => {
         expect(vocabularies).toHaveLength(newJoinerVocabularyList.length);
         expect((body as SearchResult<Vocabulary>).total).toBe(newJoinerVocabularyList.length);
 
-        vocabularies.forEach(({ cohortId }) => {
-            expect(cohortId).toBe(cohort.id);
+        vocabularies.forEach((currentVocabulary) => {
+            expect(currentVocabulary.cohortId).toBeUndefined();
+            expect(currentVocabulary.cohort).toBeUndefined();
         });
     });
 

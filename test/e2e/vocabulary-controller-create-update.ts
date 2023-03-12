@@ -334,6 +334,22 @@ describe('/v1/vocabularies', () => {
         });
 
         describe('Valid Payload', () => {
+            it('SHOULD return 201 CREATED AND omit cohort ID as the API response', async () => {
+                const payload = new Vocabulary();
+                payload.id = uuidV4();
+                payload.isDraft = true;
+                payload.word = `Word _ ${uuidV4()}`;
+                payload.definitions = [];
+
+                const { status, body } = await makeApiRequest(payload);
+
+                expect(status).toBe(201);
+
+                const vocabulary = body as Vocabulary;
+                expect(vocabulary.cohortId).toBeUndefined();
+                expect(vocabulary.cohort).toBeUndefined();
+            });
+
             it('SHOULD return 201 CREATED with trimmed word', async () => {
                 const payload = new Vocabulary();
                 payload.id = uuidV4();

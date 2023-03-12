@@ -95,6 +95,24 @@ describe('/v1/vocabularies/words/:word', () => {
         });
     });
 
+    it('SHOULD return 200 OK WITH vocabulary AND omit cohort ID as the API response', async () => {
+        // Arrange
+        const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), requester.cohortId);
+        const { id, word } = vocabulary;
+
+        // Act
+        const { status, body } = await makeApiRequest(word.toLowerCase());
+
+        // Assert
+        expect(status).toBe(200);
+        expect(body as ApiResponse).toMatchObject({
+            id,
+            word,
+        });
+        expect((body as ApiResponse).cohortId).toBeUndefined();
+        expect((body as ApiResponse).cohort).toBeUndefined();
+    });
+
     it('SHOULD return 404 NOT FOUND WITHOUT vocabulary WHEN the exact word does not exist', async () => {
         // Arrange
         const word = 'Dhaka, Bangladesh';

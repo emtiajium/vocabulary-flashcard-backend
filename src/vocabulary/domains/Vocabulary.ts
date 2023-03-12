@@ -95,4 +95,16 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
         }
         return vocabularyInstance;
     }
+
+    static omitCohortId(vocabulary: Vocabulary): Vocabulary {
+        if (vocabulary.cohortId) {
+            /* eslint-disable no-param-reassign */
+            delete vocabulary.cohortId;
+        }
+        if (vocabulary.cohort?.id) {
+            delete vocabulary.cohort.id;
+            /* eslint-enable no-param-reassign */
+        }
+        return vocabulary;
+    }
 }
