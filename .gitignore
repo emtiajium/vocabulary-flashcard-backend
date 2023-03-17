@@ -19,7 +19,12 @@ lerna-debug.log*
 /.nyc_output
 
 # IDEs and editors
-/.idea
+.idea/*
+!.idea/jsLinters
+!.idea/jsLinters/eslint.xml
+!.idea/prettier.xml
+!.idea/dataSources.local.xml
+!.idea/dataSources.xml
 .project
 .classpath
 .c9/
