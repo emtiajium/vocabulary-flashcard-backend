@@ -40,7 +40,7 @@ export async function getSingleVocabularyByCohortId(cohortId: string): Promise<V
 }
 
 export function getVocabularyById(id: string): Promise<Vocabulary> {
-    return getRepository(Vocabulary).findOne(id);
+    return getRepository(Vocabulary).findOne(id, { relations: ['definitions'] });
 }
 
 export function createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {
