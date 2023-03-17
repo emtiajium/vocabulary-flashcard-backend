@@ -29,6 +29,7 @@ describe('/v1/vocabularies/words/:word', () => {
         cohortIds.push(cohort.id);
         await addUsersToCohort(cohort.name, [user.username]);
         user.cohort = cohort;
+        user.cohortId = cohort.id;
         user = plainToClass(User, user);
         return {
             user,

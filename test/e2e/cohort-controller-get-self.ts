@@ -57,8 +57,6 @@ describe('GET /v1/cohorts/self', () => {
             name: cohort.name,
             users: [
                 {
-                    cohortId: '',
-                    cohortName: '',
                     firstname: secondUser.firstname,
                     lastname: secondUser.lastname,
                     name: secondUser.firstname,
@@ -66,8 +64,6 @@ describe('GET /v1/cohorts/self', () => {
                     username: secondUser.username,
                 },
                 {
-                    cohortId: '',
-                    cohortName: '',
                     firstname: requester.firstname,
                     lastname: requester.lastname,
                     name: requester.firstname,

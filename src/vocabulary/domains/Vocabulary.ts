@@ -52,7 +52,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     @IsBoolean()
     isDraft: boolean;
 
-    @OneToMany(() => Definition, (definition) => definition.vocabulary, { eager: true, cascade: true })
+    @OneToMany(() => Definition, (definition) => definition.vocabulary, { eager: false, cascade: true })
     @ValidateIf((vocabulary) => vocabulary.isDraft === false || _.isEmpty(vocabulary.definitions) === false)
     @ValidateNested({ each: true })
     @ArrayNotEmpty()

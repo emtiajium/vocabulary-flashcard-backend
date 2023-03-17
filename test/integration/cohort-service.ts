@@ -6,6 +6,7 @@ import { createUser, generateUsername, getUsersByUsernames, removeUsersByUsernam
 import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
 import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
+import * as uuid from 'uuid';
 
 describe('Cohort Service', () => {
     let app: INestApplication;
@@ -35,7 +36,7 @@ describe('Cohort Service', () => {
         const secondUserPayload = getUserPayload(generateUsername());
         const secondUser = await createUser(secondUserPayload);
 
-        const cohortPayload: Cohort = { name: 'The best cohort ever exist', usernames: [] } as Cohort;
+        const cohortPayload: Cohort = { name: `The best cohort ever exist _ ${uuid.v4()}`, usernames: [] } as Cohort;
         await cohortService.createCohort(cohortPayload);
 
         // Act
