@@ -11,8 +11,7 @@ export function generateUsername(): string {
 }
 
 export function getUsersByUsernames(usernames: string[]): Promise<User[]> {
-    // as eager is true, no need to pass { relations: ['cohort'] }
-    return getRepository(User).find({ where: { username: In(usernames) } });
+    return getRepository(User).find({ where: { username: In(usernames) }, relations: ['cohort'] });
 }
 
 export async function removeUsersByUsernames(usernames: string[]): Promise<void> {

@@ -33,8 +33,13 @@ export default class User extends BaseEntityWithoutMandatoryId {
 
     @ApiHideProperty()
     @IsOptional()
-    @ManyToOne(() => Cohort, (cohort) => cohort.users, { nullable: true, eager: true, cascade: true })
+    @ManyToOne(() => Cohort, (cohort) => cohort.users, { nullable: true, eager: false, cascade: true })
     cohort?: Cohort;
+
+    @ApiHideProperty()
+    @IsOptional()
+    @Column({ type: 'uuid', nullable: true })
+    cohortId?: string;
 
     @ApiHideProperty()
     @IsOptional()
@@ -48,15 +53,5 @@ export default class User extends BaseEntityWithoutMandatoryId {
     @Expose()
     get name(): string {
         return `${this.firstname} ${this.lastname || ''}`.trim();
-    }
-
-    @Expose()
-    get cohortId(): string {
-        return this.cohort?.id || '';
-    }
-
-    @Expose()
-    get cohortName(): string {
-        return this.cohort?.name || '';
     }
 }

@@ -32,10 +32,11 @@ export default class UserRepository extends Repository<User> {
     }
 
     getAll(): Promise<User[]> {
-        return this.find({
-            relations: ['cohort'],
-            select: ['username', 'firstname', 'lastname', 'createdAt'],
-            order: { createdAt: SortDirection.ASC },
-        });
+        return this.createQueryBuilder('user')
+            .innerJoin('user.cohort', 'cohort')
+            .select(['user.username', 'user.firstname', 'user.lastname', 'user.createdAt'])
+            .addSelect(['cohort.name'])
+            .orderBy({ 'user.createdAt': SortDirection.ASC })
+            .getMany();
     }
 }

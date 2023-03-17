@@ -29,6 +29,7 @@ describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
         const cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [user.username] } as Cohort);
         cohortIds.push(cohort.id);
         user.cohort = cohort;
+        user.cohortId = cohort.id;
         user = plainToClass(User, user);
         return {
             user,
