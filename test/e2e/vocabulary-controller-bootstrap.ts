@@ -82,6 +82,9 @@ describe('/v1/vocabularies/bootstrap', () => {
         const { status, body } = await makeApiRequest();
 
         expect(status).toBe(409);
-        expect((body as SupertestErrorResponse).name).toBe('ExistingVocabConflict');
+        expect(body as SupertestErrorResponse).toStrictEqual({
+            name: `ExistingVocabConflict`,
+            message: `Requested cohort has at least one vocabulary`,
+        });
     });
 });

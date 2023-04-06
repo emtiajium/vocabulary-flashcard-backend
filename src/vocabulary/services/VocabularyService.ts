@@ -141,7 +141,7 @@ export default class VocabularyService {
         if (await this.vocabularyRepository.getSingleVocabularyByCohortId(cohortId)) {
             throw new ConflictException({
                 name: 'ExistingVocabConflict',
-                message: `Cohort with ID: "${cohortId}" has at least one vocabulary`,
+                message: `Requested cohort has at least one vocabulary`,
             });
         }
         const payload = createVocabularies(cohortId, newJoinerVocabularyList);
