@@ -59,7 +59,6 @@
     "devDependencies": {
         "@nestjs/cli": "^7.6.0",
         "@nestjs/schematics": "^7.3.0",
-        "@nestjs/testing": "^7.6.15",
         "@types/express": "^4.17.12",
         "@types/jest": "^26.0.22",
         "@types/jsonwebtoken": "^8.5.9",
