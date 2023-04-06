@@ -9,27 +9,27 @@ export default MomentUnit;
 
 export type DateFn = () => Date;
 
-export function makeItOlder(now: Date, unit: MomentUnit, period: number): Date {
-    const clonedNow = new Date(now.valueOf());
+export function makeItOlder(moment: Date, unit: MomentUnit, period: number): Date {
+    const clonedMoment = new Date(moment.valueOf());
 
     const dateMap: Record<MomentUnit, DateFn> = {
-        [MomentUnit.DAYS]: () => new Date(clonedNow.setDate(clonedNow.getDate() - period)),
-        [MomentUnit.HOURS]: () => new Date(clonedNow.setHours(clonedNow.getHours() - period)),
-        [MomentUnit.MINUTES]: () => new Date(clonedNow.setMinutes(clonedNow.getMinutes() - period)),
-        [MomentUnit.SECONDS]: () => new Date(clonedNow.setSeconds(clonedNow.getSeconds() - period)),
+        [MomentUnit.DAYS]: () => new Date(clonedMoment.setDate(clonedMoment.getDate() - period)),
+        [MomentUnit.HOURS]: () => new Date(clonedMoment.setHours(clonedMoment.getHours() - period)),
+        [MomentUnit.MINUTES]: () => new Date(clonedMoment.setMinutes(clonedMoment.getMinutes() - period)),
+        [MomentUnit.SECONDS]: () => new Date(clonedMoment.setSeconds(clonedMoment.getSeconds() - period)),
     };
 
     return dateMap[unit]();
 }
 
-export function makeItNewer(now: Date, unit: MomentUnit, period: number): Date {
-    const clonedNow = new Date(now.valueOf());
+export function makeItNewer(moment: Date, unit: MomentUnit, period: number): Date {
+    const clonedMoment = new Date(moment.valueOf());
 
     const dateMap: Record<MomentUnit, DateFn> = {
-        [MomentUnit.DAYS]: () => new Date(clonedNow.setDate(clonedNow.getDate() + period)),
-        [MomentUnit.HOURS]: () => new Date(clonedNow.setHours(clonedNow.getHours() + period)),
-        [MomentUnit.MINUTES]: () => new Date(clonedNow.setMinutes(clonedNow.getMinutes() + period)),
-        [MomentUnit.SECONDS]: () => new Date(clonedNow.setSeconds(clonedNow.getSeconds() + period)),
+        [MomentUnit.DAYS]: () => new Date(clonedMoment.setDate(clonedMoment.getDate() + period)),
+        [MomentUnit.HOURS]: () => new Date(clonedMoment.setHours(clonedMoment.getHours() + period)),
+        [MomentUnit.MINUTES]: () => new Date(clonedMoment.setMinutes(clonedMoment.getMinutes() + period)),
+        [MomentUnit.SECONDS]: () => new Date(clonedMoment.setSeconds(clonedMoment.getSeconds() + period)),
     };
 
     return dateMap[unit]();
