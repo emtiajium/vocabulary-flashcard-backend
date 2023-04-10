@@ -23,6 +23,7 @@
         "lint": "eslint \"{migrations,src,test}/**/*.ts\" --fix",
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
         "test": "jest --detectOpenHandles --forceExit",
+        "test:memory-usage": "node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --detectOpenHandles --forceExit",
         "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/.bin/typeorm",
         "migration:generate": "node -r ts-node/register -r tsconfig-paths/register src/common/persistence/MigrationGenerationHandler.ts",
         "migration:run": "npm run typeorm migration:run",
