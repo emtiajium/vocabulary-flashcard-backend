@@ -13,7 +13,7 @@ import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchReques
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
-import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
+import getNewJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 import User from '@/user/domains/User';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 import * as uuid from 'uuid';
@@ -144,7 +144,7 @@ export default class VocabularyService {
                 message: `Requested cohort has at least one vocabulary`,
             });
         }
-        const payload = createVocabularies(cohortId, newJoinerVocabularyList);
+        const payload = createVocabularies(cohortId, getNewJoinerVocabularyList());
         let vocabularies = await this.vocabularyRepository.save(payload);
         vocabularies = vocabularies.map((vocabulary) => Vocabulary.omitCohortId(vocabulary));
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);

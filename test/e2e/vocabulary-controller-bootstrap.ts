@@ -16,8 +16,20 @@ import {
 import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
-import newJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
+import getNewJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 import SearchResult from '@/common/domains/SearchResult';
+import PartialVocabulary from '@/vocabulary/domains/PartialVocabulary';
+
+jest.mock('@/manual-scripts/new-joiner-vocabulary-list', () => {
+    const originalModule = jest.requireActual('@/manual-scripts/new-joiner-vocabulary-list');
+    return {
+        __esModule: true,
+        ...originalModule,
+        default: (): PartialVocabulary[] => {
+            return originalModule.default().slice(0, 1);
+        },
+    };
+});
 
 describe('/v1/vocabularies/bootstrap', () => {
     let app: INestApplication;
@@ -67,8 +79,9 @@ describe('/v1/vocabularies/bootstrap', () => {
 
         const vocabularies = (body as SearchResult<Vocabulary>).results;
 
-        expect(vocabularies).toHaveLength(newJoinerVocabularyList.length);
-        expect((body as SearchResult<Vocabulary>).total).toBe(newJoinerVocabularyList.length);
+        expect(vocabularies).toHaveLength(getNewJoinerVocabularyList().length);
+        expect(vocabularies).toHaveLength(1); // evaluating mocked methods
+        expect((body as SearchResult<Vocabulary>).total).toBe(getNewJoinerVocabularyList().length);
 
         vocabularies.forEach((currentVocabulary) => {
             expect(currentVocabulary.cohortId).toBeUndefined();
