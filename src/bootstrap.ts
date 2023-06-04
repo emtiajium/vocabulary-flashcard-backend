@@ -83,7 +83,7 @@ export class Bootstrap {
         const document = SwaggerModule.createDocument(this.app, config);
 
         SwaggerModule.setup(swaggerEndpoint, this.app, document, {
-            customSiteTitle: 'API Docs | Firecracker Vocab Practice',
+            customSiteTitle: 'API Docs | Firecracker Vocabulary Flashcards',
             customfavIcon: `https://firecrackervocabulary.com/assets/icon/favicon/favicon-32x32.png`,
         });
     }
