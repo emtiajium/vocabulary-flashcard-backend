@@ -45,7 +45,6 @@ export class Bootstrap {
         this.app.enableCors({
             origin: (origin, callback) => {
                 if (!origin || allowedOrigins.includes(origin)) {
-                    this.app.get(Logger).log(`OK || origin ${origin}`, 'CORS');
                     /* eslint-disable node/callback-return */
                     callback(null, true);
                 } else {
