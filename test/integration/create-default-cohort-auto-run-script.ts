@@ -8,14 +8,14 @@ import { defaultName } from '@/user/domains/Cohort';
 describe('Create Default Cohort Autorun Script', () => {
     let app: INestApplication;
 
-    let mockGetScriptNames;
+    let mockGetScriptNames: jest.SpyInstance;
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
     });
 
     afterAll(async () => {
-        mockGetScriptNames.restoreMock();
+        mockGetScriptNames.mockRestore();
         await app.close();
     });
 

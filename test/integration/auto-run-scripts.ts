@@ -6,14 +6,14 @@ import AutoRunScripts from '@/auto-run-scripts';
 describe('Autorun Scripts', () => {
     let app: INestApplication;
 
-    let mockRunScripts;
+    let mockRunScripts: jest.SpyInstance;
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
     });
 
     afterAll(async () => {
-        mockRunScripts.restoreMock();
+        mockRunScripts.mockRestore();
         await app.close();
     });
 
