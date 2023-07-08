@@ -78,7 +78,6 @@ describe('DELETE /v1/users/self', () => {
 
         afterEach(async () => {
             await removeData();
-            cohortIds = [];
         });
 
         it('SHOULD delete definition WHEN the cohort of the user does not have any other member', async () => {
@@ -117,7 +116,6 @@ describe('DELETE /v1/users/self', () => {
 
         afterEach(async () => {
             await removeData();
-            cohortIds = [];
         });
 
         it('SHOULD delete vocabulary WHEN the cohort of the user does not have any other member', async () => {
@@ -158,7 +156,6 @@ describe('DELETE /v1/users/self', () => {
 
         afterEach(async () => {
             await removeData();
-            cohortIds = [];
         });
 
         it('SHOULD delete flashcard WHEN the cohort of the user does not have any other member', async () => {
@@ -197,7 +194,6 @@ describe('DELETE /v1/users/self', () => {
 
         afterEach(async () => {
             await removeData();
-            cohortIds = [];
         });
 
         it('SHOULD delete user WHEN the cohort of the user does not have any other member', async () => {
@@ -226,7 +222,6 @@ describe('DELETE /v1/users/self', () => {
 
         afterEach(async () => {
             await removeData();
-            cohortIds = [];
         });
 
         it('SHOULD delete cohort WHEN the cohort of the user does not have any other member', async () => {
