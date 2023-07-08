@@ -7,10 +7,11 @@ import DatabaseModule from '@/common/persistence/DatabaseModule';
 import { ConfigService } from '@nestjs/config';
 import TokenManager from '@/common/services/TokenManager';
 import VocabularyService from '@/vocabulary/services/VocabularyService';
+import DeletionService from '@/user/services/DeletionService';
 
 @Module({
     imports: [DatabaseModule],
     controllers: [UserController, CohortController],
-    providers: [UserService, CohortService, VocabularyService, Logger, ConfigService, TokenManager],
+    providers: [UserService, CohortService, VocabularyService, DeletionService, Logger, ConfigService, TokenManager],
 })
 export default class UserModule {}
