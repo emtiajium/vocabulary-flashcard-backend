@@ -39,4 +39,8 @@ export default class UserRepository extends Repository<User> {
             .orderBy({ 'user.createdAt': SortDirection.ASC })
             .getMany();
     }
+
+    async removeById(id: string): Promise<void> {
+        await this.delete({ id });
+    }
 }

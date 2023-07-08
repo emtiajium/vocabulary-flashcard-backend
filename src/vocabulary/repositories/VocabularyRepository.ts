@@ -25,6 +25,10 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         await this.delete({ id });
     }
 
+    async removeVocabulariesByCohortId(cohortId: string): Promise<void> {
+        await this.delete({ cohortId });
+    }
+
     async findVocabularies(
         userId: string,
         cohortId: string,

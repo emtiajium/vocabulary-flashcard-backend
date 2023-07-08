@@ -81,4 +81,8 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
             ORDER BY "vocabCount" DESC;
         `);
     }
+
+    async removeByUserId(userId: string): Promise<void> {
+        await this.delete({ user: { id: userId } });
+    }
 }

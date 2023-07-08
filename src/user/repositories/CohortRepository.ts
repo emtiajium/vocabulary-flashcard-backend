@@ -46,4 +46,18 @@ export default class CohortRepository extends Repository<Cohort> {
         }
         return cohort;
     }
+
+    async isCohortAlone(id: string): Promise<boolean> {
+        const cohort = await this.createQueryBuilder(`cohort`)
+            .where(`cohort.id = :id`, { id })
+            .innerJoin(`cohort.users`, `user`)
+            .select(['cohort.id'])
+            .addSelect(['user.id'])
+            .getOne();
+        return cohort.users.length === 1;
+    }
+
+    async removeById(id: string): Promise<void> {
+        await this.delete({ id });
+    }
 }
