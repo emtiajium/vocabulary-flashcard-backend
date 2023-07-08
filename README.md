@@ -89,6 +89,7 @@
 
 ## Change Logs
 
+-   `0.45.0`: Added `@Delete(/v1/users/self)` API
 -   `0.44.0`: Set TypeORM `eager` to `false`
 -   `0.43.0`: Removed cohort ID from the API response
 -   `0.42.0`: Automated the linker words' relationship
