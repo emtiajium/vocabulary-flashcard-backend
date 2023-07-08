@@ -20,10 +20,14 @@ export default class DeletionService {
         const isCohortAlone = await this.cohortRepository.isCohortAlone(cohortId);
         if (isCohortAlone) {
             await this.definitionRepository.removeDefinitionsByCohortId(cohortId);
-            await this.leitnerSystemsRepository.removeByUserId(userId);
+        }
+        await this.leitnerSystemsRepository.removeByUserId(userId);
+        if (isCohortAlone) {
             await this.vocabularyRepository.removeVocabulariesByCohortId(cohortId);
         }
         await this.userRepository.removeById(userId);
-        await this.cohortRepository.removeById(cohortId);
+        if (isCohortAlone) {
+            await this.cohortRepository.removeById(cohortId);
+        }
     }
 }
