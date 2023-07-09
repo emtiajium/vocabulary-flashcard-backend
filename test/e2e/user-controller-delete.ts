@@ -206,12 +206,19 @@ describe('DELETE /v1/users/self', () => {
         });
 
         it('SHOULD delete user WHEN the cohort of the user has other member', async () => {
+            // Arrange
+            await createApiRequester(usernames[1]);
+            await addUsersToCohort(cohort.name, usernames);
+
             // Act
             const { status } = await makeApiRequest();
 
             // Assert
             expect(status).toBe(200);
             expect(await getUserByUsername(requester.username)).toBeUndefined();
+            expect(await getUserByUsername(usernames[1])).toMatchObject({
+                cohortId: cohortIds[0],
+            });
         });
     });
 
