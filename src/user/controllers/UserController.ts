@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import AuthGuard from '@/common/guards/AuthGuard';
@@ -11,11 +11,13 @@ import AuthToken from '@/common/http/AuthToken';
 import Client from '@/common/http/Client';
 import ClientType from '@/common/domains/ClientType';
 import VersionCode from '@/common/http/VersionCode';
+import DeletionService from '@/user/services/DeletionService';
+import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
 export default class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(private readonly userService: UserService, private readonly deletionService: DeletionService) {}
 
     @Post()
     createUser(
@@ -41,5 +43,11 @@ export default class UserController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getLeitnerLoverUsers(@Body() reportRequest: ReportRequest): Promise<LeitnerSystemsLoverUsersReport[]> {
         return this.userService.getLeitnerLoverUsers();
+    }
+
+    @Delete('/self')
+    @UseGuards(AuthGuard)
+    async deleteUser(@AuthenticatedUser() user: User): Promise<void> {
+        await this.deletionService.deleteData(user.id, user.cohortId);
     }
 }
