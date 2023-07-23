@@ -43,6 +43,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             fetchFlashcard,
         } = vocabularySearchRequest;
 
+        const sortField = Sort.getField(SupportedSortFields.updatedAt, sort);
+
         const currentPage = pageSize * (pageNumber - 1);
 
         const searchKeywordParameterPosition = 5;
@@ -66,11 +68,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                         searchKeywordParameterPosition,
                     )}
                     ${this.getFilteringQuery(fetchNotHavingDefinitionOnly, fetchFlashcard)}
-                GROUP BY vocabulary.id
-                ORDER BY vocabulary."${Sort.getField(SupportedSortFields.updatedAt, sort)}" ${Sort.getDirection(
-                SortDirection.DESC,
-                sort,
-            )}
+                GROUP BY vocabulary.id, vocabulary."${sortField}"
+                ORDER BY vocabulary."${sortField}" ${Sort.getDirection(SortDirection.DESC, sort)}
                 OFFSET $3 LIMIT $4;
             `,
             searchKeyword
