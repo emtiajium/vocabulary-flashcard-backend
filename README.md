@@ -1,5 +1,9 @@
 [![CI](https://github.com/emtiajium/vocabulary-flashcard-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/emtiajium/vocabulary-flashcard-backend/actions/workflows/ci.yml)
 
+# What is this repository for?
+
+<https://firecrackervocabulary.com>
+
 # How to Run
 
 ###### Prerequisites
