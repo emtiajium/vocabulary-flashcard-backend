@@ -26,3 +26,16 @@ FROM (SELECT vocabulary.id,
       WHERE vocabulary."cohortId" = current_setting('my.cohortId')::UUID
       GROUP BY vocabulary.id, vocabulary."word") vocabulary
 WHERE vocabulary."rowNumber" BETWEEN 11 AND 20;
+
+-- version 3
+EXPLAIN ANALYZE VERBOSE
+SELECT vocabulary.id, vocabulary.word, definitions
+FROM "Vocabulary" AS vocabulary
+         LEFT JOIN LATERAL (
+    SELECT json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning)) AS definitions
+    FROM "Definition" AS definition
+    WHERE definition."vocabularyId" = vocabulary.id
+    ) AS definitions ON true
+WHERE vocabulary."cohortId" = current_setting('my.cohortId')::UUID
+ORDER BY vocabulary.word DESC
+OFFSET 10 LIMIT 10;
