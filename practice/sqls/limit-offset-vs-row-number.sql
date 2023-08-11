@@ -29,7 +29,10 @@ WHERE vocabulary."rowNumber" BETWEEN 11 AND 20;
 
 -- version 3
 EXPLAIN ANALYZE VERBOSE
-SELECT vocabulary.id, vocabulary.word, definitions
+SELECT vocabulary.id,
+       vocabulary.word,
+       definitions,
+       (COUNT(*) OVER ())::INTEGER AS "totalNumberOfVocabularies"
 FROM "Vocabulary" AS vocabulary
          LEFT JOIN LATERAL (
     SELECT json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning)) AS definitions
