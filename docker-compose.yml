@@ -21,4 +21,5 @@ services:
 
 volumes:
     ielts-gibberish-postgres-data:
+        name: ielts-gibberish-postgres-data
         driver: local
