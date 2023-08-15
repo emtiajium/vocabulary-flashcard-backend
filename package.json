@@ -28,7 +28,8 @@
         "migration:generate": "node -r ts-node/register -r tsconfig-paths/register src/common/persistence/MigrationGenerationHandler.ts",
         "migration:run": "npm run typeorm migration:run",
         "ci": "npm run format:check && npm run lint:check && npm run test && npm run build",
-        "seed-script:insert-test-users": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/CreateTestUsers.ts"
+        "seed-script:insert-test-users": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/CreateTestUsers.ts",
+        "clean:docker-containers": "docker kill ielts-gibberish-postgres && docker stop ielts-gibberish-postgres && docker rm ielts-gibberish-postgres && docker volume rm ielts-gibberish-postgres-data"
     },
     "dependencies": {
         "@nestjs/common": "^7.6.15",
