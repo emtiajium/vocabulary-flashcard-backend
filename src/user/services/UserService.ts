@@ -77,7 +77,9 @@ export default class UserService {
         user = this.cacheUserService.get(username);
         if (!user) {
             user = await this.userRepository.findOne({ username });
-            this.cacheUserService.set(user);
+            if (user) {
+                this.cacheUserService.set(user);
+            }
         }
         if (!user) {
             throw new EntityNotFoundException(`User with username "${username}" does not exist`);
