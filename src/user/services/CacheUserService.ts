@@ -19,4 +19,10 @@ export default class CacheUserService {
     delete(username: string): void {
         cachedUser.delete(username);
     }
+
+    deleteMultiples(usernames: string[]): void {
+        usernames.forEach((username) => {
+            cachedUser.delete(username);
+        });
+    }
 }

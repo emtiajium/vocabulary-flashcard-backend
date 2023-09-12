@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import Cohort from '@/user/domains/Cohort';
 import User from '@/user/domains/User';
 import VocabularyService from '@/vocabulary/services/VocabularyService';
+import CacheUserService from '@/user/services/CacheUserService';
 
 @Injectable()
 export default class CohortService {
@@ -12,6 +13,7 @@ export default class CohortService {
         private readonly cohortRepository: CohortRepository,
         private readonly userRepository: UserRepository,
         private readonly vocabularyService: VocabularyService,
+        private readonly cacheUserService: CacheUserService,
     ) {}
 
     async createCohort(cohort: Cohort): Promise<void> {
@@ -22,6 +24,7 @@ export default class CohortService {
         }
         const { id: cohortId } = await this.cohortRepository.insertIfNotExists(cohort);
         if (!isEmptyUsernames) {
+            this.cacheUserService.deleteMultiples(cohort.usernames);
             await this.associateUsersWithCohort(cohort.usernames, cohortId);
             await this.associateVocabsWithCohort(users, cohortId);
         }
@@ -30,6 +33,7 @@ export default class CohortService {
     async addUsersToCohort(name: string, usernames: string[]): Promise<void> {
         const cohort = await this.cohortRepository.getCohortByName(name);
         const users = await this.assertUsers(usernames);
+        this.cacheUserService.deleteMultiples(usernames);
         await this.associateUsersWithCohort(usernames, cohort.id);
         await this.associateVocabsWithCohort(users, cohort.id);
     }
