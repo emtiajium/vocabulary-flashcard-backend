@@ -3,6 +3,7 @@ import User from '@/user/domains/User';
 
 const cacheSize = 10;
 const cachedUser = new Map<string, User>();
+
 @Injectable()
 export default class CacheUserService {
     set(user: User): void {
