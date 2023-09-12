@@ -18,6 +18,7 @@ import {
 } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { createVocabulary, getVocabularyById, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
+import CacheUserService from '@/user/services/CacheUserService';
 
 describe('/v1/cohorts/:name', () => {
     let app: INestApplication;
@@ -263,6 +264,34 @@ describe('/v1/cohorts/:name', () => {
                     `---SUFFIX_ADDED_BY_SYSTEM_AS_IT_IS_DUPLICATED_WHICH_WAS_ADDED_BY_ANOTHER_MEMBER_OF_THE_COHORT---`,
                 ),
             });
+
+            // Post Assert
+            await updateCohortById(firstUser.id, currentCohortIds[0]);
+            await updateCohortById(secondUser.id, currentCohortIds[1]);
+            await updateCohortById(thirdUser.id, currentCohortIds[2]);
+        });
+
+        it('SHOULD remove user from cache', async () => {
+            // Arrange
+            const currentCohortIds = [firstUser.cohort.id, secondUser.cohort.id, thirdUser.cohort.id];
+
+            const anotherCohort = await createCohort(getBasePayload());
+            cohortIds.push(anotherCohort.id);
+
+            app.get(CacheUserService).set(firstUser);
+            app.get(CacheUserService).set(secondUser);
+
+            // Act
+            await makeAuthorizedApiRequest(anotherCohort.name, [
+                firstUser.username,
+                secondUser.username,
+                thirdUser.username,
+            ]);
+
+            // Assert
+            expect(app.get(CacheUserService).get(firstUser.username)).toBeUndefined();
+            expect(app.get(CacheUserService).get(secondUser.username)).toBeUndefined();
+            expect(app.get(CacheUserService).get(thirdUser.username)).toBeUndefined();
 
             // Post Assert
             await updateCohortById(firstUser.id, currentCohortIds[0]);

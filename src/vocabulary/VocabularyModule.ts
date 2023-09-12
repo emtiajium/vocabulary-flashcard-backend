@@ -8,6 +8,7 @@ import LeitnerSystemsController from '@/vocabulary/controllers/LeitnerSystemsCon
 import DatabaseModule from '@/common/persistence/DatabaseModule';
 import { ConfigService } from '@nestjs/config';
 import TokenManager from '@/common/services/TokenManager';
+import CacheUserService from '@/user/services/CacheUserService';
 
 @Module({
     imports: [DatabaseModule],
@@ -19,6 +20,7 @@ import TokenManager from '@/common/services/TokenManager';
         Logger,
         ConfigService,
         TokenManager,
+        CacheUserService,
     ],
     controllers: [VocabularyController, LeitnerSystemsController],
 })

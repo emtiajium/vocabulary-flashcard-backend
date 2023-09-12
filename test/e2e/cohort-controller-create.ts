@@ -21,6 +21,7 @@ import {
 } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { createVocabulary, getVocabularyById, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
+import CacheUserService from '@/user/services/CacheUserService';
 
 describe('POST /v1/cohorts', () => {
     let app: INestApplication;
@@ -274,6 +275,27 @@ describe('POST /v1/cohorts', () => {
                     `---SUFFIX_ADDED_BY_SYSTEM_AS_IT_IS_DUPLICATED_WHICH_WAS_ADDED_BY_ANOTHER_MEMBER_OF_THE_COHORT---`,
                 ),
             });
+        });
+
+        it('SHOULD remove user from cache', async () => {
+            // Arrange
+            const payload = getBasePayload([firstUser.username, secondUser.username]);
+
+            app.get(CacheUserService).set(firstUser);
+            app.get(CacheUserService).set(secondUser);
+
+            // Act
+            await makeApiRequest(payload);
+
+            // Assert
+            expect(app.get(CacheUserService).get(firstUser.username)).toBeUndefined();
+            expect(app.get(CacheUserService).get(secondUser.username)).toBeUndefined();
+
+            const [firstUserWithCohort, secondUserWithCohort] = await getUsersByUsernames([
+                firstUser.username,
+                secondUser.username,
+            ]);
+            cohortIds.push(firstUserWithCohort.cohort.id, secondUserWithCohort.cohort.id);
         });
     });
 });
