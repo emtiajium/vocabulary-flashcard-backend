@@ -21,6 +21,7 @@ import {
 import Cohort from '@/user/domains/Cohort';
 import { createItem, getLeitnerBoxItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
+import CacheUserService from '@/user/services/CacheUserService';
 
 describe('DELETE /v1/users/self', () => {
     let app: INestApplication;
@@ -219,6 +220,17 @@ describe('DELETE /v1/users/self', () => {
             expect(await getUserByUsername(usernames[1])).toMatchObject({
                 cohortId: cohortIds[0],
             });
+        });
+
+        it('SHOULD delete user from cache', async () => {
+            // Arrange
+            app.get(CacheUserService).set({ ...requester, cohortId: cohort.id } as User);
+
+            // Act
+            await makeApiRequest();
+
+            // Assert
+            expect(app.get(CacheUserService).get(requester.username)).toBeUndefined();
         });
     });
 

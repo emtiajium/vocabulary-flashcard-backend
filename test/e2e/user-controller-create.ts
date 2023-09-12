@@ -13,6 +13,7 @@ import generateJwToken from '@test/util/auth-util';
 import TokenManager, { DecodedToken } from '@/common/services/TokenManager';
 import { decode } from 'jsonwebtoken';
 import ClientType from '@/common/domains/ClientType';
+import CacheUserService from '@/user/services/CacheUserService';
 
 describe('/v1/users', () => {
     let app: INestApplication;
@@ -233,6 +234,29 @@ describe('/v1/users', () => {
                 // Assert
                 expect(status).toBe(403);
                 expect(decodeJwTokenV2Mock).toHaveBeenCalled();
+
+                // Post Assert
+                decodeJwTokenV2Mock.mockRestore();
+            });
+        });
+
+        describe('Cache', () => {
+            it('SHOULD remove user from cache', async () => {
+                // Arrange
+                const decodeJwTokenV2Mock = jest
+                    .spyOn(TokenManager.prototype, 'decodeJwTokenV2')
+                    .mockImplementation(async (token: string) => {
+                        return decode(token) as DecodedToken;
+                    });
+
+                const user = getBasePayload();
+                app.get(CacheUserService).set(user);
+
+                // Act
+                await makeApiRequest(user, false, ClientType.ANDROID_NATIVE, 69);
+
+                // Assert
+                expect(app.get(CacheUserService).get(user.username)).toBeUndefined();
 
                 // Post Assert
                 decodeJwTokenV2Mock.mockRestore();

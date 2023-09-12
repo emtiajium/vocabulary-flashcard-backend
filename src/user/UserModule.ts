@@ -8,10 +8,20 @@ import { ConfigService } from '@nestjs/config';
 import TokenManager from '@/common/services/TokenManager';
 import VocabularyService from '@/vocabulary/services/VocabularyService';
 import DeletionService from '@/user/services/DeletionService';
+import CacheUserService from '@/user/services/CacheUserService';
 
 @Module({
     imports: [DatabaseModule],
     controllers: [UserController, CohortController],
-    providers: [UserService, CohortService, VocabularyService, DeletionService, Logger, ConfigService, TokenManager],
+    providers: [
+        UserService,
+        CohortService,
+        VocabularyService,
+        DeletionService,
+        Logger,
+        ConfigService,
+        TokenManager,
+        CacheUserService,
+    ],
 })
 export default class UserModule {}

@@ -4,6 +4,7 @@ import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import UserRepository from '@/user/repositories/UserRepository';
+import CacheUserService from '@/user/services/CacheUserService';
 
 @Injectable()
 export default class DeletionService {
@@ -14,6 +15,7 @@ export default class DeletionService {
         private readonly vocabularyRepository: VocabularyRepository,
         private readonly definitionRepository: DefinitionRepository,
         private readonly leitnerSystemsRepository: LeitnerSystemsRepository,
+        private readonly cacheUserService: CacheUserService,
     ) {}
 
     async deleteData(userId: string, cohortId: string): Promise<void> {
@@ -25,6 +27,7 @@ export default class DeletionService {
         if (isCohortAlone) {
             await this.vocabularyRepository.removeVocabulariesByCohortId(cohortId);
         }
+        this.cacheUserService.delete((await this.userRepository.findOne({ id: userId })).username);
         await this.userRepository.removeById(userId);
         if (isCohortAlone) {
             await this.cohortRepository.removeById(cohortId);

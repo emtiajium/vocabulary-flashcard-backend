@@ -11,6 +11,7 @@ import SearchResult from '@/common/domains/SearchResult';
 import { ConfigService } from '@nestjs/config';
 import TokenManager from '@/common/services/TokenManager';
 import ClientType from '@/common/domains/ClientType';
+import CacheUserService from '@/user/services/CacheUserService';
 
 @Injectable()
 export default class UserService {
@@ -21,6 +22,7 @@ export default class UserService {
         private readonly leitnerSystemsRepository: LeitnerSystemsRepository,
         private readonly configService: ConfigService,
         private readonly tokenManager: TokenManager,
+        private readonly cacheUserService: CacheUserService,
     ) {}
 
     async createUser(
@@ -30,6 +32,7 @@ export default class UserService {
         versionCode: number,
     ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         const user = await this.assertUserCreationPayload(userPayload, token, client, versionCode);
+        this.cacheUserService.delete(user.username);
         const persistedUser = await this.userRepository.upsert(user);
         if (persistedUser.version === 1) {
             await this.cohortService.createCohort({ name: user.username, usernames: [persistedUser.username] });
@@ -70,7 +73,12 @@ export default class UserService {
     }
 
     async getUserByUsername(username: string): Promise<User> {
-        const user = await this.userRepository.findOne({ username });
+        let user: User;
+        user = this.cacheUserService.get(username);
+        if (!user) {
+            user = await this.userRepository.findOne({ username });
+            this.cacheUserService.set(user);
+        }
         if (!user) {
             throw new EntityNotFoundException(`User with username "${username}" does not exist`);
         }
