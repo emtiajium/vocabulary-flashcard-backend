@@ -18,10 +18,7 @@ import {
 } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { createVocabulary, getVocabularyById, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
-import TokenManager, { DecodedToken } from '@/common/services/TokenManager';
-import { decode } from 'jsonwebtoken';
 import CacheUserService from '@/user/services/CacheUserService';
-import ClientType from '@/common/domains/ClientType';
 
 describe('/v1/cohorts/:name', () => {
     let app: INestApplication;
