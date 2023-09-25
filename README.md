@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+-   `0.47.0`: Added `@Post(/v1/users/active-users)`
 -   `0.46.0`: Fake caching user to reduce DB hit during authentication
 -   `0.45.0`: Added `@Delete(/v1/users/self)` API
 -   `0.44.0`: Set TypeORM `eager` to `false`

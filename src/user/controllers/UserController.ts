@@ -45,6 +45,14 @@ export default class UserController {
         return this.userService.getLeitnerLoverUsers();
     }
 
+    @Post('/active-users')
+    @UseGuards(AuthGuard)
+    @HttpCode(HttpStatus.OK)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getRecentlyActiveUsers(@Body() reportRequest: ReportRequest): Pick<User, 'username'>[] {
+        return this.userService.getRecentlyActiveUsers();
+    }
+
     @Delete('/self')
     @UseGuards(AuthGuard)
     async deleteUser(@AuthenticatedUser() user: User): Promise<void> {

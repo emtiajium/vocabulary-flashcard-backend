@@ -17,6 +17,14 @@ export default class CacheUserService {
         return cachedUser.get(username);
     }
 
+    getAll(): User[] {
+        const users = [];
+        cachedUser.forEach((value) => {
+            users.push(value);
+        });
+        return users;
+    }
+
     delete(username: string): void {
         cachedUser.delete(username);
     }

@@ -103,4 +103,13 @@ export default class UserService {
     getLeitnerLoverUsers(): Promise<LeitnerSystemsLoverUsersReport[]> {
         return this.leitnerSystemsRepository.getLeitnerLoverUsers();
     }
+
+    getRecentlyActiveUsers(): Pick<User, 'username'>[] {
+        const users = this.cacheUserService.getAll();
+        return users.map((user) => {
+            return {
+                username: user.username,
+            };
+        });
+    }
 }
