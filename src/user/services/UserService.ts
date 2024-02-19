@@ -31,7 +31,7 @@ export default class UserService {
     ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         const user = await this.assertUserCreationPayload(userPayload, token, client, versionCode);
         this.cacheUserService.delete(user.username);
-        const persistedUser = await this.userRepository.upsertII(user);
+        const persistedUser = await this.userRepository.insertOrUpdate(user);
         if (persistedUser.version === 1) {
             await this.cohortService.createCohort({ name: user.username, usernames: [persistedUser.username] });
         }

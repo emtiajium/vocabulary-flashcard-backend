@@ -14,7 +14,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         super(Vocabulary, dataSource.createEntityManager());
     }
 
-    async upsertII(vocabulary: Vocabulary): Promise<Vocabulary> {
+    async insertOrUpdate(vocabulary: Vocabulary): Promise<Vocabulary> {
         try {
             return await this.save(vocabulary);
         } catch (error) {

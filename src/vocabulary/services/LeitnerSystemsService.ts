@@ -19,7 +19,7 @@ export default class LeitnerSystemsService {
     async placeIntoFirstLeitnerBox(userId: string, cohortId: string, vocabularyId: string): Promise<void> {
         await this.validateVocabularyExistence(vocabularyId, cohortId);
 
-        await this.leitnerSystemsRepository.upsertII(
+        await this.leitnerSystemsRepository.insertOrUpdate(
             LeitnerSystems.create(LeitnerBoxType.BOX_1, userId, vocabularyId, true),
         );
     }
@@ -41,7 +41,7 @@ export default class LeitnerSystemsService {
 
         const nextBox = LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`];
 
-        await this.leitnerSystemsRepository.upsertII(
+        await this.leitnerSystemsRepository.insertOrUpdate(
             LeitnerSystems.create(nextBox, userId, vocabularyId, true).setId(boxItem.id),
         );
     }
@@ -63,7 +63,7 @@ export default class LeitnerSystemsService {
 
         const previousBox = LeitnerBoxType[`BOX_${boxItem.currentBox - 1}`];
 
-        await this.leitnerSystemsRepository.upsertII(
+        await this.leitnerSystemsRepository.insertOrUpdate(
             LeitnerSystems.create(previousBox, userId, vocabularyId, false).setId(boxItem.id),
         );
     }

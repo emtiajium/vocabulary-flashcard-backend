@@ -10,7 +10,7 @@ export default class UserRepository extends Repository<User> {
         super(User, dataSource.createEntityManager());
     }
 
-    async upsertII(user: User): Promise<User> {
+    async insertOrUpdate(user: User): Promise<User> {
         const createdUserResponse = await this.query(
             `
                 INSERT INTO "User"("createdAt", "updatedAt", "version", "id", "username", "firstname", "lastname",

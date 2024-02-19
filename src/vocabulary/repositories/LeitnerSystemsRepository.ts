@@ -14,7 +14,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         super(LeitnerSystems, dataSource.createEntityManager());
     }
 
-    async upsertII(leitnerSystems: LeitnerSystems): Promise<LeitnerSystems> {
+    async insertOrUpdate(leitnerSystems: LeitnerSystems): Promise<LeitnerSystems> {
         try {
             return await this.save(leitnerSystems);
         } catch (error) {

@@ -35,7 +35,7 @@ export default class VocabularyService {
         }
         const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
         vocabularyInstance.cohortId = cohortId;
-        const newVocabulary = await this.vocabularyRepository.upsertII(vocabularyInstance);
+        const newVocabulary = await this.vocabularyRepository.insertOrUpdate(vocabularyInstance);
         newVocabulary.isInLeitnerBox = Boolean(existingVocabulary?.isInLeitnerBox);
         this.relateLinkerWords(newVocabulary).finally();
         return Vocabulary.omitCohortId(newVocabulary);
