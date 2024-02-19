@@ -14,6 +14,7 @@ import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { capitalize } from 'lodash';
 import { plainToClass } from 'class-transformer';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
     let app: INestApplication;
@@ -39,6 +40,7 @@ describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         const response = await seed();
         requester = response.user;
     });
@@ -46,6 +48,7 @@ describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds(cohortIds);
         await app.close();
+        await DataSource.destroy();
     });
 
     function makeApiRequest(id: string, word: string): Promise<SupertestResponse<ApiResponse>> {

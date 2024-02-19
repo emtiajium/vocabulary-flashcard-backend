@@ -10,6 +10,7 @@ import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort
 import User from '@/user/domains/User';
 import { createApiRequester, createUser, generateUsername } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('GET /v1/cohorts/self', () => {
     let app: INestApplication;
@@ -21,6 +22,7 @@ describe('GET /v1/cohorts/self', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         secondUser = await createUser({
             username: generateUsername(),
@@ -36,6 +38,7 @@ describe('GET /v1/cohorts/self', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     async function makeApiRequest(requestedUser: User = requester): Promise<SupertestResponse<Cohort>> {

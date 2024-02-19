@@ -17,7 +17,10 @@ import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
 export default class UserController {
-    constructor(private readonly userService: UserService, private readonly deletionService: DeletionService) {}
+    constructor(
+        private readonly userService: UserService,
+        private readonly deletionService: DeletionService,
+    ) {}
 
     @Post()
     createUser(

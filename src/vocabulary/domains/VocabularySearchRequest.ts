@@ -1,6 +1,6 @@
 import { IsBoolean, IsNotEmptyObject, isObject, IsOptional, IsString, ValidateNested } from 'class-validator';
 import Pagination from '@/common/domains/Pagination';
-import { plainToClass, Transform, Type } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import Sort from '@/common/domains/Sort';
 import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
 
@@ -11,7 +11,7 @@ export default class VocabularySearchRequest {
 
     @Transform(({ value }) => {
         if (isObject(value)) {
-            return plainToClass(VocabularySearchCoverage, value);
+            return plainToInstance(VocabularySearchCoverage, value);
         }
         // backward compatibility for the Android app older than or equal to 0.10.4
         const compatibleVocabularySearchCoverage = new VocabularySearchCoverage();

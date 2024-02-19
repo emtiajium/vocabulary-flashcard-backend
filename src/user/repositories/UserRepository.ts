@@ -1,11 +1,16 @@
 import User from '@/user/domains/User';
-import { EntityRepository, In, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 import { SortDirection } from '@/common/domains/Sort';
+import { Injectable } from '@nestjs/common';
 
-@EntityRepository(User)
+@Injectable()
 export default class UserRepository extends Repository<User> {
-    async upsert(user: User): Promise<User> {
+    constructor(private dataSource: DataSource) {
+        super(User, dataSource.createEntityManager());
+    }
+
+    async upsertII(user: User): Promise<User> {
         // possible to get the column names by accessing "this.metadata.propertiesMap"
         const updateActionOnConflict = `SET firstname = EXCLUDED.firstname,
             lastname = EXCLUDED.lastname,
@@ -24,7 +29,7 @@ export default class UserRepository extends Repository<User> {
     }
 
     getUsersByUsernames(usernames: string[]): Promise<User[]> {
-        return this.find({ username: In(usernames) });
+        return this.findBy({ username: In(usernames) });
     }
 
     async updateCohort(usernames: string[], cohortId: string): Promise<void> {

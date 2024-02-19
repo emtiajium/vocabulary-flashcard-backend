@@ -1,16 +1,20 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
 import * as _ from 'lodash';
 import Sort, { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 
-@EntityRepository(Vocabulary)
+@Injectable()
 export default class VocabularyRepository extends Repository<Vocabulary> {
-    async upsert(vocabulary: Vocabulary): Promise<Vocabulary> {
+    constructor(private dataSource: DataSource) {
+        super(Vocabulary, dataSource.createEntityManager());
+    }
+
+    async upsertII(vocabulary: Vocabulary): Promise<Vocabulary> {
         try {
             return await this.save(vocabulary);
         } catch (error) {
@@ -92,13 +96,14 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             definitions: _.isNull(result.definitions[0])
                 ? []
                 : _.isNull(result.definitions[0].id)
-                ? []
-                : result.definitions,
+                  ? []
+                  : result.definitions,
         }));
     }
 
     private getSearchQuery(
         searchKeyword: string,
+        // eslint-disable-next-line @typescript-eslint/default-param-last
         vocabularySearchCoverage: VocabularySearchCoverage = { word: true } as VocabularySearchCoverage,
         queryParameterPosition: number,
     ): string {
@@ -126,7 +131,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     private getFilteringQuery(fetchNotHavingDefinitionOnly: boolean, fetchFlashcard: boolean): string {
         return `${fetchNotHavingDefinitionOnly ? `AND definition IS NULL` : ''}
-        ${fetchFlashcard || typeof fetchFlashcard === 'undefined' ? `` : `AND "leitnerSystems"."userId" IS NULL`}`;
+        ${fetchFlashcard || fetchFlashcard === undefined ? `` : `AND "leitnerSystems"."userId" IS NULL`}`;
     }
 
     async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {

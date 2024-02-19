@@ -4,7 +4,10 @@ import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export default class CreateDefaultCohort {
-    constructor(private readonly cohortRepository: CohortRepository, private readonly logger: Logger) {
+    constructor(
+        private readonly cohortRepository: CohortRepository,
+        private readonly logger: Logger,
+    ) {
         this.logger = new Logger(CreateDefaultCohort.name);
     }
 

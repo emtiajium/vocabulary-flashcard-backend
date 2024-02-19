@@ -7,6 +7,7 @@ import Cohort from '@/user/domains/Cohort';
 import CohortService from '@/user/services/CohortService';
 import getCohortByName, { removeCohortsByNames } from '@test/util/cohort-util';
 import * as uuid from 'uuid';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('Cohort Service', () => {
     let app: INestApplication;
@@ -16,14 +17,16 @@ describe('Cohort Service', () => {
             username,
             firstname: 'John',
             lastname: 'Doe',
-        } as User);
+        }) as User;
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
     });
 
     afterAll(async () => {
         await app.close();
+        await DataSource.destroy();
     });
 
     it('SHOULD be tagged users to a cohort', async () => {

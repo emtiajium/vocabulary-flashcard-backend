@@ -10,7 +10,7 @@
 
 ###### Prerequisites
 
-➜ Install Node 14 LTS using [nvm](https://github.com/nvm-sh/nvm)
+➜ Install Node 18.13.0 using [nvm](https://github.com/nvm-sh/nvm)
 
 ➜ Install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/)
 

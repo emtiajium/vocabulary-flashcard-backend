@@ -9,23 +9,18 @@ import Definition from '@/vocabulary/domains/Definition';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import User from '@/user/domains/User';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
-import AndroidRepository from '@/android/repositories/AndroidRepository';
-import CohortRepository from '@/user/repositories/CohortRepository';
-import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
-import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
-import UserRepository from '@/user/repositories/UserRepository';
-import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
-import { ConnectionOptions, LoggerOptions, DatabaseType } from 'typeorm';
+import { LoggerOptions } from 'typeorm';
 
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
+            inject: [ConfigService],
             useFactory: (): TypeOrmModuleOptions => {
                 const databaseConfig = new DatabaseConfig();
 
-                const connectionOptions: ConnectionOptions = {
-                    type: databaseConfig.type as DatabaseType,
+                const connectionOptions = {
+                    type: databaseConfig.type,
                     host: databaseConfig.host,
                     port: databaseConfig.port,
                     username: databaseConfig.username,
@@ -37,7 +32,7 @@ import { ConnectionOptions, LoggerOptions, DatabaseType } from 'typeorm';
                     // as directory is ***/dist/***
                     entities: [Android, Cohort, Definition, LeitnerSystems, User, Vocabulary],
                     namingStrategy: new DatabaseNamingStrategy(),
-                } as ConnectionOptions;
+                };
 
                 return {
                     retryAttempts: 1,
@@ -46,16 +41,7 @@ import { ConnectionOptions, LoggerOptions, DatabaseType } from 'typeorm';
                     ...connectionOptions,
                 };
             },
-            inject: [ConfigService],
         }),
-        TypeOrmModule.forFeature([
-            AndroidRepository,
-            CohortRepository,
-            DefinitionRepository,
-            LeitnerSystemsRepository,
-            UserRepository,
-            VocabularyRepository,
-        ]),
     ],
     exports: [TypeOrmModule],
 })

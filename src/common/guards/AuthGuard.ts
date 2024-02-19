@@ -7,7 +7,10 @@ import { getJwToken } from '@/common/http/util';
 
 @Injectable()
 export default class AuthGuard implements CanActivate {
-    constructor(private readonly userService: UserService, private readonly tokenManager: TokenManager) {}
+    constructor(
+        private readonly userService: UserService,
+        private readonly tokenManager: TokenManager,
+    ) {}
 
     private async decodeJwToken(request: Request): Promise<DecodedToken> {
         const token = getJwToken(request);
@@ -24,7 +27,7 @@ export default class AuthGuard implements CanActivate {
             const decodedToken = await this.decodeJwToken(request);
             const username = this.tokenManager.extractUsername(decodedToken);
             const user: User = await this.userService.getUserByUsername(username);
-            isValidUser = !!user;
+            isValidUser = Boolean(user);
             request.user = user;
         } catch {
             isValidUser = false;

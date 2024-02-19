@@ -19,6 +19,7 @@ import {
 import generateJwToken from '@test/util/auth-util';
 import { createVocabulary, getVocabularyById, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import CacheUserService from '@/user/services/CacheUserService';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/cohorts/:name', () => {
     let app: INestApplication;
@@ -37,16 +38,18 @@ describe('/v1/cohorts/:name', () => {
             username: generateUsername(),
             firstname: 'John',
             lastname: 'Doe',
-        } as User);
+        }) as User;
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
     });
 
     afterAll(async () => {
         await removeUsersByUsernames([requester.username]);
         await app.close();
+        await DataSource.destroy();
     });
 
     const makeAuthorizedApiRequest = async (

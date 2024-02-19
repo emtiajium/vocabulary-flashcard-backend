@@ -14,6 +14,7 @@ import TokenManager, { DecodedToken } from '@/common/services/TokenManager';
 import { decode } from 'jsonwebtoken';
 import ClientType from '@/common/domains/ClientType';
 import CacheUserService from '@/user/services/CacheUserService';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/users', () => {
     let app: INestApplication;
@@ -33,12 +34,14 @@ describe('/v1/users', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
     });
 
     afterAll(async () => {
         await removeUsersByUsernames(generatedUsernames);
         await removeCohortsByNames(generatedUsernames);
         await app.close();
+        await DataSource.destroy();
     });
 
     const makeApiRequest = async (

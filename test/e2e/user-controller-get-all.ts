@@ -13,6 +13,7 @@ import SearchResult from '@/common/domains/SearchResult';
 import ReportRequest from '@/common/domains/ReportRequest';
 import { ConfigService } from '@nestjs/config';
 import * as uuid from 'uuid';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/users/all', () => {
     let app: INestApplication;
@@ -23,6 +24,7 @@ describe('/v1/users/all', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
 
         requester = await createApiRequester(usernames[0]);
         await createCohort({ name: usernames[0], usernames: [usernames[0]] });
@@ -32,6 +34,7 @@ describe('/v1/users/all', () => {
         await removeUsersByUsernames(usernames);
         await removeCohortsByNames(usernames);
         await app.close();
+        await DataSource.destroy();
     });
 
     function getRequestPayload(secret?: string): ReportRequest {

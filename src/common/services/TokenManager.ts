@@ -15,8 +15,10 @@ export default class TokenManager {
 
     private readonly isAutomatedTestingEnvironment: boolean;
 
-    constructor(private readonly configService: ConfigService, private readonly logger: Logger) {
-        this.logger.setContext(TokenManager.name);
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly logger: Logger,
+    ) {
         this.isAutomatedTestingEnvironment = this.configService.get('SERVICE_ENV') === 'test';
         this.oAuth2ClientId = this.configService.get('GOOGLE_AUTH_CLIENT_ID');
         this.oAuth2Client = new OAuth2Client(this.oAuth2ClientId);

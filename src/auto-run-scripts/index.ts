@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import { INestApplication, Injectable, Logger } from '@nestjs/common';
 import CreateDefaultCohort from '@/auto-run-scripts/1623557103708-create-default-cohort';
 import { ClassType } from '@/common/types/ClassType';
@@ -9,7 +9,6 @@ export default class AutoRunScripts {
 
     constructor(private readonly app: INestApplication) {
         this.logger = app.get(Logger);
-        this.logger.setContext(AutoRunScripts.name);
     }
 
     async runScripts(): Promise<void> {
@@ -18,7 +17,7 @@ export default class AutoRunScripts {
         // we may need to execute the scripts sequentially in future
         await Promise.all(
             scripts.map((script) => {
-                return this.app.get(script.name).runScript();
+                return this.app.get(script).runScript();
             }),
         );
         this.logger.log(`All scripts have been executed`);

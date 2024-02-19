@@ -24,6 +24,7 @@ import {
 import generateJwToken from '@test/util/auth-util';
 import { createItem, removeLeitnerBoxItems } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('DELETE /v1/vocabularies/:id', () => {
     let app: INestApplication;
@@ -34,6 +35,7 @@ describe('DELETE /v1/vocabularies/:id', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuidV4()}`;
         cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
@@ -42,6 +44,7 @@ describe('DELETE /v1/vocabularies/:id', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     async function makeApiRequest(
@@ -112,7 +115,7 @@ describe('DELETE /v1/vocabularies/:id', () => {
         const { status } = await makeApiRequest(vocabulary.id);
 
         expect(status).toBe(200);
-        expect(await getVocabularyById(vocabulary.id)).toBeUndefined();
+        expect(await getVocabularyById(vocabulary.id)).toBeNull();
         expect(await getDefinitionsByVocabularyId(vocabulary.id)).toHaveLength(0);
     });
 });

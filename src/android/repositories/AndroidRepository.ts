@@ -1,5 +1,10 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import Android from '@/android/domains/Android';
+import { Injectable } from '@nestjs/common';
 
-@EntityRepository(Android)
-export default class AndroidRepository extends Repository<Android> {}
+@Injectable()
+export default class AndroidRepository extends Repository<Android> {
+    constructor(private dataSource: DataSource) {
+        super(Android, dataSource.createEntityManager());
+    }
+}

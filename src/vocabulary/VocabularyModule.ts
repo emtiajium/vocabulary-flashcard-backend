@@ -9,6 +9,11 @@ import DatabaseModule from '@/common/persistence/DatabaseModule';
 import { ConfigService } from '@nestjs/config';
 import TokenManager from '@/common/services/TokenManager';
 import CacheUserService from '@/user/services/CacheUserService';
+import UserRepository from '@/user/repositories/UserRepository';
+import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
+import CohortRepository from '@/user/repositories/CohortRepository';
+import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
+import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 
 @Module({
     imports: [DatabaseModule],
@@ -21,6 +26,11 @@ import CacheUserService from '@/user/services/CacheUserService';
         ConfigService,
         TokenManager,
         CacheUserService,
+        UserRepository,
+        LeitnerSystemsRepository,
+        CohortRepository,
+        VocabularyRepository,
+        DefinitionRepository,
     ],
     controllers: [VocabularyController, LeitnerSystemsController],
 })
