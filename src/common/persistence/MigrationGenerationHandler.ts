@@ -119,9 +119,7 @@ class MigrationGenerationHandler {
 
     private generateMigrationQueries(): void {
         const output = execSync(
-            `npm run typeorm migration:generate ${this.getMigrationDirectory()}/${
-                this.migrationConfigFileName
-            } -- --pretty --dataSource ${this.migrationConfigFileName}`,
+            `npm run typeorm migration:generate ${this.getMigrationDirectory()}/${this.getMigrationFileName()} -- --pretty --dataSource ${this.migrationConfigFileName}`,
             { encoding: this.encoding },
         );
 
