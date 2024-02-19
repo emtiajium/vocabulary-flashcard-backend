@@ -42,6 +42,7 @@ export default class CreateTestUsers {
 
     async execute(): Promise<void> {
         try {
+            await DataSource.initialize();
             await this.removeDefinitions();
             await this.removeVocabularies();
             await this.removeUsers();
@@ -50,6 +51,8 @@ export default class CreateTestUsers {
             await this.associateUsersWithCohort();
         } catch (error) {
             console.error(`Error`, error);
+        } finally {
+            await DataSource.destroy();
         }
     }
 
