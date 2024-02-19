@@ -1,6 +1,6 @@
 import User from '@/user/domains/User';
 import { DataSource, In, Repository } from 'typeorm';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { SortDirection } from '@/common/domains/Sort';
 import { Injectable } from '@nestjs/common';
 
@@ -11,21 +11,22 @@ export default class UserRepository extends Repository<User> {
     }
 
     async upsertII(user: User): Promise<User> {
-        // possible to get the column names by accessing "this.metadata.propertiesMap"
-        const updateActionOnConflict = `SET firstname = EXCLUDED.firstname,
-            lastname = EXCLUDED.lastname,
-            "profilePictureUrl" = EXCLUDED."profilePictureUrl",
-            "updatedAt" = NOW(),
-            version = "${this.metadata.tableName}".version + 1`;
+        const createdUserResponse = await this.query(
+            `
+                INSERT INTO "User"("createdAt", "updatedAt", "version", "id", "username", "firstname", "lastname",
+                                   "profilePictureUrl", "cohortId")
+                VALUES (DEFAULT, DEFAULT, 1, DEFAULT, $1, $2, $3, $4, DEFAULT)
+                ON CONFLICT ("username") DO UPDATE SET firstname           = EXCLUDED.firstname,
+                                                       lastname            = EXCLUDED.lastname,
+                                                       "profilePictureUrl" = EXCLUDED."profilePictureUrl",
+                                                       "updatedAt"         = NOW(),
+                                                       version             = "User".version + 1
+                RETURNING "createdAt", "updatedAt", "version", "id"
+            `,
+            [user.username, user.firstname, user.lastname, user.profilePictureUrl],
+        );
 
-        const createdUser = await this.createQueryBuilder()
-            .insert()
-            .into(User)
-            .values(user)
-            .onConflict(`("username") DO UPDATE ${updateActionOnConflict}`)
-            .execute();
-
-        return plainToClass(User, { ...user, ...createdUser.generatedMaps[0] });
+        return plainToInstance(User, { ...user, ...createdUserResponse[0] });
     }
 
     getUsersByUsernames(usernames: string[]): Promise<User[]> {
