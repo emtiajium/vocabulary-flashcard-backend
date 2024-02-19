@@ -22,7 +22,7 @@ export default class CreateDefaultCohort {
                 .insert()
                 .into(Cohort)
                 .values({ name: () => `'${defaultCohortName}'::VARCHAR` })
-                .onConflict(`("name") DO NOTHING`)
+                .orIgnore(`("name") DO NOTHING`)
                 .execute();
             this.logger.log(`Default cohort with name "${defaultCohortName}" has been created`);
         } catch {
