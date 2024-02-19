@@ -17,6 +17,9 @@ export default class InsertVocabularies {
             this.setCohortId(new ConfigService().get<string>('SEED_SCRIPT_COHORT_ID'));
             this.generateVocabularyPayload();
             await validateOrReject(this.vocabularies);
+            if (!DataSource.isInitialized) {
+                await DataSource.initialize();
+            }
             await this.remove();
             await this.persist();
         } catch (error) {
