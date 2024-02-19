@@ -4,6 +4,9 @@ import DataSource from '@/common/persistence/TypeormConfig';
 export default class RemoveDuplicateItemFromLeitnerBox {
     async execute(): Promise<void> {
         try {
+            if (!DataSource.isInitialized) {
+                await DataSource.initialize();
+            }
             await this.remove();
         } catch (error) {
             console.error(`Error while removing item`, error);
