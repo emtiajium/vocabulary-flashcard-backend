@@ -23,7 +23,7 @@ fi
 
 certificates=$(sudo certbot certificates)
 echo "Certificates ++++++++++ $(date) $certificates"
-domain=api.firecrackervocabulary.com
+domain=uat.firecrackervocabulary.com
 foundCertificatesSubString="Certificate Name: $domain"
 certificatesExist=false
 if [[ $certificates == *$foundCertificatesSubString* ]]; then
@@ -33,7 +33,7 @@ fi
 echo $certificatesExist
 
 if [[ $certificatesExist == false ]]; then
-    sudo certbot certonly --nginx -d $domain -m 271emtiaj@gmail.com --agree-tos
+    sudo certbot --nginx -d $domain -m 271emtiaj@gmail.com --agree-tos
 
     renewalCommand='sudo certbot renew -q'
     renewalCommandExists=false
