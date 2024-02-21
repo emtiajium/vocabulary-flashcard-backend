@@ -28,6 +28,8 @@ if (process.env.FIRECRACKER_PLATFORM === 'aeb') {
 }
 
 const persistence = new DatabaseConfig();
+// eslint-disable-next-line no-console
+console.log('persistence', persistence);
 const { host, port, username, password, database, type } = persistence;
 
 export default new DataSource({
