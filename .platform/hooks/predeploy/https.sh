@@ -7,7 +7,7 @@ if [[ $certbotVersion == '' ]]; then
 fi
 
 if [[ $certbotExists == false ]]; then
-    sudo yum install python3 augeas-libs
+    sudo yum install python3 augeas-libs -y
     sudo python3 -m venv /opt/certbot/
     sudo /opt/certbot/bin/pip install --upgrade pip
     sudo /opt/certbot/bin/pip install certbot certbot-nginx
