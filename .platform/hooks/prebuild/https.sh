@@ -1,14 +1,12 @@
 #!/bin/bash
 
 certbotVersion=$(sudo certbot --version)
-echo "Init ++++++++++ $(date) $certbotVersion"
 certbotExists=true
 if [[ $certbotVersion == '' ]]; then
     certbotExists=false
 fi
 
 if [[ $certbotExists == false ]]; then
-    echo "Not exist ++++++++++ $(date)"
     sudo yum install python3 augeas-libs -y
     sudo python3 -m venv /opt/certbot/
     sudo /opt/certbot/bin/pip install --upgrade pip
@@ -18,11 +16,9 @@ if [[ $certbotExists == false ]]; then
     sudo /opt/certbot/bin/pip uninstall urllib3 -y
     sudo /opt/certbot/bin/pip install urllib3==1.26.15
     sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
-    echo "$(sudo certbot --version)"
 fi
 
 certificates=$(sudo certbot certificates)
-echo "Certificates ++++++++++ $(date) $certificates"
 domain=uat.firecrackervocabulary.com
 foundCertificatesSubString="Certificate Name: $domain"
 certificatesExist=false
