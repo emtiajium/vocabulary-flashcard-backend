@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+-   `1.49.0`: Automated getting certificate to enable HTTPS after a new EC2 instance gets launched
 -   `1.48.0`: Node 18 + Upgraded packages
 -   `0.47.0`: Added `@Post(/v1/users/active-users)`
 -   `0.46.0`: Fake caching user to reduce DB hit during authentication
