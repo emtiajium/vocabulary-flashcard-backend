@@ -22,7 +22,7 @@
     "rules": {
         "import/order": "off",
         "import/extensions": "off",
-        "import/no-relative-parent-imports": "error",
+        "import/no-extraneous-dependencies": "off",
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/explicit-function-return-type": "error",
         "@typescript-eslint/no-explicit-any": "error",
@@ -41,6 +41,7 @@
         "unicorn/no-reduce": "off",
         "unicorn/no-array-for-each": "off",
         "unicorn/no-static-only-class": "off",
+        "unicorn/no-await-expression-member": "off",
         "class-methods-use-this": "off",
         "complexity": ["error", 4],
         "max-params": ["error", 4],

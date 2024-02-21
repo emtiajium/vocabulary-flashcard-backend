@@ -7,9 +7,7 @@ import User from '@/user/domains/User';
 
 @Injectable()
 export default class RequestLoggingInterceptor implements NestInterceptor {
-    constructor(private readonly logger: Logger) {
-        this.logger.setContext(RequestLoggingInterceptor.name);
-    }
+    constructor(private readonly logger: Logger) {}
 
     private logRequest(request: Request & { user?: User }): void {
         const headers = getHeaders(request);

@@ -1,10 +1,14 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import EntityNotFoundException from '@/common/exceptions/EntityNotFoundException';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
-@EntityRepository(Cohort)
+@Injectable()
 export default class CohortRepository extends Repository<Cohort> {
+    constructor(private dataSource: DataSource) {
+        super(Cohort, dataSource.createEntityManager());
+    }
+
     async insertIfNotExists(cohort: Cohort): Promise<Cohort> {
         let savedCohort: Cohort;
         try {
@@ -26,7 +30,7 @@ export default class CohortRepository extends Repository<Cohort> {
 
     async getCohortByName(name: string): Promise<Cohort> {
         // findOneOrFail() is not working as expected
-        const cohort: Cohort = await this.findOne({ name });
+        const cohort: Cohort = await this.findOneBy({ name });
         if (!cohort) {
             throw new EntityNotFoundException(`Cohort with name "${name}" does not exist`);
         }

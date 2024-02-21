@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
@@ -6,11 +6,15 @@ import Pagination from '@/common/domains/Pagination';
 import { getFormattedTomorrow } from '@/common/utils/moment-util';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import { SortDirection } from '@/common/domains/Sort';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
-@EntityRepository(LeitnerSystems)
+@Injectable()
 export default class LeitnerSystemsRepository extends Repository<LeitnerSystems> {
-    async upsert(leitnerSystems: LeitnerSystems): Promise<LeitnerSystems> {
+    constructor(private dataSource: DataSource) {
+        super(LeitnerSystems, dataSource.createEntityManager());
+    }
+
+    async insertOrUpdate(leitnerSystems: LeitnerSystems): Promise<LeitnerSystems> {
         try {
             return await this.save(leitnerSystems);
         } catch (error) {

@@ -16,6 +16,7 @@ import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import ReportRequest from '@/common/domains/ReportRequest';
 import { ConfigService } from '@nestjs/config';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('GET /v1/users/using-leitner-systems', () => {
     let app: INestApplication;
@@ -43,6 +44,7 @@ describe('GET /v1/users/using-leitner-systems', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [requester.username] } as Cohort);
     });
@@ -50,6 +52,7 @@ describe('GET /v1/users/using-leitner-systems', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     describe('API request', () => {

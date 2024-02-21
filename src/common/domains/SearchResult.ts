@@ -1,7 +1,10 @@
 type RawResult<T, U> = T & U;
 
 export default class SearchResult<T> {
-    constructor(readonly results: T[], readonly total: number) {}
+    constructor(
+        readonly results: T[],
+        readonly total: number,
+    ) {}
 
     static omitTotal<T, U>(rawResults: RawResult<T, U>[], nameHoldingTotalRows: string): SearchResult<T> {
         const isNotEmpty = rawResults?.length > 0;

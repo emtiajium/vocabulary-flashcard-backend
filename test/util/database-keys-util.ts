@@ -1,30 +1,30 @@
-import { getConnection, getManager } from 'typeorm';
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata';
 import { ForeignKeyMetadata } from 'typeorm/metadata/ForeignKeyMetadata';
 import { IndexMetadata } from 'typeorm/metadata/IndexMetadata';
 import { UniqueMetadata } from 'typeorm/metadata/UniqueMetadata';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 export function getTableNames(): string[] {
-    return getConnection().entityMetadatas.map((metadata) => metadata.tableName);
+    return DataSource.entityMetadatas.map((metadata) => metadata.tableName);
 }
 
 export function getPrimaryColumnsMetadata(tableName: string): ColumnMetadata[] {
-    const { primaryColumns } = getConnection().entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { primaryColumns } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
     return primaryColumns;
 }
 
 export function getForeignKeysMetadata(tableName: string): ForeignKeyMetadata[] {
-    const { foreignKeys } = getConnection().entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { foreignKeys } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
     return foreignKeys;
 }
 
 export function getIndexMetadata(tableName: string): IndexMetadata[] {
-    const { indices } = getConnection().entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { indices } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
     return indices;
 }
 
 export function getUniqueMetadata(tableName: string): UniqueMetadata[] {
-    const { uniques } = getConnection().entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { uniques } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
     return uniques;
 }
 
@@ -32,7 +32,7 @@ function getConstraints(
     tableName: string,
     constraintType: 'PRIMARY KEY' | 'FOREIGN KEY' | 'UNIQUE',
 ): Promise<{ constraintName: string }[]> {
-    return getManager().query(
+    return DataSource.query(
         `
             SELECT DISTINCT (tc.constraint_name) AS "constraintName"
             FROM information_schema.key_column_usage kcu
@@ -99,7 +99,7 @@ export async function getAllUniqueKeys(tableNames: string[]): Promise<Record<str
 }
 
 export async function getIndexKeysWithinTable(tableName: string): Promise<string[]> {
-    const queryResult: { indexName: string }[] = await getManager().query(
+    const queryResult: { indexName: string }[] = await DataSource.query(
         `
             SELECT indexname AS "indexName"
             FROM pg_catalog.pg_indexes

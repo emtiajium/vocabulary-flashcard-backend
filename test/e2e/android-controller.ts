@@ -9,7 +9,7 @@ import getAppAPIPrefix from '@test/util/service-util';
 import Android from '@/android/domains/Android';
 import { v4 as uuidV4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { getRepository } from 'typeorm';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/androids', () => {
     let app: INestApplication;
@@ -19,21 +19,23 @@ describe('/v1/androids', () => {
     const versionName = `Android Version Name for Automated Tests`;
 
     async function removeAndroid(): Promise<void> {
-        await getRepository(Android).delete({ versionName });
+        await DataSource.getRepository(Android).delete({ versionName });
     }
 
     function getAndroid(): Promise<Android[]> {
-        return getRepository(Android).find({ versionName });
+        return DataSource.getRepository(Android).findBy({ versionName });
     }
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
     });
 
     afterAll(async () => {
         await removeUsersByUsernames([requester.username]);
         await app.close();
+        await DataSource.destroy();
     });
 
     describe('POST', () => {
@@ -107,7 +109,7 @@ describe('/v1/androids', () => {
         });
 
         it('SHOULD return 200 OK with response', async () => {
-            await getRepository(Android).save({
+            await DataSource.getRepository(Android).save({
                 versionCode: 1,
                 versionName,
             });

@@ -22,6 +22,7 @@ import Cohort from '@/user/domains/Cohort';
 import { createItem, getLeitnerBoxItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import CacheUserService from '@/user/services/CacheUserService';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('DELETE /v1/users/self', () => {
     let app: INestApplication;
@@ -34,11 +35,13 @@ describe('DELETE /v1/users/self', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
     });
 
     afterAll(async () => {
         await removeCohortsWithRelationsByIds(cohortIds);
         await app.close();
+        await DataSource.destroy();
     });
 
     async function makeApiRequest(): Promise<SupertestResponse<void>> {
@@ -129,7 +132,7 @@ describe('DELETE /v1/users/self', () => {
             // Assert
             expect(status).toBe(200);
             vocabulary = await getVocabularyById(vocabulary.id);
-            expect(vocabulary).toBeUndefined();
+            expect(vocabulary).toBeNull();
         });
 
         it('SHOULD NOT delete vocabulary WHEN the cohort of the user has other member', async () => {
@@ -169,7 +172,7 @@ describe('DELETE /v1/users/self', () => {
 
             // Assert
             expect(status).toBe(200);
-            expect(await getLeitnerBoxItem(requester.id, vocabulary.id)).toBeUndefined();
+            expect(await getLeitnerBoxItem(requester.id, vocabulary.id)).toBeNull();
         });
 
         it('SHOULD delete flashcard WHEN the cohort of the user has other member', async () => {
@@ -184,7 +187,7 @@ describe('DELETE /v1/users/self', () => {
 
             // Assert
             expect(status).toBe(200);
-            expect(await getLeitnerBoxItem(requester.id, vocabulary.id)).toBeUndefined();
+            expect(await getLeitnerBoxItem(requester.id, vocabulary.id)).toBeNull();
         });
     });
 
@@ -203,7 +206,7 @@ describe('DELETE /v1/users/self', () => {
 
             // Assert
             expect(status).toBe(200);
-            expect(await getUserByUsername(requester.username)).toBeUndefined();
+            expect(await getUserByUsername(requester.username)).toBeNull();
         });
 
         it('SHOULD delete user WHEN the cohort of the user has other member', async () => {
@@ -216,7 +219,7 @@ describe('DELETE /v1/users/self', () => {
 
             // Assert
             expect(status).toBe(200);
-            expect(await getUserByUsername(requester.username)).toBeUndefined();
+            expect(await getUserByUsername(requester.username)).toBeNull();
             expect(await getUserByUsername(usernames[1])).toMatchObject({
                 cohortId: cohortIds[0],
             });
@@ -249,7 +252,7 @@ describe('DELETE /v1/users/self', () => {
 
             // Assert
             expect(status).toBe(200);
-            expect(await getCohortByName(cohort.name)).toBeUndefined();
+            expect(await getCohortByName(cohort.name)).toBeNull();
         });
 
         it('SHOULD NOT delete cohort WHEN the cohort of the user has other member', async () => {

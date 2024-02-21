@@ -4,7 +4,7 @@ import { ClassSerializerInterceptor, INestApplication, Logger, ValidationPipe } 
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as basicAuth from 'express-basic-auth';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import AppModule from '@/AppModule';
 import ServiceConfig from '@/common/configs/ServiceConfig';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';

@@ -1,8 +1,13 @@
-import { EntityRepository, In, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import Definition from '@/vocabulary/domains/Definition';
+import { Injectable } from '@nestjs/common';
 
-@EntityRepository(Definition)
+@Injectable()
 export default class DefinitionRepository extends Repository<Definition> {
+    constructor(private dataSource: DataSource) {
+        super(Definition, dataSource.createEntityManager());
+    }
+
     async removeDefinitionsByIds(ids: string[]): Promise<void> {
         await this.delete({ id: In(ids) });
     }
@@ -12,10 +17,13 @@ export default class DefinitionRepository extends Repository<Definition> {
     }
 
     async removeDefinitionsByCohortId(cohortId: string): Promise<void> {
-        await this.delete({
-            vocabulary: {
-                cohortId,
-            },
-        });
+        await this.query(
+            `DELETE
+             FROM "Definition"
+             WHERE "Definition"."vocabularyId" IN (SELECT id
+                                                   FROM "Vocabulary"
+                                                   WHERE "cohortId" = $1)`,
+            [cohortId],
+        );
     }
 }

@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
-/* eslint-disable unicorn/prefer-node-protocol */
 /* eslint-disable node/no-sync */
 /* eslint-disable unicorn/no-process-exit */
 
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
-import { execSync } from 'child_process';
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { execSync } from 'node:child_process';
 
 class MigrationGenerationHandler {
-    private readonly encoding = 'utf-8';
+    private readonly encoding = 'utf8';
 
     private readonly migrationConfigFileName = 'MigrationConfig.ts';
 
@@ -83,12 +82,11 @@ class MigrationGenerationHandler {
         writeFileSync(
             this.migrationConfigFileName,
             `
+            import { DataSource } from 'typeorm';
             import DatabaseNamingStrategy from '@/common/persistence/DatabaseNamingStrategy';
         
-            export = {
-                retryAttempts: 1,
+            export default new DataSource({
                 synchronize: false,
-                autoLoadEntities: false,
                 type: '${this.getEnvironmentVariableValue('TYPEORM_CONNECTION')}',
                 host: '${this.getEnvironmentVariableValue('TYPEORM_HOST')}',
                 port: ${Number.parseInt(this.getEnvironmentVariableValue('TYPEORM_PORT'), 10)},
@@ -97,11 +95,8 @@ class MigrationGenerationHandler {
                 database: '${this.getEnvironmentVariableValue('TYPEORM_DATABASE')}',
                 entities: ['${this.getEnvironmentVariableValue('TYPEORM_ENTITIES')}'],
                 migrations: ['${this.getEnvironmentVariableValue('TYPEORM_MIGRATIONS')}'],
-                cli: {
-                    migrationsDir: '${this.getEnvironmentVariableValue('TYPEORM_MIGRATIONS_DIR')}',
-                },
                 namingStrategy: new DatabaseNamingStrategy(),
-            };`,
+            });`,
         );
 
         this.isMigrationConfigFileCreated = true;
@@ -118,11 +113,13 @@ class MigrationGenerationHandler {
         return migrationFileName;
     }
 
+    private getMigrationDirectory(): string {
+        return this.getEnvironmentVariableValue('TYPEORM_MIGRATIONS_DIR');
+    }
+
     private generateMigrationQueries(): void {
         const output = execSync(
-            `npm run typeorm migration:generate -- --pretty --config ${
-                this.migrationConfigFileName
-            } --name ${this.getMigrationFileName()}`,
+            `npm run typeorm migration:generate ${this.getMigrationDirectory()}/${this.getMigrationFileName()} -- --pretty --dataSource ${this.migrationConfigFileName}`,
             { encoding: this.encoding },
         );
 

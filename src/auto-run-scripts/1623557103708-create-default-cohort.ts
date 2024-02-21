@@ -4,7 +4,10 @@ import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export default class CreateDefaultCohort {
-    constructor(private readonly cohortRepository: CohortRepository, private readonly logger: Logger) {
+    constructor(
+        private readonly cohortRepository: CohortRepository,
+        private readonly logger: Logger,
+    ) {
         this.logger = new Logger(CreateDefaultCohort.name);
     }
 
@@ -19,7 +22,7 @@ export default class CreateDefaultCohort {
                 .insert()
                 .into(Cohort)
                 .values({ name: () => `'${defaultCohortName}'::VARCHAR` })
-                .onConflict(`("name") DO NOTHING`)
+                .orIgnore(`("name") DO NOTHING`)
                 .execute();
             this.logger.log(`Default cohort with name "${defaultCohortName}" has been created`);
         } catch {

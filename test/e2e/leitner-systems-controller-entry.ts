@@ -15,6 +15,7 @@ import { createItem, getLeitnerBoxItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { momentDiff } from '@/common/utils/moment-util';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('Leitner Systems Entry', () => {
     let app: INestApplication;
@@ -27,6 +28,7 @@ describe('Leitner Systems Entry', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuidV4()}`;
         cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
@@ -36,6 +38,7 @@ describe('Leitner Systems Entry', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id, fakeCohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     describe('placeIntoFirstLeitnerBox', () => {

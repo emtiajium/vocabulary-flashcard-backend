@@ -16,6 +16,7 @@ import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import MomentUnit, { delay, getFormattedDate, makeItNewer, makeItOlder } from '@/common/utils/moment-util';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import LeitnerBoxItemSearchResult from '@/vocabulary/domains/LeitnerBoxItemSearchResult';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('Leitner Systems Box Items', () => {
     let app: INestApplication;
@@ -37,6 +38,7 @@ describe('Leitner Systems Box Items', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuid.v4()}`;
         cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
@@ -45,6 +47,7 @@ describe('Leitner Systems Box Items', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     describe('Box 1', () => {

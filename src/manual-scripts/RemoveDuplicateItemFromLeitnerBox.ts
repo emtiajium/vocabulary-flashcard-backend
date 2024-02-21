@@ -1,13 +1,11 @@
-import { createConnection, getConnectionManager, getRepository } from 'typeorm';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 export default class RemoveDuplicateItemFromLeitnerBox {
     async execute(): Promise<void> {
         try {
-            // TODO remove the condition
-            // workaround as couldn't find a way to execute the script in a separate thread in AEB
-            if (!getConnectionManager().has('default')) {
-                await createConnection();
+            if (!DataSource.isInitialized) {
+                await DataSource.initialize();
             }
             await this.remove();
         } catch (error) {
@@ -16,7 +14,7 @@ export default class RemoveDuplicateItemFromLeitnerBox {
     }
 
     private async remove(): Promise<void> {
-        await getRepository(LeitnerSystems).query(
+        await DataSource.getRepository(LeitnerSystems).query(
             `DELETE
              FROM "LeitnerSystems"
              WHERE "vocabularyId" = $1

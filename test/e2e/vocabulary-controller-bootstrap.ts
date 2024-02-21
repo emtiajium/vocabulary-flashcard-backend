@@ -19,6 +19,7 @@ import generateJwToken from '@test/util/auth-util';
 import getNewJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-list';
 import SearchResult from '@/common/domains/SearchResult';
 import PartialVocabulary from '@/vocabulary/domains/PartialVocabulary';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 jest.mock('@/manual-scripts/new-joiner-vocabulary-list', () => {
     const originalModule = jest.requireActual('@/manual-scripts/new-joiner-vocabulary-list');
@@ -40,6 +41,7 @@ describe('/v1/vocabularies/bootstrap', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         cohort = await createCohort({ name: `Cohort _ ${uuid.v4()}`, usernames: [] } as Cohort);
         await addUsersToCohort(cohort.name, [requester.username]);
@@ -48,6 +50,7 @@ describe('/v1/vocabularies/bootstrap', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     async function makeApiRequest(): Promise<SupertestResponse<SearchResult<Vocabulary>>> {

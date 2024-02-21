@@ -11,7 +11,7 @@ export default class RelateLinkerWords1678015289009 implements MigrationInterfac
         `);
 
         if (!vocabulariesHavingLinkerWords?.length) {
-            return Promise.resolve();
+            return;
         }
 
         const words = [...new Set(vocabulariesHavingLinkerWords.flatMap(({ linkerWords }) => linkerWords))];
@@ -22,7 +22,7 @@ export default class RelateLinkerWords1678015289009 implements MigrationInterfac
                 FROM "Vocabulary"
                 WHERE LOWER(word) IN (${words.map((_, index) => `$${index + 1}`)});
             `,
-            [...words.map((word) => word.toLowerCase().trim())],
+            words.map((word) => word.toLowerCase().trim()),
         );
 
         /* eslint-disable no-restricted-syntax */

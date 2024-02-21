@@ -36,7 +36,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     genericNotes?: string[];
 
     @Column({ type: 'varchar', array: true, default: [] })
-    @ValidateIf((vocabulary) => !!vocabulary.genericExternalLinks)
+    @ValidateIf((vocabulary) => Boolean(vocabulary.genericExternalLinks))
     @IsUrl(undefined, { each: true })
     @IsArray()
     @IsOptional()

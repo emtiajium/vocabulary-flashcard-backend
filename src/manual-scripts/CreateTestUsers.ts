@@ -1,9 +1,10 @@
 import User from '@/user/domains/User';
-import { createConnection, getRepository, In } from 'typeorm';
+import { In } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import * as _ from 'lodash';
 import Definition from '@/vocabulary/domains/Definition';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 type PartialUser = Pick<User, 'firstname' | 'lastname' | 'username' | 'profilePictureUrl'>;
 
@@ -41,7 +42,7 @@ export default class CreateTestUsers {
 
     async execute(): Promise<void> {
         try {
-            await createConnection();
+            await DataSource.initialize();
             await this.removeDefinitions();
             await this.removeVocabularies();
             await this.removeUsers();
@@ -50,11 +51,13 @@ export default class CreateTestUsers {
             await this.associateUsersWithCohort();
         } catch (error) {
             console.error(`Error`, error);
+        } finally {
+            await DataSource.destroy();
         }
     }
 
     private async removeDefinitions(): Promise<void> {
-        await getRepository(Definition).query(
+        await DataSource.getRepository(Definition).query(
             `DELETE
              FROM "Definition"
              WHERE "vocabularyId" IN (
@@ -71,7 +74,7 @@ export default class CreateTestUsers {
     }
 
     private async removeVocabularies(): Promise<void> {
-        await getRepository(Vocabulary).query(
+        await DataSource.getRepository(Vocabulary).query(
             `
                 DELETE
                 FROM "Vocabulary"
@@ -86,29 +89,30 @@ export default class CreateTestUsers {
     }
 
     private async removeCohort(): Promise<void> {
-        await getRepository(Cohort).delete({ name: this.cohortName });
+        await DataSource.getRepository(Cohort).delete({ name: this.cohortName });
     }
 
     private async createCohort(): Promise<void> {
-        this.cohortId = (await getRepository(Cohort).save({ name: this.cohortName, userIds: [] })).id;
+        this.cohortId = (await DataSource.getRepository(Cohort).save({ name: this.cohortName, userIds: [] })).id;
     }
 
     private async removeUsers(): Promise<void> {
-        await getRepository(User).delete({ username: In(_.map(this.users, 'username')) });
+        await DataSource.getRepository(User).delete({ username: In(_.map(this.users, 'username')) });
     }
 
     private async createUsers(): Promise<void> {
-        await getRepository(User).insert(this.users);
+        await DataSource.getRepository(User).insert(this.users);
     }
 
     private async associateUsersWithCohort(): Promise<void> {
-        await getRepository(User).update(
+        await DataSource.getRepository(User).update(
             { username: In(_.map(this.users, 'username')) },
             { cohort: { id: this.cohortId } },
         );
     }
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 (async function executeScript(): Promise<void> {
     await new CreateTestUsers().execute();
     process.exit(0);

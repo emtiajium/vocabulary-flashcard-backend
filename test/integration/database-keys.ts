@@ -15,6 +15,7 @@ import {
     getAllUniqueKeys,
     getAllIndexKeys,
 } from '@test/util/database-keys-util';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('Database Keys', () => {
     let app: INestApplication;
@@ -27,6 +28,7 @@ describe('Database Keys', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
 
         tableNames = getTableNames();
         [allPrimaryKeys, allForeignKeys, allIndexKeys, allUniqueKeys] = await Promise.all([
@@ -39,6 +41,7 @@ describe('Database Keys', () => {
 
     afterAll(async () => {
         await app.close();
+        await DataSource.destroy();
     });
 
     test(`Primary Keys`, () => {

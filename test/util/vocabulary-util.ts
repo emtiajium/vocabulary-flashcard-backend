@@ -1,11 +1,11 @@
-import { getRepository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
 import { v4 as uuidV4 } from 'uuid';
 import { removeLeitnerBoxItemsByCohortId } from '@test/util/leitner-systems-util';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 export async function removeVocabularyAndRelationsByCohortId(cohortId: string): Promise<void> {
-    await getRepository(Definition).query(
+    await DataSource.getRepository(Definition).query(
         `DELETE
          FROM "Definition"
          WHERE "vocabularyId" IN (SELECT id
@@ -14,11 +14,11 @@ export async function removeVocabularyAndRelationsByCohortId(cohortId: string): 
         [cohortId],
     );
     await removeLeitnerBoxItemsByCohortId(cohortId);
-    await getRepository(Vocabulary).delete({ cohortId });
+    await DataSource.getRepository(Vocabulary).delete({ cohortId });
 }
 
 export function getDefinitionsByVocabularyId(vocabularyId: string): Promise<Definition[]> {
-    return getRepository(Definition).query(
+    return DataSource.getRepository(Definition).query(
         `SELECT *
          FROM "Definition"
          WHERE "vocabularyId" = $1
@@ -29,7 +29,7 @@ export function getDefinitionsByVocabularyId(vocabularyId: string): Promise<Defi
 
 export async function getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {
     return (
-        await getRepository(Vocabulary).query(
+        await DataSource.getRepository(Vocabulary).query(
             `SELECT *
              FROM "Vocabulary"
              WHERE "cohortId" = $1
@@ -40,11 +40,11 @@ export async function getSingleVocabularyByCohortId(cohortId: string): Promise<V
 }
 
 export function getVocabularyById(id: string): Promise<Vocabulary> {
-    return getRepository(Vocabulary).findOne(id, { relations: ['definitions'] });
+    return DataSource.getRepository(Vocabulary).findOne({ where: { id }, relations: ['definitions'] });
 }
 
 export function createVocabulary(vocabulary: Vocabulary, cohortId: string): Promise<Vocabulary> {
-    return getRepository(Vocabulary).save({ ...vocabulary, cohortId });
+    return DataSource.getRepository(Vocabulary).save({ ...vocabulary, cohortId });
 }
 
 export function getVocabularyWithDefinitions(): Vocabulary {

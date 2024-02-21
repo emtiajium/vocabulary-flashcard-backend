@@ -35,7 +35,7 @@ export default class Definition extends BaseEntityWithMandatoryId {
     notes?: string[];
 
     @Column({ type: 'varchar', array: true })
-    @ValidateIf((definition) => !!definition.externalLinks)
+    @ValidateIf((definition) => Boolean(definition.externalLinks))
     @IsUrl(undefined, { each: true })
     @IsArray()
     @IsOptional()

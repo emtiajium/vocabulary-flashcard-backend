@@ -8,7 +8,6 @@ import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRe
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
-import { ConfigService } from '@nestjs/config';
 import TokenManager from '@/common/services/TokenManager';
 import ClientType from '@/common/domains/ClientType';
 import CacheUserService from '@/user/services/CacheUserService';
@@ -20,7 +19,6 @@ export default class UserService {
         private readonly userRepository: UserRepository,
         private readonly cohortService: CohortService,
         private readonly leitnerSystemsRepository: LeitnerSystemsRepository,
-        private readonly configService: ConfigService,
         private readonly tokenManager: TokenManager,
         private readonly cacheUserService: CacheUserService,
     ) {}
@@ -33,7 +31,7 @@ export default class UserService {
     ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         const user = await this.assertUserCreationPayload(userPayload, token, client, versionCode);
         this.cacheUserService.delete(user.username);
-        const persistedUser = await this.userRepository.upsert(user);
+        const persistedUser = await this.userRepository.insertOrUpdate(user);
         if (persistedUser.version === 1) {
             await this.cohortService.createCohort({ name: user.username, usernames: [persistedUser.username] });
         }
@@ -76,7 +74,7 @@ export default class UserService {
         let user: User;
         user = this.cacheUserService.get(username);
         if (!user) {
-            user = await this.userRepository.findOne({ username });
+            user = await this.userRepository.findOneBy({ username });
             if (user) {
                 this.cacheUserService.set(user);
             }

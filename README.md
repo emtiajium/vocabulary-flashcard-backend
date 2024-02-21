@@ -10,7 +10,7 @@
 
 ###### Prerequisites
 
-➜ Install Node 14 LTS using [nvm](https://github.com/nvm-sh/nvm)
+➜ Install Node 18.13.0 using [nvm](https://github.com/nvm-sh/nvm)
 
 ➜ Install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/)
 
@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+-   `1.48.0`: Node 18 + Upgraded packages
 -   `0.47.0`: Added `@Post(/v1/users/active-users)`
 -   `0.46.0`: Fake caching user to reduce DB hit during authentication
 -   `0.45.0`: Added `@Delete(/v1/users/self)` API

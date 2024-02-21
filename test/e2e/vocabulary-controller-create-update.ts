@@ -23,6 +23,7 @@ import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import * as _ from 'lodash';
 import { delay } from '@/common/utils/moment-util';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -51,6 +52,7 @@ describe('/v1/vocabularies', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
 
         const response = await seed();
         requester = response.user;
@@ -60,6 +62,7 @@ describe('/v1/vocabularies', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds(cohortIds);
         await app.close();
+        await DataSource.destroy();
     });
 
     async function makeApiRequest(

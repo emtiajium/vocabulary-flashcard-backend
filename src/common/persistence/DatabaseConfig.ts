@@ -1,7 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 
+type ConnectionType = 'postgres';
+
 export default class DatabaseConfig {
-    type: string;
+    type: ConnectionType;
 
     host: string;
 
@@ -18,7 +20,7 @@ export default class DatabaseConfig {
     constructor() {
         const configService = new ConfigService();
 
-        this.type = configService.get<string>('TYPEORM_CONNECTION');
+        this.type = configService.get<ConnectionType>('TYPEORM_CONNECTION');
         this.host = configService.get<string>('TYPEORM_HOST');
         this.port = configService.get<number>('TYPEORM_PORT');
         this.username = configService.get<string>('TYPEORM_USERNAME');

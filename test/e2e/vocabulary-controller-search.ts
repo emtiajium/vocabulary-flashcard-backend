@@ -18,6 +18,7 @@ import { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import Definition from '@/vocabulary/domains/Definition';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('POST /v1/vocabularies/search', () => {
     let app: INestApplication;
@@ -30,6 +31,7 @@ describe('POST /v1/vocabularies/search', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         secondUser = await createUser({
             username: generateUsername(),
@@ -44,6 +46,7 @@ describe('POST /v1/vocabularies/search', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     async function makeApiRequest(

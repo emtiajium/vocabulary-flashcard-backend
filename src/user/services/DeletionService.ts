@@ -27,7 +27,7 @@ export default class DeletionService {
         if (isCohortAlone) {
             await this.vocabularyRepository.removeVocabulariesByCohortId(cohortId);
         }
-        this.cacheUserService.delete((await this.userRepository.findOne({ id: userId })).username);
+        this.cacheUserService.delete((await this.userRepository.findOneBy({ id: userId })).username);
         await this.userRepository.removeById(userId);
         if (isCohortAlone) {
             await this.cohortRepository.removeById(cohortId);

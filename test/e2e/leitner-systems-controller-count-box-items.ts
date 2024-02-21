@@ -13,6 +13,7 @@ import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
+import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('GET /v1/leitner-systems/items/count/:box', () => {
     let app: INestApplication;
@@ -23,6 +24,7 @@ describe('GET /v1/leitner-systems/items/count/:box', () => {
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
+        await DataSource.initialize();
         requester = await createApiRequester();
         const cohortName = `Cohort _ ${uuidV4()}`;
         cohort = await createCohort({ name: cohortName, usernames: [requester.username] } as Cohort);
@@ -31,6 +33,7 @@ describe('GET /v1/leitner-systems/items/count/:box', () => {
     afterAll(async () => {
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
+        await DataSource.destroy();
     });
 
     async function makeApiRequest(
