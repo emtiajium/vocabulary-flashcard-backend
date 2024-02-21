@@ -19,6 +19,19 @@ if [[ $certbotExists == false ]]; then
     sudo /opt/certbot/bin/pip install urllib3==1.26.15
     sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
     echo "$(sudo certbot --version)"
+fi
+
+certificates=$(sudo certbot certificates)
+echo "Certificates ++++++++++ $(date) $certificates"
+notFoundCertificatesSubString='No certificates found'
+certificatesExist=true
+if [[ $certificates == *$notFoundCertificatesSubString* ]]; then
+    certificatesExist=false
+fi
+
+echo $certificatesExist
+
+if [[ $certificatesExist == false ]]; then
     sudo certbot --nginx -d api.firecrackervocabulary.com
 
     renewalCommand='sudo certbot renew -q'
