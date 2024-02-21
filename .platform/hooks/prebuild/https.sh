@@ -33,7 +33,7 @@ fi
 echo $certificatesExist
 
 if [[ $certificatesExist == false ]]; then
-    sudo certbot --nginx -d $domain -m 271emtiaj@gmail.com -y
+    sudo certbot certonly --nginx -d $domain -m 271emtiaj@gmail.com
 
     renewalCommand='sudo certbot renew -q'
     renewalCommandExists=false
