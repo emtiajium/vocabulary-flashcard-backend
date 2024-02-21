@@ -23,16 +23,17 @@ fi
 
 certificates=$(sudo certbot certificates)
 echo "Certificates ++++++++++ $(date) $certificates"
-notFoundCertificatesSubString='No certificates found'
-certificatesExist=true
-if [[ $certificates == *$notFoundCertificatesSubString* ]]; then
-    certificatesExist=false
+domain=api.firecrackervocabulary.com
+foundCertificatesSubString="Certificate Name: $domain"
+certificatesExist=false
+if [[ $certificates == *$foundCertificatesSubString* ]]; then
+    certificatesExist=true
 fi
 
 echo $certificatesExist
 
 if [[ $certificatesExist == false ]]; then
-    sudo certbot --nginx -d api.firecrackervocabulary.com
+    sudo certbot --nginx -d $domain
 
     renewalCommand='sudo certbot renew -q'
     renewalCommandExists=false
