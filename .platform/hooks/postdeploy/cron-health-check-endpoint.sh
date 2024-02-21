@@ -19,7 +19,7 @@ if [[ $isExist == false ]]; then
     # write permission to the ec2-user
     sudo chown ec2-user /etc/crontab
 
-    echo "*/1 * * * * root curl -X 'GET' '$endpoint' -H 'X-Client-Id: $clientId' -H 'accept: application/json'" | sudo tee -a /etc/crontab > /dev/null
+    echo "*/1 * * * * root curl -X GET $endpoint -H 'X-Client-Id: $clientId' -H 'accept: application/json'" | sudo tee -a /etc/crontab > /dev/null
 
     # below command is to resolve the error
     # crond[5976]: (root) WRONG FILE OWNER (/etc/crontab)
