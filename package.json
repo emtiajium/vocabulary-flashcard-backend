@@ -19,6 +19,7 @@
         "format:check": "prettier --check \"migrations/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\" \"*.md\" \"*.json\"",
         "start:dev": "nest start --watch",
         "start:prod": "npm run migration:run && npm run build && node dist/src/main.js",
+        "start:prod:aeb": "npm run migration:run:aeb && npm run build && node dist/src/main.js",
         "lint:config": "eslint --print-config src/main.ts",
         "lint": "eslint \"{migrations,src,test}/**/*.ts\" --fix",
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
@@ -27,6 +28,7 @@
         "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/.bin/typeorm",
         "migration:generate": "node -r ts-node/register -r tsconfig-paths/register src/common/persistence/MigrationGenerationHandler.ts",
         "migration:run": "npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
+        "migration:run:aeb": "FIRECRACKER_PLATFORM=aeb npm run migration:run",
         "ci": "npm run format:check && npm run lint:check && npm run test && npm run build",
         "seed-script:insert-test-users": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/CreateTestUsers.ts",
         "clean:docker-containers": "docker kill ielts-gibberish-postgres && docker stop ielts-gibberish-postgres && docker rm ielts-gibberish-postgres && docker volume rm ielts-gibberish-postgres-data"
