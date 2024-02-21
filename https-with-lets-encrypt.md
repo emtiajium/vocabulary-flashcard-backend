@@ -23,4 +23,4 @@ at `00:00:00` and `12:00:00` and create two entries in the file.
 
 After each deployment, AWS Elastic Beanstalk (AEB) will replace the `/etc/nginx.conf`, which will disable HTTPS. To avoid this, you need to [extend the Linux platform](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux-extend.html). Please check [.platform/nginx/conf.d/lets-encrypt-nginx.conf](./.platform/nginx/conf.d/lets-encrypt-nginx.conf) how I did.
 
-The whole process of installing certbot, getting the certificate and auto-renewal can be automated by [extending the Linux platform](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux-extend.html). Please check [.platform/hooks/predeploy/https.sh](./.platform/hooks/predeploy/https.sh) how I did.
+The whole process of installing certbot, getting the certificate and auto-renewal can be automated by [extending the Linux platform](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/platforms-linux-extend.html). Please check [.platform/hooks/predeploy/https.sh](.platform/hooks/prebuild/https.sh) how I did.
