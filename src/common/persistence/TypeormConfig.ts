@@ -13,7 +13,11 @@ if (process.env.FIRECRACKER_PLATFORM === 'aeb') {
     const environmentVariablesAsString = execSync(`/opt/elasticbeanstalk/bin/get-config environment`, {
         encoding: 'utf8',
     }).trim();
+    // eslint-disable-next-line no-console
+    console.log('environmentVariablesAsString', environmentVariablesAsString);
     const environmentVariables = JSON.parse(environmentVariablesAsString);
+    // eslint-disable-next-line no-console
+    console.log('environmentVariables', environmentVariables);
     configService.set('TYPEORM_CONNECTION', environmentVariables.TYPEORM_CONNECTION);
     configService.set('TYPEORM_HOST', environmentVariables.TYPEORM_HOST);
     configService.set('TYPEORM_PORT', environmentVariables.TYPEORM_PORT);
