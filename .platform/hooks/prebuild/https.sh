@@ -19,7 +19,7 @@ if [[ $certbotExists == false ]]; then
 fi
 
 certificates=$(sudo certbot certificates)
-domain=uat2.firecrackervocabulary.com
+domain=api.firecrackervocabulary.com
 foundCertificatesSubString="Certificate Name: $domain"
 certificatesExist=false
 if [[ $certificates == *$foundCertificatesSubString* ]]; then
