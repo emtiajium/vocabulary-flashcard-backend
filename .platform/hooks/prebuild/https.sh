@@ -26,8 +26,6 @@ if [[ $certificates == *$foundCertificatesSubString* ]]; then
     certificatesExist=true
 fi
 
-echo $certificatesExist
-
 if [[ $certificatesExist == false ]]; then
     sudo certbot --nginx -d $domain -m 271emtiaj@gmail.com --agree-tos
 
