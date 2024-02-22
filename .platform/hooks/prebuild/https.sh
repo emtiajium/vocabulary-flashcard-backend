@@ -45,7 +45,7 @@ if [[ $certificatesExist == false ]]; then
         # write permission to the ec2-user
         sudo chown ec2-user /etc/crontab
 
-        echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && sudo certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
+        echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && $renewalCommand" | sudo tee -a /etc/crontab > /dev/null
 
         # below command is to resolve the error
         # crond[5976]: (root) WRONG FILE OWNER (/etc/crontab)
