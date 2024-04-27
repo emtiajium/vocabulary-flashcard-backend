@@ -2,7 +2,6 @@ import { DataSource, Repository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
-import * as _ from 'lodash';
 import Sort, { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
 import { ConflictException, Injectable } from '@nestjs/common';
@@ -53,13 +52,14 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         const searchKeywordParameterPosition = 5;
 
-        let vocabularyQueryResult = await this.query(
+        const vocabularyQueryResult = await this.query(
             `
                 SELECT vocabulary.id,
                        vocabulary.word,
-                       json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning)) AS definitions,
-                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN                              AS "isInLeitnerBox",
-                       (COUNT(*) OVER ())::INTEGER                                                     AS "totalNumberOfVocabularies"
+                       coalesce(json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning))
+                                filter (where definition.id is not null), '[]') AS definitions,
+                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN       AS "isInLeitnerBox",
+                       (COUNT(*) OVER ())::INTEGER                              AS "totalNumberOfVocabularies"
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
                          LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
@@ -81,24 +81,10 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 : [userId, cohortId, currentPage, pageSize],
         );
 
-        vocabularyQueryResult = this.rejectNull(vocabularyQueryResult);
-
         return SearchResult.omitTotal<VocabularySearchResponse, { totalNumberOfVocabularies: number }>(
             vocabularyQueryResult,
             'totalNumberOfVocabularies',
         );
-    }
-
-    private rejectNull(results: Vocabulary[]): Vocabulary[] {
-        // as LEFT join results[index].definitions can be [null]
-        return _.map(results, (result) => ({
-            ...result,
-            definitions: _.isNull(result.definitions[0])
-                ? []
-                : _.isNull(result.definitions[0].id)
-                  ? []
-                  : result.definitions,
-        }));
     }
 
     private getSearchQuery(
@@ -144,12 +130,13 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                        vocabulary."genericExternalLinks",
                        vocabulary."linkerWords",
                        vocabulary."isDraft",
-                       json_agg(json_build_object('id', definition.id,
-                                                  'vocabularyId', definition."vocabularyId",
-                                                  'meaning', definition.meaning,
-                                                  'examples', definition.examples,
-                                                  'notes', definition.notes,
-                                                  'externalLinks', definition."externalLinks")) AS definitions,
+                       coalesce(json_agg(json_build_object('id', definition.id,
+                                                           'vocabularyId', definition."vocabularyId",
+                                                           'meaning', definition.meaning,
+                                                           'examples', definition.examples,
+                                                           'notes', definition.notes,
+                                                           'externalLinks', definition."externalLinks"))
+                                filter (where definition.id is not null), '[]') AS definitions,
                        CASE
                            WHEN
                                EXISTS(SELECT "leitnerSystems".id
@@ -158,7 +145,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                                         AND "leitnerSystems"."userId" = $2)
                                THEN true
                            ELSE false
-                           END                                                                  AS "isInLeitnerBox"
+                           END                                                  AS "isInLeitnerBox"
                 FROM "Vocabulary" AS vocabulary
                          LEFT JOIN (SELECT *
                                     FROM "Definition"
@@ -171,7 +158,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             [id, userId],
         );
 
-        return this.rejectNull(results)[0];
+        return results[0];
     }
 
     async getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {

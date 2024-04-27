@@ -138,6 +138,7 @@ describe('POST /v1/vocabularies/search', () => {
             expect(results).toHaveLength(1);
             expect(results[0].id).toBe(vocabulary.id);
             expect(results[0].word).toBe(word);
+            expect(results[0].definitions).toHaveLength(0);
         });
 
         it('SHOULD return 200 OK WITH vocabularies indifferent to the empty definition WHEN fetchNotHavingDefinitionOnly is false', async () => {
