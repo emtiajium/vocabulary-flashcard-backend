@@ -2,7 +2,6 @@ import { DataSource, Repository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
-import * as _ from 'lodash';
 import Sort, { SortDirection, SupportedSortFields } from '@/common/domains/Sort';
 import VocabularySearchCoverage from '@/vocabulary/domains/VocabularySearchCoverage';
 import { ConflictException, Injectable } from '@nestjs/common';
