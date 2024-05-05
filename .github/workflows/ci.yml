@@ -36,13 +36,17 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Run Docker containers
-        run: docker-compose up -d
+        run: |
+          docker-compose -f docker-compose-ci.yml up -d
+          docker-compose -f docker-compose-ci.yml ps
+          docker volume ls
+          docker inspect --format '{{json .Mounts}}' ielts-gibberish-test-postgres
 
       - name: Create environment variables
         run: npm run create:env
 
       - name: Database Tables' modification
-        run: npm run migration:run
+        run: npm run migration:run:local-test
 
       - name: Automated Test
         run: npm run test
@@ -51,4 +55,7 @@ jobs:
         run: npm run build
 
       - name: Clean Docker containers
-        run: docker-compose stop && docker-compose rm -f && docker-compose down --volumes
+        run: | 
+          docker-compose -f docker-compose-ci.yml stop
+          docker-compose -f docker-compose-ci.yml rm -f
+          docker-compose -f docker-compose-ci.yml down --volumes
