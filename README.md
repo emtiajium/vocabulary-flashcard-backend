@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+-   `1.51.0`: Created a separate DB (Docker container) for the automated test with `fsync=off`, `synchronous_commit=off` and `full_page_writes=off`
 -   `1.50.0`: Empty array when a vocab does not have a definition using the FILTER clause
 -   `1.49.0`: Automated getting certificate to enable HTTPS after a new EC2 instance gets launched
 -   `1.48.0`: Node 18 + Upgraded packages
