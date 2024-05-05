@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Run Docker containers
-        run: docker-compose up -d
+        run: docker-compose up -d ielts-gibberish-test-database
 
       - name: Create environment variables
         run: npm run create:env
