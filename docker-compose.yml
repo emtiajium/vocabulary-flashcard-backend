@@ -35,8 +35,9 @@ services:
             POSTGRES_PASSWORD: 123
             POSTGRES_USER: postgres
             POSTGRES_DB: ielts-gibberish
+        # https://www.postgresql.org/docs/14/non-durability.html
         # https://www.postgresql.org/docs/14/runtime-config-wal.html
-        command: -c fsync=off -c full_page_writes=off
+        command: -c fsync=off -c synchronous_commit=off -c full_page_writes=off
         volumes:
             - 'ielts-gibberish-test-postgres-data:/var/lib/postgresql/data'
 
