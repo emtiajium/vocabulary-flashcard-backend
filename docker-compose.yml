@@ -37,8 +37,13 @@ services:
             POSTGRES_DB: ielts-gibberish
         # https://www.postgresql.org/docs/14/runtime-config-wal.html
         command: -c fsync=off -c full_page_writes=off
+        volumes:
+            - 'ielts-gibberish-test-postgres-data:/var/lib/postgresql/data'
 
 volumes:
     ielts-gibberish-postgres-data:
         name: ielts-gibberish-postgres-data
+        driver: local
+    ielts-gibberish-test-postgres-data:
+        name: ielts-gibberish-test-postgres-data
         driver: local
