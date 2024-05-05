@@ -42,7 +42,7 @@ jobs:
         run: npm run create:env
 
       - name: Database Tables' modification
-        run: npm run migration:run
+        run: npm run migration:run:local-test
 
       - name: Automated Test
         run: npm run test
