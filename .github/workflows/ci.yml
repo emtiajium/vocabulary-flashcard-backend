@@ -36,7 +36,10 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Run Docker containers
-        run: docker-compose up -d ielts-gibberish-test-database
+        run: |
+          docker-compose -f docker-compose-ci.yml up -d
+          docker-compose -f docker-compose-ci.yml ps
+          docker volume ls
 
       - name: Create environment variables
         run: npm run create:env
@@ -51,4 +54,7 @@ jobs:
         run: npm run build
 
       - name: Clean Docker containers
-        run: docker-compose stop && docker-compose rm -f && docker-compose down --volumes
+        run: | 
+          docker-compose -f docker-compose-ci.yml stop
+          docker-compose -f docker-compose-ci.yml rm -f
+          docker-compose -f docker-compose-ci.yml down --volumes

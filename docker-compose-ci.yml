@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+    ielts-gibberish-test-database:
+        image: postgres:14.10
+        container_name: ielts-gibberish-test-postgres
+        restart: always
+        ports:
+            - '5429:5432'
+        deploy:
+            resources:
+                limits:
+                    memory: 512M
+                reservations:
+                    memory: 512M
+        environment:
+            POSTGRES_PASSWORD: 123
+            POSTGRES_USER: postgres
+            POSTGRES_DB: ielts-gibberish
+        # https://www.postgresql.org/docs/14/runtime-config-wal.html
+        command: -c fsync=off -c full_page_writes=off
