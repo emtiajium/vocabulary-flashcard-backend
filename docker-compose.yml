@@ -35,6 +35,7 @@ services:
             POSTGRES_PASSWORD: 123
             POSTGRES_USER: postgres
             POSTGRES_DB: ielts-gibberish
+        # https://www.postgresql.org/docs/14/runtime-config-wal.html
         command: -c fsync=off -c full_page_writes=off
 
 volumes:
