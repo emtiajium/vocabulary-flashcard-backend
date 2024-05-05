@@ -16,5 +16,8 @@ services:
             POSTGRES_PASSWORD: 123
             POSTGRES_USER: postgres
             POSTGRES_DB: ielts-gibberish
+        # https://docs.docker.com/storage/tmpfs/
+        tmpfs:
+            - /var/lib/postgresql/data
         # https://www.postgresql.org/docs/14/runtime-config-wal.html
         command: -c fsync=off -c full_page_writes=off
