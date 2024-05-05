@@ -19,6 +19,24 @@ services:
         volumes:
             - 'ielts-gibberish-postgres-data:/var/lib/postgresql/data'
 
+    ielts-gibberish-test-database:
+        image: postgres:14.10
+        container_name: ielts-gibberish-test-postgres
+        restart: always
+        ports:
+            - '5429:5432'
+        deploy:
+            resources:
+                limits:
+                    memory: 512M
+                reservations:
+                    memory: 512M
+        environment:
+            POSTGRES_PASSWORD: 123
+            POSTGRES_USER: postgres
+            POSTGRES_DB: ielts-gibberish
+        command: -c fsync=off -c full_page_writes=off
+
 volumes:
     ielts-gibberish-postgres-data:
         name: ielts-gibberish-postgres-data

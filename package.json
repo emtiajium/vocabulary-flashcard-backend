@@ -27,8 +27,10 @@
         "test:memory-usage": "LOGGING_CONSOLE_ENABLED=false node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --coverage=false --detectOpenHandles --forceExit --detectLeaks",
         "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/.bin/typeorm",
         "migration:generate": "node -r ts-node/register -r tsconfig-paths/register src/common/persistence/MigrationGenerationHandler.ts",
-        "migration:run": "npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
-        "migration:run:aeb": "FIRECRACKER_PLATFORM=aeb npm run migration:run",
+        "migration:run:local-dev": "npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
+        "migration:run:local-test": "TYPEORM_PORT=5429 npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
+        "migration:run": "npm run migration:run:local-test && npm run migration:run:local-dev",
+        "migration:run:aeb": "FIRECRACKER_PLATFORM=aeb npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
         "ci": "npm run format:check && npm run lint:check && npm run test && npm run build",
         "seed-script:insert-test-users": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/CreateTestUsers.ts",
         "clean:docker-containers": "docker kill ielts-gibberish-postgres && docker stop ielts-gibberish-postgres && docker rm ielts-gibberish-postgres && docker volume rm ielts-gibberish-postgres-data"
