@@ -17,6 +17,7 @@ import getNewJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-l
 import User from '@/user/domains/User';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 import * as uuid from 'uuid';
+import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
 
 @Injectable()
 export default class VocabularyService {
@@ -176,5 +177,22 @@ export default class VocabularyService {
                 }
             }),
         );
+    }
+
+    async getRandomlyChosenMeanings(cohortId: string): Promise<RandomlyChosenMeaningResponse[]> {
+        let randomlyChosenMeaningResponses: RandomlyChosenMeaningResponse[] = [];
+        let count = 0;
+        const maxTry = 3;
+
+        do {
+            randomlyChosenMeaningResponses = await this.definitionRepository.getRandomlyChosenMeanings(cohortId);
+            count += 1;
+        } while (randomlyChosenMeaningResponses.length === 0 && count < maxTry);
+
+        if (randomlyChosenMeaningResponses.length === 0) {
+            randomlyChosenMeaningResponses = await this.definitionRepository.getAnyMeanings(cohortId);
+        }
+
+        return randomlyChosenMeaningResponses;
     }
 }
