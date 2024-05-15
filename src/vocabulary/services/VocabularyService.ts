@@ -184,8 +184,7 @@ export default class VocabularyService {
     async getRandomlyChosenMeanings(cohortId: string): Promise<RandomlyChosenMeaningResponse[]> {
         const randomlyChosenMeaningResponsesFromExternalService = await this.wordsApiAdapter.getRandomWords();
 
-        let randomlyChosenMeaningResponses: RandomlyChosenMeaningResponse[] =
-            await this.definitionRepository.getRandomlyChosenMeanings(cohortId);
+        let randomlyChosenMeaningResponses = await this.definitionRepository.getRandomlyChosenMeanings(cohortId);
 
         if (randomlyChosenMeaningResponses.length === 0) {
             randomlyChosenMeaningResponses = await this.definitionRepository.getAnyMeanings(cohortId);
