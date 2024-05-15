@@ -13,12 +13,14 @@ import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import DataSource from '@/common/persistence/TypeormConfig';
 import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
+import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
 
 describe('GET /v1/vocabularies/definitions/random-search', () => {
     let app: INestApplication;
 
     let requester: User;
     let cohort: Cohort;
+    let getRandomWordMock: jest.SpyInstance;
 
     beforeAll(async () => {
         app = await kickOff(AppModule);
@@ -28,9 +30,12 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             name: `Cohort _ ${uuid.v4()}`,
             usernames: [requester.username],
         } as Cohort);
+        // @ts-expect-error need to mock a private method
+        getRandomWordMock = jest.spyOn(WordsApiAdapter.prototype, 'getRandomWord');
     });
 
     afterAll(async () => {
+        getRandomWordMock.mockRestore();
         await removeCohortsWithRelationsByIds([cohort.id]);
         await app.close();
         await DataSource.destroy();
@@ -57,6 +62,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
 
             // Assert
             expect(status).toBe(200);
+            expect(getRandomWordMock).not.toHaveBeenCalled();
             const response = body as RandomlyChosenMeaningResponse[];
             expect(response).not.toHaveLength(0);
             expect(response).toStrictEqual([
