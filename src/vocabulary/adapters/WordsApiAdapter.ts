@@ -6,10 +6,7 @@ import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChos
 import { ConfigService } from '@nestjs/config';
 import { shuffle, times } from 'lodash';
 import safeStringify from 'fast-safe-stringify';
-
-function getRandomArrayItem<T>(items: T[]): T {
-    return items[Math.floor(Math.random() * items.length)];
-}
+import { getRandomArrayItem } from '@/common/utils/array-util';
 
 @Injectable()
 export default class WordsApiAdapter {
@@ -39,7 +36,7 @@ export default class WordsApiAdapter {
             const response = await this.get<ObjectLiteral, ObjectLiteral>(`https://wordsapiv1.p.rapidapi.com/words`, {
                 params: {
                     random: 'true',
-                    partOfSpeech: getRandomArrayItem(['verb', 'adjective']),
+                    partOfSpeech: getRandomArrayItem<string>(['verb', 'adjective']),
                     hasDetails: 'definitions',
                 },
                 headers: {
