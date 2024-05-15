@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
-import * as _ from 'lodash';
+import { difference, map, shuffle } from 'lodash';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
@@ -18,12 +18,14 @@ import User from '@/user/domains/User';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 import * as uuid from 'uuid';
 import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
+import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
 
 @Injectable()
 export default class VocabularyService {
     constructor(
         private readonly vocabularyRepository: VocabularyRepository,
         private readonly definitionRepository: DefinitionRepository,
+        private readonly wordsApiAdapter: WordsApiAdapter,
     ) {}
 
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
@@ -96,7 +98,7 @@ export default class VocabularyService {
     }
 
     private extractDefinitionIds = (definitions: Definition[]): string[] => {
-        return _.map(definitions, 'id');
+        return map(definitions, 'id');
     };
 
     private validateCohort(currentCohortId: string, requesterCohortId: string): void {
@@ -119,7 +121,7 @@ export default class VocabularyService {
 
     private async removeOrphanDefinitions(existingVocabulary: Vocabulary, vocabulary: Vocabulary): Promise<void> {
         await this.definitionRepository.removeDefinitionsByIds(
-            _.difference(
+            difference(
                 this.extractDefinitionIds(existingVocabulary.definitions),
                 this.extractDefinitionIds(vocabulary.definitions),
             ),
@@ -180,19 +182,15 @@ export default class VocabularyService {
     }
 
     async getRandomlyChosenMeanings(cohortId: string): Promise<RandomlyChosenMeaningResponse[]> {
-        let randomlyChosenMeaningResponses: RandomlyChosenMeaningResponse[] = [];
-        let count = 0;
-        const maxTry = 3;
+        const randomlyChosenMeaningResponsesFromExternalService = await this.wordsApiAdapter.getRandomWords();
 
-        do {
-            randomlyChosenMeaningResponses = await this.definitionRepository.getRandomlyChosenMeanings(cohortId);
-            count += 1;
-        } while (randomlyChosenMeaningResponses.length === 0 && count < maxTry);
+        let randomlyChosenMeaningResponses: RandomlyChosenMeaningResponse[] =
+            await this.definitionRepository.getRandomlyChosenMeanings(cohortId);
 
         if (randomlyChosenMeaningResponses.length === 0) {
             randomlyChosenMeaningResponses = await this.definitionRepository.getAnyMeanings(cohortId);
         }
 
-        return randomlyChosenMeaningResponses;
+        return shuffle([...randomlyChosenMeaningResponsesFromExternalService, ...randomlyChosenMeaningResponses]);
     }
 }

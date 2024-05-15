@@ -14,9 +14,11 @@ import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRe
 import CohortRepository from '@/user/repositories/CohortRepository';
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
+import { HttpModule } from '@nestjs/axios';
+import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, HttpModule],
     controllers: [UserController, CohortController],
     providers: [
         UserService,
@@ -32,6 +34,7 @@ import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository
         CohortRepository,
         VocabularyRepository,
         DefinitionRepository,
+        WordsApiAdapter,
     ],
 })
 export default class UserModule {}
