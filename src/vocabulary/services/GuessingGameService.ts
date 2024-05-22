@@ -20,7 +20,7 @@ export default class GuessingGameService {
 
         const maxVocabs = 20;
 
-        // slicing as a word around
+        // slicing as a work-around
         // TODO improve bernoulli (10)
         let randomlyChosenMeaningResponses = (
             await this.definitionRepository.getRandomlyChosenMeanings(cohortId, previousDefinitionIds)
