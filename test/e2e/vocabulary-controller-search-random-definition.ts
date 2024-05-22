@@ -7,7 +7,11 @@ import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';
 import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort-util';
-import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
+import {
+    createVocabulary,
+    getVocabularyWithDefinitions,
+    removeVocabularyAndRelationsByCohortId,
+} from '@test/util/vocabulary-util';
 import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
@@ -32,6 +36,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             name: `Cohort _ ${uuid.v4()}`,
             usernames: [requester.username],
         } as Cohort);
+        requester.cohortId = cohort.id;
         // @ts-expect-error need to mock a private method
         getRandomWordMock = jest.spyOn(WordsApiAdapter.prototype, 'getRandomWord');
     });
@@ -56,6 +61,13 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
     }
 
     describe('Searching', () => {
+        afterEach(async () => {
+            await Promise.all([
+                app.get(GuessingGameRepository).clear(),
+                removeVocabularyAndRelationsByCohortId(cohort.id),
+            ]);
+        });
+
         it('SHOULD return 200 OK', async () => {
             // Arrange
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);

@@ -39,7 +39,8 @@ export default class DefinitionRepository extends Repository<Definition> {
                          tablesample bernoulli (10)
                          inner join "Vocabulary" on "Vocabulary".id = "Definition"."vocabularyId" and
                                                     "Vocabulary"."cohortId" = $1
-                where "Definition".id != any ($2);
+                where (array_length($2::uuid[], 1) is null
+                    or "Definition".id != any ($2::uuid[]));
             `,
             [cohortId, excludedDefinitionIds],
         );
@@ -52,7 +53,8 @@ export default class DefinitionRepository extends Repository<Definition> {
                 from "Definition"
                          inner join "Vocabulary" on "Vocabulary".id = "Definition"."vocabularyId" and
                                                     "Vocabulary"."cohortId" = $1
-                where "Definition".id != any ($2)
+                where (array_length($2::uuid[], 1) is null
+                    or "Definition".id != any ($2::uuid[]))
                 limit 10;
             `,
             [cohortId, excludedDefinitionIds],
