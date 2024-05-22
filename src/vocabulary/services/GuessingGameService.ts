@@ -49,4 +49,8 @@ export default class GuessingGameService {
             }),
         ]);
     }
+
+    async deleteOlder(): Promise<void> {
+        await this.guessingGameRepository.deleteOlder();
+    }
 }

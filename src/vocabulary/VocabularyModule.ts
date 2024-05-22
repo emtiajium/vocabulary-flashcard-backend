@@ -18,9 +18,11 @@ import { HttpModule } from '@nestjs/axios';
 import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
 import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameRepository';
 import GuessingGameService from '@/vocabulary/services/GuessingGameService';
+import { ScheduleModule } from '@nestjs/schedule';
+import DeleteOldRandomDefinitionsJob from '@/vocabulary/jobs/DeleteOldRandomDefinitionsJob';
 
 @Module({
-    imports: [DatabaseModule, HttpModule],
+    imports: [DatabaseModule, HttpModule, ScheduleModule.forRoot()],
     providers: [
         UserService,
         CohortService,
@@ -38,6 +40,7 @@ import GuessingGameService from '@/vocabulary/services/GuessingGameService';
         WordsApiAdapter,
         GuessingGameRepository,
         GuessingGameService,
+        DeleteOldRandomDefinitionsJob,
     ],
     controllers: [VocabularyController, LeitnerSystemsController],
 })
