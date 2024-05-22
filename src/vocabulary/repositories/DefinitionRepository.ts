@@ -1,7 +1,7 @@
 import { DataSource, In, Repository } from 'typeorm';
 import Definition from '@/vocabulary/domains/Definition';
 import { Injectable } from '@nestjs/common';
-import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
+import { RandomlyChosenMeaningQueryResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
 
 @Injectable()
 export default class DefinitionRepository extends Repository<Definition> {
@@ -28,29 +28,34 @@ export default class DefinitionRepository extends Repository<Definition> {
         );
     }
 
-    getRandomlyChosenMeanings(cohortId: string): Promise<RandomlyChosenMeaningResponse[]> {
+    getRandomlyChosenMeanings(
+        cohortId: string,
+        excludedDefinitionIds: string[],
+    ): Promise<RandomlyChosenMeaningQueryResponse[]> {
         return this.query(
             `
-                select "Definition".meaning, "Vocabulary".word
+                select "Definition".id as "definitionId", "Definition".meaning, "Vocabulary".word
                 from "Definition"
                          tablesample bernoulli (10)
                          inner join "Vocabulary" on "Vocabulary".id = "Definition"."vocabularyId" and
-                                                    "Vocabulary"."cohortId" = $1;
+                                                    "Vocabulary"."cohortId" = $1
+                where "Definition".id != ANY ($2);
             `,
-            [cohortId],
+            [cohortId, excludedDefinitionIds],
         );
     }
 
-    getAnyMeanings(cohortId: string): Promise<RandomlyChosenMeaningResponse[]> {
+    getAnyMeanings(cohortId: string, excludedDefinitionIds: string[]): Promise<RandomlyChosenMeaningQueryResponse[]> {
         return this.query(
             `
-                select "Definition".meaning, "Vocabulary".word
+                select "Definition".id as "definitionId", "Definition".meaning, "Vocabulary".word
                 from "Definition"
                          inner join "Vocabulary" on "Vocabulary".id = "Definition"."vocabularyId" and
                                                     "Vocabulary"."cohortId" = $1
+                where "Definition".id != ANY ($2)
                 limit 10;
             `,
-            [cohortId],
+            [cohortId, excludedDefinitionIds],
         );
     }
 }

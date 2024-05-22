@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
-import { difference, map, shuffle } from 'lodash';
+import { difference, map } from 'lodash';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
@@ -18,14 +18,14 @@ import User from '@/user/domains/User';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 import * as uuid from 'uuid';
 import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
-import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
+import GuessingGameService from '@/vocabulary/services/GuessingGameService';
 
 @Injectable()
 export default class VocabularyService {
     constructor(
         private readonly vocabularyRepository: VocabularyRepository,
         private readonly definitionRepository: DefinitionRepository,
-        private readonly wordsApiAdapter: WordsApiAdapter,
+        private readonly guessingGameService: GuessingGameService,
     ) {}
 
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
@@ -181,21 +181,7 @@ export default class VocabularyService {
         );
     }
 
-    async getRandomlyChosenMeanings(cohortId: string): Promise<RandomlyChosenMeaningResponse[]> {
-        const randomlyChosenMeaningResponsesFromExternalService = await this.wordsApiAdapter.getRandomWords();
-
-        const maxVocabs = 20;
-
-        // slicing as a word around
-        // TODO improve bernoulli (10)
-        let randomlyChosenMeaningResponses = (
-            await this.definitionRepository.getRandomlyChosenMeanings(cohortId)
-        ).slice(0, maxVocabs);
-
-        if (randomlyChosenMeaningResponses.length === 0) {
-            randomlyChosenMeaningResponses = await this.definitionRepository.getAnyMeanings(cohortId);
-        }
-
-        return shuffle([...randomlyChosenMeaningResponsesFromExternalService, ...randomlyChosenMeaningResponses]);
+    getRandomlyChosenMeanings(cohortId: string, userId: string): Promise<RandomlyChosenMeaningResponse[]> {
+        return this.guessingGameService.getRandomlyChosenMeanings(cohortId, userId);
     }
 }

@@ -60,9 +60,7 @@ export default class VocabularyController {
     }
 
     @Get('/definitions/random-search')
-    getRandomlyChosenMeanings(
-        @AuthenticatedUser('cohortId') cohortId: string,
-    ): Promise<RandomlyChosenMeaningResponse[]> {
-        return this.vocabularyService.getRandomlyChosenMeanings(cohortId);
+    getRandomlyChosenMeanings(@AuthenticatedUser() user: User): Promise<RandomlyChosenMeaningResponse[]> {
+        return this.vocabularyService.getRandomlyChosenMeanings(user.cohortId, user.id);
     }
 }

@@ -16,6 +16,8 @@ import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import { HttpModule } from '@nestjs/axios';
 import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
+import GuessingGameService from '@/vocabulary/services/GuessingGameService';
+import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameRepository';
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -35,6 +37,8 @@ import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
         VocabularyRepository,
         DefinitionRepository,
         WordsApiAdapter,
+        GuessingGameService,
+        GuessingGameRepository,
     ],
 })
 export default class UserModule {}
