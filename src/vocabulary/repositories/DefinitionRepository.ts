@@ -40,7 +40,8 @@ export default class DefinitionRepository extends Repository<Definition> {
                          inner join "Vocabulary" on "Vocabulary".id = "Definition"."vocabularyId" and
                                                     "Vocabulary"."cohortId" = $1
                 where (array_length($2::uuid[], 1) is null
-                    or "Definition".id != any ($2::uuid[]));
+                    or "Definition".id != any ($2::uuid[]))
+                limit 15;
             `,
             [cohortId, excludedDefinitionIds],
         );

@@ -18,13 +18,10 @@ export default class GuessingGameService {
 
         const previousDefinitionIds = await this.guessingGameRepository.getDefinitionIdsByUserId(userId);
 
-        const maxVocabs = 20;
-
-        // slicing as a work-around
-        // TODO improve bernoulli (10)
-        let randomlyChosenMeaningResponses = (
-            await this.definitionRepository.getRandomlyChosenMeanings(cohortId, previousDefinitionIds)
-        ).slice(0, maxVocabs);
+        let randomlyChosenMeaningResponses = await this.definitionRepository.getRandomlyChosenMeanings(
+            cohortId,
+            previousDefinitionIds,
+        );
 
         if (randomlyChosenMeaningResponses.length === 0) {
             randomlyChosenMeaningResponses = await this.definitionRepository.getAnyMeanings(
