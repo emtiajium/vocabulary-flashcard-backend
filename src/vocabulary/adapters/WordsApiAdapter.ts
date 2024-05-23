@@ -4,7 +4,7 @@ import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import { Injectable, Logger } from '@nestjs/common';
 import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
 import { ConfigService } from '@nestjs/config';
-import { shuffle, times } from 'lodash';
+import { capitalize, shuffle, times } from 'lodash';
 import safeStringify from 'fast-safe-stringify';
 import { getRandomArrayItem } from '@/common/utils/array-util';
 
@@ -48,7 +48,7 @@ export default class WordsApiAdapter {
             return response.results.map((result) => {
                 return <RandomlyChosenMeaningResponse>{
                     meaning: result.definition,
-                    word: response.word,
+                    word: capitalize(response.word),
                 };
             });
         } catch (error) {
