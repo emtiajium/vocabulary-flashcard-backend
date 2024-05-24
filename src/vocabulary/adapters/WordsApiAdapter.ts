@@ -17,7 +17,6 @@ export default class WordsApiAdapter {
     ) {}
 
     async getRandomWords(): Promise<RandomlyChosenMeaningResponse[]> {
-        this.logger.log(`[${WordsApiAdapter.name}]: ${this.configService.get('WORDS_API_ENABLED')}`);
         if (this.configService.get('WORDS_API_ENABLED') !== 'true') {
             return [];
         }
@@ -46,7 +45,6 @@ export default class WordsApiAdapter {
                 },
             });
 
-            this.logger.log(`[${WordsApiAdapter.name}]: ${safeStringify(response)}`);
             return response.results.map((result) => {
                 return <RandomlyChosenMeaningResponse>{
                     meaning: result.definition,
@@ -54,7 +52,9 @@ export default class WordsApiAdapter {
                 };
             });
         } catch (error) {
-            this.logger.error(`Error while making API request to "wordsapi". Details: ${safeStringify(error)}`);
+            this.logger.error(
+                `[${WordsApiAdapter.name}] Error while making API request to "wordsapi". Details: ${safeStringify(error)}`,
+            );
             return [];
         }
     }
