@@ -21,6 +21,7 @@ export default class GuessingGameService {
 
         let randomlyChosenMeaningResponses = await this.definitionRepository.getRandomlyChosenMeanings(
             cohortId,
+            userId,
             previousDefinitionIds,
         );
 
