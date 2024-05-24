@@ -32,6 +32,7 @@ export default class DefinitionRepository extends Repository<Definition> {
         cohortId: string,
         excludedDefinitionIds: string[],
     ): Promise<RandomlyChosenMeaningQueryResponse[]> {
+        // table sampling works before applying the filtering
         return this.query(
             `
                 select "Definition".id as "definitionId", "Definition".meaning, "Vocabulary".word
