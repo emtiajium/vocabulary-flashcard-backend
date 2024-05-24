@@ -39,7 +39,7 @@ const oneMinuteInSeconds = 60;
 
 const oneDayInHours = 24;
 
-const oneSecondInMilliSeconds = 1000;
+export const oneSecondInMilliSeconds = 1000;
 
 export function momentDiff(firstMoment: Date, secondMoment: Date, unit: MomentUnit): number {
     const differenceInSeconds = (firstMoment.getTime() - secondMoment.getTime()) / oneSecondInMilliSeconds;

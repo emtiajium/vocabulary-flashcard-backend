@@ -1,12 +1,14 @@
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
 import { ConfigService } from '@nestjs/config';
 import { capitalize, shuffle, times } from 'lodash';
 import safeStringify from 'fast-safe-stringify';
 import { getRandomArrayItem } from '@/common/utils/array-util';
+import { setTimeout } from 'node:timers/promises';
+import { oneSecondInMilliSeconds } from '@/common/utils/moment-util';
 
 @Injectable()
 export default class WordsApiAdapter {
@@ -23,15 +25,14 @@ export default class WordsApiAdapter {
 
         const randomlyChosenMeaningResponses: RandomlyChosenMeaningResponse[] = [];
         const numberOfRandomWords = 10;
-        await Promise.all(
-            times(numberOfRandomWords).map(async () => {
-                randomlyChosenMeaningResponses.push(...(await this.getRandomWord()));
-            }),
-        );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for (const whatever of times(numberOfRandomWords)) {
+            randomlyChosenMeaningResponses.push(...(await this.getRandomWord()));
+        }
         return shuffle(randomlyChosenMeaningResponses);
     }
 
-    private async getRandomWord(): Promise<RandomlyChosenMeaningResponse[]> {
+    private async getRandomWord(retries = 0): Promise<RandomlyChosenMeaningResponse[]> {
         try {
             const response = await this.get<ObjectLiteral, ObjectLiteral>(`https://wordsapiv1.p.rapidapi.com/words`, {
                 params: {
@@ -52,6 +53,11 @@ export default class WordsApiAdapter {
                 };
             });
         } catch (error) {
+            const maxRetry = 3;
+            if (error.status === HttpStatus.TOO_MANY_REQUESTS && retries < maxRetry) {
+                await setTimeout(oneSecondInMilliSeconds);
+                return this.getRandomWord(retries + 1);
+            }
             this.logger.error(
                 `[${WordsApiAdapter.name}] Error while making API request to "wordsapi". Details: ${safeStringify(error)}`,
             );
