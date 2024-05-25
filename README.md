@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+-   `1.52.0`: API to get randomly chosen meanings (part of the guessing game)
 -   `1.51.0`: Created a separate DB (Docker container) for the automated test with `fsync=off`, `synchronous_commit=off` and `full_page_writes=off`
 -   `1.50.0`: Empty array when a vocab does not have a definition using the FILTER clause
 -   `1.49.0`: Automated getting certificate to enable HTTPS after a new EC2 instance gets launched

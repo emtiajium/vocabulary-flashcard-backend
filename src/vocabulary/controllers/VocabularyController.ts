@@ -8,6 +8,7 @@ import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import User from '@/user/domains/User';
 import { ApiSecurity } from '@nestjs/swagger';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
+import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
 
 @Controller('/v1/vocabularies')
 @ApiSecurity('Authorization')
@@ -56,5 +57,10 @@ export default class VocabularyController {
         @AuthenticatedUser('cohortId') cohortId: string,
     ): Promise<Partial<Vocabulary>> {
         return this.vocabularyService.assertExistenceByWord(id, word, cohortId);
+    }
+
+    @Get('/definitions/random-search')
+    getRandomlyChosenMeanings(@AuthenticatedUser() user: User): Promise<RandomlyChosenMeaningResponse[]> {
+        return this.vocabularyService.getRandomlyChosenMeanings(user.cohortId, user.id);
     }
 }

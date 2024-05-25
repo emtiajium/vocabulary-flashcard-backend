@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
-import * as _ from 'lodash';
+import { difference, map } from 'lodash';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
 import Definition from '@/vocabulary/domains/Definition';
@@ -17,12 +17,15 @@ import getNewJoinerVocabularyList from '@/manual-scripts/new-joiner-vocabulary-l
 import User from '@/user/domains/User';
 import VocabularySearchResponse from '@/vocabulary/domains/VocabularySearchResponse';
 import * as uuid from 'uuid';
+import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
+import GuessingGameService from '@/vocabulary/services/GuessingGameService';
 
 @Injectable()
 export default class VocabularyService {
     constructor(
         private readonly vocabularyRepository: VocabularyRepository,
         private readonly definitionRepository: DefinitionRepository,
+        private readonly guessingGameService: GuessingGameService,
     ) {}
 
     async createVocabulary(vocabulary: Vocabulary, userId: string, cohortId: string): Promise<Vocabulary> {
@@ -95,7 +98,7 @@ export default class VocabularyService {
     }
 
     private extractDefinitionIds = (definitions: Definition[]): string[] => {
-        return _.map(definitions, 'id');
+        return map(definitions, 'id');
     };
 
     private validateCohort(currentCohortId: string, requesterCohortId: string): void {
@@ -118,7 +121,7 @@ export default class VocabularyService {
 
     private async removeOrphanDefinitions(existingVocabulary: Vocabulary, vocabulary: Vocabulary): Promise<void> {
         await this.definitionRepository.removeDefinitionsByIds(
-            _.difference(
+            difference(
                 this.extractDefinitionIds(existingVocabulary.definitions),
                 this.extractDefinitionIds(vocabulary.definitions),
             ),
@@ -176,5 +179,9 @@ export default class VocabularyService {
                 }
             }),
         );
+    }
+
+    getRandomlyChosenMeanings(cohortId: string, userId: string): Promise<RandomlyChosenMeaningResponse[]> {
+        return this.guessingGameService.getRandomlyChosenMeanings(cohortId, userId);
     }
 }

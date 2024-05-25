@@ -23,6 +23,8 @@ import { createItem, getLeitnerBoxItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import CacheUserService from '@/user/services/CacheUserService';
 import DataSource from '@/common/persistence/TypeormConfig';
+import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameRepository';
+import * as uuid from 'uuid';
 
 describe('DELETE /v1/users/self', () => {
     let app: INestApplication;
@@ -268,6 +270,31 @@ describe('DELETE /v1/users/self', () => {
             expect(await getCohortByName(cohort.name)).toMatchObject({
                 id: cohort.id,
             });
+        });
+    });
+
+    describe('Guessing Game Item Deletion', () => {
+        beforeEach(async () => {
+            await prepareInitialData();
+        });
+
+        afterEach(async () => {
+            await removeData();
+        });
+
+        it('SHOULD delete guessing game items', async () => {
+            // Arrange
+            await app.get(GuessingGameRepository).insert({
+                userId: requester.id,
+                definitionId: uuid.v4(),
+            });
+
+            // Act
+            const { status } = await makeApiRequest();
+
+            // Assert
+            expect(status).toBe(200);
+            expect(await app.get(GuessingGameRepository).findOneBy({ userId: requester.id })).toBeNull();
         });
     });
 });
