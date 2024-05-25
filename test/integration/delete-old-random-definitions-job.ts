@@ -21,7 +21,7 @@ describe('DeleteOldRandomDefinitionsJob', () => {
         await DataSource.destroy();
     });
 
-    it('SHOULD not delete items not older than 7 days', async () => {
+    it('SHOULD not delete items not older than 15 days', async () => {
         // Arrange
         const oldRandomDefinitionsJob = app.get(DeleteOldRandomDefinitionsJob);
         const { generatedMaps } = await app.get(GuessingGameRepository).insert({
@@ -39,13 +39,13 @@ describe('DeleteOldRandomDefinitionsJob', () => {
         expect(item).toBeDefined();
     });
 
-    it('SHOULD delete items older than 7 days', async () => {
+    it('SHOULD delete items older than 15 days', async () => {
         // Arrange
         const oldRandomDefinitionsJob = app.get(DeleteOldRandomDefinitionsJob);
         const { generatedMaps } = await app.get(GuessingGameRepository).insert({
             userId: uuid.v4(),
             definitionId: uuid.v4(),
-            createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 8),
+            createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 16),
         });
         const id = generatedMaps[0].id;
 

@@ -28,7 +28,7 @@ export default class GuessingGameRepository extends Repository<GuessingGame> {
         await this.query(`
             delete
             from "GuessingGame"
-            where "createdAt" < now() - '7 days'::interval
+            where "createdAt" < now() - '15 days'::interval
         `);
     }
 }
