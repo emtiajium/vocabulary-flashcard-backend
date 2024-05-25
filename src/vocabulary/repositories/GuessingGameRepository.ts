@@ -31,4 +31,15 @@ export default class GuessingGameRepository extends Repository<GuessingGame> {
             where "createdAt" < now() - '15 days'::interval
         `);
     }
+
+    async deleteByUserId(userId: string): Promise<void> {
+        await this.query(
+            `
+                delete
+                from "GuessingGame"
+                where "userId" = $1;
+            `,
+            [userId],
+        );
+    }
 }

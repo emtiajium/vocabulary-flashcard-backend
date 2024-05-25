@@ -52,4 +52,8 @@ export default class GuessingGameService {
     async deleteOlder(): Promise<void> {
         await this.guessingGameRepository.deleteOlder();
     }
+
+    async deleteByUserId(userId: string): Promise<void> {
+        await this.guessingGameRepository.deleteByUserId(userId);
+    }
 }
