@@ -49,7 +49,7 @@ export default class DefinitionRepository extends Repository<Definition> {
                                                                                  "Definition"."vocabularyId" and
                                                                                  "Vocabulary"."cohortId" = $1
                                                           where (array_length($2::uuid[], 1) is null
-                                                              or "Definition".id != any ($2::uuid[])));
+                                                              or "Definition".id != all ($2::uuid[])));
             `,
             [cohortId, excludedDefinitionIds],
         );
