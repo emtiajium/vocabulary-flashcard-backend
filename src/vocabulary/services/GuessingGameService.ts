@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 import { shuffle } from 'lodash';
-import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
+import {
+    RandomlyChosenMeaningQueryResponse,
+    RandomlyChosenMeaningResponse,
+} from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
 import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
 import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameRepository';
 
@@ -14,16 +17,30 @@ export default class GuessingGameService {
     ) {}
 
     async getRandomlyChosenMeanings(cohortId: string, userId: string): Promise<RandomlyChosenMeaningResponse[]> {
-        const [randomlyChosenMeaningResponsesFromExternalService, previousDefinitionIds] = await Promise.all([
+        const [randomlyChosenMeaningResponsesFromExternalService, previousDefinitions] = await Promise.all([
             this.wordsApiAdapter.getRandomWords(),
-            this.guessingGameRepository.getDefinitionIdsByUserId(userId),
+            this.guessingGameRepository.getDefinitionsByUserId(userId),
         ]);
 
-        let randomlyChosenMeaningResponses = await this.definitionRepository.getRandomlyChosenMeanings(
-            cohortId,
-            userId,
-            previousDefinitionIds,
-        );
+        let definitionFromTodayExists = false;
+        const previousDefinitionIds: string[] = [];
+        const definitionsFromToday: RandomlyChosenMeaningQueryResponse[] = [];
+
+        previousDefinitions.forEach((previousDefinition) => {
+            previousDefinitionIds.push(previousDefinition.definitionId);
+            if (previousDefinition.isCreationDateToday) {
+                definitionFromTodayExists = true;
+                definitionsFromToday.push({
+                    definitionId: previousDefinition.definitionId,
+                    word: previousDefinition.word,
+                    meaning: previousDefinition.meaning,
+                });
+            }
+        });
+
+        let randomlyChosenMeaningResponses = definitionFromTodayExists
+            ? definitionsFromToday
+            : await this.definitionRepository.getRandomlyChosenMeanings(cohortId, userId, previousDefinitionIds);
 
         if (randomlyChosenMeaningResponses.length === 0) {
             randomlyChosenMeaningResponses = await this.definitionRepository.getAnyMeanings(
@@ -32,11 +49,9 @@ export default class GuessingGameService {
             );
         }
 
-        const definitionIds = randomlyChosenMeaningResponses.map((randomlyChosenMeaningResponse) => {
-            return randomlyChosenMeaningResponse.definitionId;
-        });
-
-        this.guessingGameRepository.insertMultiples(definitionIds, userId).finally();
+        if (!definitionFromTodayExists) {
+            this.save(randomlyChosenMeaningResponses, userId).finally();
+        }
 
         return shuffle([
             ...randomlyChosenMeaningResponsesFromExternalService,
@@ -55,5 +70,12 @@ export default class GuessingGameService {
 
     async deleteByUserId(userId: string): Promise<void> {
         await this.guessingGameRepository.deleteByUserId(userId);
+    }
+
+    private async save(
+        randomlyChosenMeaningResponses: RandomlyChosenMeaningQueryResponse[],
+        userId: string,
+    ): Promise<void> {
+        await this.guessingGameRepository.insertMultiples(randomlyChosenMeaningResponses, userId);
     }
 }
