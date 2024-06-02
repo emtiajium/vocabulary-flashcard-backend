@@ -28,6 +28,8 @@ describe('DeleteOldRandomDefinitionsJob', () => {
             userId: uuid.v4(),
             definitionId: uuid.v4(),
             createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 3),
+            word: 'word',
+            meaning: 'meaning',
         });
         const id = generatedMaps[0].id;
 
@@ -46,6 +48,8 @@ describe('DeleteOldRandomDefinitionsJob', () => {
             userId: uuid.v4(),
             definitionId: uuid.v4(),
             createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 16),
+            word: 'word',
+            meaning: 'meaning',
         });
         const id = generatedMaps[0].id;
 

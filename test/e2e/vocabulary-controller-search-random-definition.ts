@@ -20,6 +20,7 @@ import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChos
 import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
 import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameRepository';
 import MomentUnit, { makeItOlder } from '@/common/utils/moment-util';
+import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 
 describe('GET /v1/vocabularies/definitions/random-search', () => {
     let app: INestApplication;
@@ -97,6 +98,8 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
                 userId: requester.id,
                 definitionId: previousVocabulary.definitions[0].id,
                 createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 3),
+                word: previousVocabulary.word,
+                meaning: previousVocabulary.definitions[0].meaning,
             });
 
             // Act
@@ -113,6 +116,45 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
                     meaning: vocabulary.definitions[0].meaning,
                 },
             ]);
+        });
+
+        it('SHOULD return 200 OK with definitions from today', async () => {
+            // Arrange
+            const getRandomlyChosenMeaningsMock = jest.spyOn(
+                DefinitionRepository.prototype,
+                'getRandomlyChosenMeanings',
+            );
+            const insertMultiplesMock = jest.spyOn(GuessingGameRepository.prototype, 'insertMultiples');
+            const previousVocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            await app.get(GuessingGameRepository).insert({
+                userId: requester.id,
+                definitionId: previousVocabulary.definitions[0].id,
+                createdAt: new Date(),
+                word: previousVocabulary.word,
+                meaning: previousVocabulary.definitions[0].meaning,
+            });
+
+            // Act
+            const { status, body } = await makeApiRequest(requester);
+
+            // Assert
+            expect(status).toBe(200);
+            expect(getRandomWordMock).not.toHaveBeenCalled();
+            expect(getRandomlyChosenMeaningsMock).not.toHaveBeenCalled();
+            expect(insertMultiplesMock).not.toHaveBeenCalled();
+            const response = body as RandomlyChosenMeaningResponse[];
+            expect(response).not.toHaveLength(0);
+            expect(response).toStrictEqual([
+                <RandomlyChosenMeaningResponse>{
+                    word: previousVocabulary.word,
+                    meaning: previousVocabulary.definitions[0].meaning,
+                },
+            ]);
+
+            // Post-Assert
+            getRandomlyChosenMeaningsMock.mockRestore();
+            insertMultiplesMock.mockRestore();
         });
     });
 });

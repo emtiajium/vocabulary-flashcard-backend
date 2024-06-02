@@ -8,20 +8,38 @@ export default class GuessingGameRepository extends Repository<GuessingGame> {
         super(GuessingGame, dataSource.createEntityManager());
     }
 
-    async insertMultiples(definitionIds: string[], userId: string): Promise<void> {
+    async insertMultiples(guessingGames: Partial<GuessingGame>[], userId: string): Promise<void> {
         await this.insert(
-            definitionIds.map((definitionId) => {
+            guessingGames.map((guessingGame) => {
                 return {
                     userId,
-                    definitionId,
+                    definitionId: guessingGame.definitionId,
+                    word: guessingGame.word,
+                    meaning: guessingGame.meaning,
                 };
             }),
         );
     }
 
-    async getDefinitionIdsByUserId(userId: string): Promise<string[]> {
-        const guessingGames = await this.find({ where: { userId }, select: ['definitionId'] });
-        return guessingGames.map(({ definitionId }) => definitionId);
+    getByUserId(userId: string): Promise<
+        {
+            definitionId: string;
+            word: string;
+            meaning: string;
+            isCreationDateToday: boolean;
+        }[]
+    > {
+        return this.query(
+            `
+                select "definitionId",
+                       word,
+                       meaning,
+                       ("createdAt"::date = now()::date) as "isCreationDateToday"
+                from "GuessingGame"
+                where "userId" = $1;
+            `,
+            [userId],
+        );
     }
 
     async deleteOlder(): Promise<void> {

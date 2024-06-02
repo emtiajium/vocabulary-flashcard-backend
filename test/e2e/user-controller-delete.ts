@@ -287,6 +287,8 @@ describe('DELETE /v1/users/self', () => {
             await app.get(GuessingGameRepository).insert({
                 userId: requester.id,
                 definitionId: uuid.v4(),
+                word: 'word',
+                meaning: 'meaning',
             });
 
             // Act

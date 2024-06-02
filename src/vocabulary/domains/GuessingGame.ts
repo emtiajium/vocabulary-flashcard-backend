@@ -11,6 +11,12 @@ export default class GuessingGame {
     @Column({ type: 'uuid', nullable: false })
     userId: string;
 
+    @Column({ type: 'varchar', nullable: false })
+    meaning: string;
+
+    @Column({ type: 'varchar', nullable: false })
+    word: string;
+
     @CreateDateColumn({ type: 'timestamp with time zone' })
     createdAt: Date;
 }
