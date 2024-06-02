@@ -19,7 +19,7 @@ export default class GuessingGameService {
     async getRandomlyChosenMeanings(cohortId: string, userId: string): Promise<RandomlyChosenMeaningResponse[]> {
         const [randomlyChosenMeaningResponsesFromExternalService, previousDefinitions] = await Promise.all([
             this.wordsApiAdapter.getRandomWords(),
-            this.guessingGameRepository.getDefinitionsByUserId(userId),
+            this.guessingGameRepository.getByUserId(userId),
         ]);
 
         let definitionFromTodayExists = false;

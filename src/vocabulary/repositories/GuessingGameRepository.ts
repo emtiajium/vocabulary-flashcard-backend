@@ -21,7 +21,7 @@ export default class GuessingGameRepository extends Repository<GuessingGame> {
         );
     }
 
-    getDefinitionsByUserId(userId: string): Promise<
+    getByUserId(userId: string): Promise<
         {
             definitionId: string;
             word: string;
