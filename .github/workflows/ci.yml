@@ -37,8 +37,8 @@ jobs:
 
       - name: Run Docker containers
         run: |
-          docker-compose -f docker-compose-ci.yml up -d
-          docker-compose -f docker-compose-ci.yml ps
+          docker compose -f docker-compose-ci.yml up -d
+          docker compose -f docker-compose-ci.yml ps
           docker volume ls
           docker inspect --format '{{json .Mounts}}' ielts-gibberish-test-postgres
 
@@ -56,6 +56,6 @@ jobs:
 
       - name: Clean Docker containers
         run: | 
-          docker-compose -f docker-compose-ci.yml stop
-          docker-compose -f docker-compose-ci.yml rm -f
-          docker-compose -f docker-compose-ci.yml down --volumes
+          docker compose -f docker-compose-ci.yml stop
+          docker compose -f docker-compose-ci.yml rm -f
+          docker compose -f docker-compose-ci.yml down --volumes
