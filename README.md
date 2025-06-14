@@ -10,7 +10,7 @@
 
 ###### Prerequisites
 
-➜ Install Node 18.13.0 using [nvm](https://github.com/nvm-sh/nvm)
+➜ Install Node 22.11.0 using [nvm](https://github.com/nvm-sh/nvm)
 
 ➜ Install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/)
 
@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+-   `1.53.0`: Node@22
 -   `1.52.1`: Sent current date's guessing game related date from the table avoiding random generation
 -   `1.52.0`: API to get randomly chosen meanings (part of the guessing game)
 -   `1.51.0`: Created a separate DB (Docker container) for the automated test with `fsync=off`, `synchronous_commit=off` and `full_page_writes=off`
