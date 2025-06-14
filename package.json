@@ -1,6 +1,6 @@
 {
     "name": "vocabulary-flashcard-backend",
-    "version": "1.52.1",
+    "version": "1.53.0",
     "author": {
         "name": "Emtiaj Hasan",
         "email": "271emtiaj@gmail.com",
@@ -8,9 +8,6 @@
     },
     "private": true,
     "license": "UNLICENSED",
-    "engines": {
-        "node": "18.13.0"
-    },
     "scripts": {
         "create:env": "node -r fs -e \"fs.copyFileSync('.env.sample', '.env', fs.constants.COPYFILE_EXCL)\"",
         "prebuild": "rimraf dist",
@@ -75,7 +72,7 @@
         "@types/jest": "^29.5.12",
         "@types/jsonwebtoken": "^9.0.5",
         "@types/lodash": "^4.14.170",
-        "@types/node": "18.13.0",
+        "@types/node": "^22.12.0",
         "@types/supertest": "^6.0.2",
         "@types/uuid": "^9.0.8",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
