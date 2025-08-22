@@ -1,61 +1,60 @@
 name: CI
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [22.11.0]
 
-    strategy:
-      matrix:
-        node-version: [ 22.11.0 ]
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+            - name: Install dependencies
+              run: npm i
 
-      - name: Install dependencies
-        run: npm i
+            - name: Prettier
+              run: npm run format:check
 
-      - name: Prettier
-        run: npm run format:check
+            - name: ESLint
+              run: npm run lint:check
 
-      - name: ESLint
-        run: npm run lint:check
+            - name: Login to Docker Hub
+              uses: docker/login-action@v1
+              with:
+                  username: ${{ secrets.DOCKER_HUB_USERNAME }}
+                  password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+            - name: Run Docker containers
+              run: |
+                  docker compose -f docker-compose-ci.yml up -d
+                  docker compose -f docker-compose-ci.yml ps
+                  docker volume ls
+                  docker inspect --format '{{json .Mounts}}' ielts-gibberish-test-postgres
 
-      - name: Run Docker containers
-        run: |
-          docker compose -f docker-compose-ci.yml up -d
-          docker compose -f docker-compose-ci.yml ps
-          docker volume ls
-          docker inspect --format '{{json .Mounts}}' ielts-gibberish-test-postgres
+            - name: Create environment variables
+              run: npm run create:env
 
-      - name: Create environment variables
-        run: npm run create:env
+            - name: Database Tables' modification
+              run: npm run migration:run:local-test
 
-      - name: Database Tables' modification
-        run: npm run migration:run:local-test
+            - name: Automated Test
+              run: npm run test
 
-      - name: Automated Test
-        run: npm run test
+            - name: Build
+              run: npm run build
 
-      - name: Build
-        run: npm run build
-
-      - name: Clean Docker containers
-        run: | 
-          docker compose -f docker-compose-ci.yml stop
-          docker compose -f docker-compose-ci.yml rm -f
-          docker compose -f docker-compose-ci.yml down --volumes
+            - name: Clean Docker containers
+              run: |
+                  docker compose -f docker-compose-ci.yml stop
+                  docker compose -f docker-compose-ci.yml rm -f
+                  docker compose -f docker-compose-ci.yml down --volumes
