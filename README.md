@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+-   `1.54.0`: Full Text searching (v0.1)
 -   `1.53.0`: Node@22
 -   `1.52.1`: Sent current date's guessing game related date from the table avoiding random generation
 -   `1.52.0`: API to get randomly chosen meanings (part of the guessing game)

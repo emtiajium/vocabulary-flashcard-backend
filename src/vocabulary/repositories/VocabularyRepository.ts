@@ -77,7 +77,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                 OFFSET $3 LIMIT $4;
             `,
             searchKeyword
-                ? [userId, cohortId, currentPage, pageSize, `%${searchKeyword.trim()}%`]
+                ? [userId, cohortId, currentPage, pageSize, searchKeyword.trim()]
                 : [userId, cohortId, currentPage, pageSize],
         );
 
@@ -98,12 +98,12 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         }
 
         const searchBuilder = {
-            word: `vocabulary.word ILIKE $${queryParameterPosition}`,
-            linkerWords: `vocabulary."linkerWords"::TEXT ILIKE $${queryParameterPosition}`,
-            genericNotes: `vocabulary."genericNotes"::TEXT ILIKE $${queryParameterPosition}`,
-            meaning: `definition.meaning ILIKE $${queryParameterPosition}`,
-            examples: `definition.examples::TEXT ILIKE $${queryParameterPosition}`,
-            notes: `definition.notes::TEXT ILIKE $${queryParameterPosition}`,
+            word: `(vocabulary.word ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(vocabulary.word, '')) @@ to_tsquery($${queryParameterPosition}))`,
+            linkerWords: `(vocabulary."linkerWords"::TEXT ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(vocabulary."linkerWords"::TEXT, '')) @@ to_tsquery($${queryParameterPosition}))`,
+            genericNotes: `(vocabulary."genericNotes"::TEXT ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(vocabulary."genericNotes"::TEXT, '')) @@ to_tsquery($${queryParameterPosition}))`,
+            meaning: `(definition.meaning ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(definition.meaning, '')) @@ to_tsquery($${queryParameterPosition}))`,
+            examples: `(definition.examples::TEXT ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(definition.examples::TEXT, '')) @@ to_tsquery($${queryParameterPosition}))`,
+            notes: `(definition.notes::TEXT ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(definition.notes::TEXT, '')) @@ to_tsquery($${queryParameterPosition}))`,
         };
 
         Object.keys(searchBuilder).forEach((key) => {
