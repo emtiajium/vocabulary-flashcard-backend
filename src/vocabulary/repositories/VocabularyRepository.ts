@@ -56,7 +56,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             `
                 SELECT vocabulary.id,
                        vocabulary.word,
-                       coalesce(json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning))
+                       coalesce(json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning) order by definition."updatedAt" desc)
                                 filter (where definition.id is not null), '[]') AS definitions,
                        COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN       AS "isInLeitnerBox",
                        (COUNT(*) OVER ())::INTEGER                              AS "totalNumberOfVocabularies"
