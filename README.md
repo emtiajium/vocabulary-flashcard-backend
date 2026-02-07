@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.55.0`: Upgraded libs
 - `1.54.0`: Full Text searching (v0.1)
 - `1.53.0`: Node@22
 - `1.52.1`: Sent current date's guessing game related date from the table avoiding random generation
