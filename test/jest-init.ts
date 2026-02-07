@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import { Logger } from '@nestjs/common';
 
 dotenv.config({
-    path: './test/.env.test',
+    path: ['./test/.env.test'],
 });
 
 if (process.env.LOGGING_CONSOLE_ENABLED === 'false') {
