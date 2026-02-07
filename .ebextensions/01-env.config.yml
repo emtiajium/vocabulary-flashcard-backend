@@ -1,6 +1,4 @@
 option_settings:
-    aws:elasticbeanstalk:application:environment:
-        BLAH: hello
     aws:elasticbeanstalk:application:environmentsecrets:
         ALLOWED_ORIGIN: arn:aws:secretsmanager:ap-south-1:388489159229:secret:prod/firecracker-node-24-app-LUF0PO
         ANDROID_VERSION_UPDATE_SECRET: arn:aws:secretsmanager:ap-south-1:388489159229:secret:prod/firecracker-node-24-app-LUF0PO
