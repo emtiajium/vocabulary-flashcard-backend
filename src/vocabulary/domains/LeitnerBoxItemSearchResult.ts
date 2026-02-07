@@ -1,10 +1,7 @@
 import SearchResult from '@/common/domains/SearchResult';
 import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
 
-export interface SingleLeitnerItemEarlierToBoxAppearanceDate {
-    boxAppearanceDate: Date;
-    vocabulary: { word: string };
-}
+export type SingleLeitnerItemEarlierToBoxAppearanceDate = { boxAppearanceDate: Date; vocabulary: { word: string } };
 
 export default class LeitnerBoxItemSearchResult extends SearchResult<LeitnerBoxItem> {
     constructor(

@@ -69,8 +69,10 @@ export default class CohortService {
         currentCohortIds = _.uniq(currentCohortIds);
 
         if (!_.isEmpty(currentCohortIds)) {
+            // eslint-disable-next-line no-restricted-syntax
             for (const currentCohortId of currentCohortIds) {
                 // I want to make sure they execute synchronously
+                // eslint-disable-next-line no-await-in-loop
                 await this.vocabularyService.updateCohort(currentCohortId, cohortId);
             }
         }

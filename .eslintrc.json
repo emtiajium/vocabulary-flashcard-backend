@@ -1,0 +1,167 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json",
+        "sourceType": "module",
+        "ecmaVersion": 2020
+    },
+    "plugins": ["unicorn", "prettier", "node"],
+    "extends": [
+        "airbnb-typescript/base",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "plugin:unicorn/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "root": true,
+    "env": {
+        "node": true,
+        "jest": true
+    },
+    "rules": {
+        "import/order": "off",
+        "import/extensions": "off",
+        "import/no-extraneous-dependencies": "off",
+        "@typescript-eslint/interface-name-prefix": "off",
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-unused-vars": "error",
+        "unicorn/filename-case": [
+            "error",
+            {
+                "cases": {
+                    "pascalCase": true,
+                    "kebabCase": true
+                }
+            }
+        ],
+        "unicorn/prevent-abbreviations": "off",
+        "unicorn/no-null": "off",
+        "unicorn/no-reduce": "off",
+        "unicorn/no-array-for-each": "off",
+        "unicorn/no-static-only-class": "off",
+        "unicorn/no-await-expression-member": "off",
+        "class-methods-use-this": "off",
+        "complexity": ["error", 4],
+        "max-params": ["error", 4],
+        "curly": "error",
+        "no-console": "error",
+        "no-floating-decimal": "error",
+        "no-implicit-coercion": "error",
+        "no-implied-eval": "error",
+        "no-invalid-this": "error",
+        "no-magic-numbers": [
+            "error",
+            {
+                "ignore": [0, 1, -1]
+            }
+        ],
+        "no-throw-literal": "error",
+        "no-unused-expressions": [
+            "error",
+            {
+                "allowShortCircuit": true,
+                "allowTernary": true
+            }
+        ],
+        "prefer-named-capture-group": "error",
+        "require-unicode-regexp": "error",
+        "no-confusing-arrow": [
+            "error",
+            {
+                "allowParens": true
+            }
+        ],
+        "no-plusplus": [
+            "error",
+            {
+                "allowForLoopAfterthoughts": true
+            }
+        ],
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allow": [],
+                "allowAfterThis": true,
+                "allowAfterSuper": true,
+                "allowAfterThisConstructor": true,
+                "enforceInMethodNames": false,
+                "allowFunctionParams": false
+            }
+        ],
+        "no-duplicate-imports": "error",
+        "node/no-process-env": "error",
+        "node/callback-return": "error",
+        "node/global-require": "error",
+        "node/no-mixed-requires": "error",
+        "node/no-new-require": "error",
+        "node/no-sync": "error",
+        "prefer-arrow-callback": [
+            "error",
+            {
+                "allowNamedFunctions": false,
+                "allowUnboundThis": true
+            }
+        ]
+    },
+    "overrides": [
+        {
+            "files": ["src/main.ts"],
+            "rules": {
+                "no-console": "off"
+            }
+        },
+        {
+            "files": ["src/bootstrap.ts"],
+            "rules": {
+                "unicorn/prefer-node-protocol": "off",
+                "node/no-sync": "off"
+            }
+        },
+        {
+            "files": ["test/**/*.ts"],
+            "rules": {
+                "no-magic-numbers": "off",
+                "unicorn/consistent-function-scoping": "off",
+                "max-classes-per-file": "off",
+                "import/prefer-default-export": "off",
+                "node/no-process-env": "off"
+            }
+        },
+        {
+            "files": ["test/util/auth-util.ts"],
+            "rules": {
+                "unicorn/prefer-node-protocol": "off",
+                "node/no-sync": "off"
+            }
+        },
+        {
+            "files": ["src/auto-run-scripts/index.ts"],
+            "rules": {
+                "unicorn/prefer-node-protocol": "off",
+                "unicorn/prefer-module": "off",
+                "@typescript-eslint/no-var-requires": "off",
+                "import/no-dynamic-require": "off",
+                "node/global-require": "off",
+                "global-require": "off"
+            }
+        },
+        {
+            "files": ["src/manual-scripts/*.ts"],
+            "rules": {
+                "unicorn/no-process-exit": "off",
+                "no-console": "off"
+            }
+        },
+        {
+            "files": [
+                "src/vocabulary/domains/LeitnerBoxAppearanceDifference.ts",
+                "src/vocabulary/domains/LeitnerBoxType.ts"
+            ],
+            "rules": {
+                "no-magic-numbers": "off"
+            }
+        }
+    ]
+}

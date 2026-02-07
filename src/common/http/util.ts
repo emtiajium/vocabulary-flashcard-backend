@@ -31,7 +31,7 @@ export function getJwToken(request: Request): string {
     }
     const expectedLength = 2;
     const authorizationParts = authorizationHeader.split('Bearer ');
-    if (!authorizationParts || authorizationParts.length !== expectedLength) {
+    if (!authorizationParts || authorizationParts?.length !== expectedLength) {
         return '';
     }
     return authorizationParts[1].trim();

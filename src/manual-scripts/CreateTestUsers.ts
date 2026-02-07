@@ -112,6 +112,7 @@ export default class CreateTestUsers {
     }
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 (async function executeScript(): Promise<void> {
     await new CreateTestUsers().execute();
     process.exit(0);

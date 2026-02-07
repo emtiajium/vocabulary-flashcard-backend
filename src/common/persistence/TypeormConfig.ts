@@ -1,3 +1,5 @@
+/* eslint-disable node/no-process-env */
+
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import DatabaseConfig from '@/common/persistence/DatabaseConfig';

@@ -56,14 +56,14 @@ export default class Definition extends BaseEntityWithMandatoryId {
     @IsNotEmpty()
     vocabularyId: string;
 
-    static create(vocabularyId: string, definition: Definition): Definition {
+    static create(vocabularyId: string, definition?: Definition): Definition {
         const definitionInstance = new Definition();
-        definitionInstance.id = definition.id;
+        definitionInstance.id = definition?.id;
         definitionInstance.vocabularyId = vocabularyId;
         definitionInstance.meaning = definition.meaning;
         definitionInstance.examples = definition.examples;
-        definitionInstance.notes = definition.notes || [];
-        definitionInstance.externalLinks = definition.externalLinks || [];
+        definitionInstance.notes = definition?.notes || [];
+        definitionInstance.externalLinks = definition?.externalLinks || [];
         return definitionInstance;
     }
 }

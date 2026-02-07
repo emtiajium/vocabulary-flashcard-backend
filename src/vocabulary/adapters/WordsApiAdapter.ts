@@ -32,7 +32,6 @@ export default class WordsApiAdapter {
         return shuffle(randomlyChosenMeaningResponses);
     }
 
-    // eslint-disable-next-line complexity
     private async getRandomWord(retries = 0): Promise<RandomlyChosenMeaningResponse[]> {
         try {
             const response = await this.get<ObjectLiteral, ObjectLiteral>(`https://wordsapiv1.p.rapidapi.com/words`, {
@@ -48,10 +47,10 @@ export default class WordsApiAdapter {
             });
 
             return response.results.map((result) => {
-                return {
+                return <RandomlyChosenMeaningResponse>{
                     meaning: result.definition,
                     word: capitalize(response.word),
-                } as RandomlyChosenMeaningResponse;
+                };
             });
         } catch (error) {
             const maxRetry = 3;

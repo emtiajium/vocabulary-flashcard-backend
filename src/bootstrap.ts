@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { ClassSerializerInterceptor, DynamicModule, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as basicAuth from 'express-basic-auth';
@@ -11,7 +11,6 @@ import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-applicati
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { version, name, author } from '@root/package.json';
 import RequestLoggingInterceptor from '@/common/interceptors/RequestLoggingInterceptor';
-import { NestExpressApplication } from '@nestjs/platform-express';
 
 export class Bootstrap {
     private readonly serviceConfig: ServiceConfig;
@@ -23,10 +22,7 @@ export class Bootstrap {
     }
 
     async start(): Promise<INestApplication> {
-        const app: INestApplication = await NestFactory.create<NestExpressApplication>(
-            this.appModule as DynamicModule,
-            this.getAppOptions(),
-        );
+        const app: INestApplication = await NestFactory.create(this.appModule, this.getAppOptions());
         this.app = app;
         this.initSwagger();
         this.initCors();
@@ -49,10 +45,12 @@ export class Bootstrap {
         this.app.enableCors({
             origin: (origin, callback) => {
                 if (!origin || allowedOrigins.includes(origin)) {
+                    /* eslint-disable node/callback-return */
                     callback(null, true);
                 } else {
                     this.app.get(Logger).warn(`NOT OK || origin ${origin}`, 'CORS');
                     callback(new Error(`Don't mess this up`));
+                    /* eslint-enable node/callback-return */
                 }
             },
         });

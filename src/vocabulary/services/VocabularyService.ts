@@ -37,9 +37,6 @@ export default class VocabularyService {
             await this.removeOrphanDefinitions(existingVocabulary, vocabulary);
         }
         const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
-        if (existingVocabulary) {
-            vocabularyInstance.updatedAt = new Date();
-        }
         vocabularyInstance.cohortId = cohortId;
         const newVocabulary = await this.vocabularyRepository.insertOrUpdate(vocabularyInstance);
         newVocabulary.isInLeitnerBox = Boolean(existingVocabulary?.isInLeitnerBox);

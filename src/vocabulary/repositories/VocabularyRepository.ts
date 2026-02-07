@@ -89,6 +89,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     private getSearchQuery(
         searchKeyword: string,
+        // eslint-disable-next-line @typescript-eslint/default-param-last
         vocabularySearchCoverage: VocabularySearchCoverage = { word: true } as VocabularySearchCoverage,
         queryParameterPosition: number,
     ): string {
@@ -107,7 +108,6 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
         Object.keys(searchBuilder).forEach((key) => {
             if (!vocabularySearchCoverage[key]) {
-                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                 delete searchBuilder[key];
             }
         });
