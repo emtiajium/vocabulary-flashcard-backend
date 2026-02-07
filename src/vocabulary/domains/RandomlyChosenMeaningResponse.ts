@@ -1,7 +1,7 @@
-export type RandomlyChosenMeaningResponse = {
+export interface RandomlyChosenMeaningResponse {
     meaning: string;
     word: string;
-};
+}
 
 export type RandomlyChosenMeaningQueryResponse = RandomlyChosenMeaningResponse & {
     definitionId: string;

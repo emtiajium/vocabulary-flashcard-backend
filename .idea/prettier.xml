@@ -4,6 +4,6 @@
     <option name="myConfigurationMode" value="MANUAL" />
     <option name="myRunOnSave" value="true" />
     <option name="myRunOnReformat" value="true" />
-    <option name="myFilesPattern" value="{**/*,*}.{js,ts,jsx,tsx,html,vue,css,scss,sass,less,md,json}" />
+    <option name="myFilesPattern" value="{**/*,*}.{js,ts,jsx,tsx,html,vue,css,scss,sass,less,md,json,mts,mjs}" />
   </component>
 </project>

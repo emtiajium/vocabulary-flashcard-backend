@@ -1,13 +1,10 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-type PrimaryKey = {
+interface PrimaryKey {
     table: string;
     existingKey: string;
     newKey: string;
-};
+}
 
 export default class StandardizePrimaryKeys1664089206512 implements MigrationInterface {
     dbKeys: Record<string, Record<string, string>> = {

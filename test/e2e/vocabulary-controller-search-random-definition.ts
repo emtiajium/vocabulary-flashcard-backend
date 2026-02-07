@@ -82,10 +82,10 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             const response = body as RandomlyChosenMeaningResponse[];
             expect(response).not.toHaveLength(0);
             expect(response).toStrictEqual([
-                <RandomlyChosenMeaningResponse>{
+                {
                     word: vocabulary.word,
                     meaning: vocabulary.definitions[0].meaning,
-                },
+                } as RandomlyChosenMeaningResponse,
             ]);
         });
 
@@ -111,10 +111,10 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             const response = body as RandomlyChosenMeaningResponse[];
             expect(response).not.toHaveLength(0);
             expect(response).toStrictEqual([
-                <RandomlyChosenMeaningResponse>{
+                {
                     word: vocabulary.word,
                     meaning: vocabulary.definitions[0].meaning,
-                },
+                } as RandomlyChosenMeaningResponse,
             ]);
         });
 
@@ -146,10 +146,10 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             const response = body as RandomlyChosenMeaningResponse[];
             expect(response).not.toHaveLength(0);
             expect(response).toStrictEqual([
-                <RandomlyChosenMeaningResponse>{
+                {
                     word: previousVocabulary.word,
                     meaning: previousVocabulary.definitions[0].meaning,
-                },
+                } as RandomlyChosenMeaningResponse,
             ]);
 
             // Post-Assert

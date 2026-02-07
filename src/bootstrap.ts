@@ -24,7 +24,7 @@ export class Bootstrap {
 
     async start(): Promise<INestApplication> {
         const app: INestApplication = await NestFactory.create<NestExpressApplication>(
-            <DynamicModule>this.appModule,
+            this.appModule as DynamicModule,
             this.getAppOptions(),
         );
         this.app = app;
@@ -49,12 +49,10 @@ export class Bootstrap {
         this.app.enableCors({
             origin: (origin, callback) => {
                 if (!origin || allowedOrigins.includes(origin)) {
-                    /* eslint-disable node/callback-return */
                     callback(null, true);
                 } else {
                     this.app.get(Logger).warn(`NOT OK || origin ${origin}`, 'CORS');
                     callback(new Error(`Don't mess this up`));
-                    /* eslint-enable node/callback-return */
                 }
             },
         });
