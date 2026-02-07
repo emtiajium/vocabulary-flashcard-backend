@@ -1,6 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable node/no-sync */
-/* eslint-disable unicorn/no-process-exit */
 
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';

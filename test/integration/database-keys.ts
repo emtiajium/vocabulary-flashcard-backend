@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-
 import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';

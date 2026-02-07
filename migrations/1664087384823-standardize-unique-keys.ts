@@ -1,13 +1,10 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
-
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-type UniqueKey = {
+interface UniqueKey {
     table: string;
     existingKey: string;
     newKey: string;
-};
+}
 
 export default class StandardizeUniqueKeys1664087384823 implements MigrationInterface {
     dbKeys: Record<string, Record<string, string>> = {

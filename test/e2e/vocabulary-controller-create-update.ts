@@ -584,6 +584,7 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
                 expect(vocabulary).toBeDefined();
                 expect(vocabulary.id).toBe(payload.id);
+                expect(vocabulary.updatedAt).not.toBe((draftVocabulary as Vocabulary).updatedAt);
                 expect(vocabulary.definitions).toHaveLength(2);
                 vocabulary.definitions.forEach((definition, index) => {
                     expect(definition.id).toBe(payload.definitions[index].id);

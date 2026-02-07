@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 
 export default class RelateLinkerWords1678015289009 implements MigrationInterface {
-    // eslint-disable-next-line consistent-return,complexity
+    // eslint-disable-next-line complexity
     public async up(queryRunner: QueryRunner): Promise<void> {
         const vocabulariesHavingLinkerWords: Vocabulary[] = await queryRunner.query(`
             SELECT id, word, "linkerWords", "cohortId"
@@ -25,8 +25,6 @@ export default class RelateLinkerWords1678015289009 implements MigrationInterfac
             words.map((word) => word.toLowerCase().trim()),
         );
 
-        /* eslint-disable no-restricted-syntax */
-        /* eslint-disable no-await-in-loop */
         for (const vocabulary of vocabularies) {
             const vocab = vocabulariesHavingLinkerWords.find(
                 (vocabularyHavingLinkerWords) =>
