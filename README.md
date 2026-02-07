@@ -10,7 +10,7 @@
 
 ###### Prerequisites
 
-➜ Install Node 22.11.0 using [nvm](https://github.com/nvm-sh/nvm)
+➜ Install Node 24.12.0 using [nvm](https://github.com/nvm-sh/nvm)
 
 ➜ Install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/)
 
@@ -95,7 +95,7 @@
 
 ## Change Logs
 
-- `1.55.0`: Upgraded libs
+- `1.55.0`: Node@24 + Upgraded libs
 - `1.54.0`: Full Text searching (v0.1)
 - `1.53.0`: Node@22
 - `1.52.1`: Sent current date's guessing game related date from the table avoiding random generation
