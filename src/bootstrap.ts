@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { ClassSerializerInterceptor, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, DynamicModule, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as basicAuth from 'express-basic-auth';
@@ -11,6 +11,7 @@ import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-applicati
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { version, name, author } from '@root/package.json';
 import RequestLoggingInterceptor from '@/common/interceptors/RequestLoggingInterceptor';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 export class Bootstrap {
     private readonly serviceConfig: ServiceConfig;
@@ -22,7 +23,10 @@ export class Bootstrap {
     }
 
     async start(): Promise<INestApplication> {
-        const app: INestApplication = await NestFactory.create(this.appModule, this.getAppOptions());
+        const app: INestApplication = await NestFactory.create<NestExpressApplication>(
+            <DynamicModule>this.appModule,
+            this.getAppOptions(),
+        );
         this.app = app;
         this.initSwagger();
         this.initCors();
