@@ -16,7 +16,7 @@
         "format:check": "prettier --check \"{migrations,src,test}/*.ts\" \"*.{md,json,mjs,mts}\" \"**/**/*.yml\"",
         "start:dev": "nest start --watch",
         "start:prod": "npm run migration:run && npm run build && node dist/src/main.js",
-        "start:prod:aeb": "npm run migration:run:aeb && npm run build && node dist/src/main.js",
+        "start:prod:aeb": "NODE_OPTIONS=--max-old-space-size=2048 npm run migration:run:aeb && npm run build && node dist/src/main.js",
         "lint:config": "eslint --print-config src/main.ts",
         "lint": "eslint \"{migrations,src,test}/**/*.ts\" --fix",
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
