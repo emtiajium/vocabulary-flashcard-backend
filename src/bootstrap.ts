@@ -23,10 +23,11 @@ export class Bootstrap {
     }
 
     async start(): Promise<INestApplication> {
-        const app: INestApplication = await NestFactory.create<NestExpressApplication>(
+        const app = await NestFactory.create<NestExpressApplication>(
             this.appModule as DynamicModule,
             this.getAppOptions(),
         );
+        app.set('query parser', 'extended');
         this.app = app;
         this.initSwagger();
         this.initCors();
