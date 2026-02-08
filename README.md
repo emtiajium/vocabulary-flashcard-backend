@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.56.0`: Integrated AWS Secret Manager
 - `1.55.0`: Node@24 + Upgraded libs
 - `1.54.0`: Full Text searching (v0.1)
 - `1.53.0`: Node@22
