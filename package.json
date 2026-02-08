@@ -17,6 +17,7 @@
         "start:dev": "nest start --watch",
         "start:prod": "npm run migration:run && npm run build && node dist/src/main.js",
         "start:prod:aeb": "NODE_OPTIONS=--max-old-space-size=4096 npm run migration:run:aeb && npm run build && node dist/src/main.js",
+        "start:prod:aeb:temp": "NODE_OPTIONS=--max-old-space-size=4096 npm run migration:run:aeb && npm run start:dev",
         "lint:config": "eslint --print-config src/main.ts",
         "lint": "eslint \"{migrations,src,test}/**/*.ts\" --fix",
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",

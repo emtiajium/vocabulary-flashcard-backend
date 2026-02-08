@@ -8,3 +8,11 @@ kickOff(AppModule)
         new AutoRunScripts(app).runScripts().finally();
     })
     .catch((error) => console.error(`Error bootstrapping the App`, error));
+
+process.on('unhandledRejection', (reason) => {
+    console.error(`Unhandled Rejection: ${reason}`);
+});
+
+process.on('uncaughtException', (error: Error) => {
+    console.error(`Uncaught Exception: ${error}`);
+});
