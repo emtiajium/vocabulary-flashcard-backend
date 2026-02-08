@@ -8,7 +8,7 @@ import HealthCheckModule from '@/health-check/HealthCheckModule';
 
 @Module({
     imports: [
-        ConfigModule.forRoot({ envFilePath: '.env' }),
+        ConfigModule.forRoot(),
         HealthCheckModule,
         AutorunScriptsModule,
         UserModule,
