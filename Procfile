@@ -1,1 +1,1 @@
-web: npm install && npm run start:prod:aeb:temp
+web: npm install --include dev && npm run start:prod:aeb
