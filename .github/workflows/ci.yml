@@ -51,7 +51,7 @@ jobs:
               run: npm run test
 
             - name: Build
-              run: rm -rf node_modules/ && npm install --omit dev && npm run migration:run:aeb && npm run build
+              run: rm -rf node_modules/ && npm install --omit dev && npm run build
 
             - name: Clean Docker containers
               run: |
