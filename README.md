@@ -10,7 +10,7 @@
 
 ###### Prerequisites
 
-➜ Install Node 24.12.0 using [nvm](https://github.com/nvm-sh/nvm)
+➜ Install Node 22.11.0 using [nvm](https://github.com/nvm-sh/nvm)
 
 ➜ Install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/)
 
