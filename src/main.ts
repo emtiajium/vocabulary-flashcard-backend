@@ -4,6 +4,7 @@ import AutoRunScripts from '@/auto-run-scripts';
 
 kickOff(AppModule)
     .then((app) => {
+        console.log('app started', app);
         // do not need to wait to be resolved/rejected
         new AutoRunScripts(app).runScripts().finally();
     })
