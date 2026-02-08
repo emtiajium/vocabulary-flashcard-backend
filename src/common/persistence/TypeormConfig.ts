@@ -8,6 +8,9 @@ import * as process from 'node:process';
 const configService = new ConfigService();
 
 if (process.env.FIRECRACKER_PLATFORM === 'aeb') {
+    config();
+    // eslint-disable-next-line no-console
+    console.log('here+++', process.env);
     const environmentVariablesAsString = execSync(`/opt/elasticbeanstalk/bin/get-config environment`, {
         encoding: 'utf8',
     }).trim();
