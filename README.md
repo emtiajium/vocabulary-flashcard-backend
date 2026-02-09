@@ -156,8 +156,7 @@
 - `0.6.2`: Dynamic vocab ordering
 - `0.6.1`: Added script to remove a leitner item for a user
 - `0.6.0`: Added functionality to remove definitions
-- `0.5.5`: Fixed the (TypeORM) relationship between Vocabulary and Definition + Ordered definitions by their creation
-  time
+- `0.5.5`: Fixed the (TypeORM) relationship between Vocabulary and Definition + Ordered definitions by their creation time
 - `0.5.4`: Populated leitner box existence info
 - `0.5.3`: Applied ordering for the leitner items
 - `0.5.2`: Attached triggering time with Leitner box item
