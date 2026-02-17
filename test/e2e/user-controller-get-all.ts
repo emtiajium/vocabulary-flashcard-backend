@@ -92,7 +92,7 @@ describe('/v1/users/all', () => {
 
             expect(status).toBe(200);
             const response = body as SearchResult<UserReport>;
-            const mostRecentUser = response.results[response.total - 1];
+            const mostRecentUser = response.results[0];
             expect(mostRecentUser).toMatchObject({
                 username: anotherUser.username,
                 cohort: {

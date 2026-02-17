@@ -42,7 +42,7 @@ export default class UserRepository extends Repository<User> {
             .innerJoin('user.cohort', 'cohort')
             .select(['user.username', 'user.firstname', 'user.lastname', 'user.createdAt'])
             .addSelect(['cohort.name'])
-            .orderBy({ 'user.createdAt': SortDirection.ASC })
+            .orderBy({ 'user.createdAt': SortDirection.DESC })
             .getMany();
     }
 
