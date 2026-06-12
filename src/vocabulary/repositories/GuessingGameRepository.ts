@@ -30,32 +30,35 @@ export default class GuessingGameRepository extends Repository<GuessingGame> {
         }[]
     > {
         return this.query(
-            `
-                select "definitionId",
-                       word,
-                       meaning,
-                       ("createdAt"::date = now()::date) as "isCreationDateToday"
-                from "GuessingGame"
-                where "userId" = $1;
+            /* sql */ `
+                select
+                    "definitionId",
+                    word,
+                    meaning,
+                    ("createdAt"::date = now()::date) as "isCreationDateToday"
+                from
+                    "GuessingGame"
+                where
+                    "userId" = $1;
             `,
             [userId],
         );
     }
 
     async deleteOlder(): Promise<void> {
-        await this.query(`
-            delete
-            from "GuessingGame"
-            where "createdAt" < now() - '15 days'::interval
+        await this.query(/* sql */ `
+            delete from "GuessingGame"
+            where
+                "createdAt" < now() - '15 days'::interval
         `);
     }
 
     async deleteByUserId(userId: string): Promise<void> {
         await this.query(
-            `
-                delete
-                from "GuessingGame"
-                where "userId" = $1;
+            /* sql */ `
+                delete from "GuessingGame"
+                where
+                    "userId" = $1;
             `,
             [userId],
         );

@@ -19,10 +19,13 @@ describe('UNLOGGED GuessingGame Table', () => {
 
     test('GuessingGame SHOULD be UNLOGGED table', async () => {
         // Act
-        const queryResponse = await app.get(GuessingGameRepository).query(`
-            select relpersistence
-            from pg_class
-            where relname = 'GuessingGame';
+        const queryResponse = await app.get(GuessingGameRepository).query(/* sql */ `
+            select
+                relpersistence
+            from
+                pg_class
+            where
+                relname = 'GuessingGame';
         `);
 
         // Assert

@@ -33,15 +33,16 @@ function getConstraints(
     constraintType: 'PRIMARY KEY' | 'FOREIGN KEY' | 'UNIQUE',
 ): Promise<{ constraintName: string }[]> {
     return DataSource.query(
-        `
-            SELECT DISTINCT (tc.constraint_name) AS "constraintName"
-            FROM information_schema.key_column_usage kcu
-                     INNER JOIN information_schema.table_constraints tc
-                                ON kcu.table_name = tc.table_name
-                                    AND kcu.table_name = $1
-                                    AND tc.table_name = $1
-                                    AND kcu.constraint_name = tc.constraint_name
-                                    AND tc.constraint_type = $2;
+        /* sql */ `
+            select distinct
+                (tc.constraint_name) as "constraintName"
+            from
+                information_schema.key_column_usage kcu
+                inner join information_schema.table_constraints tc on kcu.table_name = tc.table_name
+                and kcu.table_name = $1
+                and tc.table_name = $1
+                and kcu.constraint_name = tc.constraint_name
+                and tc.constraint_type = $2;
         `,
         [tableName, constraintType],
     );
@@ -100,12 +101,17 @@ export async function getAllUniqueKeys(tableNames: string[]): Promise<Record<str
 
 export async function getIndexKeysWithinTable(tableName: string): Promise<string[]> {
     const queryResult: { indexName: string }[] = await DataSource.query(
-        `
-            SELECT indexname AS "indexName"
-            FROM pg_catalog.pg_indexes
-            WHERE (indexdef ILIKE '%CREATE INDEX%'
-                OR indexdef ILIKE '%CREATE UNIQUE INDEX%')
-              AND tablename = $1;
+        /* sql */ `
+            select
+                indexname as "indexName"
+            from
+                pg_catalog.pg_indexes
+            where
+                (
+                    indexdef ilike '%CREATE INDEX%'
+                    or indexdef ilike '%CREATE UNIQUE INDEX%'
+                )
+                and tablename = $1;
         `,
         [tableName],
     );

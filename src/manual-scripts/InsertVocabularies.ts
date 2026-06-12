@@ -37,13 +37,18 @@ export default class InsertVocabularies {
 
     private async remove(): Promise<void> {
         await DataSource.getRepository(Definition).query(
-            `DELETE
-             FROM "Definition"
-             WHERE "vocabularyId" IN (
-                 SELECT id
-                 FROM "Vocabulary"
-                 WHERE "cohortId" = $1
-             );`,
+            /* sql */ `
+                delete from "Definition"
+                where
+                    "vocabularyId" in (
+                        select
+                            id
+                        from
+                            "Vocabulary"
+                        where
+                            "cohortId" = $1
+                    );
+            `,
             [this.cohortId],
         );
         await DataSource.getRepository(Vocabulary).delete({ cohortId: this.cohortId });

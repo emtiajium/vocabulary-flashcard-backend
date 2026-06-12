@@ -17,6 +17,11 @@ describe('Database Connection', () => {
     });
 
     it('SHOULD be connected with the Database', async () => {
-        await expect(DataSource.query(`SELECT 1 + 1 AS two;`)).resolves.toStrictEqual([{ two: 2 }]);
+        await expect(
+            DataSource.query(/* sql */ `
+                select
+                    1 + 1 as two;
+            `),
+        ).resolves.toStrictEqual([{ two: 2 }]);
     });
 });

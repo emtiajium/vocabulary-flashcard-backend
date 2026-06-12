@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.56.0`: Formatting for queries
 - `1.55.1`: Improved build stage by installing only dependencies
 - `1.55.0`: Upgraded libs + Integrated AWS Secret Manager
 - `1.54.0`: Full Text searching (v0.1)
