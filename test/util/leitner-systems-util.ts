@@ -15,12 +15,17 @@ export async function removeLeitnerBoxItems(userId: string): Promise<void> {
 
 export async function removeLeitnerBoxItemsByCohortId(cohortId: string): Promise<void> {
     await DataSource.getRepository(LeitnerSystems).query(
-        `
-            DELETE
-            FROM "LeitnerSystems"
-            WHERE "userId" IN (SELECT id
-                               FROM "User"
-                               WHERE "User"."cohortId" = $1);
+        /* sql */ `
+            delete from "LeitnerSystems"
+            where
+                "userId" in (
+                    select
+                        id
+                    from
+                        "User"
+                    where
+                        "User"."cohortId" = $1
+                );
         `,
         [cohortId],
     );

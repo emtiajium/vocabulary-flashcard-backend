@@ -58,31 +58,42 @@ export default class CreateTestUsers {
 
     private async removeDefinitions(): Promise<void> {
         await DataSource.getRepository(Definition).query(
-            `DELETE
-             FROM "Definition"
-             WHERE "vocabularyId" IN (
-                 SELECT id
-                 FROM "Vocabulary"
-                 WHERE "cohortId" = (
-                     SELECT id
-                     FROM "Cohort"
-                     WHERE name = $1
-                 )
-             );`,
+            /* sql */ `
+                delete from "Definition"
+                where
+                    "vocabularyId" in (
+                        select
+                            id
+                        from
+                            "Vocabulary"
+                        where
+                            "cohortId" = (
+                                select
+                                    id
+                                from
+                                    "Cohort"
+                                where
+                                    name = $1
+                            )
+                    );
+            `,
             [this.cohortName],
         );
     }
 
     private async removeVocabularies(): Promise<void> {
         await DataSource.getRepository(Vocabulary).query(
-            `
-                DELETE
-                FROM "Vocabulary"
-                WHERE "cohortId" = (
-                    SELECT id
-                    FROM "Cohort"
-                    WHERE name = $1
-                )
+            /* sql */ `
+                delete from "Vocabulary"
+                where
+                    "cohortId" = (
+                        select
+                            id
+                        from
+                            "Cohort"
+                        where
+                            name = $1
+                    )
             `,
             [this.cohortName],
         );

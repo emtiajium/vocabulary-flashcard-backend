@@ -77,12 +77,17 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
     }
 
     getLeitnerLoverUsers(): Promise<LeitnerSystemsLoverUsersReport[]> {
-        return this.query(`
-            SELECT DISTINCT U.username, COUNT(DISTINCT "vocabularyId")::INTEGER AS "vocabCount"
-            FROM "LeitnerSystems"
-                     INNER JOIN "User" AS U ON "LeitnerSystems"."userId" = U.id
-            GROUP BY U.username
-            ORDER BY "vocabCount" DESC;
+        return this.query(/* sql */ `
+            select distinct
+                u.username,
+                count(distinct "vocabularyId")::integer as "vocabCount"
+            from
+                "LeitnerSystems"
+                inner join "User" as u on "LeitnerSystems"."userId" = u.id
+            group by
+                u.username
+            order by
+                "vocabCount" desc;
         `);
     }
 

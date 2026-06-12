@@ -25,9 +25,13 @@ export async function removeUsersByCohortIds(cohortIds: string[]): Promise<void>
 
 export async function resetCohortById(id: string): Promise<void> {
     await DataSource.query(
-        `UPDATE "User"
-         SET "cohortId" = NULL
-         WHERE id = $1`,
+        /* sql */ `
+            update "User"
+            set
+                "cohortId" = null
+            where
+                id = $1
+        `,
         [id],
     );
 }

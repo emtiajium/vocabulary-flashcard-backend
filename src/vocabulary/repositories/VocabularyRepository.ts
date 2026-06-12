@@ -53,28 +53,48 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         const searchKeywordParameterPosition = 5;
 
         const vocabularyQueryResult = await this.query(
-            `
-                SELECT vocabulary.id,
-                       vocabulary.word,
-                       coalesce(json_agg(json_build_object('id', definition.id, 'meaning', definition.meaning) order by definition."createdAt")
-                                filter (where definition.id is not null), '[]') AS definitions,
-                       COUNT("leitnerSystems"."userId")::INTEGER::BOOLEAN       AS "isInLeitnerBox",
-                       (COUNT(*) OVER ())::INTEGER                              AS "totalNumberOfVocabularies"
-                FROM "Vocabulary" AS vocabulary
-                         LEFT JOIN "Definition" AS definition ON vocabulary.id = definition."vocabularyId"
-                         LEFT JOIN "LeitnerSystems" AS "leitnerSystems"
-                                   ON vocabulary.id = "leitnerSystems"."vocabularyId" AND
-                                      "leitnerSystems"."userId" = $1
-                WHERE vocabulary."cohortId" = $2
-                    ${this.getSearchQuery(
-                        searchKeyword || '',
-                        vocabularySearchCoverage,
-                        searchKeywordParameterPosition,
-                    )}
-                    ${this.getFilteringQuery(fetchNotHavingDefinitionOnly, fetchFlashcard)}
-                GROUP BY vocabulary.id, vocabulary."${sortField}"
-                ORDER BY vocabulary."${sortField}" ${Sort.getDirection(SortDirection.DESC, sort)}
-                OFFSET $3 LIMIT $4;
+            /* sql */ `
+                select
+                    vocabulary.id,
+                    vocabulary.word,
+                    coalesce(
+                        json_agg(
+                            json_build_object(
+                                'id',
+                                definition.id,
+                                'meaning',
+                                definition.meaning
+                            )
+                            order by
+                                definition."createdAt"
+                        ) filter (
+                            where
+                                definition.id is not null
+                        ),
+                        '[]'
+                    ) as definitions,
+                    count("leitnerSystems"."userId")::integer::boolean as "isInLeitnerBox",
+                    (count(*) over ())::integer as "totalNumberOfVocabularies"
+                from
+                    "Vocabulary" as vocabulary
+                    left join "Definition" as definition on vocabulary.id = definition."vocabularyId"
+                    left join "LeitnerSystems" as "leitnerSystems" on vocabulary.id = "leitnerSystems"."vocabularyId"
+                    and "leitnerSystems"."userId" = $1
+                where
+                    vocabulary."cohortId" = $2 ${this.getSearchQuery(
+                                            searchKeyword || '',
+                                            vocabularySearchCoverage,
+                                            searchKeywordParameterPosition,
+                                        )} ${this.getFilteringQuery(fetchNotHavingDefinitionOnly, fetchFlashcard)}
+                group by
+                    vocabulary.id,
+                    vocabulary."${sortField}"
+                order by
+                    vocabulary."${sortField}" ${Sort.getDirection(SortDirection.DESC, sort)}
+                offset
+                    $3
+                limit
+                    $4;
             `,
             searchKeyword
                 ? [userId, cohortId, currentPage, pageSize, searchKeyword.trim()]
@@ -122,38 +142,65 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     async findVocabularyById(id: string, userId: string): Promise<Vocabulary> {
         const results = await this.query(
-            `
-                SELECT vocabulary.id,
-                       vocabulary."cohortId",
-                       vocabulary.word,
-                       vocabulary."genericNotes",
-                       vocabulary."genericExternalLinks",
-                       vocabulary."linkerWords",
-                       vocabulary."isDraft",
-                       coalesce(json_agg(json_build_object('id', definition.id,
-                                                           'vocabularyId', definition."vocabularyId",
-                                                           'meaning', definition.meaning,
-                                                           'examples', definition.examples,
-                                                           'notes', definition.notes,
-                                                           'externalLinks', definition."externalLinks"))
-                                filter (where definition.id is not null), '[]') AS definitions,
-                       CASE
-                           WHEN
-                               EXISTS(SELECT "leitnerSystems".id
-                                      FROM "LeitnerSystems" AS "leitnerSystems"
-                                      WHERE "leitnerSystems"."vocabularyId" = $1
-                                        AND "leitnerSystems"."userId" = $2)
-                               THEN true
-                           ELSE false
-                           END                                                  AS "isInLeitnerBox"
-                FROM "Vocabulary" AS vocabulary
-                         LEFT JOIN (SELECT *
-                                    FROM "Definition"
-                                    WHERE "vocabularyId" = $1
-                                    ORDER BY "createdAt" ASC) AS definition
-                                   ON vocabulary.id = definition."vocabularyId"
-                WHERE vocabulary.id = $1
-                GROUP BY vocabulary.id;
+            /* sql */ `
+                select
+                    vocabulary.id,
+                    vocabulary."cohortId",
+                    vocabulary.word,
+                    vocabulary."genericNotes",
+                    vocabulary."genericExternalLinks",
+                    vocabulary."linkerWords",
+                    vocabulary."isDraft",
+                    coalesce(
+                        json_agg(
+                            json_build_object(
+                                'id',
+                                definition.id,
+                                'vocabularyId',
+                                definition."vocabularyId",
+                                'meaning',
+                                definition.meaning,
+                                'examples',
+                                definition.examples,
+                                'notes',
+                                definition.notes,
+                                'externalLinks',
+                                definition."externalLinks"
+                            )
+                        ) filter (
+                            where
+                                definition.id is not null
+                        ),
+                        '[]'
+                    ) as definitions,
+                    case
+                        when exists (
+                            select
+                                "leitnerSystems".id
+                            from
+                                "LeitnerSystems" as "leitnerSystems"
+                            where
+                                "leitnerSystems"."vocabularyId" = $1
+                                and "leitnerSystems"."userId" = $2
+                        ) then true
+                        else false
+                    end as "isInLeitnerBox"
+                from
+                    "Vocabulary" as vocabulary
+                    left join (
+                        select
+                            *
+                        from
+                            "Definition"
+                        where
+                            "vocabularyId" = $1
+                        order by
+                            "createdAt" asc
+                    ) as definition on vocabulary.id = definition."vocabularyId"
+                where
+                    vocabulary.id = $1
+                group by
+                    vocabulary.id;
             `,
             [id, userId],
         );
@@ -163,10 +210,16 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     async getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {
         const queryResult = await this.query(
-            `SELECT *
-             FROM "Vocabulary"
-             WHERE "cohortId" = $1
-             LIMIT 1;`,
+            /* sql */ `
+                select
+                    *
+                from
+                    "Vocabulary"
+                where
+                    "cohortId" = $1
+                limit
+                    1;
+            `,
             [cohortId],
         );
         return queryResult[0];
@@ -174,11 +227,18 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     async isVocabularyExist(id: string, cohortId: string): Promise<boolean> {
         const vocabulary = await this.query(
-            `SELECT EXISTS(SELECT id
-                           FROM "Vocabulary"
-                           WHERE id = $1
-                             AND "cohortId" = $2
-                        ) AS existence;`,
+            /* sql */ `
+                select
+                    exists (
+                        select
+                            id
+                        from
+                            "Vocabulary"
+                        where
+                            id = $1
+                            and "cohortId" = $2
+                    ) as existence;
+            `,
             [id, cohortId],
         );
         return vocabulary[0].existence;
@@ -186,17 +246,25 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
 
     async getPartialForRemoval(id: string): Promise<Pick<Vocabulary, 'cohortId' | 'isInLeitnerBox'>> {
         const queryResult = await this.query(
-            `SELECT vocabulary."cohortId",
-                    CASE
-                        WHEN
-                            EXISTS(SELECT "leitnerSystems".id
-                                   FROM "LeitnerSystems" AS "leitnerSystems"
-                                   WHERE "leitnerSystems"."vocabularyId" = $1)
-                            THEN true
-                        ELSE false
-                        END AS "isInLeitnerBox"
-             FROM "Vocabulary" AS vocabulary
-             WHERE vocabulary.id = $1;`,
+            /* sql */ `
+                select
+                    vocabulary."cohortId",
+                    case
+                        when exists (
+                            select
+                                "leitnerSystems".id
+                            from
+                                "LeitnerSystems" as "leitnerSystems"
+                            where
+                                "leitnerSystems"."vocabularyId" = $1
+                        ) then true
+                        else false
+                    end as "isInLeitnerBox"
+                from
+                    "Vocabulary" as vocabulary
+                where
+                    vocabulary.id = $1;
+            `,
             [id],
         );
 

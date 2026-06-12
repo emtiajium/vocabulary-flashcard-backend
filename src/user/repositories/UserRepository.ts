@@ -12,16 +12,43 @@ export default class UserRepository extends Repository<User> {
 
     async insertOrUpdate(user: User): Promise<User> {
         const createdUserResponse = await this.query(
-            `
-                INSERT INTO "User"("createdAt", "updatedAt", "version", "id", "username", "firstname", "lastname",
-                                   "profilePictureUrl", "cohortId")
-                VALUES (DEFAULT, DEFAULT, 1, DEFAULT, $1, $2, $3, $4, DEFAULT)
-                ON CONFLICT ("username") DO UPDATE SET firstname           = EXCLUDED.firstname,
-                                                       lastname            = EXCLUDED.lastname,
-                                                       "profilePictureUrl" = EXCLUDED."profilePictureUrl",
-                                                       "updatedAt"         = NOW(),
-                                                       version             = "User".version + 1
-                RETURNING "createdAt", "updatedAt", "version", "id"
+            /* sql */ `
+                insert into
+                    "User" (
+                        "createdAt",
+                        "updatedAt",
+                        "version",
+                        "id",
+                        "username",
+                        "firstname",
+                        "lastname",
+                        "profilePictureUrl",
+                        "cohortId"
+                    )
+                values
+                    (
+                        default,
+                        default,
+                        1,
+                        default,
+                        $1,
+                        $2,
+                        $3,
+                        $4,
+                        default
+                    )
+                on conflict ("username") do update
+                set
+                    firstname = excluded.firstname,
+                    lastname = excluded.lastname,
+                    "profilePictureUrl" = excluded."profilePictureUrl",
+                    "updatedAt" = now(),
+                    version = "User".version + 1
+                returning
+                    "createdAt",
+                    "updatedAt",
+                    "version",
+                    "id"
             `,
             [user.username, user.firstname, user.lastname, user.profilePictureUrl],
         );

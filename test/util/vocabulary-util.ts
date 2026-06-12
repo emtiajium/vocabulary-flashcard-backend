@@ -6,11 +6,18 @@ import DataSource from '@/common/persistence/TypeormConfig';
 
 export async function removeVocabularyAndRelationsByCohortId(cohortId: string): Promise<void> {
     await DataSource.getRepository(Definition).query(
-        `DELETE
-         FROM "Definition"
-         WHERE "vocabularyId" IN (SELECT id
-                                  FROM "Vocabulary"
-                                  WHERE "cohortId" = $1);`,
+        /* sql */ `
+            delete from "Definition"
+            where
+                "vocabularyId" in (
+                    select
+                        id
+                    from
+                        "Vocabulary"
+                    where
+                        "cohortId" = $1
+                );
+        `,
         [cohortId],
     );
     await removeLeitnerBoxItemsByCohortId(cohortId);
@@ -19,10 +26,16 @@ export async function removeVocabularyAndRelationsByCohortId(cohortId: string): 
 
 export function getDefinitionsByVocabularyId(vocabularyId: string): Promise<Definition[]> {
     return DataSource.getRepository(Definition).query(
-        `SELECT *
-         FROM "Definition"
-         WHERE "vocabularyId" = $1
-         ORDER BY "createdAt" ASC;`,
+        /* sql */ `
+            select
+                *
+            from
+                "Definition"
+            where
+                "vocabularyId" = $1
+            order by
+                "createdAt" asc;
+        `,
         [vocabularyId],
     );
 }
@@ -30,10 +43,16 @@ export function getDefinitionsByVocabularyId(vocabularyId: string): Promise<Defi
 export async function getSingleVocabularyByCohortId(cohortId: string): Promise<Vocabulary> {
     return (
         await DataSource.getRepository(Vocabulary).query(
-            `SELECT *
-             FROM "Vocabulary"
-             WHERE "cohortId" = $1
-             LIMIT 1;`,
+            /* sql */ `
+                select
+                    *
+                from
+                    "Vocabulary"
+                where
+                    "cohortId" = $1
+                limit
+                    1;
+            `,
             [cohortId],
         )
     )[0];
