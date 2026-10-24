@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.56.3`: Fixed the Leitner tests that failed around the daylight saving time switch
 - `1.56.2`: Upgraded Node to 22.23.4 (security release)
 - `1.56.1`: Git tag automating
 - `1.56.0`: Formatting for queries
