@@ -28,36 +28,16 @@ jobs:
             - name: ESLint
               run: npm run lint:check
 
-            - name: Login to Docker Hub
-              uses: docker/login-action@v1
-              with:
-                  username: ${{ secrets.DOCKER_HUB_USERNAME }}
-                  password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-            - name: Run Docker containers
-              run: |
-                  docker compose -f docker-compose-ci.yml up -d
-                  docker compose -f docker-compose-ci.yml ps
-                  docker volume ls
-                  docker inspect --format '{{json .Mounts}}' ielts-gibberish-test-postgres
-
             - name: Create environment variables
               run: npm run create:env
 
-            - name: Database Tables' modification
-              run: npm run migration:run:local-test
-
+            # The test suites boot an in-memory PGlite instance and apply the
+            # migrations by themselves, no Docker/Postgres service is required.
             - name: Automated Test
               run: npm run test
 
             - name: Build
               run: rm -rf node_modules/ && npm install --omit dev && npm run build
-
-            - name: Clean Docker containers
-              run: |
-                  docker compose -f docker-compose-ci.yml stop
-                  docker compose -f docker-compose-ci.yml rm -f
-                  docker compose -f docker-compose-ci.yml down --volumes
 
     tag:
         runs-on: ubuntu-latest

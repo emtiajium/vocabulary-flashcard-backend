@@ -38,6 +38,21 @@
 
 ➜ `npm run test`
 
+> The tests do not need Docker anymore. Each run boots an in-memory
+> [PGlite](https://pglite.dev/) instance (a WASM build of Postgres), exposes it over the
+> Postgres wire protocol and applies the migrations before the suites start.
+>
+> To run the suites against a real Postgres instead:
+>
+> ➜ `npm run backing-services:test` (optional, starts the Postgres container)
+>
+> ➜ `npm run migration:run:local-test`
+>
+> ➜ `npm run test:external-db`
+>
+> Useful environment variables: `PGLITE_ENABLED` (`true` by default), `PGLITE_PORT`
+> (`TYPEORM_PORT` by default), `PGLITE_HOST`, `PGLITE_MAX_CONNECTIONS`, `PGLITE_DEBUG`.
+
 ###### Start the development environment
 
 ➜ `npm run start:dev`
@@ -95,6 +110,7 @@
 
 ## Change Logs
 
+- `1.57.0`: Replaced the Postgres Docker container with in-memory PGlite in the automated tests + CI
 - `1.56.2`: Upgraded Node to 22.23.4 (security release)
 - `1.56.1`: Git tag automating
 - `1.56.0`: Formatting for queries

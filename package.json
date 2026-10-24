@@ -1,6 +1,6 @@
 {
     "name": "vocabulary-flashcard-backend",
-    "version": "1.56.2",
+    "version": "1.57.0",
     "author": {
         "name": "Emtiaj Hasan",
         "email": "271emtiaj@gmail.com",
@@ -21,6 +21,9 @@
         "lint": "eslint \"{migrations,src,test}/**/*.ts\" --fix",
         "lint:check": "eslint \"{migrations,src,test}/**/*.ts\"",
         "test": "jest --detectOpenHandles --forceExit",
+        "test:external-db": "PGLITE_ENABLED=false npm test",
+        "backing-services:test": "docker-compose -f docker-compose-test.yml up -d",
+        "backing-services:test:down": "docker-compose -f docker-compose-test.yml down --volumes",
         "test:memory-usage": "LOGGING_CONSOLE_ENABLED=false node --expose-gc ./node_modules/.bin/jest --logHeapUsage --runInBand --coverage=false --detectOpenHandles --forceExit --detectLeaks",
         "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/.bin/typeorm",
         "migration:generate": "node -r ts-node/register -r tsconfig-paths/register src/common/persistence/MigrationGenerationHandler.ts",
@@ -68,6 +71,8 @@
         "uuid": "^9.0.1"
     },
     "devDependencies": {
+        "@electric-sql/pglite": "^0.5.11",
+        "@electric-sql/pglite-socket": "^0.2.14",
         "@eslint/js": "^9.18.0",
         "@nestjs/schematics": "^11.0.9",
         "@types/cookie-parser": "^1.4.10",
@@ -128,6 +133,8 @@
         "setupFiles": [
             "<rootDir>/test/jest-init.ts"
         ],
+        "globalSetup": "<rootDir>/test/pglite/global-setup.ts",
+        "globalTeardown": "<rootDir>/test/pglite/global-teardown.ts",
         "testEnvironment": "node",
         "testMatch": [
             "<rootDir>/test/{e2e,integration,unit}/**/*.ts"

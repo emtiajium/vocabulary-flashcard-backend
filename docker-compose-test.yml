@@ -1,4 +1,9 @@
 version: '3.7'
+# OPTIONAL. The automated tests run against an in-memory PGlite instance by default
+# (see `test/pglite`), so no backing service is needed anymore.
+# This stack is only required when the suites must run against a real Postgres:
+#   docker-compose -f docker-compose-test.yml up -d
+#   PGLITE_ENABLED=false npm test
 services:
     ielts-gibberish-test-database:
         image: postgres:14.10
