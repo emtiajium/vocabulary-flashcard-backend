@@ -41,7 +41,7 @@
         "@nestjs/schedule": "^6.1.1",
         "@nestjs/swagger": "^11.2.6",
         "@nestjs/terminus": "^11.0.0",
-        "@nestjs/typeorm": "11.0.0",
+        "@nestjs/typeorm": "11.0.3",
         "@types/express": "^5.0.6",
         "axios": "1.20.0",
         "body-parser": "2.4.0",
