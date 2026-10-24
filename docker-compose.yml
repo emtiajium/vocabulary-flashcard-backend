@@ -1,4 +1,6 @@
 version: '3.7'
+# Development database only (npm run start:dev / npm run migration:run).
+# The automated tests run on in-memory PGlite, see docs/PGLITE.md.
 services:
     ielts-gibberish-database:
         image: postgres:14.10
