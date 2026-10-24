@@ -192,6 +192,10 @@ had exactly that, and it took the total pipeline from 2 jobs to 3).
    silently point the suites at a shared/remote database.
 6. **No second database mode.** `PGLITE_ENABLED=false` and the `test:external-db` script were
    removed on purpose: the suites always run on PGlite.
+7. **Jest path aliases do not exist inside `globalSetup`/`globalTeardown`.** Jest runs those
+   hooks outside its module sandbox, so `moduleNameMapper` is not applied there: only relative
+   imports are allowed anywhere in the `global-setup.ts` import chain (`test/pglite/*`).
+   Importing `@/…` in those files breaks the whole test run.
 
 ## History
 

@@ -15,26 +15,14 @@ export interface PgliteTestServer {
     stop: () => Promise<void>;
 }
 
-// `TYPEORM_HOST`/`TYPEORM_PORT` are the single source of truth for the connection
-// details: TypeORM keeps reading them, this server just listens on the very same address.
-// The fallbacks only cover a completely missing `.env`, which `global-setup.ts` rejects.
-const fallbackHost = '127.0.0.1';
-
-const fallbackPort = 5429;
-
 const defaultMaxConnections = 20;
 
 const loopbackHosts = ['localhost', '::1', '[::1]'];
 
-/**
- * PGlite is the only database the automated tests run against: it boots an in-memory
- * PostgreSQL (WASM) and serves it over the Postgres wire protocol, so neither TypeORM nor
- * any test had to be changed.
- */
 export async function startPgliteServer(): Promise<PgliteTestServer> {
-    const host = process.env.TYPEORM_HOST ?? fallbackHost;
-    const port = Number(process.env.TYPEORM_PORT) || fallbackPort;
-    const database = process.env.TYPEORM_DATABASE ?? 'ielts-gibberish';
+    const host = process.env.TYPEORM_HOST;
+    const port = Number(process.env.TYPEORM_PORT);
+    const database = process.env.TYPEORM_DATABASE;
 
     if (!isLocalHost(host)) {
         throw new Error(
@@ -43,8 +31,6 @@ export async function startPgliteServer(): Promise<PgliteTestServer> {
         );
     }
 
-    // `uuid-ossp` ships with PGlite, but it is not enabled by default
-    // while the migration creating the `User` table requires it.
     const db = await PGlite.create({ extensions: { uuid_ossp } });
 
     const server = new PGLiteSocketServer({
@@ -83,9 +69,6 @@ function isLocalHost(host: string): boolean {
     return loopbackHosts.includes(host) || host.startsWith('127.');
 }
 
-/**
- * Never render credentials: the endpoint is only meant for logs and error messages.
- */
 export function describeEndpoint(host: string, port: number, database: string): string {
     return `${host}:${port}/${database}`;
 }

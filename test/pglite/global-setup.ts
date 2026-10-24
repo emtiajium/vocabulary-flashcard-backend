@@ -2,16 +2,7 @@ import * as dotenv from 'dotenv';
 import { describeEndpoint, startPgliteServer } from './pglite-server';
 import { runMigrations } from './pglite-migration';
 
-/**
- * Runs once, before any test suite is executed.
- *
- * 1. Boots an in-memory PGlite instance exposed through a Postgres wire protocol server.
- * 2. Applies the real migrations so the suites find the same schema as before.
- *
- * The server handle is kept on `globalThis` so `global-teardown.ts` can shut it down.
- */
 export default async function globalSetup(): Promise<void> {
-    // `.env` holds the "development" defaults, `.env.test` overrides them for tests.
     dotenv.config({ path: ['./.env'] });
     dotenv.config({ path: ['./test/.env.test'], override: true });
 

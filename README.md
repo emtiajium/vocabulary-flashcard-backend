@@ -38,19 +38,6 @@
 
 ➜ `npm run test`
 
-> The tests do not need Docker: each run boots an in-memory
-> [PGlite](https://pglite.dev/) instance (a WASM build of PostgreSQL), exposes it over the
-> Postgres wire protocol and applies the migrations before the suites start. PGlite is the
-> only database the test suites use, and it creates the schema from `migrations/` on every
-> run — see [docs/PGLITE-TEST-DB.md](./docs/PGLITE-TEST-DB.md).
->
-> PGlite embeds PostgreSQL 18 while production runs PostgreSQL 14, so the suites cannot
-> detect PostgreSQL 14 specific behaviour. Validate that separately when touching SQL or
-> migrations.
->
-> Useful environment variables: `PGLITE_MAX_CONNECTIONS`, `PGLITE_DEBUG`. The socket server
-> always listens on `TYPEORM_HOST`/`TYPEORM_PORT` (from `.env.test`).
-
 ###### Start the development environment
 
 ➜ `npm run start:dev`
