@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.56.2`: Upgraded Node to 22.23.4 (security release)
 - `1.56.1`: Git tag automating
 - `1.56.0`: Formatting for queries
 - `1.55.1`: Improved build stage by installing only dependencies
