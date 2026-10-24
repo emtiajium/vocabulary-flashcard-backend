@@ -22,7 +22,7 @@ import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import * as _ from 'lodash';
-import { delay } from '@/common/utils/moment-util';
+import { setTimeout } from 'node:timers/promises';
 import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/vocabularies', () => {
@@ -799,7 +799,7 @@ describe('/v1/vocabularies', () => {
 
                 // Act
                 await makeApiRequest(payload);
-                await delay(1);
+                await setTimeout(1000);
 
                 // Assert
                 const { linkerWords, version, updatedAt } = await getVocabularyById(vocabulary.id);
@@ -826,7 +826,7 @@ describe('/v1/vocabularies', () => {
 
                 // Act
                 await makeApiRequest(payload);
-                await delay(1);
+                await setTimeout(1000);
 
                 // Assert
                 const { linkerWords, version, updatedAt } = await getVocabularyById(vocabulary.id);

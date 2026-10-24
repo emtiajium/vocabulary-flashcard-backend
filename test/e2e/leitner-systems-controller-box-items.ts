@@ -13,7 +13,8 @@ import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
-import MomentUnit, { delay, getFormattedDate, makeItNewer, makeItOlder } from '@/common/utils/moment-util';
+import { addDays, format, subDays } from 'date-fns';
+import { setTimeout } from 'node:timers/promises';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import LeitnerBoxItemSearchResult from '@/vocabulary/domains/LeitnerBoxItemSearchResult';
 import DataSource from '@/common/persistence/TypeormConfig';
@@ -90,7 +91,7 @@ describe('Leitner Systems Box Items', () => {
                 createVocabulary(getVocabularyWithDefinitions(), cohort.id),
             ]);
             await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_1);
-            await delay(2);
+            await setTimeout(2000);
             await createItem(requester.id, secondVocabulary.id, LeitnerBoxType.BOX_1);
 
             const { status, body } = await makeApiRequest(LeitnerBoxType.BOX_1);
@@ -110,10 +111,10 @@ describe('Leitner Systems Box Items', () => {
         });
 
         it('SHOULD return 200 OK with empty results for an early request WITH a single item WHEN all items are supposed to have appeared in future', async () => {
-            const past = makeItOlder(new Date(), MomentUnit.DAYS, 1);
+            const past = subDays(new Date(), 1);
             const getTomorrowMock = jest
                 .spyOn(app.get(LeitnerSystemsRepository), 'getTomorrow')
-                .mockImplementation(() => getFormattedDate(past));
+                .mockImplementation(() => format(past, 'yyyy-MM-dd'));
 
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             const item = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
@@ -135,14 +136,14 @@ describe('Leitner Systems Box Items', () => {
         it('SHOULD return 200 OK WITH non-empty results along with a single item outside the time frame WHEN there are items within and outside the time frame', async () => {
             let vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             const item = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
-            const past = makeItOlder(new Date(), MomentUnit.DAYS, 2);
+            const past = subDays(new Date(), 2);
             await updateItem(item.id, {
                 boxAppearanceDate: past,
             });
 
             vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             const anotherItem = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
-            const future = makeItNewer(new Date(), MomentUnit.DAYS, 5);
+            const future = addDays(new Date(), 5);
             await updateItem(anotherItem.id, {
                 boxAppearanceDate: future,
             });
@@ -160,10 +161,10 @@ describe('Leitner Systems Box Items', () => {
         });
 
         it('SHOULD return 200 OK', async () => {
-            const future = makeItNewer(new Date(), MomentUnit.DAYS, 5);
+            const future = addDays(new Date(), 5);
             const getTomorrowMock = jest
                 .spyOn(app.get(LeitnerSystemsRepository), 'getTomorrow')
-                .mockImplementation(() => getFormattedDate(future));
+                .mockImplementation(() => format(future, 'yyyy-MM-dd'));
 
             const vocabulary = await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             const { updatedAt } = await createItem(requester.id, vocabulary.id, LeitnerBoxType.BOX_2);
