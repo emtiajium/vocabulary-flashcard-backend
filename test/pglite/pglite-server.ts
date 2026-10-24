@@ -18,52 +18,28 @@ export interface PgliteTestServer {
 // `TYPEORM_HOST`/`TYPEORM_PORT` are the single source of truth for the connection
 // details: TypeORM keeps reading them, this server just listens on the very same address.
 // The fallbacks only cover a completely missing `.env`, which `global-setup.ts` rejects.
-const FALLBACK_HOST = '127.0.0.1';
+const fallbackHost = '127.0.0.1';
 
-const FALLBACK_PORT = 5429;
+const fallbackPort = 5429;
 
-const DEFAULT_MAX_CONNECTIONS = 20;
+const defaultMaxConnections = 20;
 
-const LOOPBACK_HOSTS = ['localhost', '::1', '[::1]'];
+const loopbackHosts = ['localhost', '::1', '[::1]'];
 
 /**
- * PGlite plays the role of the Postgres Docker container the automated tests used to need.
- * The suites connect to it over the Postgres wire protocol (`PGLiteSocketServer`), therefore
- * neither TypeORM nor any test had to be changed to switch between both.
- *
- * Set `PGLITE_ENABLED=false` to fall back to an externally managed Postgres instance
- * (the very same behaviour the test suites had before this integration).
+ * PGlite is the only database the automated tests run against: it boots an in-memory
+ * PostgreSQL (WASM) and serves it over the Postgres wire protocol, so neither TypeORM nor
+ * any test had to be changed.
  */
-export function isPgliteEnabled(): boolean {
-    return (process.env.PGLITE_ENABLED ?? 'true').toLowerCase() !== 'false';
-}
-
-export function getDatabaseHost(): string {
-    return process.env.TYPEORM_HOST ?? FALLBACK_HOST;
-}
-
-export function getDatabasePort(): number {
-    return Number(process.env.TYPEORM_PORT) || FALLBACK_PORT;
-}
-
-export function getDatabaseName(): string {
-    return process.env.TYPEORM_DATABASE ?? 'ielts-gibberish';
-}
-
-function isLocalHost(host: string): boolean {
-    return LOOPBACK_HOSTS.includes(host) || host.startsWith('127.');
-}
-
 export async function startPgliteServer(): Promise<PgliteTestServer> {
-    const host = getDatabaseHost();
-    const port = getDatabasePort();
-    const database = getDatabaseName();
+    const host = process.env.TYPEORM_HOST ?? fallbackHost;
+    const port = Number(process.env.TYPEORM_PORT) || fallbackPort;
+    const database = process.env.TYPEORM_DATABASE ?? 'ielts-gibberish';
 
     if (!isLocalHost(host)) {
         throw new Error(
-            `PGlite can only replace a local database but TYPEORM_HOST="${host}". ` +
-                'Either point TYPEORM_HOST to localhost/127.0.0.1, or run the suites against the real ' +
-                'PostgreSQL with PGLITE_ENABLED=false.',
+            `PGlite can only serve a local database but TYPEORM_HOST="${host}". ` +
+                'Point TYPEORM_HOST to localhost or 127.0.0.1.',
         );
     }
 
@@ -75,7 +51,7 @@ export async function startPgliteServer(): Promise<PgliteTestServer> {
         db,
         host,
         port,
-        maxConnections: Number(process.env.PGLITE_MAX_CONNECTIONS) || DEFAULT_MAX_CONNECTIONS,
+        maxConnections: Number(process.env.PGLITE_MAX_CONNECTIONS) || defaultMaxConnections,
         debug: process.env.PGLITE_DEBUG === 'true',
     });
 
@@ -85,8 +61,8 @@ export async function startPgliteServer(): Promise<PgliteTestServer> {
         await db.close();
         throw new Error(
             `PGlite cannot listen on ${describeEndpoint(host, port, database)} (${(error as Error).message}). ` +
-                'Is the Docker test database (or another process) already using that port? ' +
-                'Change TYPEORM_PORT, or run the suites against it with PGLITE_ENABLED=false.',
+                'Another process is already using TYPEORM_PORT, change it (and TYPEORM_HOST accordingly) ' +
+                'or stop that process.',
         );
     }
 
@@ -101,6 +77,10 @@ export async function startPgliteServer(): Promise<PgliteTestServer> {
             await db.close();
         },
     };
+}
+
+function isLocalHost(host: string): boolean {
+    return loopbackHosts.includes(host) || host.startsWith('127.');
 }
 
 /**

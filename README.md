@@ -38,24 +38,18 @@
 
 ➜ `npm run test`
 
-> The tests do not need Docker anymore. Each run boots an in-memory
+> The tests do not need Docker: each run boots an in-memory
 > [PGlite](https://pglite.dev/) instance (a WASM build of PostgreSQL), exposes it over the
-> Postgres wire protocol and applies the migrations before the suites start.
+> Postgres wire protocol and applies the migrations before the suites start. PGlite is the
+> only database the test suites use, and it creates the schema from `migrations/` on every
+> run — see [docs/PGLITE-TEST-DB.md](./docs/PGLITE-TEST-DB.md).
 >
-> PGlite embeds PostgreSQL 18 while production runs PostgreSQL 14, so CI runs both gates:
-> `tests-pglite` (fast feedback) and `tests-postgresql-14` (migrations + the same suite
-> against the real engine). See [docs/PGLITE-TEST-DB.md](./docs/PGLITE-TEST-DB.md).
+> PGlite embeds PostgreSQL 18 while production runs PostgreSQL 14, so the suites cannot
+> detect PostgreSQL 14 specific behaviour. Validate that separately when touching SQL or
+> migrations.
 >
-> To run the suites against the real PostgreSQL 14 locally:
->
-> ➜ `npm run backing-services:test` (optional, starts the PostgreSQL container)
->
-> ➜ `npm run migration:run:local-test`
->
-> ➜ `npm run test:external-db`
->
-> Useful environment variables: `PGLITE_ENABLED` (`true` by default), `PGLITE_MAX_CONNECTIONS`,
-> `PGLITE_DEBUG`. The socket server always listens on `TYPEORM_HOST`/`TYPEORM_PORT`.
+> Useful environment variables: `PGLITE_MAX_CONNECTIONS`, `PGLITE_DEBUG`. The socket server
+> always listens on `TYPEORM_HOST`/`TYPEORM_PORT` (from `.env.test`).
 
 ###### Start the development environment
 
@@ -114,7 +108,7 @@
 
 ## Change Logs
 
-- `1.57.0`: PGlite (WASM PostgreSQL) as the fast, Docker-free test gate + PostgreSQL 14 kept as a required CI gate
+- `1.57.0`: PGlite (WASM PostgreSQL) as the only database of the automated tests, Docker-free test suites
 - `1.56.2`: Upgraded Node to 22.23.4 (security release)
 - `1.56.1`: Git tag automating
 - `1.56.0`: Formatting for queries

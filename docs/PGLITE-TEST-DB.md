@@ -1,19 +1,22 @@
-# Automated tests: PGlite for fast feedback + PostgreSQL 14 as the correctness gate
+# Automated tests on PGlite (no Docker)
 
 ## Summary
 
-The automated test suites (unit + integration + e2e) no longer need Docker to run.
-Every `npm run test` boots an **in-memory PGlite** instance (a WASM build of PostgreSQL),
-exposes it through the **Postgres wire protocol** and applies the **real migrations**.
+The automated test suites (unit + integration + e2e) no longer need Docker, nor any database
+service: every `npm run test` boots an **in-memory PGlite** instance (a WASM build of
+PostgreSQL), exposes it through the **Postgres wire protocol** and applies the **real
+migrations** from `migrations/`.
 
 TypeORM, the app bootstrap and every single test are untouched: they still connect to
-`TYPEORM_HOST:TYPEORM_PORT` with the same credentials, they just talk to PGlite instead of
-a container.
+`TYPEORM_HOST:TYPEORM_PORT` with the same credentials, they just talk to PGlite instead of a
+container. There is no other database mode in the test path.
 
-> **PGlite replaces the Docker _dependency_, not PostgreSQL itself.**
-> PGlite embeds PostgreSQL 18.6, production runs PostgreSQL 14. A green PGlite run proves
-> the application works against PGlite; it does not prove it works against production.
-> CI therefore keeps a **required PostgreSQL 14 job** (see [CI architecture](#ci-architecture)).
+> **PGlite is PostgreSQL, but not _your_ PostgreSQL.**
+> PGlite 0.5.11 embeds PostgreSQL 18.6 while the Docker image (and production) run 14.10.
+> A green run proves the application works against PGlite; it does not prove it works against
+> PostgreSQL 14. This trade-off is accepted deliberately (see
+> [PostgreSQL 14 coverage](#postgresql-14-coverage)) — validate engine-specific changes
+> out of band.
 
 ## How it works
 
@@ -43,78 +46,51 @@ Files:
 
 `TYPEORM_HOST` / `TYPEORM_PORT` / `TYPEORM_DATABASE` are the **single source of truth**.
 The socket server listens on exactly the address TypeORM is configured to connect to, so
-there is no way to make the two disagree.
+there is no way to make the two disagree. `.env` provides the defaults, `.env.test` pins
+`TYPEORM_PORT=5429` for the tests.
 
-| Variable                 | Default | Purpose                                                        |
-| ------------------------ | ------- | -------------------------------------------------------------- |
-| `PGLITE_ENABLED`         | `true`  | `false` → use an externally managed PostgreSQL (old behaviour) |
-| `PGLITE_MAX_CONNECTIONS` | `20`    | Client connections multiplexed over the PGlite session         |
-| `PGLITE_DEBUG`           | `false` | Verbose socket/protocol logging                                |
+| Variable                 | Default | Purpose                                                |
+| ------------------------ | ------- | ------------------------------------------------------ |
+| `PGLITE_MAX_CONNECTIONS` | `20`    | Client connections multiplexed over the PGlite session |
+| `PGLITE_DEBUG`           | `false` | Verbose socket/protocol logging                        |
 
 `globalSetup` fails fast, with an actionable message, when:
 
 - `.env` is missing (`npm run create:env`);
 - `TYPEORM_HOST` is not a loopback address (PGlite can only serve a local database);
-- the port is already taken (e.g. the optional PostgreSQL container is still running).
+- the port is already taken (e.g. a locally running PostgreSQL on 5429).
 
 Credentials are never logged: only `host:port/database` appears in the output.
 
-## CI architecture
+`docker-compose.yml` is still the local **development** stack (PostgreSQL 14 on 5431 for
+`npm run start:dev` / `npm run migration:run`). It plays no part in the tests, and the test
+database service it used to define (port 5429) was removed so it cannot collide with PGlite.
+
+## CI
 
 ```
 push / pull request
   ├── static-checks          prettier, eslint, production-only build
-  ├── tests-pglite           fast feedback, disposable database, no Docker
-  └── tests-postgresql-14    real engine: migrations (transactional) + full suite
+  └── tests                  npm run test (PGlite, no Docker, no service container)
                                    ↓
-                        all three must pass → tag / release
+                        both green → tag / release
 ```
 
-| Job                   | Database                    | What it protects                                                           |
-| --------------------- | --------------------------- | -------------------------------------------------------------------------- |
-| `tests-pglite`        | PGlite (WASM PostgreSQL 18) | Fast feedback on every PR. Behavioural regressions in the app/domain code. |
-| `tests-postgresql-14` | `postgres:14.10` service    | SQL/migration compatibility with the version running in production.        |
+Branch protection must list `static-checks` and `tests` as required status checks (the
+pre-PR check was the `build (22.23.4)` matrix job, which no longer exists).
 
-Both test jobs are independent and run in parallel. The PostgreSQL 14 job applies the
-migrations with the TypeORM CLI (`npm run migration:run:local-test`) — i.e. through the real
-driver, with TypeORM's default transaction mode (`START TRANSACTION` … `COMMIT` around all
-21 migrations, verified in the run logs) — and then runs the same suite with
-`PGLITE_ENABLED=false`. That job is the only one that can validate migration transaction
-semantics, engine-level SQL behaviour and the constraint names generated by the default
-naming strategy.
-
-The PostgreSQL job is **required**: branch protection must list both
-`tests-pglite` and `tests-postgresql-14` as required status checks.
-
-Cost note: the two test jobs each install the dependencies, so total runner minutes increase
-while wall-clock duration stays roughly the same (the jobs are parallel, and the PostgreSQL job
-is the longest one). If that turns out to be too expensive, the usual next step is to keep
-`tests-pglite` on every PR and run `tests-postgresql-14` on pull requests touching
-`migrations/**`, `src/**/repositories/**`, `*.sql` plus every push to the default branch.
-
-The workflow was also modernised while it was touched: `actions/checkout@v4`,
-`actions/setup-node@v4` with the npm cache and `node-version-file: .nvmrc`, and `npm ci`
-instead of `npm i` (the `rm -rf node_modules && npm install --omit dev` dance is now a single
-`npm ci --omit dev`). Those changes are independent of the database decision.
-
-Local equivalents:
-
-```bash
-npm run test                       # PGlite
-npm run backing-services:test      # optional PostgreSQL container (docker-compose-test.yml)
-npm run migration:run:local-test
-npm run test:external-db           # PGLITE_ENABLED=false npm test
-```
+Cost note: the two jobs each install the dependencies. If that is too expensive, the
+`tests` job can be merged into `static-checks` — there is no longer any parallelism benefit
+worth a second `npm ci`.
 
 ## Performance
 
 ### Methodology
 
-One wall-clock span per iteration, covering **"fresh schema → all tests finished"**, which
-is what a CI job actually does:
+One wall-clock span per iteration, covering **"fresh schema → all tests finished"**:
 
-- **Docker**: `DROP SCHEMA public CASCADE; CREATE SCHEMA public;` → `npm run migration:run:local-test` → `PGLITE_ENABLED=false npm test`
-- **PGlite**: `npm test` (the boot + the migrations happen inside `globalSetup`)
+- **PostgreSQL 14 in Docker** (the previous setup): `DROP SCHEMA public CASCADE; CREATE SCHEMA public;` → `npm run migration:run:local-test` → `npm test`
+- **PGlite** (current): `npm test` (the boot + the migrations happen inside `globalSetup`)
 
 Environment: Linux, Node 24.22.1 (project targets 22.23.4 via `.nvmrc`), Docker 29.1.3,
 `postgres:14.10` container with a `tmpfs` data directory, `TZ=UTC`, `n = 6` per mode,
@@ -122,15 +98,15 @@ identical jest command (`--detectOpenHandles`, coverage on) and `maxWorkers: 1`.
 
 ### Test suite
 
-| Metric                           | Docker PostgreSQL 14                                     | PGlite                      |
-| -------------------------------- | -------------------------------------------------------- | --------------------------- |
-| Full flow, median                | **28.0 s**                                               | **28.4 s**                  |
-| Full flow, mean                  | 29.4 s                                                   | 29.3 s                      |
-| Full flow, min–max               | 26.3 – 36.4 s                                            | 27.7 – 33.6 s               |
-| Jest execution only, median      | 20.6 s                                                   | 23.8 s                      |
-| Database boot                    | container start (~0.2–0.5 s warm, image pull on cold CI) | 1.7 – 2.0 s (WASM + initdb) |
-| Schema setup (all 21 migrations) | 4.4 – 7.2 s                                              | 0.26 – 0.50 s               |
-| Peak memory of the test tree     | ~1.19 GB (+28 MB container)                              | ~1.48 GB                    |
+| Metric                           | PostgreSQL 14 (Docker, before)                             | PGlite (now)                |
+| -------------------------------- | ---------------------------------------------------------- | --------------------------- |
+| Full flow, median                | 28.0 s                                                     | **28.4 s**                  |
+| Full flow, mean                  | 29.4 s                                                     | 29.3 s                      |
+| Full flow, min–max               | 26.3 – 36.4 s                                              | **27.7 – 33.6 s**           |
+| Jest execution only, median      | 20.6 s                                                     | 23.8 s                      |
+| Database boot                    | container start (~0.2–0.5 s warm, 397 MB image on cold CI) | 1.7 – 2.0 s (WASM + initdb) |
+| Schema setup (all 21 migrations) | 4.4 – 7.2 s                                                | **0.26 – 0.50 s**           |
+| Peak memory of the test tree     | ~1.19 GB (+28 MB container)                                | ~1.48 GB                    |
 
 Reading of these numbers:
 
@@ -140,10 +116,10 @@ Reading of these numbers:
   database.
 - **End-to-end the two are a wash locally** (28.0 s vs 28.4 s) and PGlite is noticeably more
   stable (5.9 s spread vs 10.1 s).
-- On a **cold CI runner** the Docker path pays the `postgres:14.10` image (397 MB uncompressed)
-  plus `docker compose` orchestration, which is where the reported CI job improvement
-  (1m46s vs 2m00s) most likely comes from. That comparison is **not controlled** and should be
-  re-measured over more runs before drawing conclusions.
+- On a **cold CI runner** the Docker path paid the `postgres:14.10` image (397 MB
+  uncompressed) plus `docker compose` orchestration, which is where the reported CI job
+  improvement (1m46s vs 2m00s) most likely came from. That comparison was **not controlled**;
+  it should be re-measured over several runs.
 
 > **Correction to an earlier revision of this document.** The first version of this report
 > compared Docker's _jest-only_ wall time against PGlite's _jest + boot + migration_ wall time
@@ -156,18 +132,18 @@ Reading of these numbers:
 
 Single client, `pg` over TCP on both sides, 2 runs each:
 
-| Benchmark                              | Docker PostgreSQL 14 | PGlite       | PGlite vs Docker |
-| -------------------------------------- | -------------------- | ------------ | ---------------- |
-| Connect                                | 16–29 ms             | 5.4–5.9 ms   | **3–5x faster**  |
-| 200 round trips (`select 1`)           | 31–80 ms             | 39–40 ms     | ~equal           |
-| 1,000 row-by-row inserts               | 204–359 ms           | 343–348 ms   | ~1.3x slower     |
-| 1,000 rows in one `INSERT`             | 6.9–7.2 ms           | 8.1–8.8 ms   | ~1.2x slower     |
-| 50,000 rows `generate_series` (engine) | 164–215 ms           | 238–243 ms   | ~1.3x slower     |
-| Index creation                         | 24–26 ms             | 19–21 ms     | ~1.2x faster     |
-| 1,000 indexed lookups                  | 255–367 ms           | 314 ms       | ~equal           |
-| `count`/`sum` over 52k rows            | 4.7–7.3 ms           | 6.2–6.7 ms   | ~1.1x slower     |
-| `UPDATE` of 50,000 rows                | 135–220 ms           | 281–284 ms   | ~1.5x slower     |
-| 4 parallel clients × 100 round trips   | 484–512 ms           | 1435–1527 ms | **~2.9x slower** |
+| Benchmark                              | PostgreSQL 14 (Docker) | PGlite       | PGlite vs Docker |
+| -------------------------------------- | ---------------------- | ------------ | ---------------- |
+| Connect                                | 16–29 ms               | 5.4–5.9 ms   | **3–5x faster**  |
+| 200 round trips (`select 1`)           | 31–80 ms               | 39–40 ms     | ~equal           |
+| 1,000 row-by-row inserts               | 204–359 ms             | 343–348 ms   | ~1.3x slower     |
+| 1,000 rows in one `INSERT`             | 6.9–7.2 ms             | 8.1–8.8 ms   | ~1.2x slower     |
+| 50,000 rows `generate_series` (engine) | 164–215 ms             | 238–243 ms   | ~1.3x slower     |
+| Index creation                         | 24–26 ms               | 19–21 ms     | ~1.2x faster     |
+| 1,000 indexed lookups                  | 255–367 ms             | 314 ms       | ~equal           |
+| `count`/`sum` over 52k rows            | 4.7–7.3 ms             | 6.2–6.7 ms   | ~1.1x slower     |
+| `UPDATE` of 50,000 rows                | 135–220 ms             | 281–284 ms   | ~1.5x slower     |
+| 4 parallel clients × 100 round trips   | 484–512 ms             | 1435–1527 ms | **~2.9x slower** |
 
 - Sequential, connection-oriented workloads are close (0–50 % slower) and connection setup is
   much faster (no container networking/authentication).
@@ -177,44 +153,62 @@ Single client, `pg` over TCP on both sides, 2 runs each:
   would pay for it.
 - Memory: the WASM instance adds ~250–300 MB to the test process tree.
 
+## PostgreSQL 14 coverage
+
+PGlite cannot be pinned to PostgreSQL 14 (no such WASM build exists), so the automated suites
+no longer exercise the engine that runs in production. This is an accepted trade-off, not an
+oversight. Consequences to keep in mind:
+
+- migrations are applied by PGlite in PostgreSQL 18 mode; a migration that works there can
+  still fail on 14 (syntax, planner behaviour, extension availability);
+- constraint/index names and `information_schema`/`pg_catalog` results are asserted by
+  `test/integration/database-keys.ts` — those assertions now run against 18;
+- anything touching raw SQL, indexes, migrations or `JSONB` operators deserves a manual run
+  against a real PostgreSQL 14 before release.
+
+If this needs to be automated again, the cheapest option is a second CI job using a
+`postgres:14.10` service container plus `TYPEORM_PORT=5429` (the previous revision of this PR
+had exactly that, and it took the total pipeline from 2 jobs to 3).
+
 ## Known limitations
 
-1. **Engine version.** PGlite 0.5.11 embeds PostgreSQL 18.6; the Docker image and production
-   run 14.10. This is exactly why `tests-postgresql-14` exists and must stay required. Never
-   treat a PGlite-only run as evidence of PostgreSQL 14 compatibility.
+1. **Engine version.** PGlite 0.5.11 embeds PostgreSQL 18.6, production runs 14.10 — see
+   [PostgreSQL 14 coverage](#postgresql-14-coverage).
 2. **One PGlite session for all connections.** Queries from different connections are
    serialised, and only the connection owning an open transaction is served while it is open.
    Consequently, a migration that runs its SQL through `queryRunner.connection.query(...)`
    (a second pooled connection) would dead-lock if the migrations ran transactionally.
    `migrations/1622268797427-create-user-table.ts` was the only offender and now uses the
-   `queryRunner` it receives, so **PGlite runs the migrations with TypeORM's default `all`
+   `queryRunner` it receives, so **PGlite applies the migrations with TypeORM's default `all`
    transaction mode, exactly like `migration:run`**. The SQL is unchanged (only the runner
    differs) and the migration is already recorded in the `migrations` table everywhere it has
    been applied, so nothing is re-run in existing environments.
    New migrations must keep using `queryRunner.query(...)`.
-3. **Postgres features PGlite does not have**: no `LISTEN`/`NOTIFY`, no arbitrary native
+3. **PostgreSQL features PGlite does not have**: no `LISTEN`/`NOTIFY`, no arbitrary native
    extensions, no superuser-only features. Not used by this codebase today.
 4. **`uuid-ossp` must be enabled explicitly** (`extensions: { uuid_ossp }`), otherwise the
    `User` table migration fails.
 5. **Local-only.** `globalSetup` rejects a non-loopback `TYPEORM_HOST`, so PGlite can never
    silently point the suites at a shared/remote database.
+6. **No second database mode.** `PGLITE_ENABLED=false` and the `test:external-db` script were
+   removed on purpose: the suites always run on PGlite.
 
-## What changed after the first review
+## History
 
-| Review item                                              | Resolution                                                                                                                                                                                                                                       |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| PostgreSQL 14 no longer verified in CI                   | `tests-postgresql-14` job added (`postgres:14.10` service): applies the migrations with the TypeORM CLI and runs the suite with `PGLITE_ENABLED=false`. Required check.                                                                          |
-| Migrations no longer ran transactionally                 | The only legacy migration using `queryRunner.connection.query(...)` now uses the runner it receives, so PGlite applies the migrations with TypeORM's default `all` transaction mode, like `migration:run`. Validated against real PostgreSQL 14. |
-| `PGLITE_PORT` / `PGLITE_HOST` could diverge from TypeORM | Removed. `TYPEORM_HOST`/`TYPEORM_PORT` are the single source of truth; non-loopback hosts are rejected before anything starts.                                                                                                                   |
-| Credentials could end up in the logs                     | The connection URL is gone; only `host:port/database` is logged.                                                                                                                                                                                 |
-| CI dependency handling                                   | `npm ci`, npm cache, `actions/*@v4`, `node-version-file: .nvmrc`.                                                                                                                                                                                |
-| Benchmark accounting                                     | Full-flow span re-measured for both sides (see [Performance](#performance)); the earlier "24 % slower end-to-end" claim is retracted.                                                                                                            |
+| Change                                                                       | Where                                                          |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| PGlite replaces the Docker test database                                     | first revision of this PR                                      |
+| After review: PostgreSQL 14 CI job, transaction fix, config/log fixes        | second revision (commit `1a49dbd`)                             |
+| PostgreSQL 14 CI job, `docker-compose-test.yml` and the escape hatch removed | third revision — PGlite is the only test database (this state) |
+
+The review that drove the second revision is worth reading before touching this area again:
+its main objection was exactly the PostgreSQL 14 coverage that has now been dropped on
+purpose.
 
 ## Unrelated finding
 
 Three tests in `test/e2e/leitner-systems-controller-entry.ts` ("moving from Box 1 to Box 2/3/4")
-fail with **both** PGlite and PostgreSQL when the machine runs in `Europe/Dublin` around the
-DST switch (25 October 2026). `makeItNewer(..., DAYS, n)` adds _calendar_ days, so across a DST
-boundary the difference is 25 h and `floor(-25/24) = -2`. This is a pre-existing,
-environment-dependent flake (CI runs in UTC, which is why it is normally invisible) and it is
-**not** related to this change.
+fail when the machine runs in `Europe/Dublin` around the DST switch (25 October 2026).
+`makeItNewer(..., DAYS, n)` adds _calendar_ days, so across a DST boundary the difference is
+25 h and `floor(-25/24) = -2`. This is a pre-existing, environment-dependent flake (CI runs in
+UTC, which is why it is normally invisible) and it is **not** related to this change.

@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 // therefore only relative imports are allowed in the whole include-chain of this file.
 import DatabaseConfig from '../../src/common/persistence/DatabaseConfig';
 
-const MIGRATIONS_GLOB = 'migrations/*.ts';
+const migrationsGlob = 'migrations/*.ts';
 
 /**
  * Builds a lightweight DataSource which is only meant to run the real migrations
@@ -27,7 +27,7 @@ function createMigrationDataSource(): DataSource {
         synchronize: false,
         logging: false,
         entities: [],
-        migrations: [`${process.cwd()}/${MIGRATIONS_GLOB}`],
+        migrations: [`${process.cwd()}/${migrationsGlob}`],
     });
 }
 

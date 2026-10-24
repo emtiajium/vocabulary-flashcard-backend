@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { describeEndpoint, isPgliteEnabled, startPgliteServer } from './pglite-server';
+import { describeEndpoint, startPgliteServer } from './pglite-server';
 import { runMigrations } from './pglite-migration';
 
 /**
@@ -17,11 +17,6 @@ export default async function globalSetup(): Promise<void> {
 
     if (!process.env.TYPEORM_HOST || !process.env.TYPEORM_LOGGING) {
         throw new Error('The environment is not configured, run `npm run create:env` first.');
-    }
-
-    if (!isPgliteEnabled()) {
-        console.log('[pglite] Skipped (PGLITE_ENABLED=false), tests will use the configured PostgreSQL.');
-        return;
     }
 
     const startedAt = Date.now();
