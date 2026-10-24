@@ -60,6 +60,7 @@ export async function startPgliteServer(): Promise<PgliteTestServer> {
         server,
         stop: async (): Promise<void> => {
             await server.stop();
+            await new Promise((resolve) => setTimeout(resolve, 0));
             await db.close();
         },
     };
