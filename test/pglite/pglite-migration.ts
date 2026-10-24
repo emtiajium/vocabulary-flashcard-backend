@@ -1,10 +1,8 @@
 import { DataSource } from 'typeorm';
 import DatabaseConfig from '../../src/common/persistence/DatabaseConfig';
 
-const migrationsGlob = 'migrations/*.ts';
-
 function createMigrationDataSource(): DataSource {
-    const { type, host, port, username, password, database } = new DatabaseConfig();
+    const { type, host, port, username, password, database, migrations } = new DatabaseConfig();
 
     return new DataSource({
         type,
@@ -16,7 +14,7 @@ function createMigrationDataSource(): DataSource {
         synchronize: false,
         logging: false,
         entities: [],
-        migrations: [`${process.cwd()}/${migrationsGlob}`],
+        migrations: [migrations],
     });
 }
 

@@ -17,6 +17,10 @@ export default class DatabaseConfig {
 
     logging: string[];
 
+    entities: string;
+
+    migrations: string;
+
     constructor() {
         const configService = new ConfigService();
 
@@ -27,5 +31,7 @@ export default class DatabaseConfig {
         this.password = configService.get<string>('TYPEORM_PASSWORD');
         this.database = configService.get<string>('TYPEORM_DATABASE');
         this.logging = configService.get<string>('TYPEORM_LOGGING').split(',');
+        this.entities = configService.get<string>('TYPEORM_ENTITIES');
+        this.migrations = configService.get<string>('TYPEORM_MIGRATIONS');
     }
 }
