@@ -13,9 +13,14 @@ import Cohort from '@/user/domains/Cohort';
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import { createItem, getLeitnerBoxItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
-import MomentUnit, { momentDiff } from '@/common/utils/moment-util';
+import MomentUnit, { getFormattedDate, makeItNewer } from '@/common/utils/moment-util';
 import LeitnerBoxAppearanceDifference from '@/vocabulary/domains/LeitnerBoxAppearanceDifference';
 import DataSource from '@/common/persistence/TypeormConfig';
+
+function assertAppearsOnCalendarDay(appearanceDate: Date, calendarDaysAhead: number): void {
+    const expectedDate = getFormattedDate(makeItNewer(new Date(), MomentUnit.DAYS, calendarDaysAhead));
+    expect(getFormattedDate(appearanceDate)).toBe(expectedDate);
+}
 
 describe('Leitner Systems Entry', () => {
     let app: INestApplication;
@@ -71,7 +76,7 @@ describe('Leitner Systems Entry', () => {
 
             const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
             expect(item.currentBox).toBe(LeitnerBoxType.BOX_1);
-            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(0);
+            assertAppearsOnCalendarDay(item.boxAppearanceDate, 0);
         });
 
         it('SHOULD return 409 CONFLICT', async () => {
@@ -131,9 +136,7 @@ describe('Leitner Systems Entry', () => {
 
             const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
             expect(item.currentBox).toBe(LeitnerBoxType.BOX_2);
-            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
-                LeitnerBoxAppearanceDifference.BOX_2,
-            );
+            assertAppearsOnCalendarDay(item.boxAppearanceDate, LeitnerBoxAppearanceDifference.BOX_2);
         });
 
         it('SHOULD return 200 OK WHEN moving from Box 2 to Box 3', async () => {
@@ -149,9 +152,7 @@ describe('Leitner Systems Entry', () => {
 
             const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
             expect(item.currentBox).toBe(LeitnerBoxType.BOX_3);
-            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
-                LeitnerBoxAppearanceDifference.BOX_3,
-            );
+            assertAppearsOnCalendarDay(item.boxAppearanceDate, LeitnerBoxAppearanceDifference.BOX_3);
         });
 
         it('SHOULD return 200 OK WHEN moving from Box 3 to Box 4', async () => {
@@ -170,9 +171,7 @@ describe('Leitner Systems Entry', () => {
 
             const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
             expect(item.currentBox).toBe(LeitnerBoxType.BOX_4);
-            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
-                LeitnerBoxAppearanceDifference.BOX_4,
-            );
+            assertAppearsOnCalendarDay(item.boxAppearanceDate, LeitnerBoxAppearanceDifference.BOX_4);
         });
 
         it('SHOULD return 200 OK WHEN moving from Box 4 to Box 5', async () => {
@@ -194,9 +193,7 @@ describe('Leitner Systems Entry', () => {
 
             const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
             expect(item.currentBox).toBe(LeitnerBoxType.BOX_5);
-            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(
-                LeitnerBoxAppearanceDifference.BOX_5,
-            );
+            assertAppearsOnCalendarDay(item.boxAppearanceDate, LeitnerBoxAppearanceDifference.BOX_5);
         });
     });
 
@@ -246,7 +243,7 @@ describe('Leitner Systems Entry', () => {
 
             const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
             expect(item.currentBox).toBe(LeitnerBoxType.BOX_1);
-            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(0);
+            assertAppearsOnCalendarDay(item.boxAppearanceDate, 0);
         });
 
         it('SHOULD return 200 OK WHEN moving from Box 4 to Box 3', async () => {
@@ -258,7 +255,7 @@ describe('Leitner Systems Entry', () => {
 
             const item = await getLeitnerBoxItem(requester.id, vocabulary.id);
             expect(item.currentBox).toBe(LeitnerBoxType.BOX_3);
-            expect(momentDiff(new Date(), new Date(item.boxAppearanceDate), MomentUnit.DAYS)).toBe(0);
+            assertAppearsOnCalendarDay(item.boxAppearanceDate, 0);
         });
     });
 });
