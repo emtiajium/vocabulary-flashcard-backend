@@ -12,7 +12,7 @@ export function generateUsername(): string {
 }
 
 export function getUsersByUsernames(usernames: string[]): Promise<User[]> {
-    return DataSource.getRepository(User).find({ where: { username: In(usernames) }, relations: ['cohort'] });
+    return DataSource.getRepository(User).find({ where: { username: In(usernames) }, relations: { cohort: true } });
 }
 
 export async function removeUsersByUsernames(usernames: string[]): Promise<void> {

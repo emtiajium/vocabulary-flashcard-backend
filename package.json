@@ -1,6 +1,6 @@
 {
     "name": "vocabulary-flashcard-backend",
-    "version": "1.56.3",
+    "version": "1.57.0",
     "author": {
         "name": "Emtiaj Hasan",
         "email": "271emtiaj@gmail.com",
@@ -25,14 +25,11 @@
         "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/.bin/typeorm",
         "migration:generate": "node -r ts-node/register -r tsconfig-paths/register src/common/persistence/MigrationGenerationHandler.ts",
         "migration:run:local-dev": "npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
-        "migration:run:local-test": "TYPEORM_PORT=5429 npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
-        "migration:run": "npm run migration:run:local-test && npm run migration:run:local-dev",
+        "migration:run": "npm run migration:run:local-dev",
         "migration:run:aeb": "npm run typeorm migration:run -- -d ./src/common/persistence/TypeormConfig.ts",
         "ci": "npm run format:check && npm run lint:check && npm run test && npm run build",
         "seed-script:insert-test-users": "node -r ts-node/register -r tsconfig-paths/register src/manual-scripts/CreateTestUsers.ts",
-        "clean:docker-dev-containers": "docker kill ielts-gibberish-postgres && docker stop ielts-gibberish-postgres && docker rm ielts-gibberish-postgres && docker volume rm ielts-gibberish-postgres-data",
-        "clean:docker-test-containers": "docker kill ielts-gibberish-test-postgres && docker stop ielts-gibberish-test-postgres && docker rm ielts-gibberish-test-postgres && docker volume rm ielts-gibberish-test-postgres-data",
-        "clean:docker-containers": "npm run clean:docker-test-containers && npm run clean:docker-dev-containers"
+        "clean:docker-dev-containers": "docker kill ielts-gibberish-postgres; docker stop ielts-gibberish-postgres; docker rm ielts-gibberish-postgres; docker volume rm ielts-gibberish-postgres-data"
     },
     "dependencies": {
         "@nestjs/axios": "^4.0.1",
@@ -44,13 +41,14 @@
         "@nestjs/schedule": "^6.1.1",
         "@nestjs/swagger": "^11.2.6",
         "@nestjs/terminus": "^11.0.0",
-        "@nestjs/typeorm": "11.0.0",
+        "@nestjs/typeorm": "11.0.3",
         "@types/express": "^5.0.6",
-        "axios": "1.15.2",
-        "body-parser": "2.2.2",
+        "axios": "1.20.0",
+        "body-parser": "2.4.0",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.3",
         "cookie-parser": "^1.4.7",
+        "date-fns": "^4.4.0",
         "dotenv": "^17.2.4",
         "express": "^5.2.1",
         "express-basic-auth": "^1.2.1",
@@ -64,10 +62,12 @@
         "rxjs": "7.8.2",
         "swagger-ui-express": "^5.0.1",
         "tsconfig-paths": "^4.2.0",
-        "typeorm": "0.3.26",
+        "typeorm": "1.1.0",
         "uuid": "^9.0.1"
     },
     "devDependencies": {
+        "@electric-sql/pglite": "^0.5.11",
+        "@electric-sql/pglite-socket": "^0.2.14",
         "@eslint/js": "^9.18.0",
         "@nestjs/schematics": "^11.0.9",
         "@types/cookie-parser": "^1.4.10",
@@ -128,6 +128,8 @@
         "setupFiles": [
             "<rootDir>/test/jest-init.ts"
         ],
+        "globalSetup": "<rootDir>/test/pglite/global-setup.ts",
+        "globalTeardown": "<rootDir>/test/pglite/global-teardown.ts",
         "testEnvironment": "node",
         "testMatch": [
             "<rootDir>/test/{e2e,integration,unit}/**/*.ts"

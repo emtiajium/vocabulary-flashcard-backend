@@ -5,7 +5,7 @@ import * as uuid from 'uuid';
 import DataSource from '@/common/persistence/TypeormConfig';
 import DeleteOldRandomDefinitionsJob from '@/vocabulary/jobs/DeleteOldRandomDefinitionsJob';
 import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameRepository';
-import MomentUnit, { makeItOlder } from '@/common/utils/moment-util';
+import { subDays } from 'date-fns';
 
 describe('DeleteOldRandomDefinitionsJob', () => {
     let app: INestApplication;
@@ -27,7 +27,7 @@ describe('DeleteOldRandomDefinitionsJob', () => {
         const { generatedMaps } = await app.get(GuessingGameRepository).insert({
             userId: uuid.v4(),
             definitionId: uuid.v4(),
-            createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 3),
+            createdAt: subDays(new Date(), 3),
             word: 'word',
             meaning: 'meaning',
         });
@@ -47,7 +47,7 @@ describe('DeleteOldRandomDefinitionsJob', () => {
         const { generatedMaps } = await app.get(GuessingGameRepository).insert({
             userId: uuid.v4(),
             definitionId: uuid.v4(),
-            createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 16),
+            createdAt: subDays(new Date(), 16),
             word: 'word',
             meaning: 'meaning',
         });

@@ -43,6 +43,7 @@ export default defineConfig([
         files: ['test/**/*.ts'],
         rules: {
             'no-magic-numbers': 'off',
+            'no-console': 'off',
             complexity: 'off',
         },
     },
