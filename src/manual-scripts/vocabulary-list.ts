@@ -746,7 +746,7 @@ const vocabularyList: PartialVocabulary[] = [
                 externalLinks: [],
             },
             {
-                meaning: 'Versatile সব্যসাচী',
+                meaning: 'Versatile (সব্যসাচী)',
                 examples: ['Rabindranath Tagore was an ambidextrous genius.'],
                 notes: [],
                 externalLinks: [],
