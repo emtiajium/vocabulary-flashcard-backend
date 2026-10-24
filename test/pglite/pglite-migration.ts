@@ -31,18 +31,23 @@ function createMigrationDataSource(): DataSource {
     });
 }
 
+/**
+ * Applies `migrations/*.ts` exactly like the `migration:run` npm script does, without
+ * overriding the transaction mode: TypeORM's default (`all`) wraps every pending
+ * migration in a single transaction, which is also what happens against PostgreSQL.
+ *
+ * This requires every migration to run its SQL through the `QueryRunner` it receives.
+ * PGlite serves a single Postgres session over the socket server, so a migration calling
+ * `queryRunner.connection.query(...)` would run on a second connection which the socket
+ * server cannot serve while the migration transaction is open (it dead-locks).
+ */
 export async function runMigrations(): Promise<void> {
     const dataSource = createMigrationDataSource();
 
     await dataSource.initialize();
 
     try {
-        // `transaction: 'none'` is required: the migrations execute their SQL through
-        // `queryRunner.connection.query(...)` (a different pooled connection).
-        // PGlite multiplexes every connection over a single Postgres session and its
-        // socket server only drains the queue of the connection which owns the open
-        // transaction, so running the migrations inside a transaction dead-locks.
-        await dataSource.runMigrations({ transaction: 'none' });
+        await dataSource.runMigrations();
     } finally {
         await dataSource.destroy();
     }

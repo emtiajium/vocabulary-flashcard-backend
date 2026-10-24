@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { isPgliteEnabled, startPgliteServer } from './pglite-server';
+import { describeEndpoint, isPgliteEnabled, startPgliteServer } from './pglite-server';
 import { runMigrations } from './pglite-migration';
 
 /**
@@ -20,7 +20,7 @@ export default async function globalSetup(): Promise<void> {
     }
 
     if (!isPgliteEnabled()) {
-        console.log('[pglite] Skipped (PGLITE_ENABLED=false), tests will use the configured Postgres.');
+        console.log('[pglite] Skipped (PGLITE_ENABLED=false), tests will use the configured PostgreSQL.');
         return;
     }
 
@@ -32,6 +32,7 @@ export default async function globalSetup(): Promise<void> {
     await runMigrations();
 
     console.log(
-        `[pglite] Booted in ${bootedAt - startedAt} ms, migrated in ${Date.now() - bootedAt} ms (${server.connectionString})`,
+        `[pglite] Booted in ${bootedAt - startedAt} ms, migrated in ${Date.now() - bootedAt} ms ` +
+            `(${describeEndpoint(server.host, server.port, server.database)})`,
     );
 }
