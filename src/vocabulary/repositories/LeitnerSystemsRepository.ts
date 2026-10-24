@@ -3,7 +3,7 @@ import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
 import Pagination from '@/common/domains/Pagination';
-import { getFormattedTomorrow } from '@/common/utils/moment-util';
+import { addDays, format } from 'date-fns';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import { SortDirection } from '@/common/domains/Sort';
 import { ConflictException, Injectable } from '@nestjs/common';
@@ -30,7 +30,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
 
     // shitty code just for the easiness of jest.spyOn()
     getTomorrow(): string {
-        return getFormattedTomorrow();
+        return format(addDays(new Date(), 1), 'yyyy-MM-dd');
     }
 
     async getBoxItems(

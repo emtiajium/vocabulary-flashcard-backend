@@ -19,7 +19,7 @@ import DataSource from '@/common/persistence/TypeormConfig';
 import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
 import WordsApiAdapter from '@/vocabulary/adapters/WordsApiAdapter';
 import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameRepository';
-import MomentUnit, { makeItOlder } from '@/common/utils/moment-util';
+import { subDays } from 'date-fns';
 import DefinitionRepository from '@/vocabulary/repositories/DefinitionRepository';
 
 describe('GET /v1/vocabularies/definitions/random-search', () => {
@@ -97,7 +97,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             await app.get(GuessingGameRepository).insert({
                 userId: requester.id,
                 definitionId: previousVocabulary.definitions[0].id,
-                createdAt: makeItOlder(new Date(), MomentUnit.DAYS, 3),
+                createdAt: subDays(new Date(), 3),
                 word: previousVocabulary.word,
                 meaning: previousVocabulary.definitions[0].meaning,
             });

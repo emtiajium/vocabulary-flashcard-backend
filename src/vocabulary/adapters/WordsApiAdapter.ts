@@ -8,7 +8,8 @@ import { capitalize, shuffle, times } from 'lodash';
 import safeStringify from 'fast-safe-stringify';
 import { getRandomArrayItem } from '@/common/utils/array-util';
 import { setTimeout } from 'node:timers/promises';
-import { oneSecondInMilliSeconds } from '@/common/utils/moment-util';
+
+const oneSecondInMilliSeconds = 1000;
 
 @Injectable()
 export default class WordsApiAdapter {
