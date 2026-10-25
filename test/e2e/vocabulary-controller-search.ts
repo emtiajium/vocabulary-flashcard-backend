@@ -594,6 +594,45 @@ describe('POST /v1/vocabularies/search', () => {
             expect(response.results[0].id).toBe(vocabulary.id);
         });
 
+        it('SHOULD return 200 OK WHEN the search keyword has more than one word', async () => {
+            // Arrange
+            // The phrase is in the word, but not as a contiguous substring, so only
+            // the text-search half of the query can find it. `to_tsquery` used to be
+            // fed the raw keyword, which makes any keyword with a space a Postgres
+            // syntax error and the whole search a 500.
+            const searchKeyword = `ROG_${Date.now()}`;
+
+            const payload: VocabularySearchRequest = {
+                searchKeyword: `${searchKeyword} rogue`,
+                pagination: { pageSize: 5, pageNumber: 1 },
+                vocabularySearchCoverage: {
+                    word: true,
+                    linkerWords: false,
+                    genericNotes: false,
+                    meaning: false,
+                    examples: false,
+                    notes: false,
+                },
+            };
+
+            const vocabulary = await createVocabulary(
+                {
+                    ...getVocabularyWithDefinitions(),
+                    word: `rogue ${searchKeyword}`,
+                },
+                cohort.id,
+            );
+
+            // Act
+            const { status, body } = await makeApiRequest(requester, payload);
+
+            // Assert
+            expect(status).toBe(200);
+            const response = body as SearchResult<VocabularySearchResponse>;
+            expect(response.results).toHaveLength(1);
+            expect(response.results[0].id).toBe(vocabulary.id);
+        });
+
         it('SHOULD return 200 OK WHEN vocabularySearchCoverage.linkerWords is true AND a linker word exist matching the search keyword', async () => {
             // Arrange
             const searchKeyword = `ROG_${Date.now()}`;
