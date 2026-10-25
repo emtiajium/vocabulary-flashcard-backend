@@ -50,6 +50,17 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
         await DataSource.destroy();
     });
 
+    async function completeTodaysRound(user: User = requester): Promise<SupertestResponse<unknown>> {
+        const { status, body } = await request(app.getHttpServer())
+            .post(`${getAppAPIPrefix()}/v1/vocabularies/definitions/random-search/complete`)
+            .set('Authorization', `Bearer ${generateJwToken(user)}`);
+
+        return {
+            status,
+            body,
+        };
+    }
+
     async function makeApiRequest(user: User = requester): Promise<SupertestResponse<RandomlyChosenMeaningResponse[]>> {
         const { status, body } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/vocabularies/definitions/random-search`)
@@ -155,6 +166,69 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             // Post-Assert
             getRandomlyChosenMeaningsMock.mockRestore();
             insertMultiplesMock.mockRestore();
+        });
+
+        it("SHOULD deal a new set WHEN today's round has been completed", async () => {
+            // Arrange: enough words that a round has something to deal, and something
+            // left over for the next one.
+            const getRandomlyChosenMeaningsMock = jest.spyOn(
+                DefinitionRepository.prototype,
+                'getRandomlyChosenMeanings',
+            );
+            // Sequential: the test database is a single PGlite connection, which
+            // cannot serve concurrent inserts.
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            const { body: firstRound } = await makeApiRequest(requester);
+            const firstRoundWords = (firstRound as RandomlyChosenMeaningResponse[]).map(({ word }) => word);
+            expect(firstRoundWords).not.toHaveLength(0);
+            expect(getRandomlyChosenMeaningsMock).toHaveBeenCalledTimes(1);
+
+            // Act: the user answers every word, then comes back to play again.
+            const { status: completionStatus } = await completeTodaysRound(requester);
+            const { status, body } = await makeApiRequest(requester);
+
+            // Assert: the round was closed, so a new set is picked instead of today's
+            // rows being re-served, and the words just played are excluded from it.
+            expect(completionStatus).toBe(204);
+            expect(status).toBe(200);
+            expect(getRandomlyChosenMeaningsMock).toHaveBeenCalledTimes(2);
+            const excludedDefinitionIds = getRandomlyChosenMeaningsMock.mock.calls[1][2] as string[];
+            expect(excludedDefinitionIds).toHaveLength(firstRoundWords.length);
+            expect(body).not.toHaveLength(0);
+
+            // Post-Assert
+            getRandomlyChosenMeaningsMock.mockRestore();
+        });
+
+        it('SHOULD keep dealing the same set WHILE the round is unfinished', async () => {
+            // Arrange
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            // Act
+            const { body: first } = await makeApiRequest(requester);
+            const { body: second } = await makeApiRequest(requester);
+
+            // Assert: the same words, whatever order they are shuffled into.
+            const words = (body: RandomlyChosenMeaningResponse[]): string[] => body.map(({ word }) => word).sort();
+            expect(words(second as RandomlyChosenMeaningResponse[])).toEqual(
+                words(first as RandomlyChosenMeaningResponse[]),
+            );
+        });
+
+        it('SHOULD return 204 WHEN there is no round to complete', async () => {
+            // Arrange
+            await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
+
+            // Act
+            const { status } = await completeTodaysRound(requester);
+
+            // Assert
+            expect(status).toBe(204);
         });
     });
 });

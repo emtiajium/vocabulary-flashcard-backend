@@ -22,14 +22,15 @@ export default class GuessingGameService {
             this.guessingGameRepository.getByUserId(userId),
         ]);
 
-        let definitionFromTodayExists = false;
         const previousDefinitionIds: string[] = [];
+        // Today's round is only the round in progress while it is unfinished. Once the
+        // user has answered every word, the next request deals a new set, and today's
+        // words stay in `previousDefinitionIds` so the new one cannot repeat them.
         const definitionsFromToday: RandomlyChosenMeaningQueryResponse[] = [];
 
         previousDefinitions.forEach((previousDefinition) => {
             previousDefinitionIds.push(previousDefinition.definitionId);
-            if (previousDefinition.isCreationDateToday) {
-                definitionFromTodayExists = true;
+            if (previousDefinition.isCreationDateToday && !previousDefinition.completedAt) {
                 definitionsFromToday.push({
                     definitionId: previousDefinition.definitionId,
                     word: previousDefinition.word,
@@ -37,6 +38,8 @@ export default class GuessingGameService {
                 });
             }
         });
+
+        const definitionFromTodayExists = definitionsFromToday.length > 0;
 
         let randomlyChosenMeaningResponses = definitionFromTodayExists
             ? definitionsFromToday
@@ -62,6 +65,11 @@ export default class GuessingGameService {
                 };
             }),
         ]);
+    }
+
+    /** Ends today's round, so the next request starts a new game. */
+    async completeTodaysRound(userId: string): Promise<void> {
+        await this.guessingGameRepository.completeTodaysByUserId(userId);
     }
 
     async deleteOlder(): Promise<void> {

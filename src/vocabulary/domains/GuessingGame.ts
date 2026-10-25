@@ -19,4 +19,8 @@ export default class GuessingGame {
 
     @CreateDateColumn({ type: 'timestamp with time zone' })
     createdAt: Date;
+
+    /** Set once the user has answered every word of this round. */
+    @Column({ type: 'timestamp with time zone', nullable: true })
+    completedAt: Date | null;
 }
