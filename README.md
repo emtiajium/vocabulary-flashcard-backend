@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.57.1`: Fixed the vocabulary search that failed on a multi-word keyword
 - `1.57.0`: PGlite (WASM PostgreSQL) as the only database of the automated tests, Docker-free test suites
 - `1.56.3`: Fixed the Leitner tests that failed around the daylight saving time switch
 - `1.56.2`: Upgraded Node to 22.23.4 (security release)
