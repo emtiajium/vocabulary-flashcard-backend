@@ -64,7 +64,7 @@ export default class GuessingGameService {
         ]);
     }
 
-    async completeTodaysRound(userId: string): Promise<void> {
+    async completeTodayRound(userId: string): Promise<void> {
         await this.guessingGameRepository.completeTodaysByUserId(userId);
     }
 

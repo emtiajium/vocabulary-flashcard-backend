@@ -66,7 +66,7 @@ export default class VocabularyController {
 
     @Post('/definitions/random-search/complete')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async completeTodaysRound(@AuthenticatedUser() user: User): Promise<void> {
-        await this.vocabularyService.completeTodaysRound(user.id);
+    async completeTodayRound(@AuthenticatedUser() user: User): Promise<void> {
+        await this.vocabularyService.completeTodayRound(user.id);
     }
 }

@@ -50,7 +50,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
         await DataSource.destroy();
     });
 
-    async function completeTodaysRound(user: User = requester): Promise<SupertestResponse<unknown>> {
+    async function completeTodayRound(user: User = requester): Promise<SupertestResponse<unknown>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/definitions/random-search/complete`)
             .set('Authorization', `Bearer ${generateJwToken(user)}`);
@@ -183,7 +183,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             expect(firstRoundWords).not.toHaveLength(0);
             expect(getRandomlyChosenMeaningsMock).toHaveBeenCalledTimes(1);
 
-            const { status: completionStatus } = await completeTodaysRound(requester);
+            const { status: completionStatus } = await completeTodayRound(requester);
             const { status, body } = await makeApiRequest(requester);
 
             expect(completionStatus).toBe(204);
@@ -217,7 +217,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
 
             // Act
-            const { status } = await completeTodaysRound(requester);
+            const { status } = await completeTodayRound(requester);
 
             // Assert
             expect(status).toBe(204);

@@ -188,7 +188,7 @@ export default class VocabularyService {
         return this.guessingGameService.getRandomlyChosenMeanings(cohortId, userId);
     }
 
-    completeTodaysRound(userId: string): Promise<void> {
-        return this.guessingGameService.completeTodaysRound(userId);
+    completeTodayRound(userId: string): Promise<void> {
+        return this.guessingGameService.completeTodayRound(userId);
     }
 }
