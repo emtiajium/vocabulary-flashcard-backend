@@ -169,14 +169,10 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
         });
 
         it("SHOULD deal a new set WHEN today's round has been completed", async () => {
-            // Arrange: enough words that a round has something to deal, and something
-            // left over for the next one.
             const getRandomlyChosenMeaningsMock = jest.spyOn(
                 DefinitionRepository.prototype,
                 'getRandomlyChosenMeanings',
             );
-            // Sequential: the test database is a single PGlite connection, which
-            // cannot serve concurrent inserts.
             await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
             await createVocabulary(getVocabularyWithDefinitions(), cohort.id);
@@ -187,12 +183,9 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             expect(firstRoundWords).not.toHaveLength(0);
             expect(getRandomlyChosenMeaningsMock).toHaveBeenCalledTimes(1);
 
-            // Act: the user answers every word, then comes back to play again.
             const { status: completionStatus } = await completeTodaysRound(requester);
             const { status, body } = await makeApiRequest(requester);
 
-            // Assert: the round was closed, so a new set is picked instead of today's
-            // rows being re-served, and the words just played are excluded from it.
             expect(completionStatus).toBe(204);
             expect(status).toBe(200);
             expect(getRandomlyChosenMeaningsMock).toHaveBeenCalledTimes(2);
@@ -213,7 +206,6 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
             const { body: first } = await makeApiRequest(requester);
             const { body: second } = await makeApiRequest(requester);
 
-            // Assert: the same words, whatever order they are shuffled into.
             const words = (body: RandomlyChosenMeaningResponse[]): string[] => body.map(({ word }) => word).sort();
             expect(words(second as RandomlyChosenMeaningResponse[])).toEqual(
                 words(first as RandomlyChosenMeaningResponse[]),

@@ -47,10 +47,6 @@ export default class GuessingGameRepository extends Repository<GuessingGame> {
         );
     }
 
-    /**
-     * Ends today's round. The rows are kept, so the words just played stay excluded
-     * from the next round; only the round they belong to is closed.
-     */
     async completeTodaysByUserId(userId: string): Promise<void> {
         await this.query(
             /* sql */ `

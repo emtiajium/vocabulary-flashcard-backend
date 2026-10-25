@@ -64,10 +64,6 @@ export default class VocabularyController {
         return this.vocabularyService.getRandomlyChosenMeanings(user.cohortId, user.id);
     }
 
-    /**
-     * The user answered every word of today's round. Closing it here means the next
-     * `random-search` deals a new set instead of repeating the finished one.
-     */
     @Post('/definitions/random-search/complete')
     @HttpCode(HttpStatus.NO_CONTENT)
     async completeTodaysRound(@AuthenticatedUser() user: User): Promise<void> {
