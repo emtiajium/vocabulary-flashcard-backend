@@ -19,4 +19,7 @@ export default class GuessingGame {
 
     @CreateDateColumn({ type: 'timestamp with time zone' })
     createdAt: Date;
+
+    @Column({ type: 'timestamp with time zone', nullable: true })
+    completedAt: Date | null;
 }

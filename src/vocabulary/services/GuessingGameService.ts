@@ -22,14 +22,12 @@ export default class GuessingGameService {
             this.guessingGameRepository.getByUserId(userId),
         ]);
 
-        let definitionFromTodayExists = false;
         const previousDefinitionIds: string[] = [];
         const definitionsFromToday: RandomlyChosenMeaningQueryResponse[] = [];
 
         previousDefinitions.forEach((previousDefinition) => {
             previousDefinitionIds.push(previousDefinition.definitionId);
-            if (previousDefinition.isCreationDateToday) {
-                definitionFromTodayExists = true;
+            if (previousDefinition.isCreationDateToday && !previousDefinition.completedAt) {
                 definitionsFromToday.push({
                     definitionId: previousDefinition.definitionId,
                     word: previousDefinition.word,
@@ -37,6 +35,8 @@ export default class GuessingGameService {
                 });
             }
         });
+
+        const definitionFromTodayExists = definitionsFromToday.length > 0;
 
         let randomlyChosenMeaningResponses = definitionFromTodayExists
             ? definitionsFromToday
@@ -62,6 +62,10 @@ export default class GuessingGameService {
                 };
             }),
         ]);
+    }
+
+    async completeTodayRound(userId: string): Promise<void> {
+        await this.guessingGameRepository.completeTodaysByUserId(userId);
     }
 
     async deleteOlder(): Promise<void> {

@@ -63,4 +63,10 @@ export default class VocabularyController {
     getRandomlyChosenMeanings(@AuthenticatedUser() user: User): Promise<RandomlyChosenMeaningResponse[]> {
         return this.vocabularyService.getRandomlyChosenMeanings(user.cohortId, user.id);
     }
+
+    @Post('/definitions/random-search/complete')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async completeTodayRound(@AuthenticatedUser() user: User): Promise<void> {
+        await this.vocabularyService.completeTodayRound(user.id);
+    }
 }
