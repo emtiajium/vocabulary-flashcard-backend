@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.59.0`: Reverted 1.57.0
 - `1.58.0`: Guessing game: a new round once today's round has been completed
 - `1.57.1`: Fixed the vocabulary search that failed on a multi-word keyword
 - `1.57.0`: PGlite (WASM PostgreSQL) as the only database of the automated tests, Docker-free test suites

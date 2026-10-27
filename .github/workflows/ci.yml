@@ -33,6 +33,24 @@ jobs:
     tests:
         runs-on: ubuntu-latest
 
+        services:
+            postgres:
+                image: postgres:14.10
+                env:
+                    POSTGRES_PASSWORD: 123
+                    POSTGRES_USER: postgres
+                    POSTGRES_DB: ielts-gibberish
+                ports:
+                    - 5429:5432
+                # https://docs.docker.com/storage/tmpfs/
+                # https://www.postgresql.org/docs/14/non-durability.html
+                options: >-
+                    --tmpfs /var/lib/postgresql/data
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -48,6 +66,9 @@ jobs:
 
             - name: Create environment variables
               run: npm run create:env
+
+            - name: Apply the migrations against PostgreSQL 14
+              run: npm run migration:run:local-test
 
             - name: Automated Test
               run: npm run test
