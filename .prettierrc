@@ -10,5 +10,6 @@
     "keywordCase": "lower",
     "dataTypeCase": "lower",
     "functionCase": "lower",
-    "identifierCase": "lower"
+    "identifierCase": "lower",
+    "paramTypes": "{ named: [':'] }"
 }
