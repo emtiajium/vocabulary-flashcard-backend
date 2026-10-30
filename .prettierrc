@@ -11,5 +11,5 @@
     "dataTypeCase": "lower",
     "functionCase": "lower",
     "identifierCase": "lower",
-    "paramTypes": "{ named: [':'] }"
+    "paramTypes": "{ named: [':', '$'] }"
 }
