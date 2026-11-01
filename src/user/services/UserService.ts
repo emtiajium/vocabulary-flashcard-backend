@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import UserRepository from '@/user/repositories/UserRepository';
 import User from '@/user/domains/User';
 import CohortService from '@/user/services/CohortService';
@@ -9,7 +9,6 @@ import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
 import SearchResult from '@/common/domains/SearchResult';
 import TokenManager from '@/common/services/TokenManager';
-import ClientType from '@/common/domains/ClientType';
 import CacheUserService from '@/user/services/CacheUserService';
 
 @Injectable()
@@ -23,51 +22,31 @@ export default class UserService {
         private readonly cacheUserService: CacheUserService,
     ) {}
 
-    async createUser(
-        userPayload: User,
-        token: string,
-        client: ClientType,
-        versionCode: number,
-    ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
-        const user = await this.assertUserCreationPayload(userPayload, token, client, versionCode);
+    async createUser(token: string): Promise<Pick<User, 'id' | 'username' | 'name' | 'profilePictureUrl'>> {
+        const user = await this.assertUserCreationPayload(token);
         this.cacheUserService.delete(user.username);
         const persistedUser = await this.userRepository.insertOrUpdate(user);
         if (persistedUser.version === 1) {
             await this.cohortService.createCohort({ name: user.username, usernames: [persistedUser.username] });
         }
         return {
+            id: persistedUser.id,
             username: persistedUser.username,
             name: persistedUser.name,
             profilePictureUrl: persistedUser.profilePictureUrl,
         };
     }
 
-    private validateUserCreationToken(token: string, client: ClientType, versionCode: number): void {
+    private validateUserCreationToken(token: string): void {
         if (!token) {
-            if (client === ClientType.WEB) {
-                throw new ForbiddenException();
-            }
-            const androidVersion = 69;
-            // client = ClientType.ANDROID_NATIVE
-            if (versionCode >= androidVersion) {
-                throw new ForbiddenException();
-            }
+            throw new UnauthorizedException();
         }
     }
 
-    private async assertUserCreationPayload(
-        userPayload: User,
-        token: string,
-        client: ClientType,
-        versionCode: number,
-    ): Promise<User> {
-        this.validateUserCreationToken(token, client, versionCode);
-        let user = userPayload;
-        if (token) {
-            const decodedToken = await this.tokenManager.decodeJwTokenV2(token);
-            user = this.tokenManager.getUser(decodedToken);
-        }
-        return user;
+    private async assertUserCreationPayload(token: string): Promise<User> {
+        this.validateUserCreationToken(token);
+        const decodedToken = await this.tokenManager.decodeJwTokenV2(token);
+        return this.tokenManager.getUser(decodedToken);
     }
 
     async getUserByUsername(username: string): Promise<User> {

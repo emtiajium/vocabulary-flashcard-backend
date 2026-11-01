@@ -5,6 +5,7 @@ import { Expose } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
 import { ApiHideProperty } from '@nestjs/swagger';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
+import AuthSession from '@/user/domains/AuthSession';
 
 @Entity('User')
 @Unique(['username'])
@@ -49,6 +50,11 @@ export default class User extends BaseEntityWithoutMandatoryId {
         cascade: false,
     })
     flashcards?: LeitnerSystems[];
+
+    @ApiHideProperty()
+    @IsOptional()
+    @OneToMany(() => AuthSession, (autheSession) => autheSession.user, { eager: false })
+    authSessions?: AuthSession[];
 
     @Expose()
     get name(): string {

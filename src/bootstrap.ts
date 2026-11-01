@@ -48,14 +48,17 @@ export class Bootstrap {
         const { allowedOrigins } = this.serviceConfig;
 
         this.app.enableCors({
-            origin: (origin, callback) => {
-                if (!origin || allowedOrigins.includes(origin)) {
-                    callback(null, true);
-                } else {
-                    this.app.get(Logger).warn(`NOT OK || origin ${origin}`, 'CORS');
-                    callback(new Error(`Don't mess this up`));
-                }
-            },
+            origin: allowedOrigins,
+            credentials: true,
+            allowedHeaders: [
+                'Content-Type',
+                'X-Client-Id',
+                'X-Version',
+                'X-Version-Code',
+                'X-CSRF-Token',
+                'X-Requested-With',
+            ],
+            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         });
     }
 

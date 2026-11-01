@@ -1,11 +1,18 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
-import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
-import { decode } from 'jsonwebtoken';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import User from '@/user/domains/User';
 import safeStringify from 'fast-safe-stringify';
+import { createHash, randomBytes } from 'node:crypto';
+import { accessTokenMinutes } from '@/user/domains/AuthSession';
 
-export type DecodedToken = TokenPayload | (Partial<User> & { email: string });
+export type DecodedToken = TokenPayload | (Partial<User> & { email: string; googleSubject: string });
+export type AccessClaims = JwtPayload & {
+    sub: string;
+    sid: string;
+    typ: 'access';
+};
 
 @Injectable()
 export default class TokenManager {
@@ -13,20 +20,56 @@ export default class TokenManager {
 
     private readonly oAuth2ClientId: string;
 
-    private readonly isAutomatedTestingEnvironment: boolean;
+    private readonly jwtSecret: string;
 
     constructor(
         private readonly configService: ConfigService,
         private readonly logger: Logger,
     ) {
-        this.isAutomatedTestingEnvironment = this.configService.get('SERVICE_ENV') === 'test';
+        this.jwtSecret = this.configService.get('APP_JWT_SECRET');
         this.oAuth2ClientId = this.configService.get('GOOGLE_AUTH_CLIENT_ID');
         this.oAuth2Client = new OAuth2Client(this.oAuth2ClientId);
     }
 
-    private isEligibleToLegacyTokenVerification(): boolean {
-        return true;
-        // return this.isAutomatedTestingEnvironment;
+    createAccessToken(email: string, sessionId: string): string {
+        return sign(
+            {
+                typ: 'access',
+                sid: sessionId,
+                email,
+            },
+            this.jwtSecret,
+            {
+                subject: email,
+                issuer: 'firecracker-api',
+                audience: 'firecracker-client',
+                algorithm: 'HS256',
+                expiresIn: `${accessTokenMinutes}m`,
+            },
+        );
+    }
+
+    createRefreshToken(): string {
+        const randomByteSize = 32;
+        return randomBytes(randomByteSize).toString('base64url');
+    }
+
+    hashRefreshToken(token: string): string {
+        return createHash('sha256').update(token).digest('hex');
+    }
+
+    verifyAccessToken(token: string): AccessClaims {
+        const claims = verify(token, this.jwtSecret, {
+            algorithms: ['HS256'],
+            issuer: 'firecracker-api',
+            audience: 'firecracker-client',
+        }) as AccessClaims;
+
+        if (claims.typ !== 'access' || typeof claims.sub !== 'string' || typeof claims.sid !== 'string') {
+            throw new UnauthorizedException('Invalid access token');
+        }
+
+        return claims;
     }
 
     async decodeJwTokenV2(token: string): Promise<DecodedToken> {
@@ -39,38 +82,32 @@ export default class TokenManager {
         return decodedToken;
     }
 
-    private async decodeViaGoogle(token: string): Promise<DecodedToken> {
+    // eslint-disable-next-line complexity
+    async decodeViaGoogle(token: string): Promise<DecodedToken> {
         const loginTicket = await this.oAuth2Client.verifyIdToken({
             idToken: token,
             audience: this.oAuth2ClientId,
         });
-        return loginTicket.getPayload();
+        const payload = loginTicket.getPayload();
+        if (!payload?.sub || !payload.email || !payload.email_verified) {
+            throw new UnauthorizedException('Invalid Google identity');
+        }
+        return {
+            ...payload,
+            googleSubject: payload.sub,
+        };
     }
 
     private handleTokenDecodingException(error: Error | string): void {
         this.logger.error(`Error while verifying the token`, error instanceof Error ? safeStringify(error) : error);
-        throw new ForbiddenException();
+        throw new UnauthorizedException();
     }
 
-    async decodeJwToken(token: string): Promise<DecodedToken> {
-        let decodedToken: DecodedToken;
-
-        try {
-            decodedToken = this.isEligibleToLegacyTokenVerification()
-                ? (decode(token, { json: true }) as DecodedToken)
-                : await this.decodeViaGoogle(token);
-        } catch (error) {
-            this.handleTokenDecodingException(error);
+    extractUsername = (accessClaims: AccessClaims): string => {
+        if (!accessClaims?.email) {
+            throw new UnauthorizedException();
         }
-
-        return decodedToken;
-    }
-
-    extractUsername = (decodedToken: DecodedToken): string => {
-        if (!decodedToken?.email) {
-            throw new ForbiddenException();
-        }
-        return decodedToken.email;
+        return accessClaims.email;
     };
 
     getUser(decodedToken: DecodedToken): User {
