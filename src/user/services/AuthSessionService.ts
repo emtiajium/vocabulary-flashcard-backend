@@ -1,12 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { IsNull } from 'typeorm';
 import { randomUUID } from 'node:crypto';
-import AuthSession from '@/user/domains/AuthSession';
+import AuthSession, { refreshMaxAge } from '@/user/domains/AuthSession';
 import AuthSessionRepository from '@/user/repositories/AuthSessionRepository';
 import TokenManager from '@/common/services/TokenManager';
-
-// eslint-disable-next-line no-magic-numbers
-const REFRESH_LIFETIME_MS = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class AuthSessionService {
@@ -23,7 +20,7 @@ export class AuthSessionService {
             userId,
             username: email,
             refreshTokenHash: this.tokenManager.hashRefreshToken(refreshToken),
-            expiresAt: new Date(Date.now() + REFRESH_LIFETIME_MS),
+            expiresAt: new Date(Date.now() + refreshMaxAge),
         });
 
         await this.authSessionRepository.insert(session);

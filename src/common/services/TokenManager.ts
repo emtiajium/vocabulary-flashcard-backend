@@ -50,8 +50,8 @@ export default class TokenManager {
     }
 
     createRefreshToken(): string {
-        // eslint-disable-next-line no-magic-numbers
-        return randomBytes(32).toString('base64url');
+        const randomByteSize = 32;
+        return randomBytes(randomByteSize).toString('base64url');
     }
 
     hashRefreshToken(token: string): string {
@@ -82,14 +82,13 @@ export default class TokenManager {
         return decodedToken;
     }
 
-    // eslint-disable-next-line complexity
     async decodeViaGoogle(token: string): Promise<DecodedToken> {
         const loginTicket = await this.oAuth2Client.verifyIdToken({
             idToken: token,
             audience: this.oAuth2ClientId,
         });
         const payload = loginTicket.getPayload();
-        if (!payload?.sub || !payload.email || !payload.email_verified) {
+        if ([payload?.sub, !payload.email, !payload.email_verified].map(Boolean).includes(false)) {
             throw new UnauthorizedException('Invalid Google identity');
         }
         return {
