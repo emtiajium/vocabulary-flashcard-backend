@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import UserRepository from '@/user/repositories/UserRepository';
 import User from '@/user/domains/User';
 import CohortService from '@/user/services/CohortService';
@@ -39,7 +39,7 @@ export default class UserService {
 
     private validateUserCreationToken(token: string): void {
         if (!token) {
-            throw new ForbiddenException();
+            throw new UnauthorizedException();
         }
     }
 

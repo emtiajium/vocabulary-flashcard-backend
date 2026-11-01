@@ -1,10 +1,11 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
-import { ForbiddenException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import User from '@/user/domains/User';
 import safeStringify from 'fast-safe-stringify';
 import { createHash, randomBytes } from 'node:crypto';
+import { accessMaxAge } from '@/user/domains/AuthSession';
 
 export type DecodedToken = TokenPayload | (Partial<User> & { email: string; googleSubject: string });
 export type AccessClaims = JwtPayload & {
@@ -43,7 +44,7 @@ export default class TokenManager {
                 issuer: 'firecracker-api',
                 audience: 'firecracker-client',
                 algorithm: 'HS256',
-                expiresIn: '15m',
+                expiresIn: accessMaxAge,
             },
         );
     }
@@ -65,7 +66,7 @@ export default class TokenManager {
         }) as AccessClaims;
 
         if (claims.typ !== 'access' || typeof claims.sub !== 'string' || typeof claims.sid !== 'string') {
-            throw new ForbiddenException('Invalid access token');
+            throw new UnauthorizedException('Invalid access token');
         }
 
         return claims;
@@ -99,12 +100,12 @@ export default class TokenManager {
 
     private handleTokenDecodingException(error: Error | string): void {
         this.logger.error(`Error while verifying the token`, error instanceof Error ? safeStringify(error) : error);
-        throw new ForbiddenException();
+        throw new UnauthorizedException();
     }
 
     extractUsername = (accessClaims: AccessClaims): string => {
         if (!accessClaims?.email) {
-            throw new ForbiddenException();
+            throw new UnauthorizedException();
         }
         return accessClaims.email;
     };

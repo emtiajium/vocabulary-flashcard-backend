@@ -1,6 +1,13 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import User from '@/user/domains/User';
 import BaseEntityWithMandatoryId from '@/common/persistence/BaseEntityWithMandatoryId';
+import { millisecondsInMinute, millisecondsInDay } from 'date-fns/constants';
+
+const accessTokenMinutes = 15;
+const refreshTokenDays = 30;
+
+export const accessMaxAge = accessTokenMinutes * millisecondsInMinute;
+export const refreshMaxAge = refreshTokenDays * millisecondsInDay;
 
 @Entity('AuthSession')
 export default class AuthSession extends BaseEntityWithMandatoryId {

@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Response, CookieOptions } from 'express';
+import { accessMaxAge, refreshMaxAge } from '@/user/domains/AuthSession';
 
 const ACCESS_COOKIE = '__Host-fc_access';
 const REFRESH_COOKIE = '__Host-fc_refresh';
-
-// eslint-disable-next-line no-magic-numbers
-const ACCESS_MAX_AGE = 15 * 60 * 1000;
-// eslint-disable-next-line no-magic-numbers
-const REFRESH_MAX_AGE = 30 * 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class AuthCookieService {
@@ -21,12 +17,12 @@ export class AuthCookieService {
     set(response: Response, accessToken: string, refreshToken: string): void {
         response.cookie(ACCESS_COOKIE, accessToken, {
             ...this.common,
-            maxAge: ACCESS_MAX_AGE,
+            maxAge: accessMaxAge,
         });
 
         response.cookie(REFRESH_COOKIE, refreshToken, {
             ...this.common,
-            maxAge: REFRESH_MAX_AGE,
+            maxAge: refreshMaxAge,
         });
     }
 

@@ -7,7 +7,7 @@ import { generateUsername, removeUsersByUsernames } from '@test/util/user-util';
 import { removeCohortsByNames } from '@test/util/cohort-util';
 import User from '@/user/domains/User';
 import SupertestResponse from '@test/util/supertest-util';
-import generateJwToken from '@test/util/auth-util';
+import { generateGoogleProvidedToken } from '@test/util/auth-util';
 import TokenManager, { DecodedToken } from '@/common/services/TokenManager';
 import { decode } from 'jsonwebtoken';
 import ClientType from '@/common/domains/ClientType';
@@ -31,7 +31,7 @@ describe('/v1/users', () => {
             profilePictureUrl: 'https://firecrackervocabulary.com/files/images/blah.png',
         });
         return {
-            idToken: generateJwToken(generatedUser),
+            idToken: generateGoogleProvidedToken(generatedUser),
         };
     };
 
