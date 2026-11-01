@@ -5,7 +5,7 @@ import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import User from '@/user/domains/User';
 import safeStringify from 'fast-safe-stringify';
 import { createHash, randomBytes } from 'node:crypto';
-import { accessMaxAge } from '@/user/domains/AuthSession';
+import { accessTokenMinutes } from '@/user/domains/AuthSession';
 
 export type DecodedToken = TokenPayload | (Partial<User> & { email: string; googleSubject: string });
 export type AccessClaims = JwtPayload & {
@@ -44,7 +44,7 @@ export default class TokenManager {
                 issuer: 'firecracker-api',
                 audience: 'firecracker-client',
                 algorithm: 'HS256',
-                expiresIn: accessMaxAge,
+                expiresIn: `${accessTokenMinutes}m`,
             },
         );
     }
@@ -82,13 +82,14 @@ export default class TokenManager {
         return decodedToken;
     }
 
+    // eslint-disable-next-line complexity
     async decodeViaGoogle(token: string): Promise<DecodedToken> {
         const loginTicket = await this.oAuth2Client.verifyIdToken({
             idToken: token,
             audience: this.oAuth2ClientId,
         });
         const payload = loginTicket.getPayload();
-        if ([payload?.sub, !payload.email, !payload.email_verified].map(Boolean).includes(false)) {
+        if (!payload?.sub || !payload.email || !payload.email_verified) {
             throw new UnauthorizedException('Invalid Google identity');
         }
         return {

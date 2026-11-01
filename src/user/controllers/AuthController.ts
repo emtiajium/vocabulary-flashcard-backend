@@ -3,6 +3,9 @@ import { Response } from 'express';
 import { AuthSessionService } from '@/user/services/AuthSessionService';
 import { AuthCookieService } from '@/user/services/AuthCookieService';
 import { RefreshAuthToken } from '@/common/http/AuthToken';
+import { TokenResponse } from '@/user/domains/TokenResponse';
+import Client from '@/common/http/Client';
+import ClientType from '@/common/domains/ClientType';
 
 @Controller('/v1/auth')
 export class AuthController {
@@ -15,16 +18,27 @@ export class AuthController {
     async refresh(
         @Res({ passthrough: true }) response: Response,
         @RefreshAuthToken() refreshToken: string,
-    ): Promise<{ success: boolean }> {
+        @Client() client: ClientType,
+    ): Promise<{ success: boolean } & TokenResponse> {
         if (!refreshToken) {
             throw new UnauthorizedException();
         }
 
-        const tokens = await this.authSessionService.refresh(refreshToken);
+        const token = await this.authSessionService.refresh(refreshToken);
 
-        this.authCookieService.set(response, tokens.accessToken, tokens.refreshToken);
+        this.authCookieService.set(response, token.accessToken, token.refreshToken);
 
-        return { success: true };
+        if (client === ClientType.ANDROID_NATIVE) {
+            return {
+                success: true,
+                accessToken: token.accessToken,
+                refreshToken: token.refreshToken,
+            };
+        }
+
+        return {
+            success: true,
+        };
     }
 
     @Post('/logout')
