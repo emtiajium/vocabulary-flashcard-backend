@@ -11,6 +11,7 @@ import User from '@/user/domains/User';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import { LoggerOptions } from 'typeorm';
 import GuessingGame from '@/vocabulary/domains/GuessingGame';
+import AuthSession from '@/user/domains/AuthSession';
 
 @Module({
     imports: [
@@ -31,7 +32,16 @@ import GuessingGame from '@/vocabulary/domains/GuessingGame';
                     // do not use the environment variable TYPEORM_ENTITIES
                     // as it won't work with npm run start:prod
                     // as directory is ***/dist/***
-                    entities: [Android, Cohort, Definition, LeitnerSystems, User, Vocabulary, GuessingGame],
+                    entities: [
+                        Android,
+                        Cohort,
+                        Definition,
+                        LeitnerSystems,
+                        User,
+                        Vocabulary,
+                        GuessingGame,
+                        AuthSession,
+                    ],
                     namingStrategy: new DatabaseNamingStrategy(),
                 };
 
