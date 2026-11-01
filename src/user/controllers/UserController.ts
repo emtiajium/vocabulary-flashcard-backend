@@ -12,6 +12,9 @@ import DeletionService from '@/user/services/DeletionService';
 import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import { AuthCookieService } from '@/user/services/AuthCookieService';
 import { AuthSessionService } from '@/user/services/AuthSessionService';
+import { CreateUserResponse } from '@/user/domains/CreateUserResponse';
+import Client from '@/common/http/Client';
+import ClientType from '@/common/domains/ClientType';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
@@ -27,11 +30,21 @@ export default class UserController {
     async createUser(
         @Body('idToken') idToken: string,
         @Res({ passthrough: true }) response: Response,
-    ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
+        @Client() client: ClientType,
+    ): Promise<CreateUserResponse> {
         const userResponse = await this.userService.createUser(idToken);
-        const tokens = await this.authSessionService.create(userResponse.id, userResponse.username);
-        this.authCookieService.set(response, tokens.accessToken, tokens.refreshToken);
-        return userResponse;
+        const token = await this.authSessionService.create(userResponse.id, userResponse.username);
+        this.authCookieService.set(response, token.accessToken, token.refreshToken);
+        const createUserResponse: CreateUserResponse = {
+            username: userResponse.username,
+            name: userResponse.name,
+            profilePictureUrl: userResponse.profilePictureUrl,
+        };
+        if (client === ClientType.ANDROID_NATIVE) {
+            createUserResponse.accessToken = token.accessToken;
+            createUserResponse.refreshToken = token.refreshToken;
+        }
+        return createUserResponse;
     }
 
     @Post('/all')
