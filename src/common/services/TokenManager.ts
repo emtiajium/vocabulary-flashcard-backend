@@ -33,14 +33,22 @@ export default class TokenManager {
         this.oAuth2Client = new OAuth2Client(this.oAuth2ClientId);
     }
 
-    createAccessToken(userId: string, sessionId: string): string {
-        return sign({ typ: 'access', sid: sessionId }, this.jwtSecret, {
-            subject: userId,
-            issuer: 'firecracker-api',
-            audience: 'firecracker-client',
-            algorithm: 'HS256',
-            expiresIn: '15m',
-        });
+    createAccessToken(email: string, sessionId: string): string {
+        return sign(
+            {
+                typ: 'access',
+                sid: sessionId,
+                email,
+            },
+            this.jwtSecret,
+            {
+                subject: email,
+                issuer: 'firecracker-api',
+                audience: 'firecracker-client',
+                algorithm: 'HS256',
+                expiresIn: '15m',
+            },
+        );
     }
 
     createRefreshToken(): string {

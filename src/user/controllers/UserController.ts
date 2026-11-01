@@ -29,7 +29,7 @@ export default class UserController {
         @Res({ passthrough: true }) response: Response,
     ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         const userResponse = await this.userService.createUser(idToken);
-        const tokens = await this.authSessionService.create(userResponse.id);
+        const tokens = await this.authSessionService.create(userResponse.id, userResponse.username);
         this.authCookieService.set(response, tokens.accessToken, tokens.refreshToken);
         return userResponse;
     }

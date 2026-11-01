@@ -15,7 +15,7 @@ export class AuthSessionService {
         private readonly tokenManager: TokenManager,
     ) {}
 
-    async create(userId: string): Promise<{ accessToken: string; refreshToken: string }> {
+    async create(userId: string, email: string): Promise<{ accessToken: string; refreshToken: string }> {
         const refreshToken = this.tokenManager.createRefreshToken();
 
         const session = this.authSessionRepository.create({
@@ -25,10 +25,10 @@ export class AuthSessionService {
             expiresAt: new Date(Date.now() + REFRESH_LIFETIME_MS),
         });
 
-        await this.authSessionRepository.save(session);
+        await this.authSessionRepository.insert(session);
 
         return {
-            accessToken: this.tokenManager.createAccessToken(userId, session.id),
+            accessToken: this.tokenManager.createAccessToken(email, session.id),
             refreshToken,
         };
     }
