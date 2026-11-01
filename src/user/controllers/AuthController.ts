@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { AuthSessionService } from '@/user/services/AuthSessionService';
 import { AuthCookieService, REFRESH_COOKIE } from '@/user/services/AuthCookieService';
 
-@Controller('/auth')
+@Controller('/v1/auth')
 export class AuthController {
     constructor(
         private readonly authSessionService: AuthSessionService,

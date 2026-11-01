@@ -21,10 +21,11 @@ import GuessingGameRepository from '@/vocabulary/repositories/GuessingGameReposi
 import AuthSessionRepository from '@/user/repositories/AuthSessionRepository';
 import { AuthSessionService } from '@/user/services/AuthSessionService';
 import { AuthCookieService } from '@/user/services/AuthCookieService';
+import { AuthController } from '@/user/controllers/AuthController';
 
 @Module({
     imports: [DatabaseModule, HttpModule],
-    controllers: [UserController, CohortController],
+    controllers: [UserController, CohortController, AuthController],
     providers: [
         UserService,
         CohortService,
