@@ -21,6 +21,7 @@ export class AuthSessionService {
         const session = this.authSessionRepository.create({
             id: randomUUID(),
             userId,
+            username: email,
             refreshTokenHash: this.tokenManager.hashRefreshToken(refreshToken),
             expiresAt: new Date(Date.now() + REFRESH_LIFETIME_MS),
         });
@@ -50,7 +51,7 @@ export class AuthSessionService {
             .where('refreshTokenHash = :oldHash', { oldHash })
             .andWhere('revokedAt IS NULL')
             .andWhere('expiresAt > :now', { now })
-            .returning(['id', 'userId'])
+            .returning(['id', 'username'])
             .execute();
 
         if (result.affected !== 1) {
@@ -59,11 +60,11 @@ export class AuthSessionService {
 
         const session = result.raw[0] as {
             id: string;
-            user_id: string;
+            username: string;
         };
 
         return {
-            accessToken: this.tokenManager.createAccessToken(session.user_id, session.id),
+            accessToken: this.tokenManager.createAccessToken(session.username, session.id),
             refreshToken: newToken,
         };
     }

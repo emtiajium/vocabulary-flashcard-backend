@@ -11,6 +11,9 @@ export default class AuthSession extends BaseEntityWithMandatoryId {
     @Column({ type: 'uuid', nullable: false })
     userId: string;
 
+    @Column({ type: 'text', nullable: false })
+    username: string;
+
     @Column({ type: 'text', nullable: false, unique: true })
     refreshTokenHash: string;
 

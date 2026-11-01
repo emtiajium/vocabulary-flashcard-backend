@@ -11,6 +11,7 @@ export class AuthSession1793530743224 implements MigrationInterface {
                 "version" integer NOT NULL DEFAULT '1',
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "userId" uuid NOT NULL,
+                "username" text NOT NULL,
                 "refreshTokenHash" text NOT NULL,
                 "expiresAt" TIMESTAMP WITH TIME ZONE NOT NULL,
                 "revokedAt" TIMESTAMP WITH TIME ZONE,
