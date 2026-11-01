@@ -50,7 +50,14 @@ export class Bootstrap {
         this.app.enableCors({
             origin: allowedOrigins,
             credentials: true,
-            allowedHeaders: ['Content-Type', 'X-Client-Id', 'X-Version', 'X-Version-Code', 'X-CSRF-Token'],
+            allowedHeaders: [
+                'Content-Type',
+                'X-Client-Id',
+                'X-Version',
+                'X-Version-Code',
+                'X-CSRF-Token',
+                'X-Requested-With',
+            ],
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         });
     }
