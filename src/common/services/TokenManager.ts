@@ -1,7 +1,7 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { ForbiddenException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { decode, JwtPayload, sign, verify } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import User from '@/user/domains/User';
 import safeStringify from 'fast-safe-stringify';
 import { createHash, randomBytes } from 'node:crypto';
@@ -21,13 +21,10 @@ export default class TokenManager {
 
     private readonly jwtSecret: string;
 
-    private readonly isAutomatedTestingEnvironment: boolean;
-
     constructor(
         private readonly configService: ConfigService,
         private readonly logger: Logger,
     ) {
-        this.isAutomatedTestingEnvironment = this.configService.get('SERVICE_ENV') === 'test';
         this.jwtSecret = this.configService.get('APP_JWT_SECRET');
         this.oAuth2ClientId = this.configService.get('GOOGLE_AUTH_CLIENT_ID');
         this.oAuth2Client = new OAuth2Client(this.oAuth2ClientId);
@@ -74,11 +71,6 @@ export default class TokenManager {
         return claims;
     }
 
-    private isEligibleToLegacyTokenVerification(): boolean {
-        return true;
-        // return this.isAutomatedTestingEnvironment;
-    }
-
     async decodeJwTokenV2(token: string): Promise<DecodedToken> {
         let decodedToken: DecodedToken;
         try {
@@ -110,25 +102,11 @@ export default class TokenManager {
         throw new ForbiddenException();
     }
 
-    async decodeJwToken(token: string): Promise<DecodedToken> {
-        let decodedToken: DecodedToken;
-
-        try {
-            decodedToken = this.isEligibleToLegacyTokenVerification()
-                ? (decode(token, { json: true }) as DecodedToken)
-                : await this.decodeViaGoogle(token);
-        } catch (error) {
-            this.handleTokenDecodingException(error);
-        }
-
-        return decodedToken;
-    }
-
-    extractUsername = (decodedToken: DecodedToken): string => {
-        if (!decodedToken?.email) {
+    extractUsername = (accessClaims: AccessClaims): string => {
+        if (!accessClaims?.email) {
             throw new ForbiddenException();
         }
-        return decodedToken.email;
+        return accessClaims.email;
     };
 
     getUser(decodedToken: DecodedToken): User {
