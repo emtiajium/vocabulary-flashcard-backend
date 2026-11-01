@@ -56,6 +56,9 @@ export class Bootstrap {
                     callback(new Error(`Don't mess this up`));
                 }
             },
+            // credentials: true,
+            // allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+            // methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         });
     }
 

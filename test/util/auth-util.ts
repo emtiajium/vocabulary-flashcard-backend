@@ -1,7 +1,7 @@
 import User from '@/user/domains/User';
 import { sign, Algorithm } from 'jsonwebtoken';
 import * as fs from 'fs';
-import { classToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 import { ConfigService } from '@nestjs/config';
 
 // to encode a jwt: https://jwt.io/
@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 // Google generated jwt details: https://developers.google.com/identity/gsi/web/reference/js-reference
 
 export default function generateJwToken(user: User): string {
-    const plainUser = classToPlain({
+    const plainUser = instanceToPlain({
         ...user,
         email: user.username,
         email_verified: true,

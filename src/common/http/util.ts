@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import ClientType from '@/common/domains/ClientType';
+import { ACCESS_COOKIE } from '@/user/services/AuthCookieService';
 
 export function getHeaders(request: Request): Record<string, unknown> {
     return request.headers;
@@ -24,7 +25,15 @@ export function getVersionCode(request: Request): number {
     return 0;
 }
 
+// eslint-disable-next-line complexity
 export function getJwToken(request: Request): string {
+    const cookieToken = request.cookies?.[ACCESS_COOKIE];
+
+    // Never silently fall back from an invalid cookie to a bearer token.
+    if (typeof cookieToken === 'string') {
+        return cookieToken;
+    }
+
     const authorizationHeader = getAuthorization(request);
     if (!authorizationHeader) {
         return '';
