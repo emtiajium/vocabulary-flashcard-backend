@@ -1,9 +1,15 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { getJwToken } from '@/common/http/util';
+import { getAccessToken, getRefreshToken } from '@/common/http/util';
 
 const AuthToken = createParamDecorator((key: string, executionContext: ExecutionContext) => {
     const request = executionContext.switchToHttp().getRequest();
-    return getJwToken(request);
+    return getAccessToken(request);
+});
+
+const RefreshAuthToken = createParamDecorator((key: string, executionContext: ExecutionContext) => {
+    const request = executionContext.switchToHttp().getRequest();
+    return getRefreshToken(request);
 });
 
 export default AuthToken;
+export { RefreshAuthToken };

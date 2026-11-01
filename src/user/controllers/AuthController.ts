@@ -1,7 +1,8 @@
-import { Controller, Post, Req, Res, UnauthorizedException } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Post, Res, UnauthorizedException } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthSessionService } from '@/user/services/AuthSessionService';
-import { AuthCookieService, REFRESH_COOKIE } from '@/user/services/AuthCookieService';
+import { AuthCookieService } from '@/user/services/AuthCookieService';
+import { RefreshAuthToken } from '@/common/http/AuthToken';
 
 @Controller('/v1/auth')
 export class AuthController {
@@ -12,11 +13,9 @@ export class AuthController {
 
     @Post('/refresh')
     async refresh(
-        @Req() request: Request,
         @Res({ passthrough: true }) response: Response,
+        @RefreshAuthToken() refreshToken: string,
     ): Promise<{ success: boolean }> {
-        const refreshToken = request.cookies?.[REFRESH_COOKIE];
-
         if (!refreshToken) {
             throw new UnauthorizedException();
         }
@@ -30,11 +29,9 @@ export class AuthController {
 
     @Post('/logout')
     async logout(
-        @Req() request: Request,
         @Res({ passthrough: true }) response: Response,
+        @RefreshAuthToken() refreshToken: string,
     ): Promise<{ success: boolean }> {
-        const refreshToken = request.cookies?.[REFRESH_COOKIE];
-
         if (refreshToken) {
             await this.authSessionService.revoke(refreshToken);
         }

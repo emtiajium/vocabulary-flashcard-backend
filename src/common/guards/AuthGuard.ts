@@ -3,7 +3,7 @@ import User from '@/user/domains/User';
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import TokenManager, { AccessClaims } from '@/common/services/TokenManager';
-import { getJwToken } from '@/common/http/util';
+import { getAccessToken } from '@/common/http/util';
 
 @Injectable()
 export default class AuthGuard implements CanActivate {
@@ -12,8 +12,8 @@ export default class AuthGuard implements CanActivate {
         private readonly tokenManager: TokenManager,
     ) {}
 
-    private async decodeJwToken(request: Request): Promise<AccessClaims> {
-        const token = getJwToken(request);
+    private async decodeAccessToken(request: Request): Promise<AccessClaims> {
+        const token = getAccessToken(request);
         if (!token) {
             throw new UnauthorizedException();
         }
@@ -24,7 +24,7 @@ export default class AuthGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         let isValidUser: boolean;
         try {
-            const decodedToken = await this.decodeJwToken(request);
+            const decodedToken = await this.decodeAccessToken(request);
             const username = this.tokenManager.extractUsername(decodedToken);
             const user: User = await this.userService.getUserByUsername(username);
             isValidUser = Boolean(user);
