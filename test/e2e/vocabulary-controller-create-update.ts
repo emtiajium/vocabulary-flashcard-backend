@@ -304,6 +304,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.isDraft = false;
                 payload.word = `Word_${uuidV4()}`;
+                // @ts-expect-error
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id), examples: [] };
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);

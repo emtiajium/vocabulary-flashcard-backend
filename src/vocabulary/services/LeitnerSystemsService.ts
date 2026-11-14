@@ -40,7 +40,7 @@ export default class LeitnerSystemsService {
             throw new ConflictException(`This vocabulary is in the last Leitner box.`);
         }
 
-        const nextBox = LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`];
+        const nextBox = boxItem.currentBox + 1;
 
         await this.leitnerSystemsRepository.insertOrUpdate(
             LeitnerSystems.create(nextBox, userId, vocabularyId, true).setId?.(boxItem.id),
@@ -62,7 +62,7 @@ export default class LeitnerSystemsService {
             throw new ConflictException(`This vocabulary is in the first Leitner box.`);
         }
 
-        const previousBox = LeitnerBoxType[`BOX_${boxItem.currentBox - 1}`];
+        const previousBox = boxItem.currentBox - 1;
 
         await this.leitnerSystemsRepository.insertOrUpdate(
             LeitnerSystems.create(previousBox, userId, vocabularyId, false).setId(boxItem.id),

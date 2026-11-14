@@ -14,7 +14,7 @@
         "resolveJsonModule": true,
         "strict": true,
         "strictNullChecks": false,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strictPropertyInitialization": false,
         "types": ["node", "jest"],
         "paths": {

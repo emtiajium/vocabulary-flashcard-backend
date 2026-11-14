@@ -6,20 +6,20 @@ export default class SearchResult<T> {
         readonly total: number,
     ) {}
 
-    static omitTotal<T, U>(rawResults: RawResult<T, U>[], nameHoldingTotalRows: string): SearchResult<T> {
-        const isNotEmpty = rawResults?.length > 0;
-        const total = isNotEmpty ? rawResults[0][nameHoldingTotalRows] : 0;
+    static omitTotal<T extends object, U extends Record<string, number>>(
+        rawResults: RawResult<T, U>[],
+        nameHoldingTotalRows: keyof U & string,
+    ): SearchResult<T> {
+        if ((rawResults ?? []).length === 0) {
+            return new SearchResult<T>([], 0);
+        }
 
-        const results: T[] = (rawResults || []).map((result) => {
-            const resultWithoutTotal = {} as T;
+        const total = rawResults[0]?.[nameHoldingTotalRows];
 
-            Object.keys(result).forEach((key) => {
-                if (key !== nameHoldingTotalRows) {
-                    resultWithoutTotal[key] = result[key];
-                }
-            });
+        const results = rawResults.map((result) => {
+            const { [nameHoldingTotalRows]: _total, ...resultWithoutTotal } = result;
 
-            return resultWithoutTotal;
+            return resultWithoutTotal as T;
         });
 
         return new SearchResult<T>(results, total);
