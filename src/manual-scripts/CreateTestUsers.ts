@@ -1,10 +1,10 @@
 import User from '@/user/domains/User';
 import { In } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
-import * as _ from 'lodash';
 import Definition from '@/vocabulary/domains/Definition';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import DataSource from '@/common/persistence/TypeormConfig';
+import { map } from 'lodash';
 
 type PartialUser = Pick<User, 'firstname' | 'lastname' | 'username' | 'profilePictureUrl'>;
 
@@ -108,7 +108,7 @@ export default class CreateTestUsers {
     }
 
     private async removeUsers(): Promise<void> {
-        await DataSource.getRepository(User).delete({ username: In(_.map(this.users, 'username')) });
+        await DataSource.getRepository(User).delete({ username: In(map(this.users, 'username')) });
     }
 
     private async createUsers(): Promise<void> {
@@ -117,7 +117,7 @@ export default class CreateTestUsers {
 
     private async associateUsersWithCohort(): Promise<void> {
         await DataSource.getRepository(User).update(
-            { username: In(_.map(this.users, 'username')) },
+            { username: In(map(this.users, 'username')) },
             { cohort: { id: this.cohortId } },
         );
     }

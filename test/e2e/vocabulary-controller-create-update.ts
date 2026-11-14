@@ -21,9 +21,9 @@ import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
-import * as _ from 'lodash';
 import { setTimeout } from 'node:timers/promises';
 import DataSource from '@/common/persistence/TypeormConfig';
+import { capitalize } from 'lodash';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -379,7 +379,7 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
 
                 const vocabulary = body as Vocabulary;
-                expect(vocabulary.word).toBe(_.capitalize(payload.word));
+                expect(vocabulary.word).toBe(capitalize(payload.word));
             });
 
             it('SHOULD return 201 CREATED with capitalized linker words', async () => {
@@ -395,8 +395,8 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
 
                 const vocabulary = body as Vocabulary;
-                expect(vocabulary.linkerWords[0]).toBe(_.capitalize('Lower 1'));
-                expect(vocabulary.linkerWords[1]).toBe(_.capitalize('Lower 2'));
+                expect(vocabulary.linkerWords[0]).toBe(capitalize('Lower 1'));
+                expect(vocabulary.linkerWords[1]).toBe(capitalize('Lower 2'));
             });
 
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {
