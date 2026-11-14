@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
     # Fast, static checks. No database is needed.
     static-checks:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-26.04
 
         steps:
             - name: Checkout
@@ -30,7 +30,7 @@ jobs:
               run: npm run build
 
     tests:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-26.04
 
         services:
             postgres:
@@ -73,7 +73,7 @@ jobs:
               run: npm run test
 
     tag:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-26.04
         needs: [static-checks, tests]
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         permissions:
