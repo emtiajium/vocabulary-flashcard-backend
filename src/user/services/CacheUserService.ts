@@ -18,7 +18,7 @@ export default class CacheUserService {
     }
 
     getAll(): User[] {
-        const users = [];
+        const users: User[] = [];
         cachedUser.forEach((value) => {
             users.push(value);
         });

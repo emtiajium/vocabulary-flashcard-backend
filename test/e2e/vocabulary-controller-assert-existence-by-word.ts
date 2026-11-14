@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import SupertestResponse from '@test/util/supertest-util';
-import * as request from 'supertest';
+import request from 'supertest';
 import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
@@ -13,7 +13,7 @@ import User from '@/user/domains/User';
 import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { capitalize } from 'lodash';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import DataSource from '@/common/persistence/TypeormConfig';
 
 describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
@@ -31,7 +31,7 @@ describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
         cohortIds.push(cohort.id);
         user.cohort = cohort;
         user.cohortId = cohort.id;
-        user = plainToClass(User, user);
+        user = plainToInstance(User, user);
         return {
             user,
             cohort,

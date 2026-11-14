@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
 import AppModule from '@/AppModule';

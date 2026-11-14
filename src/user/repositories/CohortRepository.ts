@@ -29,8 +29,7 @@ export default class CohortRepository extends Repository<Cohort> {
     }
 
     async getCohortByName(name: string): Promise<Cohort> {
-        // findOneOrFail() is not working as expected
-        const cohort: Cohort = await this.findOneBy({ name });
+        const cohort = await this.findOneBy({ name });
         if (!cohort) {
             throw new EntityNotFoundException(`Cohort with name "${name}" does not exist`);
         }

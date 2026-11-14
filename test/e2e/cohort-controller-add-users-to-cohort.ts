@@ -1,7 +1,7 @@
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';

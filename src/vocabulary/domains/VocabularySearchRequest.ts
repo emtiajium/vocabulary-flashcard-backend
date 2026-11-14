@@ -15,7 +15,7 @@ export default class VocabularySearchRequest {
         }
         // backward compatibility for the Android app older than or equal to 0.10.4
         const compatibleVocabularySearchCoverage = new VocabularySearchCoverage();
-        compatibleVocabularySearchCoverage.setWord(true);
+        compatibleVocabularySearchCoverage.setWord?.(true);
         return compatibleVocabularySearchCoverage;
     })
     @IsOptional()

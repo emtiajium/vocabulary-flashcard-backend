@@ -156,7 +156,7 @@ export default class VocabularyService {
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
 
-    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
+    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | null> {
         return this.vocabularyRepository.assertExistenceByWord(id, word, cohortId);
     }
 

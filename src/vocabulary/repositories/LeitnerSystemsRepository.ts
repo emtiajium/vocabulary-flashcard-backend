@@ -56,7 +56,7 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         return new SearchResult<LeitnerSystems>(items, total);
     }
 
-    getSingleBoxItemEarlierToBoxAppearanceDate(userId: string, box: LeitnerBoxType): Promise<LeitnerSystems> {
+    getSingleBoxItemEarlierToBoxAppearanceDate(userId: string, box: LeitnerBoxType): Promise<LeitnerSystems | null> {
         return this.createQueryBuilder('leitnerSystems')
             .innerJoin('leitnerSystems.vocabulary', 'vocabulary')
             .where('leitnerSystems.userId = :userId', { userId })

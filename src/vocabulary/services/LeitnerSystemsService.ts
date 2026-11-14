@@ -4,10 +4,11 @@ import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import VocabularyRepository from '@/vocabulary/repositories/VocabularyRepository';
 import Pagination from '@/common/domains/Pagination';
-import * as _ from 'lodash';
 import LeitnerBoxItemSearchResult, {
     SingleLeitnerItemEarlierToBoxAppearanceDate,
 } from '@/vocabulary/domains/LeitnerBoxItemSearchResult';
+import { map } from 'lodash';
+import LeitnerBoxItem from '@/vocabulary/domains/LeitnerBoxItem';
 
 @Injectable()
 export default class LeitnerSystemsService {
@@ -42,7 +43,7 @@ export default class LeitnerSystemsService {
         const nextBox = LeitnerBoxType[`BOX_${boxItem.currentBox + 1}`];
 
         await this.leitnerSystemsRepository.insertOrUpdate(
-            LeitnerSystems.create(nextBox, userId, vocabularyId, true).setId(boxItem.id),
+            LeitnerSystems.create(nextBox, userId, vocabularyId, true).setId?.(boxItem.id),
         );
     }
 
@@ -74,7 +75,7 @@ export default class LeitnerSystemsService {
         }
     }
 
-    private getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems> {
+    private getLeitnerBoxItem(userId: string, vocabularyId: string): Promise<LeitnerSystems | null> {
         return this.leitnerSystemsRepository.findOneBy({ user: { id: userId }, vocabulary: { id: vocabularyId } });
     }
 
@@ -84,7 +85,7 @@ export default class LeitnerSystemsService {
         pagination: Pagination,
     ): Promise<LeitnerBoxItemSearchResult> {
         const { results, total } = await this.leitnerSystemsRepository.getBoxItems(userId, box, pagination);
-        const items = _.map(results, (result) => {
+        const items = map<LeitnerSystems, LeitnerBoxItem>(results, (result) => {
             return {
                 vocabularyId: result.vocabularyId,
                 word: result.vocabulary.word,

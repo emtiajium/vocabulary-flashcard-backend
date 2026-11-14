@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
-import * as request from 'supertest';
+import request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
@@ -178,7 +178,6 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.isDraft = true;
                 payload.word = `Word_${uuidV4()}`;
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 payload.genericExternalLinks = 'NOT_AN_ARRAY';
                 payload.definitions = [];
@@ -270,8 +269,7 @@ describe('/v1/vocabularies', () => {
                     ...getBaseDefinitionPayloadWithoutRelations(payload.id),
                     externalLinks: 'NOT_AN_ARRAY',
                 };
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                // @ts-expect-error
                 payload.definitions = [definition];
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);

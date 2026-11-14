@@ -3,7 +3,6 @@ import UserRepository from '@/user/repositories/UserRepository';
 import User from '@/user/domains/User';
 import CohortService from '@/user/services/CohortService';
 import EntityNotFoundException from '@/common/exceptions/EntityNotFoundException';
-import * as _ from 'lodash';
 import LeitnerSystemsRepository from '@/vocabulary/repositories/LeitnerSystemsRepository';
 import UserReport from '@/user/domains/UserReport';
 import LeitnerSystemsLoverUsersReport from '@/user/domains/LeitnerSystemsLoverUsersReport';
@@ -11,6 +10,7 @@ import SearchResult from '@/common/domains/SearchResult';
 import TokenManager from '@/common/services/TokenManager';
 import ClientType from '@/common/domains/ClientType';
 import CacheUserService from '@/user/services/CacheUserService';
+import { map } from 'lodash';
 
 @Injectable()
 export default class UserService {
@@ -88,7 +88,7 @@ export default class UserService {
     async getAll(): Promise<SearchResult<UserReport>> {
         const users = await this.userRepository.getAll();
         return new SearchResult<UserReport>(
-            _.map(users, (user) => ({
+            map<User, UserReport>(users, (user) => ({
                 username: user.username,
                 name: user.name,
                 createdAt: user.createdAt,

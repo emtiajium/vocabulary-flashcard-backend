@@ -67,7 +67,7 @@ export default class LeitnerSystems extends BaseEntityWithoutMandatoryId {
         return leitnerSystems;
     }
 
-    setId?(id: string): LeitnerSystems {
+    setId(id: string): LeitnerSystems {
         this.id = id;
         return this;
     }

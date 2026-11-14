@@ -55,7 +55,7 @@ export default class VocabularyController {
         @Param('id') id: string,
         @Param('word') word: string,
         @AuthenticatedUser('cohortId') cohortId: string,
-    ): Promise<Partial<Vocabulary>> {
+    ): Promise<Partial<Vocabulary> | null> {
         return this.vocabularyService.assertExistenceByWord(id, word, cohortId);
     }
 

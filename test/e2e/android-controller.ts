@@ -4,7 +4,7 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester, removeUsersByUsernames } from '@test/util/user-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
-import * as request from 'supertest';
+import request from 'supertest';
 import getAppAPIPrefix from '@test/util/service-util';
 import Android from '@/android/domains/Android';
 import { v4 as uuidV4 } from 'uuid';

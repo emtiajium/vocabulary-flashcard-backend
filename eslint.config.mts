@@ -3,7 +3,6 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import { defineConfig } from 'eslint/config';
 import unicorn from 'eslint-plugin-unicorn';
-import prettier from 'eslint-plugin-prettier';
 
 export default defineConfig([
     eslint.configs.recommended,
@@ -13,14 +12,20 @@ export default defineConfig([
     {
         plugins: {
             unicorn,
-            prettier,
         },
         rules: {
-            '@typescript-eslint/interface-name-prefix': 'off',
             '@typescript-eslint/no-extraneous-class': 'off',
+            '@typescript-eslint/ban-ts-comment': 'off',
+            '@typescript-eslint/no-dynamic-delete': 'off',
             '@typescript-eslint/explicit-function-return-type': 'error',
             '@typescript-eslint/no-explicit-any': 'error',
-            '@typescript-eslint/no-unused-vars': 'error',
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                },
+            ],
             complexity: ['error', 4],
             'max-params': ['error', 4],
             'no-console': 'error',

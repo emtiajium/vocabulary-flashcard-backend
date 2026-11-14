@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, DynamicModule, INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as basicAuth from 'express-basic-auth';
+import cookieParser from 'cookie-parser';
+import basicAuth from 'express-basic-auth';
 import * as fs from 'node:fs';
 import AppModule from '@/AppModule';
 import ServiceConfig from '@/common/configs/ServiceConfig';
@@ -48,12 +48,12 @@ export class Bootstrap {
         const { allowedOrigins } = this.serviceConfig;
 
         this.app.enableCors({
-            origin: (origin, callback) => {
+            origin: (origin: string, callback: (arg0: Error | null, arg1: boolean | undefined) => void) => {
                 if (!origin || allowedOrigins.includes(origin)) {
                     callback(null, true);
                 } else {
                     this.app.get(Logger).warn(`NOT OK || origin ${origin}`, 'CORS');
-                    callback(new Error(`Don't mess this up`));
+                    callback(new Error(`Don't mess this up`), false);
                 }
             },
         });

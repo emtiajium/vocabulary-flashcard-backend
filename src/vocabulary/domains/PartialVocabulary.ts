@@ -1,8 +1,8 @@
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
-import * as _ from 'lodash';
 import { v4 as uuidV4 } from 'uuid';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
+import { cloneDeep, map } from 'lodash';
 
 type PartialDefinition = Required<Pick<Definition, 'meaning' | 'examples' | 'notes' | 'externalLinks'>>;
 type VocabularyWithoutDefinitions = Required<
@@ -13,14 +13,14 @@ type PartialVocabulary = Required<VocabularyWithoutDefinitions & { definitions: 
 export default PartialVocabulary;
 
 export function createVocabularies(cohortId: string, vocabularies: PartialVocabulary[]): Vocabulary[] {
-    return _.map(_.cloneDeep(vocabularies), (vocabulary) => {
+    return map(cloneDeep(vocabularies), (vocabulary) => {
         const vocabularyId = uuidV4();
-        // plainToClass() to make @Transform() works
-        return plainToClass(Vocabulary, {
+        // plainToInstance() to make @Transform() works
+        return plainToInstance(Vocabulary, {
             ...vocabulary,
             id: vocabularyId,
             cohortId,
-            definitions: _.map(vocabulary.definitions, (definition) => {
+            definitions: map(vocabulary.definitions, (definition) => {
                 return {
                     ...definition,
                     id: uuidV4(),
