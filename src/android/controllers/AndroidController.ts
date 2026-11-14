@@ -14,7 +14,7 @@ export default class AndroidController {
     }
 
     @Get()
-    fetch(): Promise<Android> {
+    fetch(): Promise<Android | null> {
         return this.androidService.fetch();
     }
 }

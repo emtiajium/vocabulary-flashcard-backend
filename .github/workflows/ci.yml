@@ -5,14 +5,14 @@ on: [push, pull_request]
 jobs:
     # Fast, static checks. No database is needed.
     static-checks:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-26.04
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: Use Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version-file: .nvmrc
                   cache: npm
@@ -26,12 +26,11 @@ jobs:
             - name: ESLint
               run: npm run lint:check
 
-            # The production dependency set must be enough to build the service.
             - name: Build
-              run: npm ci --omit dev && npm run build
+              run: npm run build
 
     tests:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-26.04
 
         services:
             postgres:
@@ -53,10 +52,10 @@ jobs:
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: Use Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version-file: .nvmrc
                   cache: npm
@@ -74,7 +73,7 @@ jobs:
               run: npm run test
 
     tag:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-26.04
         needs: [static-checks, tests]
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         permissions:
@@ -82,7 +81,7 @@ jobs:
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: Read version from package.json
               id: version

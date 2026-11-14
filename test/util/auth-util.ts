@@ -1,15 +1,15 @@
 import User from '@/user/domains/User';
 import { sign, Algorithm } from 'jsonwebtoken';
-import * as fs from 'fs';
-import { classToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 import { ConfigService } from '@nestjs/config';
+import { readFileSync } from 'node:fs';
 
 // to encode a jwt: https://jwt.io/
 // to generate a private key: https://dinochiesa.github.io/jwt/
 // Google generated jwt details: https://developers.google.com/identity/gsi/web/reference/js-reference
 
 export default function generateJwToken(user: User): string {
-    const plainUser = classToPlain({
+    const plainUser = instanceToPlain({
         ...user,
         email: user.username,
         email_verified: true,
@@ -19,7 +19,7 @@ export default function generateJwToken(user: User): string {
         picture: user.profilePictureUrl,
     });
     const algorithm: Algorithm = 'RS256';
-    const privateKey = fs.readFileSync(`${process.cwd()}/test/private.key`);
+    const privateKey = readFileSync(`${process.cwd()}/test/private.key`);
     // https://github.com/nodejs/node/issues/43132#issuecomment-1131856552
     return sign(plainUser, privateKey, {
         algorithm,

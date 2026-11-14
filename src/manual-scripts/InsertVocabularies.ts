@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { validateOrReject } from 'class-validator';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import Definition from '@/vocabulary/domains/Definition';
@@ -6,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { createVocabularies } from '@/vocabulary/domains/PartialVocabulary';
 import vocabularyList from './vocabulary-list';
 import DataSource from '@/common/persistence/TypeormConfig';
+import { map } from 'lodash';
 
 export default class InsertVocabularies {
     private cohortId: string;
@@ -56,7 +56,7 @@ export default class InsertVocabularies {
 
     private async persist(): Promise<void> {
         await Promise.all(
-            _.map(this.vocabularies, (vocabulary) => {
+            map(this.vocabularies, (vocabulary) => {
                 const vocabularyInstance = Vocabulary.populateDefinitions(vocabulary);
                 return DataSource.getRepository(Vocabulary).save(vocabularyInstance);
             }),

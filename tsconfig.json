@@ -1,22 +1,26 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "declaration": true,
-        "removeComments": true,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
-        "target": "es2020",
-        "sourceMap": true,
-        "outDir": "./dist",
-        "baseUrl": "./",
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "incremental": true,
-        "resolveJsonModule": true,
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "./dist",
         "paths": {
             "@/*": ["./src/*"],
-            "@test/*": ["./test/*"],
-            "@root/*": ["./*"]
-        }
+            "@root/*": ["./*"],
+            "@test/*": ["./test/*"]
+        },
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "strict": true,
+        "strictNullChecks": false,
+        "strictPropertyInitialization": false,
+        "target": "es2020",
+        "types": ["node", "jest"]
     }
 }

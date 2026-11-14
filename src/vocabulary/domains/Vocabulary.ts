@@ -13,18 +13,18 @@ import {
     ValidateNested,
 } from 'class-validator';
 import Definition from '@/vocabulary/domains/Definition';
-import { plainToClass, Transform, Type } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import Cohort from '@/user/domains/Cohort';
-import * as _ from 'lodash';
 import BaseEntityWithMandatoryId from '@/common/persistence/BaseEntityWithMandatoryId';
 import { ApiHideProperty } from '@nestjs/swagger';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
+import { capitalize, isEmpty, map } from 'lodash';
 
 @Entity('Vocabulary')
 @Unique(['word', 'cohortId'])
 export default class Vocabulary extends BaseEntityWithMandatoryId {
     @Column({ type: 'varchar' })
-    @Transform(({ value }) => _.capitalize(value).trim())
+    @Transform(({ value }) => capitalize(value).trim())
     @IsNotEmpty()
     @IsString()
     @IsDefined()
@@ -43,7 +43,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     genericExternalLinks?: string[];
 
     @Column({ type: 'varchar', array: true, default: [] })
-    @Transform(({ value }) => _.map(value, (linkerWord) => _.capitalize(linkerWord)))
+    @Transform(({ value }) => map(value, (linkerWord) => capitalize(linkerWord)))
     @IsArray()
     @IsOptional()
     linkerWords?: string[];
@@ -53,7 +53,7 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     isDraft: boolean;
 
     @OneToMany(() => Definition, (definition) => definition.vocabulary, { eager: false, cascade: true })
-    @ValidateIf((vocabulary) => vocabulary.isDraft === false || _.isEmpty(vocabulary.definitions) === false)
+    @ValidateIf((vocabulary) => vocabulary.isDraft === false || !isEmpty(vocabulary.definitions))
     @ValidateNested({ each: true })
     @ArrayNotEmpty()
     @IsArray()
@@ -86,8 +86,8 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
     isInLeitnerBox?: boolean;
 
     static populateDefinitions(vocabulary: Vocabulary): Vocabulary {
-        const vocabularyInstance = plainToClass(Vocabulary, vocabulary);
-        if (!_.isEmpty(vocabulary.definitions)) {
+        const vocabularyInstance = plainToInstance(Vocabulary, vocabulary);
+        if (!isEmpty(vocabulary.definitions)) {
             vocabularyInstance.isDraft = false;
             vocabularyInstance.definitions = vocabulary.definitions.map((definition) =>
                 Definition.create(vocabulary.id, definition),
@@ -100,9 +100,12 @@ export default class Vocabulary extends BaseEntityWithMandatoryId {
         if (vocabulary.cohortId) {
             delete vocabulary.cohortId;
         }
+
         if (vocabulary.cohort?.id) {
-            delete vocabulary.cohort.id;
+            const { id: _id, ...cohortWithoutId } = vocabulary.cohort;
+            vocabulary.cohort = cohortWithoutId as Cohort;
         }
+
         return vocabulary;
     }
 }

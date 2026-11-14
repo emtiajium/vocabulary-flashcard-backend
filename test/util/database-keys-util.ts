@@ -3,28 +3,37 @@ import { ForeignKeyMetadata } from 'typeorm/metadata/ForeignKeyMetadata';
 import { IndexMetadata } from 'typeorm/metadata/IndexMetadata';
 import { UniqueMetadata } from 'typeorm/metadata/UniqueMetadata';
 import DataSource from '@/common/persistence/TypeormConfig';
+import { EntityMetadata } from 'typeorm';
 
 export function getTableNames(): string[] {
     return DataSource.entityMetadatas.map((metadata) => metadata.tableName);
 }
 
 export function getPrimaryColumnsMetadata(tableName: string): ColumnMetadata[] {
-    const { primaryColumns } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { primaryColumns } = DataSource.entityMetadatas.find(
+        (metadata) => metadata.tableName === tableName,
+    ) as EntityMetadata;
     return primaryColumns;
 }
 
 export function getForeignKeysMetadata(tableName: string): ForeignKeyMetadata[] {
-    const { foreignKeys } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { foreignKeys } = DataSource.entityMetadatas.find(
+        (metadata) => metadata.tableName === tableName,
+    ) as EntityMetadata;
     return foreignKeys;
 }
 
 export function getIndexMetadata(tableName: string): IndexMetadata[] {
-    const { indices } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { indices } = DataSource.entityMetadatas.find(
+        (metadata) => metadata.tableName === tableName,
+    ) as EntityMetadata;
     return indices;
 }
 
 export function getUniqueMetadata(tableName: string): UniqueMetadata[] {
-    const { uniques } = DataSource.entityMetadatas.find((metadata) => metadata.tableName === tableName);
+    const { uniques } = DataSource.entityMetadatas.find(
+        (metadata) => metadata.tableName === tableName,
+    ) as EntityMetadata;
     return uniques;
 }
 

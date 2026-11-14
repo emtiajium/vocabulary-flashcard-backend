@@ -2,7 +2,7 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { INestApplication } from '@nestjs/common';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
-import * as request from 'supertest';
+import request from 'supertest';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort, { cohortNameSize } from '@/user/domains/Cohort';
 import getCohortByName, {

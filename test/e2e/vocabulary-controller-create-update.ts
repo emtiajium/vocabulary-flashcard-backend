@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
-import * as request from 'supertest';
+import request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
@@ -21,9 +21,9 @@ import { createApiRequester } from '@test/util/user-util';
 import generateJwToken from '@test/util/auth-util';
 import { createItem } from '@test/util/leitner-systems-util';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
-import * as _ from 'lodash';
 import { setTimeout } from 'node:timers/promises';
 import DataSource from '@/common/persistence/TypeormConfig';
+import { capitalize } from 'lodash';
 
 describe('/v1/vocabularies', () => {
     let app: INestApplication;
@@ -178,7 +178,6 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.isDraft = true;
                 payload.word = `Word_${uuidV4()}`;
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 payload.genericExternalLinks = 'NOT_AN_ARRAY';
                 payload.definitions = [];
@@ -270,8 +269,7 @@ describe('/v1/vocabularies', () => {
                     ...getBaseDefinitionPayloadWithoutRelations(payload.id),
                     externalLinks: 'NOT_AN_ARRAY',
                 };
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                // @ts-expect-error
                 payload.definitions = [definition];
                 const { status } = await makeApiRequest(payload);
                 expect(status).toBe(400);
@@ -306,6 +304,7 @@ describe('/v1/vocabularies', () => {
                 payload.id = uuidV4();
                 payload.isDraft = false;
                 payload.word = `Word_${uuidV4()}`;
+                // @ts-expect-error
                 const definition = { ...getBaseDefinitionPayloadWithoutRelations(payload.id), examples: [] };
                 payload.definitions = [definition as Definition];
                 const { status } = await makeApiRequest(payload);
@@ -380,7 +379,7 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
 
                 const vocabulary = body as Vocabulary;
-                expect(vocabulary.word).toBe(_.capitalize(payload.word));
+                expect(vocabulary.word).toBe(capitalize(payload.word));
             });
 
             it('SHOULD return 201 CREATED with capitalized linker words', async () => {
@@ -396,8 +395,8 @@ describe('/v1/vocabularies', () => {
                 expect(status).toBe(201);
 
                 const vocabulary = body as Vocabulary;
-                expect(vocabulary.linkerWords[0]).toBe(_.capitalize('Lower 1'));
-                expect(vocabulary.linkerWords[1]).toBe(_.capitalize('Lower 2'));
+                expect(vocabulary.linkerWords[0]).toBe(capitalize('Lower 1'));
+                expect(vocabulary.linkerWords[1]).toBe(capitalize('Lower 2'));
             });
 
             it('SHOULD return 201 CREATED for payload WHEN definitions[x].externalLinks is not defined', async () => {

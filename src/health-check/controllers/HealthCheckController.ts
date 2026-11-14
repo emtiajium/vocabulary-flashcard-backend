@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiSecurity } from '@nestjs/swagger';
-import { HealthCheck, HealthIndicatorResult, TypeOrmHealthIndicator } from '@nestjs/terminus';
+import { HealthCheck, HealthCheckAttempt, TypeOrmHealthIndicator } from '@nestjs/terminus';
 
 @Controller('/v1/health')
 @ApiSecurity('Authorization')
@@ -9,7 +9,7 @@ export default class HealthCheckController {
 
     @Get()
     @HealthCheck()
-    check(): Promise<HealthIndicatorResult> {
+    check(): HealthCheckAttempt<'database'> {
         return this.typeOrmHealthIndicator.pingCheck('database');
     }
 }

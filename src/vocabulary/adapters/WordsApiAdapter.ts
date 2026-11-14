@@ -1,5 +1,4 @@
 import { HttpService } from '@nestjs/axios';
-import { AxiosResponse } from 'axios';
 import { ObjectLiteral } from '@/common/types/ObjectLiteral';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { RandomlyChosenMeaningResponse } from '@/vocabulary/domains/RandomlyChosenMeaningResponse';
@@ -8,6 +7,8 @@ import { capitalize, shuffle, times } from 'lodash';
 import safeStringify from 'fast-safe-stringify';
 import { getRandomArrayItem } from '@/common/utils/array-util';
 import { setTimeout } from 'node:timers/promises';
+import { firstValueFrom } from 'rxjs';
+import { AxiosRequestConfig } from 'axios';
 
 const oneSecondInMilliSeconds = 1000;
 
@@ -26,8 +27,8 @@ export default class WordsApiAdapter {
 
         const randomlyChosenMeaningResponses: RandomlyChosenMeaningResponse[] = [];
         const numberOfRandomWords = 10;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for (const whatever of times(numberOfRandomWords)) {
+            void whatever;
             randomlyChosenMeaningResponses.push(...(await this.getRandomWord()));
         }
         return shuffle(randomlyChosenMeaningResponses);
@@ -48,7 +49,7 @@ export default class WordsApiAdapter {
                 },
             });
 
-            return response.results.map((result) => {
+            return response.results.map((result: { definition: string }) => {
                 return {
                     meaning: result.definition,
                     word: capitalize(response.word),
@@ -56,7 +57,10 @@ export default class WordsApiAdapter {
             });
         } catch (error) {
             const maxRetry = 3;
-            if (error.status === HttpStatus.TOO_MANY_REQUESTS && retries < maxRetry) {
+            if (
+                (error as Error & { status: HttpStatus }).status === HttpStatus.TOO_MANY_REQUESTS &&
+                retries < maxRetry
+            ) {
                 await setTimeout(oneSecondInMilliSeconds);
                 return this.getRandomWord(retries + 1);
             }
@@ -67,8 +71,8 @@ export default class WordsApiAdapter {
         }
     }
 
-    private async get<UOptions, VResponse>(url: string, options?: UOptions): Promise<VResponse> {
-        const response: AxiosResponse<VResponse> = await this.httpService.get(url, options).toPromise();
-        return response.data;
+    private async get<UOptions, VResponse>(url: string, options: UOptions): Promise<VResponse> {
+        const response = await firstValueFrom(this.httpService.get(url, options as AxiosRequestConfig<UOptions>));
+        return response?.data as VResponse;
     }
 }

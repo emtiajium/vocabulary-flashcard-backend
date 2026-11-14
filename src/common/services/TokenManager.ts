@@ -47,7 +47,7 @@ export default class TokenManager {
         return loginTicket.getPayload();
     }
 
-    private handleTokenDecodingException(error: Error | string): void {
+    private handleTokenDecodingException(error: unknown): never {
         this.logger.error(`Error while verifying the token`, error instanceof Error ? safeStringify(error) : error);
         throw new ForbiddenException();
     }

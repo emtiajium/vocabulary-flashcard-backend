@@ -17,9 +17,17 @@ export default class DatabaseNamingStrategy extends DefaultNamingStrategy implem
     ): string {
         const referencingTableName = this.getTableName(referencingTableOrName);
 
-        const referencingReferencedGroup = referencingColumnNames.map((referencingColumn, index) => {
-            return `${referencingTableName}_${referencingColumn}_${referencedTablePath}_${referencedColumnNames[index]}`;
-        });
+        const referencingReferencedGroup: string[] = referencingColumnNames.map(
+            (referencingColumn: string, index: number): string => {
+                const referencedColumn = referencedColumnNames?.[index];
+
+                if (typeof referencedColumn === 'undefined') {
+                    throw new Error('Referenced column name is missing');
+                }
+
+                return `${referencingTableName}_${referencingColumn}_${referencedTablePath}_${referencedColumn}`;
+            },
+        );
 
         return `FK_${referencingReferencedGroup.join('_')}`;
     }

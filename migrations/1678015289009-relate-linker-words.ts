@@ -30,7 +30,7 @@ export default class RelateLinkerWords1678015289009 implements MigrationInterfac
                 (vocabularyHavingLinkerWords) =>
                     vocabularyHavingLinkerWords.cohortId === vocabulary.cohortId &&
                     vocabularyHavingLinkerWords.linkerWords
-                        .map((_) => _.toLowerCase())
+                        .map((linkerWord) => linkerWord.toLowerCase())
                         .includes(vocabulary.word.toLowerCase()),
             );
 
@@ -47,8 +47,7 @@ export default class RelateLinkerWords1678015289009 implements MigrationInterfac
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async down(queryRunner: QueryRunner): Promise<void> {
-        // do nothing
+        void queryRunner;
     }
 }

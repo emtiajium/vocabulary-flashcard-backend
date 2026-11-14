@@ -3,6 +3,7 @@ import SearchResult from '@/common/domains/SearchResult';
 describe('SearchResult: omitTotal', () => {
     test('undefined', () => {
         // Arrange
+        // @ts-expect-error
         const rawResults = undefined;
         const nameHoldingTotalRows = 'total';
 
@@ -16,6 +17,7 @@ describe('SearchResult: omitTotal', () => {
 
     test('null', () => {
         // Arrange
+        // @ts-expect-error
         const rawResults = null;
         const nameHoldingTotalRows = 'total';
 
@@ -29,10 +31,12 @@ describe('SearchResult: omitTotal', () => {
 
     test('empty array', () => {
         // Arrange
+        // @ts-expect-error
         const rawResults = [];
         const nameHoldingTotalRows = 'total';
 
         // Act
+        // @ts-expect-error
         const searchResult = SearchResult.omitTotal(rawResults, nameHoldingTotalRows);
 
         // Assert
@@ -49,6 +53,7 @@ describe('SearchResult: omitTotal', () => {
         const nameHoldingTotalRows = 'total';
 
         // Act
+        // @ts-expect-error
         const searchResult = SearchResult.omitTotal(rawResults, nameHoldingTotalRows);
 
         // Assert

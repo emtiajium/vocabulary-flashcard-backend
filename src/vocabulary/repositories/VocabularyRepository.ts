@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
@@ -13,11 +13,12 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         super(Vocabulary, dataSource.createEntityManager());
     }
 
+    // eslint-disable-next-line complexity
     async insertOrUpdate(vocabulary: Vocabulary): Promise<Vocabulary> {
         try {
             return await this.save(vocabulary);
         } catch (error) {
-            if (error.constraint === 'UQ_Vocabulary_word_cohortId') {
+            if (error instanceof QueryFailedError && error.driverError?.constraint === 'UQ_Vocabulary_word_cohortId') {
                 throw new ConflictException(`"${vocabulary.word}" already exists. Please update it.`);
             }
             throw error;
@@ -82,10 +83,10 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
                     and "leitnerSystems"."userId" = $1
                 where
                     vocabulary."cohortId" = $2 ${this.getSearchQuery(
-                                            searchKeyword || '',
-                                            vocabularySearchCoverage,
-                                            searchKeywordParameterPosition,
-                                        )} ${this.getFilteringQuery(fetchNotHavingDefinitionOnly, fetchFlashcard)}
+                        searchKeyword || '',
+                        vocabularySearchCoverage,
+                        searchKeywordParameterPosition,
+                    )} ${this.getFilteringQuery(fetchNotHavingDefinitionOnly, fetchFlashcard)}
                 group by
                     vocabulary.id,
                     vocabulary."${sortField}"
@@ -116,7 +117,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             return ``;
         }
 
-        const searchBuilder = {
+        const searchBuilder: Record<string, string> = {
             word: `(vocabulary.word ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(vocabulary.word, '')) @@ plainto_tsquery($${queryParameterPosition}))`,
             linkerWords: `(vocabulary."linkerWords"::TEXT ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(vocabulary."linkerWords"::TEXT, '')) @@ plainto_tsquery($${queryParameterPosition}))`,
             genericNotes: `(vocabulary."genericNotes"::TEXT ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(vocabulary."genericNotes"::TEXT, '')) @@ plainto_tsquery($${queryParameterPosition}))`,
@@ -125,9 +126,8 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
             notes: `(definition.notes::TEXT ILIKE '%' || $${queryParameterPosition} || '%' or to_tsvector(coalesce(definition.notes::TEXT, '')) @@ plainto_tsquery($${queryParameterPosition}))`,
         };
 
-        Object.keys(searchBuilder).forEach((key) => {
+        (Object.keys(searchBuilder) as (keyof VocabularySearchCoverage)[]).forEach((key) => {
             if (!vocabularySearchCoverage[key]) {
-                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                 delete searchBuilder[key];
             }
         });
@@ -271,7 +271,7 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         return queryResult[0];
     }
 
-    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
+    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | null> {
         return this.createQueryBuilder('vocabulary')
             .where(`LOWER(vocabulary.word) = :word`, { word: word.toLowerCase().trim() })
             .andWhere(`vocabulary.cohortId = :cohortId`, { cohortId })

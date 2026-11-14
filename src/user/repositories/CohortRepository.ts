@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import Cohort from '@/user/domains/Cohort';
 import EntityNotFoundException from '@/common/exceptions/EntityNotFoundException';
 import { ConflictException, Injectable } from '@nestjs/common';
@@ -9,6 +9,7 @@ export default class CohortRepository extends Repository<Cohort> {
         super(Cohort, dataSource.createEntityManager());
     }
 
+    // eslint-disable-next-line complexity
     async insertIfNotExists(cohort: Cohort): Promise<Cohort> {
         let savedCohort: Cohort;
         try {
@@ -20,7 +21,7 @@ export default class CohortRepository extends Repository<Cohort> {
 
             savedCohort = insertResult.generatedMaps[0] as Cohort;
         } catch (error) {
-            if (error.constraint === 'UQ_Cohort_name') {
+            if (error instanceof QueryFailedError && error.driverError?.constraint === 'UQ_Cohort_name') {
                 throw new ConflictException(`Cohort with name "${cohort.name}" already exists`);
             }
             throw error;
@@ -29,8 +30,7 @@ export default class CohortRepository extends Repository<Cohort> {
     }
 
     async getCohortByName(name: string): Promise<Cohort> {
-        // findOneOrFail() is not working as expected
-        const cohort: Cohort = await this.findOneBy({ name });
+        const cohort = await this.findOneBy({ name });
         if (!cohort) {
             throw new EntityNotFoundException(`Cohort with name "${name}" does not exist`);
         }

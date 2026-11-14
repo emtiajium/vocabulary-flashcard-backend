@@ -4,7 +4,7 @@ import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import { createApiRequester } from '@test/util/user-util';
 import SupertestResponse, { SupertestErrorResponse } from '@test/util/supertest-util';
-import * as request from 'supertest';
+import request from 'supertest';
 import { v4 as uuidV4 } from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';

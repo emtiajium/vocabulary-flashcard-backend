@@ -42,8 +42,7 @@ const vocabularyList: PartialVocabulary[] = [
         word: 'Juxtaposition',
         definitions: [
             {
-                meaning:
-                    'an act or instance of placing two elements close together or side by side (তুলনা করার বিদ্যা)',
+                meaning: 'an act or instance of placing two elements close together or side by side (তুলনা করার বিদ্যা)',
                 examples: ['The juxtaposition of the colour images stimulates the imagination.'],
                 notes: ['নাবিলা লিটল প্রিন্স ছাতার পাশে কলম রেখে ছবি তুলেছিল ছাতাটা কতটা ছোট সেটা তুলনা করার জন্য'],
                 externalLinks: [],
@@ -1138,8 +1137,7 @@ const vocabularyList: PartialVocabulary[] = [
         word: 'Tumultuous',
         definitions: [
             {
-                meaning:
-                    'Full of confusion, change, or uncertainty বিক্ষোভপূর্ণ, আলোড়নপূর্ণ, দাঙ্গাপূর্ণ, সংশয়পূর্ণ',
+                meaning: 'Full of confusion, change, or uncertainty বিক্ষোভপূর্ণ, আলোড়নপূর্ণ, দাঙ্গাপূর্ণ, সংশয়পূর্ণ',
                 examples: ['After the tumultuous events of 1990, Europe was completely transformed.'],
                 notes: [],
                 externalLinks: [],

@@ -5,7 +5,7 @@ import User from '@/user/domains/User';
 const AuthenticatedUser = createParamDecorator((key: string, executionContext: ExecutionContext) => {
     const request = executionContext.switchToHttp().getRequest();
     const user = plainToInstance(User, request.user);
-    return key ? user[key] : user;
+    return key ? user[key as keyof User] : user;
 });
 
 export default AuthenticatedUser;

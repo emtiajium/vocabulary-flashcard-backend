@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { kickOff } from '@/bootstrap';
 import AppModule from '@/AppModule';
 import SupertestResponse from '@test/util/supertest-util';
-import * as request from 'supertest';
+import request from 'supertest';
 import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import Cohort from '@/user/domains/Cohort';

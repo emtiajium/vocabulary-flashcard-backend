@@ -35,24 +35,24 @@ export default class UserController {
     @Post('/all')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getUsers(@Body() reportRequest: ReportRequest): Promise<SearchResult<UserReport>> {
+        void reportRequest;
         return this.userService.getAll();
     }
 
     @Post('/using-leitner-systems')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getLeitnerLoverUsers(@Body() reportRequest: ReportRequest): Promise<LeitnerSystemsLoverUsersReport[]> {
+        void reportRequest;
         return this.userService.getLeitnerLoverUsers();
     }
 
     @Post('/active-users')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getRecentlyActiveUsers(@Body() reportRequest: ReportRequest): Pick<User, 'username'>[] {
+        void reportRequest;
         return this.userService.getRecentlyActiveUsers();
     }
 

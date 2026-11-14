@@ -156,7 +156,7 @@ export default class VocabularyService {
         return new SearchResult<Vocabulary>(vocabularies, vocabularies.length);
     }
 
-    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | undefined> {
+    assertExistenceByWord(id: string, word: string, cohortId: string): Promise<Partial<Vocabulary> | null> {
         return this.vocabularyRepository.assertExistenceByWord(id, word, cohortId);
     }
 
@@ -167,7 +167,8 @@ export default class VocabularyService {
             vocabularyIds.map(async (vocabularyId) => {
                 try {
                     await this.vocabularyRepository.updateCohortId(vocabularyId, newCohortId);
-                } catch (error) {
+                } catch (_error) {
+                    const error = _error as Error & { response: { name: string; word: string } };
                     if (error.response?.name === 'WordConflict') {
                         await this.vocabularyRepository.updateWord(
                             vocabularyId,

@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import CohortRepository from '@/user/repositories/CohortRepository';
 import UserRepository from '@/user/repositories/UserRepository';
-import * as _ from 'lodash';
 import Cohort from '@/user/domains/Cohort';
 import User from '@/user/domains/User';
 import VocabularyService from '@/vocabulary/services/VocabularyService';
 import CacheUserService from '@/user/services/CacheUserService';
+import { difference, isEmpty, map, uniq } from 'lodash';
 
 @Injectable()
 export default class CohortService {
@@ -48,7 +48,7 @@ export default class CohortService {
     private async assertUsers(usernames: string[]): Promise<User[]> {
         const users = await this.userRepository.getUsersByUsernames(usernames);
         if (users.length !== usernames.length) {
-            const nonExistingUsers = _.difference(usernames, _.map(users, 'username'));
+            const nonExistingUsers = difference(usernames, map(users, 'username'));
             throw new NotFoundException(this.getUsersNotFoundExceptionMessage(nonExistingUsers));
         }
         return users;
@@ -66,9 +66,9 @@ export default class CohortService {
                 currentCohortIds.push(user.cohortId);
             }
         });
-        currentCohortIds = _.uniq(currentCohortIds);
+        currentCohortIds = uniq(currentCohortIds);
 
-        if (!_.isEmpty(currentCohortIds)) {
+        if (!isEmpty(currentCohortIds)) {
             for (const currentCohortId of currentCohortIds) {
                 // I want to make sure they execute synchronously
                 await this.vocabularyService.updateCohort(currentCohortId, cohortId);

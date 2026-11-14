@@ -1,6 +1,6 @@
 import PartialVocabulary from '@/vocabulary/domains/PartialVocabulary';
 import vocabularyList from '@/manual-scripts/vocabulary-list';
-import * as _ from 'lodash';
+import { cloneDeep, filter, includes } from 'lodash';
 
 function getNewJoinerWordList(): string[] {
     return [
@@ -42,7 +42,7 @@ function getNewJoinerWordList(): string[] {
 }
 
 export default function getNewJoinerVocabularyList(): PartialVocabulary[] {
-    return _.filter(_.cloneDeep(vocabularyList), (vocabulary) => {
-        return _.includes(getNewJoinerWordList(), vocabulary.word);
+    return filter(cloneDeep(vocabularyList), (vocabulary) => {
+        return includes(getNewJoinerWordList(), vocabulary.word);
     });
 }

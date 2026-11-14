@@ -8,7 +8,7 @@ import { createCohort, removeCohortsWithRelationsByIds } from '@test/util/cohort
 import { createVocabulary, getVocabularyWithDefinitions } from '@test/util/vocabulary-util';
 import { createItem, removeLeitnerBoxItems, updateItem } from '@test/util/leitner-systems-util';
 import SupertestResponse from '@test/util/supertest-util';
-import * as request from 'supertest';
+import request from 'supertest';
 import * as uuid from 'uuid';
 import getAppAPIPrefix from '@test/util/service-util';
 import generateJwToken from '@test/util/auth-util';

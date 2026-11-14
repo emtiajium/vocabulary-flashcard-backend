@@ -10,7 +10,7 @@
 
 ###### Prerequisites
 
-➜ Install Node 22.23.4 using [nvm](https://github.com/nvm-sh/nvm)
+➜ Install Node 26.13.1 using [nvm](https://github.com/nvm-sh/nvm)
 
 ➜ Install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/)
 
@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.54.0`: Node@26 + Nest@12
 - `1.59.0`: Reverted 1.57.0
 - `1.58.0`: Guessing game: a new round once today's round has been completed
 - `1.57.1`: Fixed the vocabulary search that failed on a multi-word keyword
