@@ -26,9 +26,8 @@ jobs:
             - name: ESLint
               run: npm run lint:check
 
-            # The production dependency set must be enough to build the service.
             - name: Build
-              run: npm ci --omit dev && npm run build
+              run: npm run build
 
     tests:
         runs-on: ubuntu-latest
