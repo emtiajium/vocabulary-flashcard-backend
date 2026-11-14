@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import Vocabulary from '@/vocabulary/domains/Vocabulary';
 import VocabularySearchRequest from '@/vocabulary/domains/VocabularySearchRequest';
 import SearchResult from '@/common/domains/SearchResult';
@@ -13,11 +13,12 @@ export default class VocabularyRepository extends Repository<Vocabulary> {
         super(Vocabulary, dataSource.createEntityManager());
     }
 
+    // eslint-disable-next-line complexity
     async insertOrUpdate(vocabulary: Vocabulary): Promise<Vocabulary> {
         try {
             return await this.save(vocabulary);
         } catch (error) {
-            if (error.constraint === 'UQ_Vocabulary_word_cohortId') {
+            if (error instanceof QueryFailedError && error.driverError?.constraint === 'UQ_Vocabulary_word_cohortId') {
                 throw new ConflictException(`"${vocabulary.word}" already exists. Please update it.`);
             }
             throw error;

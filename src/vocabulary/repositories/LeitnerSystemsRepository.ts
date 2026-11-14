@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import LeitnerSystems from '@/vocabulary/domains/LeitnerSystems';
 import LeitnerBoxType from '@/vocabulary/domains/LeitnerBoxType';
 import SearchResult from '@/common/domains/SearchResult';
@@ -14,11 +14,15 @@ export default class LeitnerSystemsRepository extends Repository<LeitnerSystems>
         super(LeitnerSystems, dataSource.createEntityManager());
     }
 
+    // eslint-disable-next-line complexity
     async insertOrUpdate(leitnerSystems: LeitnerSystems): Promise<LeitnerSystems> {
         try {
             return await this.save(leitnerSystems);
         } catch (error) {
-            if (error.constraint === 'UQ_LeitnerSystems_userId_vocabularyId') {
+            if (
+                error instanceof QueryFailedError &&
+                error.driverError?.constraint === 'UQ_LeitnerSystems_userId_vocabularyId'
+            ) {
                 throw new ConflictException(
                     `You already made a flashcard with this vocabulary.`,
                     `Vocabulary with ID "${leitnerSystems.vocabularyId}" for the user "${leitnerSystems.userId}" is already exist`,

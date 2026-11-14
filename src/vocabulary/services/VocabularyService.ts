@@ -167,7 +167,8 @@ export default class VocabularyService {
             vocabularyIds.map(async (vocabularyId) => {
                 try {
                     await this.vocabularyRepository.updateCohortId(vocabularyId, newCohortId);
-                } catch (error) {
+                } catch (_error) {
+                    const error = _error as Error & { response: { name: string; word: string } };
                     if (error.response?.name === 'WordConflict') {
                         await this.vocabularyRepository.updateWord(
                             vocabularyId,
