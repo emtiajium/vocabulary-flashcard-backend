@@ -71,8 +71,8 @@ export default class WordsApiAdapter {
         }
     }
 
-    private async get<UOptions, VResponse>(url: string, options: UOptions): Promise<VResponse> {
-        const response = await firstValueFrom(this.httpService.get(url, options as AxiosRequestConfig<UOptions>));
-        return response?.data as VResponse;
+    private async get<UOptions, VResponse>(url: string, options?: AxiosRequestConfig<UOptions>): Promise<VResponse> {
+        const response = await firstValueFrom(this.httpService.get<VResponse>(url, options));
+        return response.data;
     }
 }
