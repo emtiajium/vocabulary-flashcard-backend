@@ -1,4 +1,4 @@
-import { Controller, Post, Res, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthSessionService } from '@/user/services/AuthSessionService';
 import { AuthCookieService } from '@/user/services/AuthCookieService';
@@ -6,6 +6,7 @@ import { RefreshAuthToken } from '@/common/http/AuthToken';
 import { TokenResponse } from '@/user/domains/TokenResponse';
 import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import User from '@/user/domains/User';
+import AuthGuard from '@/common/guards/AuthGuard';
 
 @Controller('/v1/auth')
 export class AuthController {
@@ -15,6 +16,7 @@ export class AuthController {
     ) {}
 
     @Post('/refresh')
+    @UseGuards(AuthGuard)
     async refresh(
         @Res({ passthrough: true }) response: Response,
         @RefreshAuthToken() refreshToken: string,
@@ -26,7 +28,7 @@ export class AuthController {
 
         const token = await this.authSessionService.refresh(refreshToken);
 
-        if (token.userId !== user.id || token.username !== user.username) {
+        if (token.username !== user.username) {
             await this.authSessionService.revoke(token.refreshToken);
             throw new UnauthorizedException();
         }
