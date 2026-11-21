@@ -1,4 +1,4 @@
-import { ForbiddenException, INestApplication } from '@nestjs/common';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
 import request from 'supertest';
 import { kickOff } from '@/bootstrap';
 import getAppAPIPrefix from '@test/util/service-util';
@@ -86,12 +86,12 @@ describe('/v1/users', () => {
                 decodeJwTokenV2Mock.mockRestore();
             });
 
-            it('SHOULD return 403 FORBIDDEN WHEN the token is invalid', async () => {
+            it('SHOULD return 401 Unauthorized WHEN the token is invalid', async () => {
                 // Arrange
                 const decodeJwTokenV2Mock = jest
                     .spyOn(TokenManager.prototype, 'decodeJwTokenV2')
                     .mockImplementation(() => {
-                        throw new ForbiddenException();
+                        throw new UnauthorizedException();
                     });
 
                 const user = getBasePayload();
@@ -100,7 +100,7 @@ describe('/v1/users', () => {
                 const { status } = await makeApiRequest(user);
 
                 // Assert
-                expect(status).toBe(403);
+                expect(status).toBe(401);
                 expect(decodeJwTokenV2Mock).toHaveBeenCalled();
 
                 // Post Assert

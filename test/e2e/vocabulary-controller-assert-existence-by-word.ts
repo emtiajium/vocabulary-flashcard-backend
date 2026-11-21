@@ -57,14 +57,14 @@ describe('/v1/vocabularies/:id/assert-existence/words/:word', () => {
             .set('Authorization', `Bearer ${generateJwToken(requester)}`);
     }
 
-    it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
+    it('SHOULD return 401 Unauthorized WHEN JWT is missing', async () => {
         // Act
         const { status } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/vocabularies/${uuid.v4()}/assert-existence/words/hello`)
             .send();
 
         // Assert
-        expect(status).toBe(403);
+        expect(status).toBe(401);
     });
 
     describe('API call before creating vocabulary by the end-user', () => {

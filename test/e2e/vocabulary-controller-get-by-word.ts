@@ -57,14 +57,14 @@ describe('/v1/vocabularies/words/:word', () => {
             .set('Authorization', `Bearer ${generateJwToken(requester)}`);
     }
 
-    it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
+    it('SHOULD return 401 Unauthorized WHEN JWT is missing', async () => {
         // Act
         const { status } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/vocabularies/words/hello`)
             .send();
 
         // Assert
-        expect(status).toBe(403);
+        expect(status).toBe(401);
     });
 
     it('SHOULD return 200 OK WITH vocabulary WHEN the vocabulary with requested word exists: Case Insensitive I', async () => {

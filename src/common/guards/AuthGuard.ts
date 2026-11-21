@@ -36,6 +36,12 @@ export default class AuthGuard implements CanActivate {
         } catch {
             isValidUser = false;
         }
-        return isValidUser;
+
+        // When a NestJS guard returns false, Nest normally responds with 403 Forbidden, not 401 Unauthorized
+        if (!isValidUser) {
+            throw new UnauthorizedException();
+        }
+
+        return true;
     }
 }
