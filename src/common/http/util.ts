@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import ClientType from '@/common/domains/ClientType';
+import { ACCESS_COOKIE, REFRESH_COOKIE } from '@/user/services/AuthCookieService';
 
 export function getHeaders(request: Request): Record<string, unknown> {
     return request.headers;
@@ -24,7 +25,7 @@ export function getVersionCode(request: Request): number {
     return 0;
 }
 
-export function getJwToken(request: Request): string {
+function getBearerToken(request: Request): string {
     const authorizationHeader = getAuthorization(request);
     if (!authorizationHeader) {
         return '';
@@ -35,4 +36,23 @@ export function getJwToken(request: Request): string {
         return '';
     }
     return authorizationParts[1].trim();
+}
+
+export function getAccessToken(request: Request): string {
+    const cookieToken = request.cookies?.[ACCESS_COOKIE];
+
+    // Never silently fall back from an invalid cookie to a bearer token.
+    if (typeof cookieToken === 'string') {
+        return cookieToken;
+    }
+
+    return getBearerToken(request);
+}
+
+export function getRefreshToken(request: Request): string {
+    if (getClient(request) === ClientType.WEB) {
+        return request.cookies?.[REFRESH_COOKIE];
+    }
+
+    return getBearerToken(request);
 }
