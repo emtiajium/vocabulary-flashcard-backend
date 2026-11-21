@@ -14,6 +14,8 @@ import { AuthSessionService } from '@/user/services/AuthSessionService';
 import { AuthCookieService } from '@/user/services/AuthCookieService';
 import { plainToInstance } from 'class-transformer';
 import { pick } from 'lodash';
+import Client from '@/common/http/Client';
+import ClientType from '@/common/domains/ClientType';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
@@ -27,12 +29,16 @@ export default class UserController {
 
     @Post()
     async createUser(
+        @Client() clientType: ClientType,
         @Body('idToken') idToken: string,
         @Res({ passthrough: true }) response: Response,
     ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         const userResponse = await this.userService.createUser(idToken);
-        const token = await this.authSessionService.create(userResponse.id, userResponse.username);
-        this.authCookieService.set(response, token.accessToken, token.refreshToken);
+
+        if (clientType === ClientType.WEB) {
+            const token = await this.authSessionService.create(userResponse.id, userResponse.username);
+            this.authCookieService.set(response, token.accessToken, token.refreshToken);
+        }
 
         return {
             username: userResponse.username,
