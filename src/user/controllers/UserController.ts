@@ -73,8 +73,9 @@ export default class UserController {
 
     @Delete('/self')
     @UseGuards(AuthGuard)
-    async deleteUser(@AuthenticatedUser() user: User): Promise<void> {
+    async deleteUser(@AuthenticatedUser() user: User, @Res({ passthrough: true }) response: Response): Promise<void> {
         await this.deletionService.deleteData(user.id, user.cohortId);
+        this.authCookieService.clear(response);
     }
 
     @Get('/self')
