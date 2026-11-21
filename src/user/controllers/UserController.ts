@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
@@ -12,6 +12,8 @@ import DeletionService from '@/user/services/DeletionService';
 import AuthenticatedUser from '@/common/http/AuthenticatedUser';
 import { AuthSessionService } from '@/user/services/AuthSessionService';
 import { AuthCookieService } from '@/user/services/AuthCookieService';
+import { plainToInstance } from 'class-transformer';
+import { pick } from 'lodash';
 
 @Controller('/v1/users')
 @ApiSecurity('Authorization')
@@ -67,5 +69,11 @@ export default class UserController {
     @UseGuards(AuthGuard)
     async deleteUser(@AuthenticatedUser() user: User): Promise<void> {
         await this.deletionService.deleteData(user.id, user.cohortId);
+    }
+
+    @Get('/self')
+    @UseGuards(AuthGuard)
+    async getSelf(@AuthenticatedUser() user: User): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
+        return pick(plainToInstance(User, user), ['name', 'username', 'profilePictureUrl']);
     }
 }
