@@ -93,11 +93,11 @@ describe('/v1/cohorts/:name', () => {
             await removeCohortsWithRelationsByIds(cohortIds);
         });
 
-        it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
+        it('SHOULD return 401 Unauthorized WHEN JWT is missing', async () => {
             const { status } = await request(app.getHttpServer())
                 .put(`${getAppAPIPrefix()}/v1/cohorts/${uuidV4()}`)
                 .send();
-            expect(status).toBe(403);
+            expect(status).toBe(401);
         });
 
         it('SHOULD return 404 NOT_FOUND WHEN cohort does not exist', async () => {

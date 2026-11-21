@@ -1,10 +1,11 @@
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import unicorn from 'eslint-plugin-unicorn';
 
 export default defineConfig([
+    globalIgnores(['practice/scripts/*.ts']),
     eslint.configs.recommended,
     tseslint.configs.strict,
     tseslint.configs.stylistic,

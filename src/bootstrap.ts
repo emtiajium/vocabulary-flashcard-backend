@@ -56,6 +56,7 @@ export class Bootstrap {
                     callback(new Error(`Don't mess this up`), false);
                 }
             },
+            credentials: true,
         });
     }
 

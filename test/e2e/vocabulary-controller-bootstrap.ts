@@ -64,11 +64,11 @@ describe('/v1/vocabularies/bootstrap', () => {
         };
     }
 
-    it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
+    it('SHOULD return 401 Unauthorized WHEN JWT is missing', async () => {
         const { status } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/bootstrap`)
             .send();
-        expect(status).toBe(403);
+        expect(status).toBe(401);
     });
 
     it('SHOULD return 201 CREATED for the brand new user WITHOUT cohort ID as the API response', async () => {
