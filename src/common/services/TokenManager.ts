@@ -72,8 +72,8 @@ export default class TokenManager {
         return claims;
     }
 
-    legacyVerifyAccessToken(token: string): AccessClaims {
-        return this.decodeViaGoogle(token) as unknown as AccessClaims;
+    legacyVerifyAccessToken(token: string): Promise<DecodedToken> {
+        return this.decodeViaGoogle(token);
     }
 
     async decodeJwTokenV2(token: string): Promise<DecodedToken> {
@@ -107,7 +107,7 @@ export default class TokenManager {
         throw new UnauthorizedException();
     }
 
-    extractUsername = (accessClaims: AccessClaims): string => {
+    extractUsername = (accessClaims: AccessClaims | DecodedToken): string => {
         if (!accessClaims?.email) {
             throw new UnauthorizedException();
         }

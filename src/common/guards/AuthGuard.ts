@@ -2,7 +2,7 @@ import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import TokenManager, { AccessClaims } from '@/common/services/TokenManager';
+import TokenManager, { AccessClaims, DecodedToken } from '@/common/services/TokenManager';
 import { getAccessToken, getClient } from '@/common/http/util';
 import ClientType from '@/common/domains/ClientType';
 
@@ -13,7 +13,7 @@ export default class AuthGuard implements CanActivate {
         private readonly tokenManager: TokenManager,
     ) {}
 
-    private async decodeAccessToken(request: Request): Promise<AccessClaims> {
+    private async decodeAccessToken(request: Request): Promise<AccessClaims | DecodedToken> {
         const token = getAccessToken(request);
         if (!token) {
             throw new UnauthorizedException();

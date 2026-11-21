@@ -50,9 +50,5 @@ export function getAccessToken(request: Request): string {
 }
 
 export function getRefreshToken(request: Request): string {
-    if (getClient(request) === ClientType.WEB) {
-        return request.cookies?.[REFRESH_COOKIE];
-    }
-
-    return getBearerToken(request);
+    return request.cookies?.[REFRESH_COOKIE];
 }
