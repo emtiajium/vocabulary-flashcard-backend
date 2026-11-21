@@ -31,13 +31,15 @@ export class AuthSessionService {
         };
     }
 
-    async refresh(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
+    async refresh(
+        refreshToken: string,
+    ): Promise<{ accessToken: string; refreshToken: string; userId: string; username: string }> {
         const oldHash = this.tokenManager.hashRefreshToken(refreshToken);
         const newToken = this.tokenManager.createRefreshToken();
         const newHash = this.tokenManager.hashRefreshToken(newToken);
         const now = new Date();
 
-        // Atomic compare-and-swap: only one concurrent refresh wins.
+        // Atomic compare-and-swap: only one concurrent refresh wins
         const result = await this.authSessionRepository
             .createQueryBuilder()
             .update(AuthSession)
@@ -63,6 +65,8 @@ export class AuthSessionService {
         return {
             accessToken: this.tokenManager.createAccessToken(session.username, session.id),
             refreshToken: newToken,
+            userId: session.id,
+            username: session.username,
         };
     }
 

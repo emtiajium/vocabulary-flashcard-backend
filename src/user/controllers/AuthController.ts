@@ -4,8 +4,8 @@ import { AuthSessionService } from '@/user/services/AuthSessionService';
 import { AuthCookieService } from '@/user/services/AuthCookieService';
 import { RefreshAuthToken } from '@/common/http/AuthToken';
 import { TokenResponse } from '@/user/domains/TokenResponse';
-import Client from '@/common/http/Client';
-import ClientType from '@/common/domains/ClientType';
+import AuthenticatedUser from '@/common/http/AuthenticatedUser';
+import User from '@/user/domains/User';
 
 @Controller('/v1/auth')
 export class AuthController {
@@ -18,7 +18,7 @@ export class AuthController {
     async refresh(
         @Res({ passthrough: true }) response: Response,
         @RefreshAuthToken() refreshToken: string,
-        @Client() client: ClientType,
+        @AuthenticatedUser() user: User,
     ): Promise<{ success: boolean } & TokenResponse> {
         if (!refreshToken) {
             throw new UnauthorizedException();
@@ -26,15 +26,12 @@ export class AuthController {
 
         const token = await this.authSessionService.refresh(refreshToken);
 
-        this.authCookieService.set(response, token.accessToken, token.refreshToken);
-
-        if (client === ClientType.ANDROID_NATIVE) {
-            return {
-                success: true,
-                accessToken: token.accessToken,
-                refreshToken: token.refreshToken,
-            };
+        if (token.userId !== user.id || token.username !== user.username) {
+            await this.authSessionService.revoke(token.refreshToken);
+            throw new UnauthorizedException();
         }
+
+        this.authCookieService.set(response, token.accessToken, token.refreshToken);
 
         return {
             success: true,

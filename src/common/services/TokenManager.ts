@@ -1,7 +1,7 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import { decode, JwtPayload, sign, verify } from 'jsonwebtoken';
 import User from '@/user/domains/User';
 import safeStringify from 'fast-safe-stringify';
 import { createHash, randomBytes } from 'node:crypto';
@@ -70,6 +70,18 @@ export default class TokenManager {
         }
 
         return claims;
+    }
+
+    legacyVerifyAccessToken(token: string): AccessClaims {
+        let decodedToken: JwtPayload;
+
+        try {
+            decodedToken = decode(token, { json: true });
+        } catch (error) {
+            this.handleTokenDecodingException(error);
+        }
+
+        return decodedToken as unknown as AccessClaims;
     }
 
     async decodeJwTokenV2(token: string): Promise<DecodedToken> {

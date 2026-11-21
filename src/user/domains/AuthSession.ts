@@ -3,8 +3,8 @@ import User from '@/user/domains/User';
 import BaseEntityWithMandatoryId from '@/common/persistence/BaseEntityWithMandatoryId';
 import { millisecondsInMinute, millisecondsInDay } from 'date-fns/constants';
 
-export const accessTokenMinutes = 1;
-const refreshTokenDays = 60;
+export const accessTokenMinutes = 15;
+const refreshTokenDays = 30;
 
 export const accessMaxAge = accessTokenMinutes * millisecondsInMinute;
 export const refreshMaxAge = refreshTokenDays * millisecondsInDay;

@@ -3,7 +3,8 @@ import User from '@/user/domains/User';
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import TokenManager, { AccessClaims } from '@/common/services/TokenManager';
-import { getAccessToken } from '@/common/http/util';
+import { getAccessToken, getClient } from '@/common/http/util';
+import ClientType from '@/common/domains/ClientType';
 
 @Injectable()
 export default class AuthGuard implements CanActivate {
@@ -16,6 +17,9 @@ export default class AuthGuard implements CanActivate {
         const token = getAccessToken(request);
         if (!token) {
             throw new UnauthorizedException();
+        }
+        if (getClient(request) === ClientType.ANDROID_NATIVE) {
+            return this.tokenManager.legacyVerifyAccessToken(token);
         }
         return this.tokenManager.verifyAccessToken(token);
     }
