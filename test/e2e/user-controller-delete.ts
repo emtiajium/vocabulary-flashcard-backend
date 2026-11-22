@@ -68,12 +68,12 @@ describe('DELETE /v1/users/self', () => {
     }
 
     describe('Authentication', () => {
-        it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
+        it('SHOULD return 401 Unauthorized WHEN JWT is missing', async () => {
             // Act
             const { status } = await request(app.getHttpServer()).delete(`${getAppAPIPrefix()}/v1/users/self`);
 
             // Arrange
-            expect(status).toBe(403);
+            expect(status).toBe(401);
         });
     });
 

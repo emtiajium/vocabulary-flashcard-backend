@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.61.0`: Refresh token
 - `1.60.0`: Node@26 + Nest@12
 - `1.59.0`: Reverted 1.57.0
 - `1.58.0`: Guessing game: a new round once today's round has been completed

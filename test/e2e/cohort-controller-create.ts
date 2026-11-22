@@ -65,9 +65,9 @@ describe('POST /v1/cohorts', () => {
     };
 
     describe('UnAuthorized', () => {
-        it('SHOULD return 403 FORBIDDEN WHEN JWT is missing', async () => {
+        it('SHOULD return 401 Unauthorized WHEN JWT is missing', async () => {
             const { status } = await request(app.getHttpServer()).post(`${getAppAPIPrefix()}/v1/cohorts`).send();
-            expect(status).toBe(403);
+            expect(status).toBe(401);
         });
     });
 

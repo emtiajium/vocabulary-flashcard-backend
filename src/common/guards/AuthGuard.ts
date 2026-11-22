@@ -1,9 +1,10 @@
 import UserService from '@/user/services/UserService';
 import User from '@/user/domains/User';
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
-import TokenManager, { DecodedToken } from '@/common/services/TokenManager';
-import { getJwToken } from '@/common/http/util';
+import TokenManager, { AccessClaims, DecodedToken } from '@/common/services/TokenManager';
+import { getAccessToken, getClient } from '@/common/http/util';
+import ClientType from '@/common/domains/ClientType';
 
 @Injectable()
 export default class AuthGuard implements CanActivate {
@@ -12,19 +13,22 @@ export default class AuthGuard implements CanActivate {
         private readonly tokenManager: TokenManager,
     ) {}
 
-    private async decodeJwToken(request: Request): Promise<DecodedToken> {
-        const token = getJwToken(request);
+    private async decodeAccessToken(request: Request): Promise<AccessClaims | DecodedToken> {
+        const token = getAccessToken(request);
         if (!token) {
-            throw new ForbiddenException();
+            throw new UnauthorizedException();
         }
-        return this.tokenManager.decodeJwToken(token);
+        if (getClient(request) === ClientType.ANDROID_NATIVE) {
+            return this.tokenManager.legacyVerifyAccessToken(token);
+        }
+        return this.tokenManager.verifyAccessToken(token);
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         let isValidUser: boolean;
         try {
-            const decodedToken = await this.decodeJwToken(request);
+            const decodedToken = await this.decodeAccessToken(request);
             const username = this.tokenManager.extractUsername(decodedToken);
             const user: User = await this.userService.getUserByUsername(username);
             isValidUser = Boolean(user);
@@ -32,6 +36,12 @@ export default class AuthGuard implements CanActivate {
         } catch {
             isValidUser = false;
         }
-        return isValidUser;
+
+        // When a NestJS guard returns false, Nest normally responds with 403 Forbidden, not 401 Unauthorized
+        if (!isValidUser) {
+            throw new UnauthorizedException();
+        }
+
+        return true;
     }
 }
