@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class AuthSessionRepository extends Repository<AuthSession> {
-    constructor(private dataSource: DataSource) {
+    constructor(private readonly dataSource: DataSource) {
         super(AuthSession, dataSource.createEntityManager());
     }
 }
