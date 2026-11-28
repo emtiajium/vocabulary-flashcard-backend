@@ -56,7 +56,7 @@ describe('POST /v1/cohorts', () => {
     const makeApiRequest = async (cohort?: Cohort): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/cohorts`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
             .send(cohort);
         return {
             status,

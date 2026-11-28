@@ -29,7 +29,7 @@ describe('Leitner Systems Box Items', () => {
     async function makeApiRequest(box: LeitnerBoxType): Promise<SupertestResponse<LeitnerBoxItemSearchResult>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/leitner-systems/items/${box}`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
             .send({ pagination: { pageSize: 10, pageNumber: 1 } });
         return {
             status,

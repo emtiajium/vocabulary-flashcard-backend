@@ -49,7 +49,7 @@ describe('GET /v1/vocabularies/:id', () => {
     ): Promise<SupertestResponse<Vocabulary>> {
         const { status, body } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/vocabularies/${vocabularyId}`)
-            .set('Authorization', `Bearer ${generateJwToken(requestedUser)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requestedUser)};`])
             .send();
         return {
             status,

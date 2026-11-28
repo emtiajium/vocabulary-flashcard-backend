@@ -46,7 +46,7 @@ describe('/v1/users/all', () => {
     const makeApiRequest = async (secret?: string): Promise<SupertestResponse<SearchResult<UserReport>>> => {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/users/all`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
             .send(getRequestPayload(secret));
         return {
             status,

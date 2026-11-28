@@ -54,7 +54,7 @@ describe('/v1/vocabularies/words/:word', () => {
     function makeApiRequest(word: string): Promise<SupertestResponse<ApiResponse>> {
         return request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/vocabularies/words/${word}`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`);
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`]);
     }
 
     it('SHOULD return 401 Unauthorized WHEN JWT is missing', async () => {

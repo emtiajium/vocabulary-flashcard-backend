@@ -6,7 +6,6 @@ import User from '@/user/domains/User';
 import safeStringify from 'fast-safe-stringify';
 import { createHash, randomBytes } from 'node:crypto';
 import { accessTokenMinutes } from '@/user/domains/AuthSession';
-import { compactVerify, createRemoteJWKSet } from 'jose';
 
 export type DecodedToken = TokenPayload | (Partial<User> & { email: string; googleSubject: string });
 export type AccessClaims = JwtPayload & {
@@ -14,8 +13,6 @@ export type AccessClaims = JwtPayload & {
     sid: string;
     typ: 'access';
 };
-
-const googleJwks = createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
 
 @Injectable()
 export default class TokenManager {
@@ -73,41 +70,6 @@ export default class TokenManager {
         }
 
         return claims;
-    }
-
-    // eslint-disable-next-line complexity
-    async legacyVerifyAccessToken(token: string): Promise<DecodedToken> {
-        try {
-            // Verify the signature against Google's public keys.
-            const { payload: verifiedBytes, protectedHeader } = await compactVerify(token, googleJwks);
-
-            if (protectedHeader.alg !== 'RS256') {
-                return Promise.reject(new UnauthorizedException('Invalid Google algorithm'));
-            }
-
-            const payload = JSON.parse(Buffer.from(verifiedBytes).toString('utf8')) as TokenPayload;
-
-            // Verify Google issuer.
-            if (payload.iss !== 'accounts.google.com' && payload.iss !== 'https://accounts.google.com') {
-                return Promise.reject(new UnauthorizedException('Invalid Google issuer'));
-            }
-
-            // Verify that Google issued the token for our application.
-            if (payload.aud !== this.oAuth2ClientId) {
-                return Promise.reject(new UnauthorizedException('Invalid Google audience'));
-            }
-
-            if (!payload.sub || !payload.email || !payload.email_verified) {
-                return Promise.reject(new UnauthorizedException('Invalid Google identity'));
-            }
-
-            return {
-                ...payload,
-                googleSubject: payload.sub,
-            };
-        } catch {
-            throw new UnauthorizedException('Invalid Google token');
-        }
     }
 
     async decodeJwTokenV2(token: string): Promise<DecodedToken> {

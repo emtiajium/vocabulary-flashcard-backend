@@ -58,7 +58,7 @@ describe('/v1/cohorts/:name', () => {
     ): Promise<SupertestResponse<void>> => {
         const { status, body } = await request(app.getHttpServer())
             .put(`${getAppAPIPrefix()}/v1/cohorts/${name}`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
             .send(usernames);
         return {
             status,

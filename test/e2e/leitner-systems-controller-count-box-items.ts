@@ -42,7 +42,7 @@ describe('GET /v1/leitner-systems/items/count/:box', () => {
     ): Promise<SupertestResponse<void>> {
         const { status, text } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/leitner-systems/items/count/${box}`)
-            .set('Authorization', `Bearer ${generateJwToken(requestedUser)}`);
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requestedUser)};`]);
         return {
             status,
             text,

@@ -34,7 +34,7 @@ describe('GET /v1/users/using-leitner-systems', () => {
     async function makeApiRequest(secret?: string): Promise<SupertestResponse<LeitnerSystemsLoverUsersReport[]>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/users/using-leitner-systems`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
             .send(getRequestPayload(secret));
         return {
             status,
