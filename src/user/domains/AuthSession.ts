@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import User from '@/user/domains/User';
 import BaseEntityWithMandatoryId from '@/common/persistence/BaseEntityWithMandatoryId';
 import { millisecondsInMinute, millisecondsInDay } from 'date-fns/constants';
+import ClientType from '@/common/domains/ClientType';
 
 export const accessTokenMinutes = 15;
 const refreshTokenDays = 30;
@@ -20,6 +21,9 @@ export default class AuthSession extends BaseEntityWithMandatoryId {
 
     @Column({ type: 'text', nullable: false })
     username: string;
+
+    @Column({ type: 'text', nullable: false })
+    clientType: ClientType;
 
     @Column({ type: 'text', nullable: false, unique: true })
     refreshTokenHash: string;

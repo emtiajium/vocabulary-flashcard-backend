@@ -37,10 +37,8 @@ export default class UserController {
     ): Promise<Pick<User, 'username' | 'name' | 'profilePictureUrl'>> {
         const userResponse = await this.userService.createUser(idToken ?? idTokenFromLegacyApp);
 
-        if (clientType === ClientType.WEB) {
-            const token = await this.authSessionService.create(userResponse.id, userResponse.username);
-            this.authCookieService.set(response, token.accessToken, token.refreshToken);
-        }
+        const token = await this.authSessionService.create(userResponse.id, userResponse.username, clientType);
+        this.authCookieService.set(response, token.accessToken, token.refreshToken);
 
         return {
             username: userResponse.username,
