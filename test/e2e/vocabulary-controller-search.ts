@@ -55,7 +55,7 @@ describe('POST /v1/vocabularies/search', () => {
     ): Promise<SupertestResponse<SearchResult<VocabularySearchResponse>>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/search`)
-            .set('Authorization', `Bearer ${generateJwToken(user)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(user)};`])
             .send(payload);
         return {
             status,

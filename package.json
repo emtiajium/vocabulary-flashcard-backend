@@ -1,6 +1,6 @@
 {
     "name": "vocabulary-flashcard-backend",
-    "version": "1.61.1",
+    "version": "1.62.0",
     "author": {
         "name": "Emtiaj Hasan",
         "email": "271emtiaj@gmail.com",
@@ -59,7 +59,6 @@
         "express-basic-auth": "^1.2.1",
         "fast-safe-stringify": "^2.0.7",
         "google-auth-library": "^10.5.0",
-        "jose": "^6.2.18",
         "jsonwebtoken": "9.0.3",
         "lodash": "^4.18.1",
         "pg": "^8.18.0",

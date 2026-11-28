@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import AuthSession, { refreshMaxAge } from '@/user/domains/AuthSession';
 import AuthSessionRepository from '@/user/repositories/AuthSessionRepository';
 import TokenManager from '@/common/services/TokenManager';
+import ClientType from '@/common/domains/ClientType';
 
 @Injectable()
 export class AuthSessionService {
@@ -12,13 +13,18 @@ export class AuthSessionService {
         private readonly tokenManager: TokenManager,
     ) {}
 
-    async create(userId: string, email: string): Promise<{ accessToken: string; refreshToken: string }> {
+    async create(
+        userId: string,
+        email: string,
+        clientType: ClientType,
+    ): Promise<{ accessToken: string; refreshToken: string }> {
         const refreshToken = this.tokenManager.createRefreshToken();
 
         const authSession = this.authSessionRepository.create({
             id: randomUUID(),
             userId,
             username: email,
+            clientType,
             refreshTokenHash: this.tokenManager.hashRefreshToken(refreshToken),
             expiresAt: new Date(Date.now() + refreshMaxAge),
         });

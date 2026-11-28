@@ -22,6 +22,11 @@ export default class Android {
     @IsString()
     versionName: string;
 
+    @Column({ type: 'varchar', nullable: true })
+    @IsOptional()
+    @IsString()
+    message?: string;
+
     @IsEqualToByConfig('ANDROID_VERSION_UPDATE_SECRET')
     @IsNotEmpty()
     @IsString()
@@ -32,6 +37,7 @@ export default class Android {
         android.id = id || uuidV4();
         android.versionCode = payload.versionCode;
         android.versionName = payload.versionName;
+        android.message = payload.message;
         return android;
     }
 }

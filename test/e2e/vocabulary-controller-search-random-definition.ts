@@ -53,7 +53,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
     async function completeTodayRound(user: User = requester): Promise<SupertestResponse<unknown>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/definitions/random-search/complete`)
-            .set('Authorization', `Bearer ${generateJwToken(user)}`);
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(user)};`]);
 
         return {
             status,
@@ -64,7 +64,7 @@ describe('GET /v1/vocabularies/definitions/random-search', () => {
     async function makeApiRequest(user: User = requester): Promise<SupertestResponse<RandomlyChosenMeaningResponse[]>> {
         const { status, body } = await request(app.getHttpServer())
             .get(`${getAppAPIPrefix()}/v1/vocabularies/definitions/random-search`)
-            .set('Authorization', `Bearer ${generateJwToken(user)}`);
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(user)};`]);
 
         return {
             status,

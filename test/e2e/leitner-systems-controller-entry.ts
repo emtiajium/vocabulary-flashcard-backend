@@ -45,7 +45,7 @@ describe('Leitner Systems Entry', () => {
         async function makeApiRequest(vocabularyId: string): Promise<SupertestResponse<void>> {
             const { status, body } = await request(app.getHttpServer())
                 .post(`${getAppAPIPrefix()}/v1/leitner-systems/start/${vocabularyId}`)
-                .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+                .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
                 .send();
             return {
                 status,
@@ -89,7 +89,7 @@ describe('Leitner Systems Entry', () => {
         async function makeApiRequest(vocabularyId: string): Promise<SupertestResponse<void>> {
             const { status, body } = await request(app.getHttpServer())
                 .put(`${getAppAPIPrefix()}/v1/leitner-systems/forward/${vocabularyId}`)
-                .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+                .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
                 .send();
             return {
                 status,
@@ -204,7 +204,7 @@ describe('Leitner Systems Entry', () => {
         async function makeApiRequest(vocabularyId: string): Promise<SupertestResponse<void>> {
             const { status, body } = await request(app.getHttpServer())
                 .put(`${getAppAPIPrefix()}/v1/leitner-systems/backward/${vocabularyId}`)
-                .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+                .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
                 .send();
             return {
                 status,

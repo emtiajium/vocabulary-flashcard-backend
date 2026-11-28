@@ -53,7 +53,7 @@ describe('DELETE /v1/vocabularies/:id', () => {
     ): Promise<SupertestResponse<void>> {
         const { status, body } = await request(app.getHttpServer())
             .delete(`${getAppAPIPrefix()}/v1/vocabularies/${vocabularyId}`)
-            .set('Authorization', `Bearer ${generateJwToken(requestedUser)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requestedUser)};`])
             .send();
         return {
             status,

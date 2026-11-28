@@ -49,7 +49,7 @@ describe('DELETE /v1/users/self', () => {
     async function makeApiRequest(): Promise<SupertestResponse<void>> {
         const { status, body } = await request(app.getHttpServer())
             .delete(`${getAppAPIPrefix()}/v1/users/self`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`);
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`]);
         return {
             status,
             body,

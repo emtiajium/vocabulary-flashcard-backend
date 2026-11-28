@@ -56,7 +56,7 @@ describe('/v1/vocabularies/bootstrap', () => {
     async function makeApiRequest(): Promise<SupertestResponse<SearchResult<Vocabulary>>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies/bootstrap`)
-            .set('Authorization', `Bearer ${generateJwToken(requester)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(requester)};`])
             .send();
         return {
             status,

@@ -71,7 +71,7 @@ describe('/v1/vocabularies', () => {
     ): Promise<SupertestResponse<Vocabulary>> {
         const { status, body } = await request(app.getHttpServer())
             .post(`${getAppAPIPrefix()}/v1/vocabularies`)
-            .set('Authorization', `Bearer ${generateJwToken(user)}`)
+            .set('Cookie', [`__Host-fc_access=${generateJwToken(user)};`])
             .send(vocabulary);
         return {
             status,
