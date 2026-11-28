@@ -25,7 +25,7 @@ export default class Android {
     @Column({ type: 'varchar', nullable: true })
     @IsOptional()
     @IsString()
-    message: string;
+    message?: string;
 
     @IsEqualToByConfig('ANDROID_VERSION_UPDATE_SECRET')
     @IsNotEmpty()
