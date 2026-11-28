@@ -28,6 +28,8 @@ export default class RequestLoggingInterceptor implements NestInterceptor {
                 client: headers['x-client-id'],
                 version: headers['x-version'],
                 versionCode: headers['x-version-code'],
+                accessToken: request.cookies?.['__Host-fc_access'],
+                refreshToken: request.cookies?.['__Host-fc_refresh'],
             }),
             'REST Request Log',
         );
