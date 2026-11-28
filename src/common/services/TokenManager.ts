@@ -72,7 +72,7 @@ export default class TokenManager {
         return claims;
     }
 
-    async decodeJwTokenV2(token: string): Promise<DecodedToken> {
+    async decodeJwToken(token: string): Promise<DecodedToken> {
         let decodedToken: DecodedToken;
         try {
             decodedToken = await this.decodeViaGoogle(token);

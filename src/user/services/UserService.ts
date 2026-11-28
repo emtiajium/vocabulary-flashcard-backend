@@ -45,7 +45,7 @@ export default class UserService {
 
     private async assertUserCreationPayload(token: string): Promise<User> {
         this.validateUserCreationToken(token);
-        const decodedToken = await this.tokenManager.decodeJwTokenV2(token);
+        const decodedToken = await this.tokenManager.decodeJwToken(token);
         return this.tokenManager.getUser(decodedToken);
     }
 

@@ -68,7 +68,7 @@ describe('/v1/users', () => {
             it('SHOULD return 201 CREATED WHEN there is token', async () => {
                 // Arrange
                 const decodeJwTokenV2Mock = jest
-                    .spyOn(TokenManager.prototype, 'decodeJwTokenV2')
+                    .spyOn(TokenManager.prototype, 'decodeJwToken')
                     .mockImplementation(async (token: string) => {
                         return decode(token) as DecodedToken;
                     });
@@ -89,7 +89,7 @@ describe('/v1/users', () => {
             it('SHOULD return 401 Unauthorized WHEN the token is invalid', async () => {
                 // Arrange
                 const decodeJwTokenV2Mock = jest
-                    .spyOn(TokenManager.prototype, 'decodeJwTokenV2')
+                    .spyOn(TokenManager.prototype, 'decodeJwToken')
                     .mockImplementation(() => {
                         throw new UnauthorizedException();
                     });
@@ -112,7 +112,7 @@ describe('/v1/users', () => {
             it('SHOULD remove user from cache', async () => {
                 // Arrange
                 const decodeJwTokenV2Mock = jest
-                    .spyOn(TokenManager.prototype, 'decodeJwTokenV2')
+                    .spyOn(TokenManager.prototype, 'decodeJwToken')
                     .mockImplementation(async (token: string) => {
                         return decode(token) as DecodedToken;
                     });
