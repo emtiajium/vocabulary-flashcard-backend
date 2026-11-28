@@ -95,6 +95,7 @@
 
 ## Change Logs
 
+- `1.62.1`: Disabled /swagger-json and /swagger-yml
 - `1.62.0`: Refresh token for Android too
 - `1.61.1`: Set cookie for Android users too
 - `1.61.0`: Refresh token
