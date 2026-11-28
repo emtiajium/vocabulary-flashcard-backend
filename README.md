@@ -96,6 +96,7 @@
 ## Change Logs
 
 - `1.62.0`: Refresh token for Android too
+- `1.61.1`: Set cookie for Android users too
 - `1.61.0`: Refresh token
 - `1.60.0`: Node@26 + Nest@12
 - `1.59.0`: Reverted 1.57.0
